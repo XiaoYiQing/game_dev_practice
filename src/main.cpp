@@ -17,11 +17,11 @@ TODO: Create a base checkers game engine.
 #include <SFML/Graphics.hpp>
 
 
-// #include "SFML_button_XYQ.h"
-// #include "SFML_TxtBox_XYQ.h"
-// #include "SFML_HPBar_XYQ.h"
-// #include "SFML_infoBox_XYQ.h"
-// #include "SFML_page_XYQ.h"
+#include "SFML_button_XYQ.h"
+#include "SFML_TxtBox_XYQ.h"
+#include "SFML_HPBar_XYQ.h"
+#include "SFML_infoBox_XYQ.h"
+#include "SFML_page_XYQ.h"
 
 #include "window_test.h"
 #include "button_test.h"

@@ -31,22 +31,22 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
@@ -61,30 +61,21 @@
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">sfml-audio.dir\Debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">sfml-audio-d-2</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">true</GenerateManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">sfml-audio-s-d</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">.lib</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|win32'">sfml-audio.dir\Release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|win32'">sfml-audio-2</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|win32'">true</GenerateManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|win32'">sfml-audio-s</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|win32'">.lib</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">sfml-audio.dir\MinSizeRel\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">sfml-audio-2</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">true</GenerateManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">sfml-audio-s</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">.lib</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">sfml-audio.dir\RelWithDebInfo\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">sfml-audio-2</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">true</GenerateManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">sfml-audio-s</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">.lib</TargetExt>
   </PropertyGroup>
-  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -104,12 +95,13 @@
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="Debug";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\Debug\sfml-audio-s.pdb</ProgramDataBaseFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"Debug\";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\minimp3;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\AL;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -120,19 +112,9 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
-    <Link>
-      <AdditionalDependencies>..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\openal32.lib;..\..\..\lib\Debug\sfml-system-d.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisenc.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisfile.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbis.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\ogg.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    <Lib>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/Debug/sfml-audio-d.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/Debug/sfml-audio.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|win32'">
     <ClCompile>
@@ -152,14 +134,15 @@
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="Release";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
+      <ProgramDataBaseFileName>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\Release\sfml-audio-s.pdb</ProgramDataBaseFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"Release\";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\minimp3;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\AL;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -170,19 +153,9 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
-    <Link>
-      <AdditionalDependencies>..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\openal32.lib;..\..\..\lib\Release\sfml-system.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisenc.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisfile.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbis.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\ogg.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    <Lib>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/Release/sfml-audio.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/Release/sfml-audio.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">
     <ClCompile>
@@ -202,14 +175,15 @@
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="MinSizeRel";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
+      <ProgramDataBaseFileName>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\MinSizeRel\sfml-audio-s.pdb</ProgramDataBaseFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"MinSizeRel\";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\minimp3;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\AL;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -220,19 +194,9 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
-    <Link>
-      <AdditionalDependencies>..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\openal32.lib;..\..\..\lib\MinSizeRel\sfml-system.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisenc.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisfile.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbis.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\ogg.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    <Lib>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/MinSizeRel/sfml-audio.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/MinSizeRel/sfml-audio.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">
     <ClCompile>
@@ -253,12 +217,13 @@
       <SupportJustMyCode></SupportJustMyCode>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="RelWithDebInfo";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\lib\RelWithDebInfo\sfml-audio-s.pdb</ProgramDataBaseFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"RelWithDebInfo\";SFML_AUDIO_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;SFML_STATIC;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;OV_EXCLUDE_STATIC_CALLBACKS;FLAC__NO_DLL;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\minimp3;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers\AL;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\extlibs\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -269,19 +234,9 @@
       <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
-    <Link>
-      <AdditionalDependencies>..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\openal32.lib;..\..\..\lib\RelWithDebInfo\sfml-system.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisenc.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbisfile.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\vorbis.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\ogg.lib;..\..\..\..\sfml-src\extlibs\libs-msvc-universal\x86\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    <Lib>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/RelWithDebInfo/sfml-audio.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-build/lib/RelWithDebInfo/sfml-audio.pdb</ProgramDataBaseFile>
-      <SubSystem>Console</SubSystem>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src\SFML\Audio\CMakeLists.txt">
@@ -296,7 +251,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\tools\windows\resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Audio\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|win32'">Building Custom Rule C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/src/SFML/Audio/CMakeLists.txt</Message>
@@ -309,7 +264,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\tools\windows\resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Audio\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">Building Custom Rule C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/src/SFML/Audio/CMakeLists.txt</Message>
@@ -322,7 +277,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\tools\windows\resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Audio\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">Building Custom Rule C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/src/SFML/Audio/CMakeLists.txt</Message>
@@ -335,7 +290,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\tools\windows\resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindFLAC.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindOpenAL.cmake;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\cmake\Modules\FindVORBIS.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Audio\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">false</LinkObjects>
     </CustomBuild>
@@ -744,7 +699,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <TreatSpecificWarningsAsErrors Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">4289</TreatSpecificWarningsAsErrors>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">Level4</WarningLevel>
     </ClCompile>
-    <ResourceCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Audio\sfml-audio.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\ZERO_CHECK.vcxproj">

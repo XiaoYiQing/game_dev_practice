@@ -16,7 +16,7 @@
 
 //TRUE to build SFML as shared libraries, FALSE to build it as
 // static libraries
-BUILD_SHARED_LIBS:BOOL=TRUE
+BUILD_SHARED_LIBS:BOOL=OFF
 
 //Path to a program.
 CMAKE_AR:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.41.34120/bin/Hostx86/x86/lib.exe

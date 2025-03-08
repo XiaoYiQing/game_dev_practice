@@ -121,9 +121,6 @@
     <CustomBuild Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src\SFML\Graphics\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Graphics\sfml-graphics.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="drawables">
       <UniqueIdentifier>{5ACAAE34-C1C3-3EF9-A845-530C85AF4F41}</UniqueIdentifier>
     </Filter>

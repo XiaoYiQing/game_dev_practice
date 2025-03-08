@@ -31,8 +31,5 @@
     <CustomBuild Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src\SFML\Network\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Network\sfml-network.rc" />
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
 </Project>

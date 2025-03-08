@@ -92,9 +92,6 @@
     <CustomBuild Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\src\SFML\Audio\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-build\src\SFML\Audio\sfml-audio.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="codecs">
       <UniqueIdentifier>{09818E6F-8D51-32E1-A02D-B6B3194582CF}</UniqueIdentifier>
     </Filter>

@@ -1,0 +1,10 @@
+^C:\USERS\YI QING XIAO\DOCUMENTS\CPP_LEARNING\GAME_DEV_PRACTICE\BUILD\CMAKEFILES\4F7DA5E28F914FE30AD3634C24FFF431\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice" "-BC:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/MyFuncs.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
