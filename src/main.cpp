@@ -72,7 +72,6 @@ int main(int, char**){
     game::play_Checkers();
 
 
-
     cout << "Here comes the Sun." << endl;
 
     return 0;
