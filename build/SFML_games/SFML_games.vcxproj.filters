@@ -13,6 +13,9 @@
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CHK_SFML_eng.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\cardReact.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\TikTakTok.h">
@@ -25,6 +28,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CHK_SFML_eng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\cardReact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

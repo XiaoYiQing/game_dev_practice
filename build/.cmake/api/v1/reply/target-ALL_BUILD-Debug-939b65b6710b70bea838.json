@@ -17,19 +17,19 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "sfml-system::@8cb1db2982443611e568"
+			"id" : "sfml-window::@5730451e331e3690ae65"
 		},
 		{
 			"id" : "sfml-network::@d7f79968b2699e7782cb"
 		},
 		{
+			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
+		},
+		{
 			"id" : "sfml-main::@81ec5539f1398dd625f6"
 		},
 		{
-			"id" : "sfml-window::@5730451e331e3690ae65"
-		},
-		{
-			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
+			"id" : "sfml-system::@8cb1db2982443611e568"
 		},
 		{
 			"id" : "sfml-audio::@a153e5727587c53fce98"

@@ -268,28 +268,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-Debug-1aeda2ae1b4667737d39.json",
+					"jsonFile" : "target-ALL_BUILD-Debug-b3df4e38e5e48e4f1f6f.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@120c268ab73394db0a9a",
-					"jsonFile" : "target-ALL_BUILD-Debug-b45452815f2aebef7d46.json",
+					"jsonFile" : "target-ALL_BUILD-Debug-939b65b6710b70bea838.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 10,
 					"id" : "SFML_games::@a23c4e5dac5a98fab458",
-					"jsonFile" : "target-SFML_games-Debug-cadf93297d0424eb6c8e.json",
+					"jsonFile" : "target-SFML_games-Debug-9bb923a87bd123ee861f.json",
 					"name" : "SFML_games",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 9,
 					"id" : "SFML_utils::@02c47fcd27ea615c0885",
-					"jsonFile" : "target-SFML_utils-Debug-6b0c8df67175a0ccc7ca.json",
+					"jsonFile" : "target-SFML_utils-Debug-b40e391b2c16e5d93ae8.json",
 					"name" : "SFML_utils",
 					"projectIndex" : 0
 				},
@@ -303,7 +303,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "myapp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-myapp-Debug-eb200f9a2eebd51dfb78.json",
+					"jsonFile" : "target-myapp-Debug-720fea971020585ee8d1.json",
 					"name" : "myapp",
 					"projectIndex" : 0
 				},
@@ -317,7 +317,7 @@
 				{
 					"directoryIndex" : 7,
 					"id" : "sfml-graphics::@98af38147d5fa7e70f61",
-					"jsonFile" : "target-sfml-graphics-Debug-38186c3b9dd8d8d6bd67.json",
+					"jsonFile" : "target-sfml-graphics-Debug-e9903aa06c617043b5ba.json",
 					"name" : "sfml-graphics",
 					"projectIndex" : 1
 				},
@@ -352,7 +352,7 @@
 				{
 					"directoryIndex" : 11,
 					"id" : "tests::@a44f0ac069e85531cdee",
-					"jsonFile" : "target-tests-Debug-b0b55e7f9012ffbbaee6.json",
+					"jsonFile" : "target-tests-Debug-3046a1c792107be64691.json",
 					"name" : "tests",
 					"projectIndex" : 0
 				}
@@ -625,28 +625,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-Release-1aeda2ae1b4667737d39.json",
+					"jsonFile" : "target-ALL_BUILD-Release-b3df4e38e5e48e4f1f6f.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@120c268ab73394db0a9a",
-					"jsonFile" : "target-ALL_BUILD-Release-b45452815f2aebef7d46.json",
+					"jsonFile" : "target-ALL_BUILD-Release-939b65b6710b70bea838.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 10,
 					"id" : "SFML_games::@a23c4e5dac5a98fab458",
-					"jsonFile" : "target-SFML_games-Release-dbd8ce16aa1a438efbe1.json",
+					"jsonFile" : "target-SFML_games-Release-3f45279c657798923aa0.json",
 					"name" : "SFML_games",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 9,
 					"id" : "SFML_utils::@02c47fcd27ea615c0885",
-					"jsonFile" : "target-SFML_utils-Release-8a4c722d66fd8f4e1474.json",
+					"jsonFile" : "target-SFML_utils-Release-02598c8903c66b442d88.json",
 					"name" : "SFML_utils",
 					"projectIndex" : 0
 				},
@@ -660,7 +660,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "myapp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-myapp-Release-1ed535c28df9630b177f.json",
+					"jsonFile" : "target-myapp-Release-2a82d4bc1dc889d22e04.json",
 					"name" : "myapp",
 					"projectIndex" : 0
 				},
@@ -674,7 +674,7 @@
 				{
 					"directoryIndex" : 7,
 					"id" : "sfml-graphics::@98af38147d5fa7e70f61",
-					"jsonFile" : "target-sfml-graphics-Release-547542ff8fc429b954a8.json",
+					"jsonFile" : "target-sfml-graphics-Release-40a0674246613297a6b6.json",
 					"name" : "sfml-graphics",
 					"projectIndex" : 1
 				},
@@ -709,7 +709,7 @@
 				{
 					"directoryIndex" : 11,
 					"id" : "tests::@a44f0ac069e85531cdee",
-					"jsonFile" : "target-tests-Release-79cced70d9d4825dd752.json",
+					"jsonFile" : "target-tests-Release-05a23689a0c01a407769.json",
 					"name" : "tests",
 					"projectIndex" : 0
 				}
@@ -982,28 +982,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-MinSizeRel-1aeda2ae1b4667737d39.json",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-b3df4e38e5e48e4f1f6f.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@120c268ab73394db0a9a",
-					"jsonFile" : "target-ALL_BUILD-MinSizeRel-b45452815f2aebef7d46.json",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-939b65b6710b70bea838.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 10,
 					"id" : "SFML_games::@a23c4e5dac5a98fab458",
-					"jsonFile" : "target-SFML_games-MinSizeRel-9e1b16ac5833e62fdbc3.json",
+					"jsonFile" : "target-SFML_games-MinSizeRel-b26d809b9973bfb2420e.json",
 					"name" : "SFML_games",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 9,
 					"id" : "SFML_utils::@02c47fcd27ea615c0885",
-					"jsonFile" : "target-SFML_utils-MinSizeRel-e056e3396b45c9157a0a.json",
+					"jsonFile" : "target-SFML_utils-MinSizeRel-bad0ad0abddb3da85b87.json",
 					"name" : "SFML_utils",
 					"projectIndex" : 0
 				},
@@ -1017,7 +1017,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "myapp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-myapp-MinSizeRel-06a32e3371a8cc3010ad.json",
+					"jsonFile" : "target-myapp-MinSizeRel-6ca9b2878aa04d897582.json",
 					"name" : "myapp",
 					"projectIndex" : 0
 				},
@@ -1031,7 +1031,7 @@
 				{
 					"directoryIndex" : 7,
 					"id" : "sfml-graphics::@98af38147d5fa7e70f61",
-					"jsonFile" : "target-sfml-graphics-MinSizeRel-ad9ed34ab40b6e8fd1e1.json",
+					"jsonFile" : "target-sfml-graphics-MinSizeRel-4166232c2f15dc42e3d8.json",
 					"name" : "sfml-graphics",
 					"projectIndex" : 1
 				},
@@ -1066,7 +1066,7 @@
 				{
 					"directoryIndex" : 11,
 					"id" : "tests::@a44f0ac069e85531cdee",
-					"jsonFile" : "target-tests-MinSizeRel-dcbf61afd09bf203061e.json",
+					"jsonFile" : "target-tests-MinSizeRel-30d5c61bb0f1ecbeab8b.json",
 					"name" : "tests",
 					"projectIndex" : 0
 				}
@@ -1339,28 +1339,28 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-1aeda2ae1b4667737d39.json",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-b3df4e38e5e48e4f1f6f.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@120c268ab73394db0a9a",
-					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-b45452815f2aebef7d46.json",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-939b65b6710b70bea838.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 10,
 					"id" : "SFML_games::@a23c4e5dac5a98fab458",
-					"jsonFile" : "target-SFML_games-RelWithDebInfo-db2748f29aef708bb8b1.json",
+					"jsonFile" : "target-SFML_games-RelWithDebInfo-27e1c29c4e2067d35e90.json",
 					"name" : "SFML_games",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 9,
 					"id" : "SFML_utils::@02c47fcd27ea615c0885",
-					"jsonFile" : "target-SFML_utils-RelWithDebInfo-565bdaed98b45784986f.json",
+					"jsonFile" : "target-SFML_utils-RelWithDebInfo-44983be422fd7cd3e360.json",
 					"name" : "SFML_utils",
 					"projectIndex" : 0
 				},
@@ -1374,7 +1374,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "myapp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-myapp-RelWithDebInfo-7cb5d29f56cf811f07ff.json",
+					"jsonFile" : "target-myapp-RelWithDebInfo-17cf173fcfc8ecbda24b.json",
 					"name" : "myapp",
 					"projectIndex" : 0
 				},
@@ -1388,7 +1388,7 @@
 				{
 					"directoryIndex" : 7,
 					"id" : "sfml-graphics::@98af38147d5fa7e70f61",
-					"jsonFile" : "target-sfml-graphics-RelWithDebInfo-22555478060fc1e56e13.json",
+					"jsonFile" : "target-sfml-graphics-RelWithDebInfo-32834f85e1d68a6095f5.json",
 					"name" : "sfml-graphics",
 					"projectIndex" : 1
 				},
@@ -1423,7 +1423,7 @@
 				{
 					"directoryIndex" : 11,
 					"id" : "tests::@a44f0ac069e85531cdee",
-					"jsonFile" : "target-tests-RelWithDebInfo-79ba700c1cc36c6dd8cd.json",
+					"jsonFile" : "target-tests-RelWithDebInfo-fc0ca09f4c892186fd38.json",
 					"name" : "tests",
 					"projectIndex" : 0
 				}

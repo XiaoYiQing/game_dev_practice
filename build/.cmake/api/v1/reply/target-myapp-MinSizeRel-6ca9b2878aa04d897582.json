@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "RelWithDebInfo/myapp.exe"
+			"path" : "MinSizeRel/myapp.exe"
 		},
 		{
-			"path" : "RelWithDebInfo/myapp.pdb"
+			"path" : "MinSizeRel/myapp.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -161,7 +161,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG -std:c++20"
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O1 /Ob1 /DNDEBUG -std:c++20"
 				}
 			],
 			"defines" : 
@@ -218,10 +218,6 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "sfml-system::@8cb1db2982443611e568"
-		},
-		{
-			"backtrace" : 2,
 			"id" : "sfml-window::@5730451e331e3690ae65"
 		},
 		{
@@ -229,19 +225,23 @@
 			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
 		},
 		{
-			"backtrace" : 5,
-			"id" : "tests::@a44f0ac069e85531cdee"
+			"backtrace" : 2,
+			"id" : "sfml-system::@8cb1db2982443611e568"
 		},
 		{
-			"backtrace" : 4,
-			"id" : "SFML_games::@a23c4e5dac5a98fab458"
+			"backtrace" : 3,
+			"id" : "SFML_utils::@02c47fcd27ea615c0885"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "tests::@a44f0ac069e85531cdee"
 		},
 		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
-			"backtrace" : 3,
-			"id" : "SFML_utils::@02c47fcd27ea615c0885"
+			"backtrace" : 4,
+			"id" : "SFML_games::@a23c4e5dac5a98fab458"
 		}
 	],
 	"id" : "myapp::@6890427a1f51a3e7e1df",
@@ -250,56 +250,56 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG",
+				"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O1 /Ob1 /DNDEBUG",
 				"role" : "flags"
 			},
 			{
-				"fragment" : "/machine:X86 /debug /INCREMENTAL /subsystem:console",
+				"fragment" : "/machine:X86 /INCREMENTAL:NO /subsystem:console",
 				"role" : "flags"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-graphics-s.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\MinSizeRel\\sfml-graphics-s.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "SFML_utils\\RelWithDebInfo\\SFML_utils.lib",
+				"fragment" : "SFML_utils\\MinSizeRel\\SFML_utils.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 4,
-				"fragment" : "SFML_games\\RelWithDebInfo\\SFML_games.lib",
+				"fragment" : "SFML_games\\MinSizeRel\\SFML_games.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 5,
-				"fragment" : "tests\\RelWithDebInfo\\tests.lib",
+				"fragment" : "tests\\MinSizeRel\\tests.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 4,
-				"fragment" : "SFML_games\\RelWithDebInfo\\SFML_games.lib",
+				"fragment" : "SFML_games\\MinSizeRel\\SFML_games.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "SFML_utils\\RelWithDebInfo\\SFML_utils.lib",
+				"fragment" : "SFML_utils\\MinSizeRel\\SFML_utils.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-graphics-s.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\MinSizeRel\\sfml-graphics-s.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 7,
-				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-window-s.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\MinSizeRel\\sfml-window-s.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 9,
-				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-system-s.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\MinSizeRel\\sfml-system-s.lib",
 				"role" : "libraries"
 			},
 			{
