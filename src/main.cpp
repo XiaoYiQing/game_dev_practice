@@ -70,10 +70,14 @@ int main(int, char**){
 
     // tests::checkers_test4();
 
-    game::play_Checkers();
 
+    vector<int> tmp = randIntVectGen( 0, 100, 10 );
 
-    cout << "Here comes the Sun." << endl;
+    cout << "Here comes the Sun: " << endl;
+    for( int z : tmp ){
+        cout << "[" << z << "] " ;
+    }
+    cout << endl;
 
     return 0;
 

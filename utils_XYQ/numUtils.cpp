@@ -43,6 +43,44 @@ vector<int>* randIntGen( int L_bnd, int U_bnd, unsigned int cnt ){
     return tmpVec;
 }
 
+vector<int> randIntVectGen( int L_bnd, int U_bnd, unsigned int cnt ){
+
+    try{
+        if( L_bnd > U_bnd ){
+            string errMsg = "randIntGen lower bound must not be larger than the upper bound."; 
+            throw errMsg;
+        }
+    }catch( string errMsg ){
+        cout << errMsg << endl;
+        vector<int> tmpVec;
+        return tmpVec;
+    }
+
+    /*
+    A random number seed from hardware which ensures a varying seed based 
+    on external entropy.
+    */
+    random_device rd;
+    /*
+    The generator using the seed. 
+    mt19937 is a popular choice due to its balance of speed and randomness quality
+    */
+    mt19937 gen(rd());
+
+
+    // Define a uniform distribution for even number occurence chance over the range.
+    uniform_int_distribution<> distrib( L_bnd, U_bnd );
+
+    // Create an integer array to store all random integers.
+    vector<int> tmpVec;
+    for (unsigned int i = 0; i < cnt; i++) {
+        tmpVec.push_back( distrib( gen ) );
+    }
+
+    return tmpVec;
+
+}
+
 /*
     Retains portion of the target integer "tarNum" up to decimal 
     position "orderPos".

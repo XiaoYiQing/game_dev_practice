@@ -10,6 +10,9 @@ using namespace std;
 /* Generate a vector of random integers. */
 vector<int>* randIntGen( int L_bnd, int U_bnd, unsigned int cnt );
 
+/* Generate a vector of random integers. */
+vector<int> randIntVectGen( int L_bnd, int U_bnd, unsigned int cnt );
+
 /* 
 Cut-off the upper 10th order digits of the target number down to and 
 including the specified order. 
