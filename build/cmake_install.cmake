@@ -35,6 +35,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_utils/cmake_install.cmake")
+  include("C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/utils_XYQ/cmake_install.cmake")
   include("C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_games/cmake_install.cmake")
   include("C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/tests/cmake_install.cmake")
 

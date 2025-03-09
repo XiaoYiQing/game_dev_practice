@@ -29,6 +29,9 @@ C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-
 C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_utils/CMakeFiles/SFML_utils.dir
 C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_utils/CMakeFiles/PACKAGE.dir
 C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_utils/CMakeFiles/INSTALL.dir
+C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/utils_XYQ/CMakeFiles/utils_XYQ.dir
+C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/utils_XYQ/CMakeFiles/PACKAGE.dir
+C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/utils_XYQ/CMakeFiles/INSTALL.dir
 C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_games/CMakeFiles/SFML_games.dir
 C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_games/CMakeFiles/PACKAGE.dir
 C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/SFML_games/CMakeFiles/INSTALL.dir

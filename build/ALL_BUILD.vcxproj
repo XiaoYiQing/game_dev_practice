@@ -189,6 +189,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{79A3AF4B-AC0D-33B5-B1BF-12A742C01C84}</Project>
       <Name>tests</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\utils_XYQ\utils_XYQ.vcxproj">
+      <Project>{ABDEFF5C-A86E-3422-824A-61208D316E58}</Project>
+      <Name>utils_XYQ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

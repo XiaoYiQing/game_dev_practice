@@ -45,12 +45,35 @@ public:
     int getMainCardID() const;
     void setMainCardID( int mainCardID );
 
-    int getPossCardID( unsigned int vect_idx ) const;
-    void setPossCardID( unsigned int vect_idx, int newID );
+    int getPossCardID( int vect_idx ) const;
+    void setPossCardID( int vect_idx, int newID );
 
 // ====================================================================== <<<<<
 
+
+
+// ====================================================================== >>>>>
+//      Game Functionality (Public)
+// ====================================================================== >>>>>
+
+
+// ====================================================================== <<<<<
+
+
+
 protected:
+
+// ====================================================================== >>>>>
+//      Game Functionality (Protected)
+// ====================================================================== >>>>>
+
+    /*
+    Randomly assign the main card.
+    */
+    void pickMainCard();
+
+// ====================================================================== <<<<<
+
 
     // Number of possible cards.
     int possCardCnt;
@@ -58,7 +81,7 @@ protected:
     /*
     The ID of the main card.
     */
-    vector<int> mainCardID;
+    int mainCardID;
     /*
     The integers representing the IDs of the possible cards.
     */

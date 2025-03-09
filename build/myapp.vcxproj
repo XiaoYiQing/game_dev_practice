@@ -86,7 +86,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -109,10 +109,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;RES_PATH_XYQ=\"C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/res\";SFML_STATIC;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -132,7 +132,7 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PreBuildEvent>
     <Link>
-      <AdditionalDependencies>_deps\sfml-build\lib\Debug\sfml-graphics-s-d.lib;SFML_utils\Debug\SFML_utils.lib;SFML_games\Debug\SFML_games.lib;tests\Debug\tests.lib;SFML_games\Debug\SFML_games.lib;SFML_utils\Debug\SFML_utils.lib;_deps\sfml-build\lib\Debug\sfml-graphics-s-d.lib;_deps\sfml-build\lib\Debug\sfml-window-s-d.lib;_deps\sfml-build\lib\Debug\sfml-system-s-d.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>_deps\sfml-build\lib\Debug\sfml-graphics-s-d.lib;SFML_utils\Debug\SFML_utils.lib;utils_XYQ\Debug\utils_XYQ.lib;SFML_games\Debug\SFML_games.lib;tests\Debug\tests.lib;SFML_games\Debug\SFML_games.lib;SFML_utils\Debug\SFML_utils.lib;_deps\sfml-build\lib\Debug\sfml-graphics-s-d.lib;_deps\sfml-build\lib\Debug\sfml-window-s-d.lib;_deps\sfml-build\lib\Debug\sfml-system-s-d.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -147,7 +147,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -171,10 +171,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RES_PATH_XYQ=\"C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/res\";SFML_STATIC;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -194,7 +194,7 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PreBuildEvent>
     <Link>
-      <AdditionalDependencies>_deps\sfml-build\lib\Release\sfml-graphics-s.lib;SFML_utils\Release\SFML_utils.lib;SFML_games\Release\SFML_games.lib;tests\Release\tests.lib;SFML_games\Release\SFML_games.lib;SFML_utils\Release\SFML_utils.lib;_deps\sfml-build\lib\Release\sfml-graphics-s.lib;_deps\sfml-build\lib\Release\sfml-window-s.lib;_deps\sfml-build\lib\Release\sfml-system-s.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>_deps\sfml-build\lib\Release\sfml-graphics-s.lib;SFML_utils\Release\SFML_utils.lib;utils_XYQ\Release\utils_XYQ.lib;SFML_games\Release\SFML_games.lib;tests\Release\tests.lib;SFML_games\Release\SFML_games.lib;SFML_utils\Release\SFML_utils.lib;_deps\sfml-build\lib\Release\sfml-graphics-s.lib;_deps\sfml-build\lib\Release\sfml-window-s.lib;_deps\sfml-build\lib\Release\sfml-system-s.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -209,7 +209,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -233,10 +233,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RES_PATH_XYQ=\"C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/res\";SFML_STATIC;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -256,7 +256,7 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PreBuildEvent>
     <Link>
-      <AdditionalDependencies>_deps\sfml-build\lib\MinSizeRel\sfml-graphics-s.lib;SFML_utils\MinSizeRel\SFML_utils.lib;SFML_games\MinSizeRel\SFML_games.lib;tests\MinSizeRel\tests.lib;SFML_games\MinSizeRel\SFML_games.lib;SFML_utils\MinSizeRel\SFML_utils.lib;_deps\sfml-build\lib\MinSizeRel\sfml-graphics-s.lib;_deps\sfml-build\lib\MinSizeRel\sfml-window-s.lib;_deps\sfml-build\lib\MinSizeRel\sfml-system-s.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>_deps\sfml-build\lib\MinSizeRel\sfml-graphics-s.lib;SFML_utils\MinSizeRel\SFML_utils.lib;utils_XYQ\MinSizeRel\utils_XYQ.lib;SFML_games\MinSizeRel\SFML_games.lib;tests\MinSizeRel\tests.lib;SFML_games\MinSizeRel\SFML_games.lib;SFML_utils\MinSizeRel\SFML_utils.lib;_deps\sfml-build\lib\MinSizeRel\sfml-graphics-s.lib;_deps\sfml-build\lib\MinSizeRel\sfml-window-s.lib;_deps\sfml-build\lib\MinSizeRel\sfml-system-s.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -271,7 +271,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/include"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -294,10 +294,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;RES_PATH_XYQ=\"C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/res\";SFML_STATIC;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_utils;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\utils_XYQ;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\tests;C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\_deps\sfml-src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -317,7 +317,7 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PreBuildEvent>
     <Link>
-      <AdditionalDependencies>_deps\sfml-build\lib\RelWithDebInfo\sfml-graphics-s.lib;SFML_utils\RelWithDebInfo\SFML_utils.lib;SFML_games\RelWithDebInfo\SFML_games.lib;tests\RelWithDebInfo\tests.lib;SFML_games\RelWithDebInfo\SFML_games.lib;SFML_utils\RelWithDebInfo\SFML_utils.lib;_deps\sfml-build\lib\RelWithDebInfo\sfml-graphics-s.lib;_deps\sfml-build\lib\RelWithDebInfo\sfml-window-s.lib;_deps\sfml-build\lib\RelWithDebInfo\sfml-system-s.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>_deps\sfml-build\lib\RelWithDebInfo\sfml-graphics-s.lib;SFML_utils\RelWithDebInfo\SFML_utils.lib;utils_XYQ\RelWithDebInfo\utils_XYQ.lib;SFML_games\RelWithDebInfo\SFML_games.lib;tests\RelWithDebInfo\tests.lib;SFML_games\RelWithDebInfo\SFML_games.lib;SFML_utils\RelWithDebInfo\SFML_utils.lib;_deps\sfml-build\lib\RelWithDebInfo\sfml-graphics-s.lib;_deps\sfml-build\lib\RelWithDebInfo\sfml-window-s.lib;_deps\sfml-build\lib\RelWithDebInfo\sfml-system-s.lib;opengl32.lib;winmm.lib;gdi32.lib;_deps\sfml-src\extlibs\libs-msvc-universal\x86\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -420,6 +420,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\tests\tests.vcxproj">
       <Project>{79A3AF4B-AC0D-33B5-B1BF-12A742C01C84}</Project>
       <Name>tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\utils_XYQ\utils_XYQ.vcxproj">
+      <Project>{ABDEFF5C-A86E-3422-824A-61208D316E58}</Project>
+      <Name>utils_XYQ</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

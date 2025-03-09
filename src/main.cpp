@@ -33,6 +33,7 @@ TODO: Create a base checkers game engine.
 #include "TTT_wt_but_XYQ.h"
 #include "CHK_SFML_eng.h"
 
+#include "numUtils.h"
 
 using namespace std;
 
