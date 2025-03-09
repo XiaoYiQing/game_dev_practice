@@ -26,4 +26,9 @@ target_include_directories(SFML_games PUBLIC
     "${PROJECT_SOURCE_DIR}/SFML_utils"
 )
 
+target_link_libraries( SFML_games PRIVATE utils_XYQ )
+target_include_directories(SFML_games PUBLIC
+    "${PROJECT_SOURCE_DIR}/utils_XYQ"
+)
+
 

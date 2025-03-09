@@ -234,15 +234,18 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "sfml-system::@8cb1db2982443611e568"
-		},
-		{
-			"backtrace" : 2,
 			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
 		},
 		{
 			"backtrace" : 2,
+			"id" : "sfml-system::@8cb1db2982443611e568"
+		},
+		{
+			"backtrace" : 2,
 			"id" : "sfml-window::@5730451e331e3690ae65"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 4,
@@ -253,15 +256,12 @@
 			"id" : "SFML_utils::@02c47fcd27ea615c0885"
 		},
 		{
-			"backtrace" : 6,
-			"id" : "tests::@a44f0ac069e85531cdee"
-		},
-		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
-		},
-		{
 			"backtrace" : 5,
 			"id" : "SFML_games::@a23c4e5dac5a98fab458"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "tests::@a44f0ac069e85531cdee"
 		}
 	],
 	"id" : "myapp::@6890427a1f51a3e7e1df",
@@ -345,6 +345,11 @@
 			{
 				"backtrace" : 17,
 				"fragment" : "_deps\\sfml-src\\extlibs\\libs-msvc-universal\\x86\\freetype.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "utils_XYQ\\MinSizeRel\\utils_XYQ.lib",
 				"role" : "libraries"
 			},
 			{

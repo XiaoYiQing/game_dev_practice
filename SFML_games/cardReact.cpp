@@ -20,7 +20,7 @@ cardReact::cardReact( int possCardCnt ){
         possCardID_vect.push_back( i );
     }
 
-
+    this->pickMainCard();
 
 }
 
@@ -68,8 +68,12 @@ void cardReact::setPossCardID( int vect_idx, int newID ){
 //      Game Functionality (Protected)
 // ====================================================================== >>>>>
 
-void pickMainCard(){
+void cardReact::pickMainCard(){
     
+    int rand_vect_idx = randIntVectGen( 0, possCardCnt - 1, 1 ).at(0);
+
+    this->mainCardID = this->possCardID_vect.at( rand_vect_idx );
+
 }
 
 // ====================================================================== <<<<<

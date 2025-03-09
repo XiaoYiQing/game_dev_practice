@@ -32,6 +32,7 @@ TODO: Create a base checkers game engine.
 
 #include "TTT_wt_but_XYQ.h"
 #include "CHK_SFML_eng.h"
+#include "cardReact.h"
 
 #include "numUtils.h"
 
@@ -78,6 +79,11 @@ int main(int, char**){
         cout << "[" << z << "] " ;
     }
     cout << endl;
+
+
+    gameEngine::cardReact myGame = gameEngine::cardReact( 6 );
+    int tmp_ID = myGame.getMainCardID();
+    cout << "ID: " << tmp_ID << endl;
 
     return 0;
 

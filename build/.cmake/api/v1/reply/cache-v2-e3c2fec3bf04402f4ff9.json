@@ -2039,7 +2039,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "general;sfml-graphics;general;SFML_utils;"
+			"value" : "general;sfml-graphics;general;SFML_utils;general;utils_XYQ;"
 		},
 		{
 			"name" : "SFML_utils_LIB_DEPENDS",

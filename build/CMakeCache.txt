@@ -390,7 +390,7 @@ SFML_USE_STATIC_STD_LIBS:BOOL=FALSE
 SFML_USE_SYSTEM_DEPS:BOOL=FALSE
 
 //Dependencies for the target
-SFML_games_LIB_DEPENDS:STATIC=general;sfml-graphics;general;SFML_utils;
+SFML_games_LIB_DEPENDS:STATIC=general;sfml-graphics;general;SFML_utils;general;utils_XYQ;
 
 //Dependencies for the target
 SFML_utils_LIB_DEPENDS:STATIC=general;sfml-graphics;
