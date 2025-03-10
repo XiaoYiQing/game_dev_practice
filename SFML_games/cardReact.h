@@ -50,6 +50,14 @@ public:
     int getPossCardID( int vect_idx ) const;
     void setPossCardID( int vect_idx, int newID );
 
+    // Obtain the amount of time elapsed since the start of the game in milliseconds.
+    long long getElapsedMS();
+
+    /*
+    Determines if the main card is revealed.
+    */
+    bool isMainCardRevealed();
+
 // ====================================================================== <<<<<
 
 
@@ -83,32 +91,29 @@ protected:
     void pickMainCard();
 
 
-
 // ====================================================================== <<<<<
 
 
-    // Number of possible cards.
-    int possCardCnt;
+    
 
     /*
     The ID of the main card.
     */
     int mainCardID;
+
+    
+    // Number of possible cards.
+    int possCardCnt;
     /*
     The integers representing the IDs of the possible cards.
     */
     vector<int> possCardID_vect;
 
     /*
-    The amount of time in seconds for the count down before the main card is
+    The amount of time in milliseconds for the count down before the main card is
     revealed.
     */
-    int cntDownStartT;
-
-    /*
-    The amount of time elapsed since a game start.
-    */
-    double timeElapsed;
+    long long cntDownStartT;
 
     chrono::steady_clock::time_point startTimePt;
     chrono::steady_clock::time_point lastTimePt;

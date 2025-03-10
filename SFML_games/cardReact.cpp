@@ -14,6 +14,7 @@ using namespace gameEngine;
 cardReact::cardReact( int possCardCnt ){
 
     this->possCardCnt = possCardCnt;
+    this->cntDownStartT = 3000;
 
     // Use straightforward incremental ID assignement.
     for( int i = 0; i < possCardCnt; i++ ){
@@ -50,6 +51,21 @@ void cardReact::setPossCardID( int vect_idx, int newID ){
     this->possCardID_vect.at( vect_idx ) = newID;
 }
 
+long long cardReact::getElapsedMS(){
+
+    lastTimePt = chrono::high_resolution_clock::now();
+    return duration_cast<chrono::milliseconds>( lastTimePt - startTimePt ).count();
+
+}
+
+bool cardReact::isMainCardRevealed(){
+
+    lastTimePt = chrono::high_resolution_clock::now();
+    long long elapsedTime = duration_cast<chrono::milliseconds>( lastTimePt - startTimePt ).count();
+
+    return cntDownStartT < elapsedTime;
+
+}
 
 // ====================================================================== <<<<<
 
@@ -62,14 +78,18 @@ void cardReact::setPossCardID( int vect_idx, int newID ){
 
 void cardReact::reset(){
 
-    // Reset time elapsed to 0.
-    this->timeElapsed = 0;
-
     // Obtain a new card.
     this->pickMainCard();
 
     startTimePt = chrono::high_resolution_clock::now();
     lastTimePt = startTimePt;
+
+}
+
+
+void cardReact::start(){
+
+    startTimePt = chrono::high_resolution_clock::now();
 
 }
 

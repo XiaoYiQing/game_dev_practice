@@ -13,6 +13,7 @@ TODO: Create a base checkers game engine.
 #include <chrono>
 #include <iostream>
 #include <string>
+#include <thread>
 
 #include <SFML/Graphics.hpp>
 
@@ -73,7 +74,9 @@ int main(int, char**){
 
 
     
-    chrono::steady_clock::time_point lol = chrono::high_resolution_clock::now();
+    gameEngine::cardReact myGame(8);
+
+    cout << myGame.getElapsedMS() << endl;
 
     return 0;
 
