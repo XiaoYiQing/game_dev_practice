@@ -2,6 +2,7 @@
     "files.associations": {
         "memory": "cpp",
         "vector": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "ostream": "cpp"
     }
 }

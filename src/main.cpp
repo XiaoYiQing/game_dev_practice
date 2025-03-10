@@ -76,7 +76,23 @@ int main(int, char**){
     
     gameEngine::cardReact myGame(8);
 
-    cout << myGame.getElapsedMS() << endl;
+    this_thread::sleep_for( chrono::milliseconds(2900) );
+
+    cout << myGame.getElapsedMS() << ": ";
+    if( myGame.isMainCardRevealed() ){
+        cout << "true" << endl;
+    }else{
+        cout << "false" << endl;
+    }
+
+    this_thread::sleep_for( chrono::milliseconds(100) );
+
+    cout << myGame.getElapsedMS() << ": ";
+    if( myGame.isMainCardRevealed() ){
+        cout << "true" << endl;
+    }else{
+        cout << "false" << endl;
+    }
 
     return 0;
 
