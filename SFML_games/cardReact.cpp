@@ -20,6 +20,8 @@ cardReact::cardReact( int possCardCnt ){
         possCardID_vect.push_back( i );
     }
 
+    this->reset();
+
     this->pickMainCard();
 
 }
@@ -58,7 +60,18 @@ void cardReact::setPossCardID( int vect_idx, int newID ){
 //      Game Functionality (Public)
 // ====================================================================== >>>>>
 
+void cardReact::reset(){
 
+    // Reset time elapsed to 0.
+    this->timeElapsed = 0;
+
+    // Obtain a new card.
+    this->pickMainCard();
+
+    startTimePt = chrono::high_resolution_clock::now();
+    lastTimePt = startTimePt;
+
+}
 
 // ====================================================================== <<<<<
 

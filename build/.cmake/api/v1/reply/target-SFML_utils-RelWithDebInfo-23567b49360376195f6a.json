@@ -12,7 +12,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "SFML_utils/Debug/SFML_utils.lib"
+			"path" : "SFML_utils/RelWithDebInfo/SFML_utils.lib"
 		}
 	],
 	"backtrace" : 1,
@@ -52,7 +52,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20"
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG -std:c++20"
 				}
 			],
 			"defines" : 
@@ -95,7 +95,7 @@
 	[
 		{
 			"backtrace" : 2,
-			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
+			"id" : "sfml-window::@5730451e331e3690ae65"
 		},
 		{
 			"backtrace" : 2,
@@ -103,7 +103,7 @@
 		},
 		{
 			"backtrace" : 2,
-			"id" : "sfml-window::@5730451e331e3690ae65"
+			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
 		},
 		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"

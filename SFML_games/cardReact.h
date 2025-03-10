@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#include <chrono>
+
 #include "numUtils.h"
 
 using namespace std;
@@ -56,6 +58,14 @@ public:
 //      Game Functionality (Public)
 // ====================================================================== >>>>>
 
+    /*
+    Reset the state of the game.
+    */
+    void reset();
+
+    /*
+    */
+    void start();
 
 // ====================================================================== <<<<<
 
@@ -72,6 +82,8 @@ protected:
     */
     void pickMainCard();
 
+
+
 // ====================================================================== <<<<<
 
 
@@ -87,14 +99,25 @@ protected:
     */
     vector<int> possCardID_vect;
 
+    /*
+    The amount of time in seconds for the count down before the main card is
+    revealed.
+    */
+    int cntDownStartT;
 
+    /*
+    The amount of time elapsed since a game start.
+    */
+    double timeElapsed;
+
+    chrono::steady_clock::time_point startTimePt;
+    chrono::steady_clock::time_point lastTimePt;
 
 private:
-
 
 
 };
 
 }
 
-#endif  // CARDREACT_H
+#endif  

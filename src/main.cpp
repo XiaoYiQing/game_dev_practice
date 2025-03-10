@@ -10,7 +10,7 @@
 TODO: Create a base checkers game engine.
 */
 
-
+#include <chrono>
 #include <iostream>
 #include <string>
 
@@ -72,18 +72,8 @@ int main(int, char**){
     // tests::checkers_test4();
 
 
-    vector<int> tmp = randIntVectGen( 0, 100, 10 );
-
-    cout << "Here comes the Sun: " << endl;
-    for( int z : tmp ){
-        cout << "[" << z << "] " ;
-    }
-    cout << endl;
-
-
-    gameEngine::cardReact myGame = gameEngine::cardReact( 6 );
-    int tmp_ID = myGame.getMainCardID();
-    cout << "ID: " << tmp_ID << endl;
+    
+    chrono::steady_clock::time_point lol = chrono::high_resolution_clock::now();
 
     return 0;
 
