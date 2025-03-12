@@ -8,6 +8,7 @@
 #include <iostream>
 #include <magic_enum.hpp>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include <chrono>
@@ -76,8 +77,12 @@ public:
     // Obtain the amount of time (ms) elapsed since the start of the game.
     long long getElapsedMS() const;
 
-    // Obtain the amount of time (ms) elapsed between the card reveal time and 
-    // the time a card has been picked.
+    /* 
+    Obtain the amount of time (ms) elapsed between the card reveal time and 
+    the time a card has been picked.
+    A real time is returned only when the game is finished (win/loss), otherwise
+    -1 is returned.
+    */
     long long getPickCardMS() const;
 
     // Determines if the main card is revealed.
@@ -159,5 +164,15 @@ private:
 };
 
 }
+
+
+
+namespace tests{
+
+    void CRG_test1();
+    
+}
+
+
 
 #endif  

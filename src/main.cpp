@@ -72,36 +72,7 @@ int main(int, char**){
 
     // tests::checkers_test4();
 
-
-    
-    gameEngine::cardReact myGame(8);
-    myGame.start();
-
-    this_thread::sleep_for( chrono::milliseconds(2900) );
-
-    cout << myGame.getElapsedMS() << ": ";
-    if( myGame.isMainCardRevealed() ){
-        cout << "true: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
-    }else{
-        cout << "false: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
-    }
-    cout << "Card pick time: " << myGame.getPickCardMS() << endl;
-
-    this_thread::sleep_for( chrono::milliseconds(250) );
-
-    cout << myGame.getElapsedMS() << ": ";
-    if( myGame.isMainCardRevealed() ){
-        cout << "true: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
-    }else{
-        cout << "false: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
-    }
-
-    int mainCardID = myGame.getMainCardID();
-    myGame.selectCard( mainCardID );
-
-    cout << myGame.getElapsedMS() << ": ";
-    cout << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
-    cout << "Card pick time: " << myGame.getPickCardMS() << endl;
+    tests::CRG_test1();
 
     return 0;
 
