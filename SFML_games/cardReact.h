@@ -2,8 +2,6 @@
 #define CARDREACT_H
 
 
-#include <SFML/Graphics.hpp>
-
 #include <cmath>
 #include <iostream>
 #include <magic_enum.hpp>
@@ -170,7 +168,7 @@ private:
 namespace tests{
 
     void CRG_test1();
-    
+
 }
 
 

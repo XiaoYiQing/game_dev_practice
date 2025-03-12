@@ -35,9 +35,13 @@ class CHK_SFML_eng : checkers{
 
 public:
 
+    // The color of light tiles.
     static const sf::Color LTILECOLOR;
+    // The color of dark tiles.
     static const sf::Color DTILECOLOR;
+    // The color of pressed (by mouse) tiles.
     static const sf::Color PTILECOLOR;
+    // The color of locked tile.
     static const sf::Color LOCKTILECOLOR;
 
     /*
