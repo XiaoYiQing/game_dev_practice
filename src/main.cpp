@@ -75,23 +75,24 @@ int main(int, char**){
 
     
     gameEngine::cardReact myGame(8);
+    myGame.start();
 
     this_thread::sleep_for( chrono::milliseconds(2900) );
 
     cout << myGame.getElapsedMS() << ": ";
     if( myGame.isMainCardRevealed() ){
-        cout << "true" << endl;
+        cout << "true: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
     }else{
-        cout << "false" << endl;
+        cout << "false: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
     }
 
     this_thread::sleep_for( chrono::milliseconds(100) );
 
     cout << myGame.getElapsedMS() << ": ";
     if( myGame.isMainCardRevealed() ){
-        cout << "true" << endl;
+        cout << "true: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
     }else{
-        cout << "false" << endl;
+        cout << "false: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
     }
 
     return 0;

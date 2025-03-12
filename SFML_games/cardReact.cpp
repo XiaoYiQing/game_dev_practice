@@ -34,6 +34,7 @@ cardReact::CRG_STATE get_CRG_STATE_AtIdx( int idx ){
 
 cardReact::cardReact( int possCardCnt ){
 
+    this->state = CRG_STATE::UNSTARTED;
     this->possCardCnt = possCardCnt;
     this->cntDownStartT = 3000;
 
@@ -72,20 +73,32 @@ void cardReact::setPossCardID( int vect_idx, int newID ){
     this->possCardID_vect.at( vect_idx ) = newID;
 }
 
-long long cardReact::getElapsedMS(){
+long long cardReact::getElapsedMS() const{
 
-    lastTimePt = chrono::high_resolution_clock::now();
-    return duration_cast<chrono::milliseconds>( lastTimePt - startTimePt ).count();
+    if( this->state == CRG_STATE::UNSTARTED ){
+        return 0;
+    }
+
+    auto tmp = chrono::high_resolution_clock::now();
+    return duration_cast<chrono::milliseconds>( tmp - startTimePt ).count();
 
 }
 
-bool cardReact::isMainCardRevealed(){
+bool cardReact::isMainCardRevealed() const{
 
-    lastTimePt = chrono::high_resolution_clock::now();
-    long long elapsedTime = duration_cast<chrono::milliseconds>( lastTimePt - startTimePt ).count();
+    if( this->state == CRG_STATE::UNSTARTED ){
+        return false;
+    }
+
+    auto tmp = chrono::high_resolution_clock::now();
+    long long elapsedTime = duration_cast<chrono::milliseconds>( tmp - startTimePt ).count();
 
     return cntDownStartT < elapsedTime;
 
+}
+
+cardReact::CRG_STATE cardReact::getState() const{
+    return this->state;
 }
 
 // ====================================================================== <<<<<
@@ -99,6 +112,8 @@ bool cardReact::isMainCardRevealed(){
 
 void cardReact::reset(){
 
+    this->state = CRG_STATE::UNSTARTED;
+
     // Select a new card.
     this->pickMainCard();
 
@@ -111,6 +126,8 @@ void cardReact::reset(){
 
 void cardReact::start(){
 
+    this->state = CRG_STATE::ONGOING;
+
     startTimePt = chrono::high_resolution_clock::now();
 
 }
@@ -118,17 +135,17 @@ void cardReact::start(){
 
 bool cardReact::selectCard( int cardVect_idx ){
 
-    if( this->isMainCardRevealed() ){
+    bool success = false;
+
+    if( ( this->state == CRG_STATE::ONGOING ) && ( this->isMainCardRevealed() ) ){
 
         if( possCardID_vect.at( cardVect_idx ) == mainCardID ){
-            return true;
-        }else{
-            return false;
+            success = true;
         }
 
-    }else{
-        return false;
     }
+
+    return success;
 
 }
 

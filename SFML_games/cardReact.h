@@ -72,12 +72,15 @@ public:
     void setPossCardID( int vect_idx, int newID );
 
     // Obtain the amount of time elapsed since the start of the game in milliseconds.
-    long long getElapsedMS();
+    long long getElapsedMS() const;
 
     /*
     Determines if the main card is revealed.
     */
-    bool isMainCardRevealed();
+    bool isMainCardRevealed() const;
+
+    // Obtain the state of the game.
+    CRG_STATE getState() const;
 
 // ====================================================================== <<<<<
 
@@ -123,7 +126,10 @@ protected:
 // ====================================================================== <<<<<
 
 
-    
+    /*
+    The state of the game.
+    */
+    CRG_STATE state;
 
     /*
     The ID of the main card.
