@@ -297,11 +297,13 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\checkers.h" />
     <ClInclude Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CHK_SFML_eng.h" />
     <ClInclude Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\cardReact.h" />
+    <ClInclude Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CRG_SFML_eng.h" />
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\TikTakTok.cpp" />
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\TTT_wt_but_XYQ.cpp" />
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\checkers.cpp" />
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CHK_SFML_eng.cpp" />
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\cardReact.cpp" />
+    <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CRG_SFML_eng.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\build\ZERO_CHECK.vcxproj">

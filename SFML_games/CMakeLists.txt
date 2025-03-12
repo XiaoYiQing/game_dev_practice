@@ -6,6 +6,7 @@ set( SFML_games_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/checkers.h
     ${CMAKE_CURRENT_SOURCE_DIR}/CHK_SFML_eng.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cardReact.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/CRG_SFML_eng.h
 )
 
 set( SFML_games_SOURCES
@@ -14,6 +15,7 @@ set( SFML_games_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/checkers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CHK_SFML_eng.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cardReact.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CRG_SFML_eng.cpp
 )
 
 
