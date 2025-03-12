@@ -78,9 +78,10 @@ bool cardReact::isMainCardRevealed(){
 
 void cardReact::reset(){
 
-    // Obtain a new card.
+    // Select a new card.
     this->pickMainCard();
 
+    // Reset the start time point.
     startTimePt = chrono::high_resolution_clock::now();
     lastTimePt = startTimePt;
 
@@ -90,6 +91,23 @@ void cardReact::reset(){
 void cardReact::start(){
 
     startTimePt = chrono::high_resolution_clock::now();
+
+}
+
+
+bool cardReact::selectCard( int cardVect_idx ){
+
+    if( this->isMainCardRevealed() ){
+
+        if( possCardID_vect.at( cardVect_idx ) == mainCardID ){
+            return true;
+        }else{
+            return false;
+        }
+
+    }else{
+        return false;
+    }
 
 }
 
@@ -103,8 +121,10 @@ void cardReact::start(){
 
 void cardReact::pickMainCard(){
     
+    // Select a random card vector index.
     int rand_vect_idx = randIntVectGen( 0, possCardCnt - 1, 1 ).at(0);
 
+    // Set the main card's ID to be the randomly selected card's ID.
     this->mainCardID = this->possCardID_vect.at( rand_vect_idx );
 
 }

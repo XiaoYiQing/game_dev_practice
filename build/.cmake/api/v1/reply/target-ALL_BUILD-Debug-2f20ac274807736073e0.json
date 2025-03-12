@@ -20,19 +20,19 @@
 			"id" : "myapp::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "SFML_games::@a23c4e5dac5a98fab458"
-		},
-		{
-			"id" : "tests::@a44f0ac069e85531cdee"
-		},
-		{
 			"id" : "SFML_utils::@02c47fcd27ea615c0885"
 		},
 		{
 			"id" : "utils_XYQ::@bc954a5f2bdbaa69641d"
 		},
 		{
+			"id" : "tests::@a44f0ac069e85531cdee"
+		},
+		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "SFML_games::@a23c4e5dac5a98fab458"
 		}
 	],
 	"folder" : 
