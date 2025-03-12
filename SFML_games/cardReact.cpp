@@ -140,8 +140,12 @@ bool cardReact::selectCard( int cardVect_idx ){
     if( ( this->state == CRG_STATE::ONGOING ) && ( this->isMainCardRevealed() ) ){
 
         if( possCardID_vect.at( cardVect_idx ) == mainCardID ){
-            success = true;
+            this->state = CRG_STATE::WIN;
+        }else{
+            this->state = CRG_STATE::LOSS;
         }
+        // Card is selected successfully.
+        success = true;
 
     }
 

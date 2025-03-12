@@ -104,7 +104,7 @@ public:
     /*
     Select the card which matches the hidden card.
     Card selection will fail (false) if countdown has not yet finished yet.
-    Card selection will fail (false) if wrong card is picked.
+    Card selection will fail (false) if game is not ongoing.
     */
     bool selectCard( int cardVect_idx );
 

@@ -12,7 +12,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "SFML_games/RelWithDebInfo/SFML_games.lib"
+			"path" : "SFML_games/Debug/SFML_games.lib"
 		}
 	],
 	"backtrace" : 1,
@@ -48,13 +48,13 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 24,
+				"line" : 29,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 29,
+				"line" : 24,
 				"parent" : 0
 			},
 			{
@@ -77,7 +77,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG -std:c++20"
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20"
 				}
 			],
 			"defines" : 
@@ -138,11 +138,11 @@
 		},
 		{
 			"backtrace" : 3,
-			"id" : "SFML_utils::@02c47fcd27ea615c0885"
+			"id" : "utils_XYQ::@bc954a5f2bdbaa69641d"
 		},
 		{
 			"backtrace" : 4,
-			"id" : "utils_XYQ::@bc954a5f2bdbaa69641d"
+			"id" : "SFML_utils::@02c47fcd27ea615c0885"
 		},
 		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"

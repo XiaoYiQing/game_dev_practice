@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Debug/myapp.exe"
+			"path" : "RelWithDebInfo/myapp.exe"
 		},
 		{
-			"path" : "Debug/myapp.pdb"
+			"path" : "RelWithDebInfo/myapp.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -173,7 +173,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20"
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG -std:c++20"
 				}
 			],
 			"defines" : 
@@ -245,19 +245,19 @@
 			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
 		},
 		{
-			"backtrace" : 3,
-			"id" : "SFML_utils::@02c47fcd27ea615c0885"
-		},
-		{
 			"backtrace" : 4,
 			"id" : "utils_XYQ::@bc954a5f2bdbaa69641d"
 		},
 		{
-			"backtrace" : 6,
-			"id" : "tests::@a44f0ac069e85531cdee"
+			"backtrace" : 3,
+			"id" : "SFML_utils::@02c47fcd27ea615c0885"
 		},
 		{
 			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "tests::@a44f0ac069e85531cdee"
 		},
 		{
 			"backtrace" : 5,
@@ -270,7 +270,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1",
+				"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG",
 				"role" : "flags"
 			},
 			{
@@ -279,52 +279,52 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "_deps\\sfml-build\\lib\\Debug\\sfml-graphics-s-d.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-graphics-s.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "SFML_utils\\Debug\\SFML_utils.lib",
+				"fragment" : "SFML_utils\\RelWithDebInfo\\SFML_utils.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 4,
-				"fragment" : "utils_XYQ\\Debug\\utils_XYQ.lib",
+				"fragment" : "utils_XYQ\\RelWithDebInfo\\utils_XYQ.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 5,
-				"fragment" : "SFML_games\\Debug\\SFML_games.lib",
+				"fragment" : "SFML_games\\RelWithDebInfo\\SFML_games.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 6,
-				"fragment" : "tests\\Debug\\tests.lib",
+				"fragment" : "tests\\RelWithDebInfo\\tests.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 5,
-				"fragment" : "SFML_games\\Debug\\SFML_games.lib",
+				"fragment" : "SFML_games\\RelWithDebInfo\\SFML_games.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "SFML_utils\\Debug\\SFML_utils.lib",
+				"fragment" : "SFML_utils\\RelWithDebInfo\\SFML_utils.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "_deps\\sfml-build\\lib\\Debug\\sfml-graphics-s-d.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-graphics-s.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 8,
-				"fragment" : "_deps\\sfml-build\\lib\\Debug\\sfml-window-s-d.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-window-s.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 10,
-				"fragment" : "_deps\\sfml-build\\lib\\Debug\\sfml-system-s-d.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\RelWithDebInfo\\sfml-system-s.lib",
 				"role" : "libraries"
 			},
 			{
@@ -349,7 +349,7 @@
 			},
 			{
 				"backtrace" : 4,
-				"fragment" : "utils_XYQ\\Debug\\utils_XYQ.lib",
+				"fragment" : "utils_XYQ\\RelWithDebInfo\\utils_XYQ.lib",
 				"role" : "libraries"
 			},
 			{
