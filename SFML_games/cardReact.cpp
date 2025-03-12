@@ -32,11 +32,11 @@ cardReact::CRG_STATE get_CRG_STATE_AtIdx( int idx ){
 //      Constructor
 // ====================================================================== >>>>>
 
-cardReact::cardReact( int possCardCnt ){
+cardReact::cardReact( int possCardCnt, long long cntDownT ){
 
     this->state = CRG_STATE::UNSTARTED;
     this->possCardCnt = possCardCnt;
-    this->cntDownStartT = 3000;
+    this->cntDownT = cntDownT;
 
     this->reset();
 
@@ -74,7 +74,7 @@ long long cardReact::getElapsedMS() const{
 long long cardReact::getPickCardMS() const{
     if( this->state == CRG_STATE::WIN || this->state == CRG_STATE::LOSS ){
         return duration_cast<chrono::milliseconds>( cardPickTimePt - 
-            startTimePt ).count() - cntDownStartT;
+            startTimePt ).count() - cntDownT;
     }else{
         return -1;
     }
@@ -90,7 +90,7 @@ bool cardReact::isMainCardRevealed() const{
     long long elapsedTime = 
         duration_cast<chrono::milliseconds>( tmp - startTimePt ).count();
 
-    return cntDownStartT < elapsedTime;
+    return cntDownT < elapsedTime;
 
 }
 

@@ -56,7 +56,12 @@ public:
 //      Constructor
 // ====================================================================== >>>>>
     
-    cardReact( int possCardCnt = 8 );
+    /*
+    Constructor for the card react game.
+    > possCardCnt = number of possible cards.
+    > cntDownT = countdown duration time (ms) before card is revealed following a game start.
+    */
+    cardReact( int possCardCnt = 8, long long cntDownT = 3000 );
 
 // ====================================================================== <<<<<
 
@@ -143,7 +148,7 @@ protected:
     The amount of time in milliseconds for the count down before the main card is
     revealed.
     */
-    long long cntDownStartT;
+    long long cntDownT;
 
     chrono::steady_clock::time_point startTimePt;
     chrono::steady_clock::time_point cardPickTimePt;
