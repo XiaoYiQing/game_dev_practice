@@ -85,8 +85,9 @@ int main(int, char**){
     }else{
         cout << "false: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
     }
+    cout << "Card pick time: " << myGame.getPickCardMS() << endl;
 
-    this_thread::sleep_for( chrono::milliseconds(100) );
+    this_thread::sleep_for( chrono::milliseconds(250) );
 
     cout << myGame.getElapsedMS() << ": ";
     if( myGame.isMainCardRevealed() ){
@@ -100,6 +101,7 @@ int main(int, char**){
 
     cout << myGame.getElapsedMS() << ": ";
     cout << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
+    cout << "Card pick time: " << myGame.getPickCardMS() << endl;
 
     return 0;
 

@@ -68,12 +68,14 @@ public:
     int getMainCardID() const;
     void setMainCardID( int mainCardID );
 
-    // Obtain the amount of time elapsed since the start of the game in milliseconds.
+    // Obtain the amount of time (ms) elapsed since the start of the game.
     long long getElapsedMS() const;
 
-    /*
-    Determines if the main card is revealed.
-    */
+    // Obtain the amount of time (ms) elapsed between the card reveal time and 
+    // the time a card has been picked.
+    long long getPickCardMS() const;
+
+    // Determines if the main card is revealed.
     bool isMainCardRevealed() const;
 
     // Obtain the state of the game.
@@ -144,7 +146,7 @@ protected:
     long long cntDownStartT;
 
     chrono::steady_clock::time_point startTimePt;
-    chrono::steady_clock::time_point lastTimePt;
+    chrono::steady_clock::time_point cardPickTimePt;
 
 private:
 

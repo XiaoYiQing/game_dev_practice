@@ -71,6 +71,15 @@ long long cardReact::getElapsedMS() const{
 
 }
 
+long long cardReact::getPickCardMS() const{
+    if( this->state == CRG_STATE::WIN || this->state == CRG_STATE::LOSS ){
+        return duration_cast<chrono::milliseconds>( cardPickTimePt - 
+            startTimePt ).count() - cntDownStartT;
+    }else{
+        return -1;
+    }
+}
+
 bool cardReact::isMainCardRevealed() const{
 
     if( this->state == CRG_STATE::UNSTARTED ){
@@ -78,7 +87,8 @@ bool cardReact::isMainCardRevealed() const{
     }
 
     auto tmp = chrono::high_resolution_clock::now();
-    long long elapsedTime = duration_cast<chrono::milliseconds>( tmp - startTimePt ).count();
+    long long elapsedTime = 
+        duration_cast<chrono::milliseconds>( tmp - startTimePt ).count();
 
     return cntDownStartT < elapsedTime;
 
@@ -106,7 +116,7 @@ void cardReact::reset(){
 
     // Reset the start time point.
     startTimePt = chrono::high_resolution_clock::now();
-    lastTimePt = startTimePt;
+    cardPickTimePt = startTimePt;
 
 }
 
@@ -116,6 +126,7 @@ void cardReact::start(){
     this->state = CRG_STATE::ONGOING;
 
     startTimePt = chrono::high_resolution_clock::now();
+    cardPickTimePt = startTimePt;
 
 }
 
@@ -126,11 +137,16 @@ bool cardReact::selectCard( int cardVect_idx ){
 
     if( ( this->state == CRG_STATE::ONGOING ) && ( this->isMainCardRevealed() ) ){
 
+        // Record the card pick time.
+        this->cardPickTimePt = chrono::high_resolution_clock::now();
+
+        // Win/Loss verification.
         if( cardVect_idx == mainCardID ){
             this->state = CRG_STATE::WIN;
         }else{
             this->state = CRG_STATE::LOSS;
         }
+
         // Card is selected successfully.
         success = true;
 
