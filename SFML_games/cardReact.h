@@ -68,9 +68,6 @@ public:
     int getMainCardID() const;
     void setMainCardID( int mainCardID );
 
-    int getPossCardID( int vect_idx ) const;
-    void setPossCardID( int vect_idx, int newID );
-
     // Obtain the amount of time elapsed since the start of the game in milliseconds.
     long long getElapsedMS() const;
 
@@ -139,10 +136,6 @@ protected:
     
     // Number of possible cards.
     int possCardCnt;
-    /*
-    The integers representing the IDs of the possible cards.
-    */
-    vector<int> possCardID_vect;
 
     /*
     The amount of time in milliseconds for the count down before the main card is

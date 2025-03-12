@@ -38,11 +38,6 @@ cardReact::cardReact( int possCardCnt ){
     this->possCardCnt = possCardCnt;
     this->cntDownStartT = 3000;
 
-    // Use straightforward incremental ID assignement.
-    for( int i = 0; i < possCardCnt; i++ ){
-        possCardID_vect.push_back( i );
-    }
-
     this->reset();
 
     this->pickMainCard();
@@ -63,14 +58,6 @@ int cardReact::getMainCardID() const{
 
 void cardReact::setMainCardID( int mainCardID ){
     this->mainCardID = mainCardID;
-}
-
-int cardReact::getPossCardID( int vect_idx ) const{
-    return this->possCardID_vect.at( vect_idx );
-}
-
-void cardReact::setPossCardID( int vect_idx, int newID ){
-    this->possCardID_vect.at( vect_idx ) = newID;
 }
 
 long long cardReact::getElapsedMS() const{
@@ -139,7 +126,7 @@ bool cardReact::selectCard( int cardVect_idx ){
 
     if( ( this->state == CRG_STATE::ONGOING ) && ( this->isMainCardRevealed() ) ){
 
-        if( possCardID_vect.at( cardVect_idx ) == mainCardID ){
+        if( cardVect_idx == mainCardID ){
             this->state = CRG_STATE::WIN;
         }else{
             this->state = CRG_STATE::LOSS;
@@ -164,10 +151,7 @@ bool cardReact::selectCard( int cardVect_idx ){
 void cardReact::pickMainCard(){
     
     // Select a random card vector index.
-    int rand_vect_idx = randIntVectGen( 0, possCardCnt - 1, 1 ).at(0);
-
-    // Set the main card's ID to be the randomly selected card's ID.
-    this->mainCardID = this->possCardID_vect.at( rand_vect_idx );
+    this->mainCardID = randIntVectGen( 0, possCardCnt - 1, 1 ).at(0);
 
 }
 

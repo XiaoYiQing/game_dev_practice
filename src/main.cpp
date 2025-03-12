@@ -95,7 +95,7 @@ int main(int, char**){
         cout << "false: " << myGame.get_CRG_STATE_Str( myGame.getState() ) << endl;
     }
 
-    long long mainCardID = myGame.getMainCardID();
+    int mainCardID = myGame.getMainCardID();
     myGame.selectCard( mainCardID );
 
     cout << myGame.getElapsedMS() << ": ";
