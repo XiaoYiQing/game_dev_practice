@@ -6,6 +6,27 @@ using namespace gameEngine;
 
 
 
+// ====================================================================== >>>>>
+//      Class Enum "CRG_STATE" Help Functions
+// ====================================================================== >>>>>
+
+string cardReact::get_CRG_STATE_Str( CRG_STATE tar_CRG_STATE ){
+    return string( magic_enum::enum_name( tar_CRG_STATE ) );
+}
+
+cardReact::CRG_STATE get_CRG_STATE_AtIdx( int idx ){
+    if( idx >= 0 && idx < cardReact::CRG_STATE_Count ){
+        return static_cast<cardReact::CRG_STATE>(idx);
+    }else{
+        cout << "Invalid int index for accessing enum \"CRG_STATE\"." << endl;
+        return static_cast<cardReact::CRG_STATE>(-1);
+    }
+}
+
+// ====================================================================== <<<<<
+
+
+
 
 // ====================================================================== >>>>>
 //      Constructor

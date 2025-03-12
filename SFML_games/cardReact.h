@@ -31,6 +31,27 @@ class cardReact{
 
 public:
 
+
+// ====================================================================== >>>>>
+//      Class Enum "CRG_STATE" Help Functions
+// ====================================================================== >>>>>
+
+    /*
+    Enum representing the states the game can be in.
+    */
+    enum class CRG_STATE{ UNSTARTED, ONGOING, WIN, LOSS };
+
+    // The number of enum entries in the enum "CRG_STATE" (Uses magic enum).
+    const static int CRG_STATE_Count = (int) magic_enum::enum_count<CRG_STATE>();
+    // Obtain the string of the target enum case (Uses magic enum).
+    static string get_CRG_STATE_Str( CRG_STATE tar_CRG_STATE );
+    // Obtain the enum matching the enum integer index.
+    static CRG_STATE get_CRG_STATE_AtIdx( int idx );
+
+// ====================================================================== <<<<<
+
+
+
 // ====================================================================== >>>>>
 //      Constructor
 // ====================================================================== >>>>>
