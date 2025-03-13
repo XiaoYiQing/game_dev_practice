@@ -132,7 +132,7 @@ void play_cardReactGame(){
 
 
     // Create the main window.
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Card Reaction Game");
+    sf::RenderWindow window( sf::VideoMode(800, 600), "Card Reaction Game" );
 
     // Main loop.
     while (window.isOpen()) {

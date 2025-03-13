@@ -63,6 +63,10 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
 
     }
 
+    // Initialize the main card.
+    int mainCardID = this->getMainCardID();
+    this->mainCard = possCard_vect.at( mainCardID );
+
 }
 
 
@@ -109,7 +113,7 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
             buttonX->setTxtStr( to_string( z ) );
             buttonX->setTxtColor( noCardTxtColor );
             buttonX->enableText();
-            
+
             buttonX->disableSprite();
 
             buttonX->update();
@@ -119,6 +123,10 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
         }
 
     }
+
+    // Initialize the main card.
+    int mainCardID = this->getMainCardID();
+    this->mainCard = possCard_vect.at( mainCardID );
 
 }
 
@@ -171,6 +179,10 @@ bool CRG_SFML_eng::releaseButton(){
         if( released ){
 
             cout << "Button released: " << to_string(z) << endl;
+
+            if( buttonX == mainCard ){
+                cout << "MATCH!" << endl;
+            }
 
             break;
 
