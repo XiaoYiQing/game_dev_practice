@@ -118,7 +118,7 @@ void play_cardReactGame(){
     
     // Define the default locations and sizes of the buttons.
     float x_start = 100;        float y_start = 100;
-    float butWidth = 50;       float butHeight = 50;
+    float butWidth = 100;       float butHeight = 100;
     float butSep = 5;
 
     // Card index variable.
@@ -137,11 +137,16 @@ void play_cardReactGame(){
             buttonX->setHeight( butHeight );
             buttonX->setUPColor( noCardColor );
             buttonX->setPColor( noCardColor );
-            buttonX->setTxtStr( "" + z );
+
+            buttonX->setTxtFont( font );
+            buttonX->setTxtStr( std::to_string(z) );
             buttonX->setTxtColor( noCardTxtColor );
+            buttonX->enableText();
+
             buttonX->disableSprite();
 
             CGR_possCard_buttons.push_back( buttonX );
+            page3_game.addObj( buttonX );
 
             z++;
 
@@ -151,8 +156,48 @@ void play_cardReactGame(){
 
     gameEngine::CRG_SFML_eng CRG_SFML_obj( 9, 3000, CGR_possCard_buttons );
 
-    int lmao = 0;
+    page3_game.update();
+    page3_game.enable();
+
 // ---------------------------------------------------------------------- <<<<<
+
+
+    // Create the main window.
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Card Reaction Game");
+
+    // Main loop.
+    while (window.isOpen()) {
+
+        sf::Event event;
+        while (window.pollEvent(event)) {
+
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+
+            // Mouse pressed event.
+            if (event.type == sf::Event::MouseButtonPressed) {
+
+            }
+
+            // Mouse released event.
+            if (event.type == sf::Event::MouseButtonReleased){
+
+
+            }
+            
+        }
+
+        // Clear the window.
+        window.clear(sf::Color::Black); // Background color
+
+        // Draw the game page.
+        page3_game.beDrawn( window );
+
+        // Display what has been rendered to the window
+        window.display();
+
+    }
 
 }
 

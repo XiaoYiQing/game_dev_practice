@@ -577,7 +577,7 @@ void game::play_Checkers(){
                 }
             }
 
-             // Mouse released event.
+            // Mouse released event.
             if (event.type == sf::Event::MouseButtonReleased){
                 if( event.mouseButton.button == sf::Mouse::Left ){
 
