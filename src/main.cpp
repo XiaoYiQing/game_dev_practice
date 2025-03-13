@@ -177,12 +177,15 @@ void play_cardReactGame(){
 
             // Mouse pressed event.
             if (event.type == sf::Event::MouseButtonPressed) {
+                
+                CRG_SFML_obj.pressButton( window );
 
             }
 
             // Mouse released event.
             if (event.type == sf::Event::MouseButtonReleased){
 
+                bool gameButRel = CRG_SFML_obj.releaseButton();
 
             }
             

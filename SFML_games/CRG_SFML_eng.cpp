@@ -10,6 +10,10 @@ const sf::Color CRG_SFML_eng::noCardColor = sf::Color( 255, 255, 255, 255 );
 const sf::Color CRG_SFML_eng::noCardTxtColor = sf::Color( 255, 0, 0, 255 );
 
 
+// ====================================================================== >>>>>
+//      Constructor
+// ====================================================================== >>>>>
+
 CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) : 
     cardReact( possCardCnt, cntDownT )
 {
@@ -63,14 +67,75 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     vector<shared_ptr<SFML_button_XYQ>> possCard_vect )
 {
 
+    // Use the given card pointer vector.
+    this->possCard_vect = possCard_vect;
+    // Obtain the number of cards.
+    this->possCardCnt = possCard_vect.size();
+
     // Determine the number of rows and columns of cards depending on how many cards there
     // are in total.
     float tmp = std::sqrt( (float) possCardCnt );
     rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
-    rowColCnt.y = (int) std::ceil( tmp );
-
-    // Use the given card pointer vector.
-    this->possCard_vect = possCard_vect;
+    rowColCnt.y = (int) std::ceil( tmp );    
 
 }
 
+// ====================================================================== <<<<<
+
+
+
+// ====================================================================== >>>>>
+//      Gameplay Functions
+// ====================================================================== >>>>>
+
+bool CRG_SFML_eng::pressButton( const sf::RenderWindow& window ){
+
+    bool success = false;
+
+    for( int z = 0; z < possCardCnt; z++ ){
+
+        // Get the current button.
+        shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at(z);
+
+        // Attempt a button press on current button.
+        success = buttonX->pressButton( window );
+
+        if( success ){
+
+            cout << "Button pressed: " << to_string(z) << endl;
+
+            break;
+
+        }
+
+    }
+
+    return false;
+
+}
+
+
+bool CRG_SFML_eng::releaseButton(){
+
+    bool released = false;
+
+    for( int z = 0; z < possCardCnt; z++ ){
+
+        // Get the current button.
+        shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at(z);
+
+        released = buttonX->releaseButton();
+
+        if( released ){
+
+            cout << "Button released: " << to_string(z) << endl;
+
+            break;
+
+        }
+
+    }
+
+    return released;
+
+}
