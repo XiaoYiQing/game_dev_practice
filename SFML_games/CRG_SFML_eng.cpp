@@ -58,3 +58,19 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
 
 }
 
+
+CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT, 
+    vector<shared_ptr<SFML_button_XYQ>> possCard_vect )
+{
+
+    // Determine the number of rows and columns of cards depending on how many cards there
+    // are in total.
+    float tmp = std::sqrt( (float) possCardCnt );
+    rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
+    rowColCnt.y = (int) std::ceil( tmp );
+
+    // Use the given card pointer vector.
+    this->possCard_vect = possCard_vect;
+
+}
+

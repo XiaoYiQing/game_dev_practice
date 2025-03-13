@@ -33,7 +33,7 @@ TODO: Create a base checkers game engine.
 
 #include "TTT_wt_but_XYQ.h"
 #include "CHK_SFML_eng.h"
-#include "cardReact.h"
+#include "CRG_SFML_eng.h"
 
 #include "numUtils.h"
 
@@ -74,7 +74,9 @@ int main(int, char**){
 
     // tests::checkers_test4();
 
-    tests::CRG_test1();
+    // tests::CRG_test1();
+
+    play_cardReactGame();
 
     return 0;
 
@@ -88,6 +90,69 @@ void play_cardReactGame(){
     string button_img_np_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_np.png";
     string button_img_p_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_p.png";
     string funny_img_FFN = RES_PATH_XYQ_str + "/funny_img_2.jpg";
+
+
+    shared_ptr<sf::Texture> button_img_np_texture = SFMLUtilsXYQ::genTexture( button_img_np_FFN );
+    shared_ptr<sf::Texture> button_img_p_texture = SFMLUtilsXYQ::genTexture( button_img_p_FFN );
+    shared_ptr<sf::Texture> funny_img_texture = SFMLUtilsXYQ::genTexture( funny_img_FFN );
+
+    sf::Font font = SFMLUtilsXYQ::getArialFont( RES_PATH_XYQ_str );
+
+// ---------------------------------------------------------------------- >>>>>
+//      Game Page Setup
+// ---------------------------------------------------------------------- >>>>>
+
+    // Page initialization.
+    SFML_page_XYQ page3_game = SFML_page_XYQ();
+
+    // Vector of all possible card buttons.
+    vector<shared_ptr<SFML_button_XYQ>> CGR_possCard_buttons;
+
+    sf::Color noCardColor = sf::Color( 255, 255, 255, 255 );
+    sf::Color noCardTxtColor = sf::Color( 255, 0, 0, 255 );
+
+    int possCardCnt = 9;
+    float tmp = std::sqrt( (float) possCardCnt );
+    int x = (int) std::ceil( ( (float) possCardCnt )/tmp );
+    int y = (int) std::ceil( tmp );
+    
+    // Define the default locations and sizes of the buttons.
+    float x_start = 100;        float y_start = 100;
+    float butWidth = 50;       float butHeight = 50;
+    float butSep = 5;
+
+    // Card index variable.
+    int z = 0;
+
+    // Standard distribution of buttons into a rectangular formation (as close to square as possible).
+    for( int i = 0; ( i < x && z < possCardCnt ); i++ ){
+        for( int j = 0; ( j < y && z < possCardCnt ); j++ ){
+
+            shared_ptr<SFML_button_XYQ> buttonX = 
+                    shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+
+            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
+                y_start + ( butHeight + butSep )*i );
+            buttonX->setWidth( butWidth );      
+            buttonX->setHeight( butHeight );
+            buttonX->setUPColor( noCardColor );
+            buttonX->setPColor( noCardColor );
+            buttonX->setTxtStr( "" + z );
+            buttonX->setTxtColor( noCardTxtColor );
+            buttonX->disableSprite();
+
+            CGR_possCard_buttons.push_back( buttonX );
+
+            z++;
+
+        }
+
+    }
+
+    gameEngine::CRG_SFML_eng CRG_SFML_obj( 9, 3000, CGR_possCard_buttons );
+
+    int lmao = 0;
+// ---------------------------------------------------------------------- <<<<<
 
 }
 

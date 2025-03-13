@@ -31,6 +31,9 @@ public:
 
     CRG_SFML_eng( int possCardCnt = 8, long long cntDownT = 3000 );
 
+    CRG_SFML_eng( int possCardCnt, long long cntDownT, 
+        vector<shared_ptr<SFML_button_XYQ>> possCard_vect );
+
 // ====================================================================== <<<<<
 
 
