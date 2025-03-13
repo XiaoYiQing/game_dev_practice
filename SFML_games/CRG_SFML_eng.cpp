@@ -48,11 +48,14 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
             buttonX->setHeight( butHeight );
             buttonX->setUPColor( noCardColor );
             buttonX->setPColor( noCardColor );
-            buttonX->setTxtStr( "" + z );
+            buttonX->setTxtStr( to_string( z ) );
             buttonX->setTxtColor( noCardTxtColor );
+            buttonX->enableText();
             buttonX->disableSprite();
 
             possCard_vect.push_back( buttonX );
+
+            buttonX->update();
 
             z++;
 
@@ -76,7 +79,46 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     // are in total.
     float tmp = std::sqrt( (float) possCardCnt );
     rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
-    rowColCnt.y = (int) std::ceil( tmp );    
+    rowColCnt.y = (int) std::ceil( tmp );  
+    
+    
+
+    // Define the default locations and sizes of the buttons.
+    float x_start = 100;        float y_start = 100;
+    float butWidth = 100;       float butHeight = 100;
+    float butSep = 5;
+
+    // Card index variable.
+    int z = 0;
+
+    // Standard distribution of buttons into a rectangular formation (as close to square as possible).
+    for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
+        for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
+
+            possCardTex_vect.push_back( shared_ptr<sf::Texture>( new sf::Texture() ) );
+
+            shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at(z);
+
+            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
+                y_start + ( butHeight + butSep )*i );
+            buttonX->setWidth( butWidth );      
+            buttonX->setHeight( butHeight );
+            buttonX->setUPColor( noCardColor );
+            buttonX->setPColor( noCardColor );
+
+            buttonX->setTxtStr( to_string( z ) );
+            buttonX->setTxtColor( noCardTxtColor );
+            buttonX->enableText();
+            
+            buttonX->disableSprite();
+
+            buttonX->update();
+
+            z++;
+
+        }
+
+    }
 
 }
 

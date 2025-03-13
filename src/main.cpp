@@ -112,46 +112,15 @@ void play_cardReactGame(){
     sf::Color noCardTxtColor = sf::Color( 255, 0, 0, 255 );
 
     int possCardCnt = 9;
-    float tmp = std::sqrt( (float) possCardCnt );
-    int x = (int) std::ceil( ( (float) possCardCnt )/tmp );
-    int y = (int) std::ceil( tmp );
-    
-    // Define the default locations and sizes of the buttons.
-    float x_start = 100;        float y_start = 100;
-    float butWidth = 100;       float butHeight = 100;
-    float butSep = 5;
 
-    // Card index variable.
-    int z = 0;
+    for( int z = 0; z < possCardCnt; z++ ){
+        shared_ptr<SFML_button_XYQ> buttonX = 
+            shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
-    // Standard distribution of buttons into a rectangular formation (as close to square as possible).
-    for( int i = 0; ( i < x && z < possCardCnt ); i++ ){
-        for( int j = 0; ( j < y && z < possCardCnt ); j++ ){
+        buttonX->setTxtFont( font );
 
-            shared_ptr<SFML_button_XYQ> buttonX = 
-                    shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-
-            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
-                y_start + ( butHeight + butSep )*i );
-            buttonX->setWidth( butWidth );      
-            buttonX->setHeight( butHeight );
-            buttonX->setUPColor( noCardColor );
-            buttonX->setPColor( noCardColor );
-
-            buttonX->setTxtFont( font );
-            buttonX->setTxtStr( std::to_string(z) );
-            buttonX->setTxtColor( noCardTxtColor );
-            buttonX->enableText();
-
-            buttonX->disableSprite();
-
-            CGR_possCard_buttons.push_back( buttonX );
-            page3_game.addObj( buttonX );
-
-            z++;
-
-        }
-
+        CGR_possCard_buttons.push_back( buttonX );
+        page3_game.addObj( buttonX );
     }
 
     gameEngine::CRG_SFML_eng CRG_SFML_obj( 9, 3000, CGR_possCard_buttons );
