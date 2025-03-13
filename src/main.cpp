@@ -117,13 +117,18 @@ void play_cardReactGame(){
         shared_ptr<SFML_button_XYQ> buttonX = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
-        buttonX->setTxtFont( font );
-
         CGR_possCard_buttons.push_back( buttonX );
         page3_game.addObj( buttonX );
     }
 
+    // Initialize the game object.
     gameEngine::CRG_SFML_eng CRG_SFML_obj( 9, 3000, CGR_possCard_buttons );
+    CRG_SFML_obj.setMainFont( font );
+    CRG_SFML_obj.update();
+
+    shared_ptr<SFML_button_XYQ> mainCardBut = CRG_SFML_obj.getMainCard();
+    page3_game.addObj( mainCardBut );
+
 
     page3_game.update();
     page3_game.enable();

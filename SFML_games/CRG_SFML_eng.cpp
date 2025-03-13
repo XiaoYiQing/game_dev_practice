@@ -26,8 +26,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     
 
     // Define the default locations and sizes of the buttons.
-    float x_start = 100;        float y_start = 100;
-    float butWidth = 50;       float butHeight = 50;
+    float x_start = 250;        float y_start = 100;
+    float butWidth = 100;       float butHeight = 100;
     float butSep = 5;
 
     // Card index variable.
@@ -48,9 +48,12 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
             buttonX->setHeight( butHeight );
             buttonX->setUPColor( noCardColor );
             buttonX->setPColor( noCardColor );
+
+            buttonX->setTxtFont( mainFont );
             buttonX->setTxtStr( to_string( z ) );
             buttonX->setTxtColor( noCardTxtColor );
             buttonX->enableText();
+
             buttonX->disableSprite();
 
             possCard_vect.push_back( buttonX );
@@ -64,8 +67,17 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     }
 
     // Initialize the main card.
-    int mainCardID = this->getMainCardID();
-    this->mainCard = possCard_vect.at( mainCardID );
+    this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    mainCard->setPos( x_start - 150, y_start );
+
+    mainCard->setWidth( butWidth );      
+    mainCard->setHeight( butHeight );
+    mainCard->setUPColor( noCardColor );
+    mainCard->setPColor( noCardColor );
+    mainCard->setTxtStr( to_string( mainCardID ) );
+    mainCard->setTxtColor( noCardTxtColor );
+    mainCard->enableText();
+    mainCard->disableSprite();
 
 }
 
@@ -88,7 +100,7 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     
 
     // Define the default locations and sizes of the buttons.
-    float x_start = 100;        float y_start = 100;
+    float x_start = 250;        float y_start = 100;
     float butWidth = 100;       float butHeight = 100;
     float butSep = 5;
 
@@ -110,6 +122,7 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
             buttonX->setUPColor( noCardColor );
             buttonX->setPColor( noCardColor );
 
+            buttonX->setTxtFont( mainFont );
             buttonX->setTxtStr( to_string( z ) );
             buttonX->setTxtColor( noCardTxtColor );
             buttonX->enableText();
@@ -125,8 +138,17 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     }
 
     // Initialize the main card.
-    int mainCardID = this->getMainCardID();
-    this->mainCard = possCard_vect.at( mainCardID );
+    this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    mainCard->setPos( x_start - 150, y_start );
+
+    mainCard->setWidth( butWidth );      
+    mainCard->setHeight( butHeight );
+    mainCard->setUPColor( noCardColor );
+    mainCard->setPColor( noCardColor );
+    mainCard->setTxtStr( to_string( mainCardID ) );
+    mainCard->setTxtColor( noCardTxtColor );
+    mainCard->enableText();
+    mainCard->disableSprite();
 
 }
 
@@ -141,12 +163,34 @@ shared_ptr<SFML_button_XYQ> CRG_SFML_eng::getMainCard(){
     return this->mainCard;    
 }
 
+void CRG_SFML_eng::setMainFont( sf::Font mainFont ){
+    
+    this->mainFont = mainFont;
+
+    for( shared_ptr<SFML_button_XYQ> tmp_but : this->possCard_vect ){
+        tmp_but->setTxtFont( this->mainFont );
+    }
+    this->mainCard->setTxtFont( this->mainFont );
+
+}
+
 // ====================================================================== <<<<<
 
 
 // ====================================================================== >>>>>
 //      Gameplay Functions
 // ====================================================================== >>>>>
+
+void CRG_SFML_eng::update(){
+
+    for( shared_ptr<SFML_button_XYQ> tmp_but : this->possCard_vect ){
+        tmp_but->update();
+    }
+
+    this->mainCard->update();
+
+}
+
 
 bool CRG_SFML_eng::pressButton( const sf::RenderWindow& window ){
 

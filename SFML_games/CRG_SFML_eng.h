@@ -44,12 +44,19 @@ public:
     // Obtain a shared pointer to the main card.
     shared_ptr<SFML_button_XYQ> getMainCard();
 
+    // Set the main font utilized by objects the display texts in this class.
+    // Also applies the font to all valid targets in the class.
+    void setMainFont( sf::Font );
+
 // ====================================================================== <<<<<
 
 
 // ====================================================================== >>>>>
 //      Gameplay Functions
 // ====================================================================== >>>>>
+
+    // Update the objects that can be updated within the class.
+    void update();
 
     /*
     Try to perform a press button action on all buttons.
@@ -77,6 +84,11 @@ protected:
 // ====================================================================== <<<<<
 
     /*
+    The font adopted by text in this class.
+    */
+    sf::Font mainFont;
+
+    /*
     Vector holding the number of rows (x) and columns (y).
     */
     sf::Vector2i rowColCnt;
@@ -102,7 +114,7 @@ protected:
 };
 
 
-}
+};
 
 
 #endif  // CRG_SFML_ENG_H
