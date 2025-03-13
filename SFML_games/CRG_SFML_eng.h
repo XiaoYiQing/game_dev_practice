@@ -40,6 +40,9 @@ public:
 // ====================================================================== >>>>>
 //      Access Functions (public)
 // ====================================================================== >>>>>
+    
+    // Obtain a shared pointer to the main card.
+    shared_ptr<SFML_button_XYQ> getMainCard();
 
 // ====================================================================== <<<<<
 
@@ -58,7 +61,7 @@ public:
 
     /*
     Try to perform a button release on all buttons.
-    If any one of the nine buttons is released, return true, else false.
+    If any one of the buttons is released, return true, else false.
     A button being released triggers a series of checks.
     */
     bool releaseButton();

@@ -133,6 +133,16 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
 // ====================================================================== <<<<<
 
 
+// ====================================================================== >>>>>
+//      Access Functions (public)
+// ====================================================================== >>>>>
+
+shared_ptr<SFML_button_XYQ> CRG_SFML_eng::getMainCard(){
+    return this->mainCard;    
+}
+
+// ====================================================================== <<<<<
+
 
 // ====================================================================== >>>>>
 //      Gameplay Functions
@@ -166,7 +176,7 @@ bool CRG_SFML_eng::pressButton( const sf::RenderWindow& window ){
 
 
 bool CRG_SFML_eng::releaseButton(){
-
+    
     bool released = false;
 
     for( int z = 0; z < possCardCnt; z++ ){
@@ -180,7 +190,7 @@ bool CRG_SFML_eng::releaseButton(){
 
             cout << "Button released: " << to_string(z) << endl;
 
-            if( buttonX == mainCard ){
+            if( z == mainCardID ){
                 cout << "MATCH!" << endl;
             }
 
