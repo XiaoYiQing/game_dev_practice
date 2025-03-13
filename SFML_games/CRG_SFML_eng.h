@@ -20,6 +20,10 @@ class CRG_SFML_eng : cardReact{
 
 public:
 
+    // The color of the button when no sprite is present.
+    static const sf::Color noCardColor;
+    // The color of the button's text when no sprite is present.
+    static const sf::Color noCardTxtColor;
 
 // ====================================================================== >>>>>
 //      Constructor

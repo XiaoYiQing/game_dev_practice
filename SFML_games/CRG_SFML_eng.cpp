@@ -4,15 +4,21 @@
 
 using namespace gameEngine;
 
-CRG_SFML_eng::CRG_SFML_eng( int possCardCnt = 8, long long cntDownT = 3000 ) : 
+
+
+const sf::Color CRG_SFML_eng::noCardColor = sf::Color( 255, 255, 255, 255 );
+const sf::Color CRG_SFML_eng::noCardTxtColor = sf::Color( 255, 0, 0, 255 );
+
+
+CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) : 
     cardReact( possCardCnt, cntDownT )
 {
 
     // Determine the number of rows and columns of cards depending on how many cards there
     // are in total.
     float tmp = std::sqrt( (float) possCardCnt );
-    rowColCnt.x = std::ceil( ( (float) possCardCnt )/tmp );
-    rowColCnt.y = std::ceil( tmp );
+    rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
+    rowColCnt.y = (int) std::ceil( tmp );
     
 
     // Define the default locations and sizes of the buttons.
@@ -22,6 +28,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt = 8, long long cntDownT = 3000 ) :
 
     // Card index variable.
     int z = 0;
+
+    // Standard distribution of buttons into a rectangular formation (as close to square as possible).
     for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
         for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
 
@@ -33,8 +41,11 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt = 8, long long cntDownT = 3000 ) :
             buttonX->setPos( x_start + ( butWidth + butSep )*j, 
                 y_start + ( butHeight + butSep )*i );
             buttonX->setWidth( butWidth );      
-            buttonX->setHeight( butHeight );  
+            buttonX->setHeight( butHeight );
+            buttonX->setUPColor( noCardColor );
+            buttonX->setPColor( noCardColor );
             buttonX->setTxtStr( "" + z );
+            buttonX->setTxtColor( noCardTxtColor );
             buttonX->disableSprite();
 
             possCard_vect.push_back( buttonX );

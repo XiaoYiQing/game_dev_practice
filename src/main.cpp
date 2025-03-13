@@ -39,6 +39,8 @@ TODO: Create a base checkers game engine.
 
 using namespace std;
 
+void play_cardReactGame();
+
 // Global string variable holding the full path of the extra resource directory.
 string RES_PATH_XYQ_str = string( RES_PATH_XYQ );
 
@@ -79,6 +81,15 @@ int main(int, char**){
 }
 
 
+void play_cardReactGame(){
+
+
+    // Create a texture to hold the image
+    string button_img_np_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_np.png";
+    string button_img_p_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_p.png";
+    string funny_img_FFN = RES_PATH_XYQ_str + "/funny_img_2.jpg";
+
+}
 
 /*
 DONE: Button's sprite now can have their size adjusted through modying its scaling 
