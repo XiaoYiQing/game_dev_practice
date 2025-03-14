@@ -98,6 +98,11 @@ void play_cardReactGame(){
 
     sf::Font font = SFMLUtilsXYQ::getArialFont( RES_PATH_XYQ_str );
 
+
+    /*
+    Create second thread.
+    */
+
 // ---------------------------------------------------------------------- >>>>>
 //      Game Page Setup
 // ---------------------------------------------------------------------- >>>>>
@@ -128,6 +133,8 @@ void play_cardReactGame(){
 
     shared_ptr<SFML_button_XYQ> mainCardBut = CRG_SFML_obj.getMainCard();
     page3_game.addObj( mainCardBut );
+
+    CRG_SFML_obj.start();
 
 
     page3_game.update();

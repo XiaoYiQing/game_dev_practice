@@ -1,11 +1,13 @@
 #ifndef CRG_SFML_ENG_H
 #define CRG_SFML_ENG_H
 
-#include "cardReact.h"
 
 
+#include <chrono>
 #include <SFML/Graphics.hpp>
+#include <thread>
 
+#include "cardReact.h"
 #include "SFML_button_XYQ.h"
 
 using namespace std;
@@ -64,6 +66,11 @@ public:
     Reset the state of the game.
     */
     void reset();
+    
+    /*
+    Start the game.
+    */
+    void start();
 
     /*
     Try to perform a press button action on all buttons.
@@ -80,9 +87,25 @@ public:
     */
     bool releaseButton();
 
+
+    /*
+    Perform a countdown, following which the hidden card is revealed.
+    NOTE: this function is meant to be used on a separate thread.
+    */
+    static void countDownThread( int tarObj );
+
 // ====================================================================== <<<<<
 
 protected:
+
+// ====================================================================== >>>>>
+//      Gameplay Functions (Protected)
+// ====================================================================== >>>>>
+
+    
+
+// ====================================================================== <<<<<
+
 
 // ====================================================================== >>>>>
 //      Access Functions (protected)

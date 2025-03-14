@@ -77,7 +77,7 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     mainCard->setPColor( noCardPColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
-    mainCard->enableText();
+    mainCard->disableText();
     mainCard->disableSprite();
 
 }
@@ -148,7 +148,7 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     mainCard->setPColor( noCardPColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
-    mainCard->enableText();
+    mainCard->disableText();
     mainCard->disableSprite();
 
 }
@@ -201,6 +201,15 @@ void CRG_SFML_eng::reset(){
 
 }
 
+void CRG_SFML_eng::start(){
+
+    cardReact::start();
+
+    // Create a new thread that runs the runInThread function
+    std::thread myThread( countDownThread, 10 );
+    myThread.detach();
+
+}
 
 bool CRG_SFML_eng::pressButton( const sf::RenderWindow& window ){
 
@@ -261,3 +270,21 @@ bool CRG_SFML_eng::releaseButton(){
     return released;
 
 }
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Gameplay Functions (Protected)
+// ====================================================================== >>>>>
+
+void CRG_SFML_eng::countDownThread( int tarObj ){
+
+    std::this_thread::sleep_for( chrono::milliseconds( 2000 ) );
+    cout << "Second thread run ends." << endl;
+    // tarGame.mainCard->enableText();
+    // tarGame.mainCard->enableSprite();
+
+}
+
+// ====================================================================== <<<<<
