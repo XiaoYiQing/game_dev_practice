@@ -207,8 +207,11 @@ void CRG_SFML_eng::update(){
 
 void CRG_SFML_eng::reset(){
     
-    cardReact::reset();
-    
+    this->cardReact::reset();
+    cout << this->mainCardID << endl;
+
+    mainCard->setTxtStr( to_string( mainCardID ) );
+    mainCard->setTxtColor( noCardTxtColor );
     mainCard->disableSprite();
     mainCard->disableText();
 
@@ -307,7 +310,6 @@ bool CRG_SFML_eng::releaseButton(){
 void CRG_SFML_eng::countDownThread( CRG_SFML_eng& tarObj ){
 
     std::this_thread::sleep_for( chrono::milliseconds( tarObj.cntDownT ) );
-    cout << "Second thread run ends." << endl;
     tarObj.mainCard->enableText();
     tarObj.mainCard->enableSprite();
 
