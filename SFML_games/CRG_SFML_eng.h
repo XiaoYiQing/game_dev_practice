@@ -22,18 +22,25 @@ class CRG_SFML_eng : cardReact{
 
 public:
 
-    // The color of the button when no sprite is present.
-    static const sf::Color noCardUPColor;
-    // The color of the button when no sprite is present.
-    static const sf::Color noCardPColor;
+    // The color of the unpressed button before game over when no sprite is present.
+    static const sf::Color upColorBef;
+    // The color of the pressed button before game over when no sprite is present.
+    static const sf::Color pColorBef;
+    // The color of the unpressed button after game over when no sprite is present.
+    static const sf::Color upColorAft;
+    // The color of the pressed button after game over when no sprite is present.
+    static const sf::Color pColorAft;
     // The color of the button's text when no sprite is present.
     static const sf::Color noCardTxtColor;
 
+    
+
+    
 // ====================================================================== >>>>>
 //      Constructor
 // ====================================================================== >>>>>
 
-    CRG_SFML_eng( int possCardCnt = 8, long long cntDownT = 3000 );
+    CRG_SFML_eng( int possCardCnt = 9, long long cntDownT = 3000 );
 
     CRG_SFML_eng( int possCardCnt, long long cntDownT, 
         vector<shared_ptr<SFML_button_XYQ>> possCard_vect );
@@ -112,6 +119,12 @@ protected:
 // ====================================================================== >>>>>
 
 // ====================================================================== <<<<<
+    
+
+// The color of the button when not pressed.
+    sf::Color upColor;
+    // The color of the button when pressed
+    sf::Color pColor;
 
     /*
     The font adopted by text in this class.
