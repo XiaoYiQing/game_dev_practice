@@ -249,6 +249,7 @@ bool CRG_SFML_eng::releaseButton(){
 
         released = buttonX->releaseButton();
 
+        // If current button is the one being released.
         if( released ){
 
             cout << "Button released: " << to_string(z) << endl;
@@ -280,10 +281,10 @@ bool CRG_SFML_eng::releaseButton(){
 
 void CRG_SFML_eng::countDownThread( CRG_SFML_eng& tarObj ){
 
-    std::this_thread::sleep_for( chrono::milliseconds( 2000 ) );
+    std::this_thread::sleep_for( chrono::milliseconds( tarObj.cntDownT ) );
     cout << "Second thread run ends." << endl;
-    // tarGame.mainCard->enableText();
-    // tarGame.mainCard->enableSprite();
+    tarObj.mainCard->enableText();
+    tarObj.mainCard->enableSprite();
 
 }
 
