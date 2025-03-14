@@ -214,6 +214,8 @@ void CRG_SFML_eng::reset(){
 
     this->upColor = upColorBef;
     this->pColor = pColorBef;
+    
+    this->update();
 
 }
 

@@ -110,6 +110,28 @@ void play_cardReactGame(){
     // Page initialization.
     SFML_page_XYQ page3_game = SFML_page_XYQ();
 
+
+
+
+    // Object: button for resetting the game board.
+    shared_ptr<SFML_button_XYQ> but3B_reset = 
+    shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3B_reset->setPos( 200, 500 );
+    but3B_reset->setWidth( 150 );      
+    but3B_reset->setHeight( 50 );      
+    but3B_reset->setTxtFont( font );
+    but3B_reset->setTxtStr( "Reset" );
+    but3B_reset->setTxtColor( 50, 50, 50, 255 );
+    but3B_reset->setUPTexture( button_img_np_texture );
+    but3B_reset->setPTexture( button_img_p_texture );
+    // Add to page.
+    page3_game.addObj( but3B_reset );
+
+
+
+
+
+
     // Vector of all possible card buttons.
     vector<shared_ptr<SFML_button_XYQ>> CGR_possCard_buttons;
 
@@ -137,6 +159,11 @@ void play_cardReactGame(){
     CRG_SFML_obj.start();
 
 
+
+    
+
+
+
     page3_game.update();
     page3_game.enable();
 
@@ -159,12 +186,18 @@ void play_cardReactGame(){
             // Mouse pressed event.
             if (event.type == sf::Event::MouseButtonPressed) {
                 
+                but3B_reset->pressButton( window );
+
                 CRG_SFML_obj.pressButton( window );
 
             }
 
             // Mouse released event.
             if (event.type == sf::Event::MouseButtonReleased){
+
+                if( but3B_reset->releaseButton() ){
+                    CRG_SFML_obj.reset();
+                }
 
                 bool gameButRel = CRG_SFML_obj.releaseButton();
 
