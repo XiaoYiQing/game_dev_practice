@@ -6,7 +6,8 @@ using namespace gameEngine;
 
 
 
-const sf::Color CRG_SFML_eng::noCardColor = sf::Color( 255, 255, 255, 255 );
+const sf::Color CRG_SFML_eng::noCardUPColor = sf::Color( 255, 255, 255, 255 );
+const sf::Color CRG_SFML_eng::noCardPColor = sf::Color( 0, 0, 255, 255 );
 const sf::Color CRG_SFML_eng::noCardTxtColor = sf::Color( 255, 0, 0, 255 );
 
 
@@ -46,8 +47,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
                 y_start + ( butHeight + butSep )*i );
             buttonX->setWidth( butWidth );      
             buttonX->setHeight( butHeight );
-            buttonX->setUPColor( noCardColor );
-            buttonX->setPColor( noCardColor );
+            buttonX->setUPColor( noCardUPColor );
+            buttonX->setPColor( noCardPColor );
 
             buttonX->setTxtFont( mainFont );
             buttonX->setTxtStr( to_string( z ) );
@@ -72,8 +73,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
 
     mainCard->setWidth( butWidth );      
     mainCard->setHeight( butHeight );
-    mainCard->setUPColor( noCardColor );
-    mainCard->setPColor( noCardColor );
+    mainCard->setUPColor( noCardUPColor );
+    mainCard->setPColor( noCardPColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
     mainCard->enableText();
@@ -119,8 +120,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
                 y_start + ( butHeight + butSep )*i );
             buttonX->setWidth( butWidth );      
             buttonX->setHeight( butHeight );
-            buttonX->setUPColor( noCardColor );
-            buttonX->setPColor( noCardColor );
+            buttonX->setUPColor( noCardUPColor );
+            buttonX->setPColor( noCardPColor );
 
             buttonX->setTxtFont( mainFont );
             buttonX->setTxtStr( to_string( z ) );
@@ -143,8 +144,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
 
     mainCard->setWidth( butWidth );      
     mainCard->setHeight( butHeight );
-    mainCard->setUPColor( noCardColor );
-    mainCard->setPColor( noCardColor );
+    mainCard->setUPColor( noCardUPColor );
+    mainCard->setPColor( noCardPColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
     mainCard->enableText();
@@ -182,12 +183,21 @@ void CRG_SFML_eng::setMainFont( sf::Font mainFont ){
 // ====================================================================== >>>>>
 
 void CRG_SFML_eng::update(){
-
+    
     for( shared_ptr<SFML_button_XYQ> tmp_but : this->possCard_vect ){
         tmp_but->update();
     }
 
     this->mainCard->update();
+
+}
+
+void CRG_SFML_eng::reset(){
+    
+    cardReact::reset();
+
+    mainCard->disableSprite();
+    mainCard->disableText();
 
 }
 
@@ -234,8 +244,12 @@ bool CRG_SFML_eng::releaseButton(){
 
             cout << "Button released: " << to_string(z) << endl;
 
-            if( z == mainCardID ){
-                cout << "MATCH!" << endl;
+            bool selected = this->selectCard( z );
+
+            if( selected ){
+                cout << get_CRG_STATE_Str( this->state ) << endl;
+            }else{
+                cout << "Well." << endl;
             }
 
             break;

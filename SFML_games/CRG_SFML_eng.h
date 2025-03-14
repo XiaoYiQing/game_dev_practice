@@ -21,7 +21,9 @@ class CRG_SFML_eng : cardReact{
 public:
 
     // The color of the button when no sprite is present.
-    static const sf::Color noCardColor;
+    static const sf::Color noCardUPColor;
+    // The color of the button when no sprite is present.
+    static const sf::Color noCardPColor;
     // The color of the button's text when no sprite is present.
     static const sf::Color noCardTxtColor;
 
@@ -57,6 +59,11 @@ public:
 
     // Update the objects that can be updated within the class.
     void update();
+    
+    /*
+    Reset the state of the game.
+    */
+    void reset();
 
     /*
     Try to perform a press button action on all buttons.
