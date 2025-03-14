@@ -206,7 +206,7 @@ void CRG_SFML_eng::start(){
     cardReact::start();
 
     // Create a new thread that runs the runInThread function
-    std::thread myThread( countDownThread, 10 );
+    std::thread myThread( countDownThread, ref( *this ) );
     myThread.detach();
 
 }
@@ -278,7 +278,7 @@ bool CRG_SFML_eng::releaseButton(){
 //      Gameplay Functions (Protected)
 // ====================================================================== >>>>>
 
-void CRG_SFML_eng::countDownThread( int tarObj ){
+void CRG_SFML_eng::countDownThread( CRG_SFML_eng& tarObj ){
 
     std::this_thread::sleep_for( chrono::milliseconds( 2000 ) );
     cout << "Second thread run ends." << endl;
