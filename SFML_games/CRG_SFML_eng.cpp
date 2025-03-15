@@ -222,6 +222,30 @@ void CRG_SFML_eng::reset(){
 
 }
 
+
+void CRG_SFML_eng::shuffle(){
+
+    // randIntVectGen( 0, possCardCnt - 1, 1 ).at(0);
+    // vector<int> randIntVectGen( 0, possCardCnt - 1, unsigned int cnt );
+
+    // // Define the default locations and sizes of the buttons.
+    // float x_start = 250;        float y_start = 100;
+    // float butWidth = 100;       float butHeight = 100;
+    // float butSep = 5;
+
+    // // Card index variable.
+    // int z = 0;
+
+    // // Standard distribution of buttons into a rectangular formation (as close to square as possible).
+    // for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
+    //     for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
+
+    //     }
+    // }
+
+}
+
+
 void CRG_SFML_eng::start(){
 
     cardReact::start();

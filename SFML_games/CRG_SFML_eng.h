@@ -75,6 +75,12 @@ public:
     void reset();
     
     /*
+    Shuffle the placement of the cards in a random manner.
+    NOTE: only the card placement is shuffled.
+    */
+    void shuffle();
+
+    /*
     Start the game.
     */
     void start();

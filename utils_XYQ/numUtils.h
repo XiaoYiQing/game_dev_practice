@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <random>
 #include <vector>
 
@@ -12,6 +13,17 @@ vector<int>* randIntGen( int L_bnd, int U_bnd, unsigned int cnt );
 
 /* Generate a vector of random integers. */
 vector<int> randIntVectGen( int L_bnd, int U_bnd, unsigned int cnt );
+
+template<typename T, typename A>
+// Function to shuffle a vector
+void shuffleVector(std::vector<T,A>& inVect) {
+    // Obtain a random number generator
+    std::random_device rd; // Obtain random number from hardware
+    std::mt19937 generator(rd()); // Seed the generator
+
+    // Shuffle the vector
+    std::shuffle(inVect.begin(), inVect.end(), generator);
+}
 
 /* 
 Cut-off the upper 10th order digits of the target number down to and 

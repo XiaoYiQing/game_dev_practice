@@ -15,6 +15,11 @@ TODO: Create a base checkers game engine.
 #include <string>
 #include <thread>
 
+#include <algorithm>
+#include <random>
+
+
+
 #include <SFML/Graphics.hpp>
 
 
@@ -76,8 +81,17 @@ int main(int, char**){
 
     // tests::CRG_test1();
 
-    play_cardReactGame();
+    // play_cardReactGame();
 
+    vector<int> myVect = { 0, 1, 2, 3, 4, 5 };
+
+    shuffleVector( myVect );
+
+    for( int z : myVect ){
+        cout << z << ", ";
+    }
+    cout << endl;
+    
     return 0;
 
 }
@@ -168,7 +182,7 @@ void play_cardReactGame(){
 
     shared_ptr<SFML_button_XYQ> mainCardBut = CRG_SFML_obj.getMainCard();
     page3_game.addObj( mainCardBut );
-    
+
 
     page3_game.update();
     page3_game.enable();
