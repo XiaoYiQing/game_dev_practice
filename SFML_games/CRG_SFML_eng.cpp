@@ -39,55 +39,20 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
     rowColCnt.y = (int) std::ceil( tmp );
 
+    // Initialize a set of cards.
+    for( int z = 0; z < possCardCnt; z++ ){
+        shared_ptr<SFML_button_XYQ> buttonX = 
+            shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
-    // Card index variable.
-    int z = 0;
-
-    // Standard distribution of buttons into a rectangular formation (as close to square as possible).
-    for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
-        for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
-
-            possCardTex_vect.push_back( shared_ptr<sf::Texture>( new sf::Texture() ) );
-
-            shared_ptr<SFML_button_XYQ> buttonX = 
-                    shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-
-            buttonX->setPos( field_pos.x + ( field_card_dim.x + field_card_sep )*j, 
-                field_pos.y + ( field_card_dim.y + field_card_sep )*i );
-            buttonX->setWidth( field_card_dim.x );      
-            buttonX->setHeight( field_card_dim.y );
-            buttonX->setUPColor( upColor );
-            buttonX->setPColor( pColor );
-
-            buttonX->setTxtFont( mainFont );
-            buttonX->setTxtStr( to_string( z ) );
-            buttonX->setTxtColor( noCardTxtColor );
-            buttonX->enableText();
-
-            buttonX->disableSprite();
-
-            possCard_vect.push_back( buttonX );
-
-            buttonX->update();
-
-            z++;
-
-        }
-
+        possCard_vect.push_back( buttonX );
     }
+    // Update the field cards.
+    upd_fieldCards(true);
 
     // Initialize the main card.
     this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    mainCard->setPos( field_pos.x - 150, field_pos.y );
-
-    mainCard->setWidth( field_card_dim.x );      
-    mainCard->setHeight( field_card_dim.y );
-    mainCard->setUPColor( upColor );
-    mainCard->setPColor( pColor );
-    mainCard->setTxtStr( to_string( mainCardID ) );
-    mainCard->setTxtColor( noCardTxtColor );
-    mainCard->disableText();
-    mainCard->disableSprite();
+    // Update the main card.
+    this->upd_mainCard();
 
 }
 
@@ -118,52 +83,13 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
     rowColCnt.y = (int) std::ceil( tmp );  
     
-
-    // Card index variable.
-    int z = 0;
-
-    // Standard distribution of buttons into a rectangular formation (as close to square as possible).
-    for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
-        for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
-
-            possCardTex_vect.push_back( shared_ptr<sf::Texture>( new sf::Texture() ) );
-
-            shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at(z);
-
-            buttonX->setPos( field_pos.x + ( field_card_dim.x + field_card_sep )*j, 
-                field_pos.y + ( field_card_dim.y + field_card_sep )*i );
-            buttonX->setWidth( field_card_dim.x );      
-            buttonX->setHeight( field_card_dim.y );
-            buttonX->setUPColor( upColor );
-            buttonX->setPColor( pColor );
-
-            buttonX->setTxtFont( mainFont );
-            buttonX->setTxtStr( to_string( z ) );
-            buttonX->setTxtColor( noCardTxtColor );
-            buttonX->enableText();
-
-            buttonX->disableSprite();
-
-            buttonX->update();
-
-            z++;
-
-        }
-
-    }
+    // Update the field cards.
+    upd_fieldCards(true);
 
     // Initialize the main card.
     this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    mainCard->setPos( field_pos.x - 150, field_pos.y );
-
-    mainCard->setWidth( field_card_dim.x );      
-    mainCard->setHeight( field_card_dim.y );
-    mainCard->setUPColor( upColor );
-    mainCard->setPColor( pColor );
-    mainCard->setTxtStr( to_string( mainCardID ) );
-    mainCard->setTxtColor( noCardTxtColor );
-    mainCard->disableText();
-    mainCard->disableSprite();
+    // Update the main card.
+    this->upd_mainCard();
 
 }
 
@@ -211,24 +137,45 @@ void CRG_SFML_eng::update(){
 void CRG_SFML_eng::reset(){
     
     this->cardReact::reset();
-    cout << this->mainCardID << endl;
 
-    mainCard->setTxtStr( to_string( mainCardID ) );
-    mainCard->setTxtColor( noCardTxtColor );
-    mainCard->disableSprite();
-    mainCard->disableText();
+    // Update the main card with the new target.
+    // mainCard->setTxtStr( to_string( mainCardID ) );
+    // mainCard->setTxtColor( noCardTxtColor );
+    // mainCard->disableSprite();
+    // mainCard->disableText();
+    
+    
 
+    // Reset the card colors to before being pressed.
     this->upColor = upColorBef;
     this->pColor = pColorBef;
     
-    this->upd_pos(true);
+    // Update the main card.
+    this->upd_mainCard();
+    // Update the field cards.
+    this->upd_fieldCards(true);
 
     this->update();
 
 }
 
+void CRG_SFML_eng::upd_mainCard(){
 
-void CRG_SFML_eng::upd_pos( bool shuffle = true ){
+    // Initialize the main card.
+    mainCard->setPos( field_pos.x - 150, field_pos.y );
+
+    mainCard->setWidth( field_card_dim.x );      
+    mainCard->setHeight( field_card_dim.y );
+    mainCard->setUPColor( upColor );
+    mainCard->setPColor( pColor );
+    mainCard->setTxtStr( to_string( mainCardID ) );
+    mainCard->setTxtColor( noCardTxtColor );
+    mainCard->disableText();
+    mainCard->disableSprite();
+
+}
+
+void CRG_SFML_eng::upd_fieldCards( bool shuffle = true ){
 
     // Create an index vector.
     vector<int> rdOrdIdx_Vect;
@@ -248,12 +195,21 @@ void CRG_SFML_eng::upd_pos( bool shuffle = true ){
     for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
         for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
 
-            shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at( rdOrdIdx_Vect.at(z) );
+            int orig_idx = rdOrdIdx_Vect.at(z);
+            shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at( orig_idx );
 
             buttonX->setPos( field_pos.x + ( field_card_dim.x + field_card_sep )*j, 
                 field_pos.y + ( field_card_dim.y + field_card_sep )*i );
+            
+            buttonX->setWidth( field_card_dim.x );      
+            buttonX->setHeight( field_card_dim.y );
+            buttonX->setUPColor( upColor );
+            buttonX->setPColor( pColor );
 
-            buttonX->update();
+            buttonX->setTxtFont( mainFont );
+            buttonX->setTxtStr( to_string( orig_idx ) );
+            buttonX->setTxtColor( noCardTxtColor );
+            buttonX->enableText();
 
             z++;
 

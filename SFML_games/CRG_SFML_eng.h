@@ -75,11 +75,16 @@ public:
     void reset();
     
     /*
-    Distribute the possible cards in the card field in the form of a rectangle 
-    (That is as close to a square as possible). Positions are shuffled if specified.
-    NOTE: only the card placement is shuffled, not their indices.
+    Update the main card.
     */
-    void upd_pos( bool shuffle );
+    void upd_mainCard();
+
+    /*
+    Update the field cards.
+    Positions are shuffled if specified.
+    NOTE: only the card placement is shuffled, not the card indices.
+    */
+    void upd_fieldCards( bool shuffle );
 
     /*
     Start the game.
