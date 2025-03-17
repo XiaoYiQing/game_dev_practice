@@ -127,7 +127,7 @@ protected:
 // ====================================================================== <<<<<
     
 
-// The color of the button when not pressed.
+    // The color of the button when not pressed.
     sf::Color upColor;
     // The color of the button when pressed
     sf::Color pColor;
@@ -141,6 +141,13 @@ protected:
     Vector holding the number of rows (x) and columns (y).
     */
     sf::Vector2i rowColCnt;
+    
+    // Position (Upper-left corner) of the field of possible cards.
+    sf::Vector2f field_pos;
+    // Size of the cards from the field of cards (x = width, y = height).
+    sf::Vector2f field_card_dim;
+    // Separation between cards from the field.
+    float field_card_sep;
 
     /*
     The main card which is hidden at first when the game starts and is then

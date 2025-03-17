@@ -26,17 +26,19 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     this->upColor = upColorBef;
     this->pColor = pColorBef;
 
+    // Field of cards properties.
+    this->field_pos.x = 250;
+    this->field_pos.y = 100;
+    this->field_card_dim.x = 100;
+    this->field_card_dim.y = 100;
+    this->field_card_sep = 5;
+
     // Determine the number of rows and columns of cards depending on how many cards there
     // are in total.
     float tmp = std::sqrt( (float) possCardCnt );
     rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
     rowColCnt.y = (int) std::ceil( tmp );
-    
 
-    // Define the default locations and sizes of the buttons.
-    float x_start = 250;        float y_start = 100;
-    float butWidth = 100;       float butHeight = 100;
-    float butSep = 5;
 
     // Card index variable.
     int z = 0;
@@ -50,10 +52,10 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
             shared_ptr<SFML_button_XYQ> buttonX = 
                     shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
-            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
-                y_start + ( butHeight + butSep )*i );
-            buttonX->setWidth( butWidth );      
-            buttonX->setHeight( butHeight );
+            buttonX->setPos( field_pos.x + ( field_card_dim.x + field_card_sep )*j, 
+                field_pos.y + ( field_card_dim.y + field_card_sep )*i );
+            buttonX->setWidth( field_card_dim.x );      
+            buttonX->setHeight( field_card_dim.y );
             buttonX->setUPColor( upColor );
             buttonX->setPColor( pColor );
 
@@ -76,10 +78,10 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
 
     // Initialize the main card.
     this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    mainCard->setPos( x_start - 150, y_start );
+    mainCard->setPos( field_pos.x - 150, field_pos.y );
 
-    mainCard->setWidth( butWidth );      
-    mainCard->setHeight( butHeight );
+    mainCard->setWidth( field_card_dim.x );      
+    mainCard->setHeight( field_card_dim.y );
     mainCard->setUPColor( upColor );
     mainCard->setPColor( pColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
@@ -98,6 +100,13 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     this->upColor = upColorBef;
     this->pColor = pColorBef;
 
+    // Field of cards properties.
+    this->field_pos.x = 250;
+    this->field_pos.y = 100;
+    this->field_card_dim.x = 100;
+    this->field_card_dim.y = 100;
+    this->field_card_sep = 5;
+
     // Use the given card pointer vector.
     this->possCard_vect = possCard_vect;
     // Obtain the number of cards.
@@ -109,12 +118,6 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
     rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
     rowColCnt.y = (int) std::ceil( tmp );  
     
-    
-
-    // Define the default locations and sizes of the buttons.
-    float x_start = 250;        float y_start = 100;
-    float butWidth = 100;       float butHeight = 100;
-    float butSep = 5;
 
     // Card index variable.
     int z = 0;
@@ -127,10 +130,10 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
 
             shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at(z);
 
-            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
-                y_start + ( butHeight + butSep )*i );
-            buttonX->setWidth( butWidth );      
-            buttonX->setHeight( butHeight );
+            buttonX->setPos( field_pos.x + ( field_card_dim.x + field_card_sep )*j, 
+                field_pos.y + ( field_card_dim.y + field_card_sep )*i );
+            buttonX->setWidth( field_card_dim.x );      
+            buttonX->setHeight( field_card_dim.y );
             buttonX->setUPColor( upColor );
             buttonX->setPColor( pColor );
 
@@ -151,10 +154,10 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT,
 
     // Initialize the main card.
     this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    mainCard->setPos( x_start - 150, y_start );
+    mainCard->setPos( field_pos.x - 150, field_pos.y );
 
-    mainCard->setWidth( butWidth );      
-    mainCard->setHeight( butHeight );
+    mainCard->setWidth( field_card_dim.x );      
+    mainCard->setHeight( field_card_dim.y );
     mainCard->setUPColor( upColor );
     mainCard->setPColor( pColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
@@ -218,8 +221,6 @@ void CRG_SFML_eng::reset(){
     this->upColor = upColorBef;
     this->pColor = pColorBef;
     
-    this->shuffle();
-
     this->update();
 
 }
