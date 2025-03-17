@@ -156,7 +156,7 @@ void play_cardReactGame(){
     sf::Color noCardColor = sf::Color( 255, 255, 255, 255 );
     sf::Color noCardTxtColor = sf::Color( 255, 0, 0, 255 );
 
-    int possCardCnt = 9;
+    int possCardCnt = 12;
 
     for( int z = 0; z < possCardCnt; z++ ){
         shared_ptr<SFML_button_XYQ> buttonX = 

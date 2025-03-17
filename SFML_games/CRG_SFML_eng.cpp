@@ -27,7 +27,7 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
 
     // Field of cards properties.
     this->field_pos.x = 250;
-    this->field_pos.y = 100;
+    this->field_pos.y = 50;
     this->field_card_dim.x = 100;
     this->field_card_dim.y = 100;
     this->field_card_sep = 5;
@@ -53,14 +53,13 @@ CRG_SFML_eng::CRG_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> possCard_vect,
 
     // Use the given card pointer vector.
     this->possCard_vect = possCard_vect;
-    // Obtain the number of cards.
-    this->possCardCnt = possCard_vect.size();
+
     // Initialize the main card.
     this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
     
     // Field of cards properties.
     this->field_pos.x = 250;
-    this->field_pos.y = 100;
+    this->field_pos.y = 50;
     this->field_card_dim.x = 100;
     this->field_card_dim.y = 100;
     this->field_card_sep = 5;
