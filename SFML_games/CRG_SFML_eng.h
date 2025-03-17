@@ -42,8 +42,7 @@ public:
 
     CRG_SFML_eng( int possCardCnt = 9, long long cntDownT = 3000 );
 
-    CRG_SFML_eng( int possCardCnt, long long cntDownT, 
-        vector<shared_ptr<SFML_button_XYQ>> possCard_vect );
+    CRG_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> possCard_vect, long long cntDownT );
 
 // ====================================================================== <<<<<
 
@@ -66,7 +65,7 @@ public:
 //      Gameplay Functions
 // ====================================================================== >>>>>
 
-    // Update the objects that can be updated within the class.
+    // Update the objects related to SFML.
     void update();
     
     /*
@@ -154,6 +153,8 @@ protected:
     sf::Vector2f field_card_dim;
     // Separation between cards from the field.
     float field_card_sep;
+    // The cards ordering.
+    vector<int> rdOrdIdx_Vect;
 
     /*
     The main card which is hidden at first when the game starts and is then

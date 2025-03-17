@@ -22,9 +22,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     cardReact( possCardCnt, cntDownT )
 {
 
-    // Initialize no card colors.
-    this->upColor = upColorBef;
-    this->pColor = pColorBef;
+    // Initialize the main card.
+    this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
     // Field of cards properties.
     this->field_pos.x = 250;
@@ -32,64 +31,47 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     this->field_card_dim.x = 100;
     this->field_card_dim.y = 100;
     this->field_card_sep = 5;
-
-    // Determine the number of rows and columns of cards depending on how many cards there
-    // are in total.
-    float tmp = std::sqrt( (float) possCardCnt );
-    rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
-    rowColCnt.y = (int) std::ceil( tmp );
-
-    // Initialize a set of cards.
-    for( int z = 0; z < possCardCnt; z++ ){
+    // Initialize a set of cards and a vector holding index reordering of the field cards.
+    for( int i = 0; i < possCardCnt; i++ ){
         shared_ptr<SFML_button_XYQ> buttonX = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
         possCard_vect.push_back( buttonX );
+        rdOrdIdx_Vect.push_back(i);
     }
-    // Update the field cards.
-    upd_fieldCards(true);
-
-    // Initialize the main card.
-    this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    // Update the main card.
-    this->upd_mainCard();
+    
+    // Perform the first reset, which effectively acts as an initialization to variables
+    // which participate in resets.
+    this->reset();
 
 }
 
 
-CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT, 
-    vector<shared_ptr<SFML_button_XYQ>> possCard_vect )
+CRG_SFML_eng::CRG_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> possCard_vect, 
+    long long cntDownT ) : cardReact( possCard_vect.size(), cntDownT )
 {
-
-    // Initialize no card colors.
-    this->upColor = upColorBef;
-    this->pColor = pColorBef;
-
-    // Field of cards properties.
-    this->field_pos.x = 250;
-    this->field_pos.y = 100;
-    this->field_card_dim.x = 100;
-    this->field_card_dim.y = 100;
-    this->field_card_sep = 5;
 
     // Use the given card pointer vector.
     this->possCard_vect = possCard_vect;
     // Obtain the number of cards.
     this->possCardCnt = possCard_vect.size();
-
-    // Determine the number of rows and columns of cards depending on how many cards there
-    // are in total.
-    float tmp = std::sqrt( (float) possCardCnt );
-    rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
-    rowColCnt.y = (int) std::ceil( tmp );  
-    
-    // Update the field cards.
-    upd_fieldCards(true);
-
     // Initialize the main card.
     this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    // Update the main card.
-    this->upd_mainCard();
+    
+    // Field of cards properties.
+    this->field_pos.x = 250;
+    this->field_pos.y = 100;
+    this->field_card_dim.x = 100;
+    this->field_card_dim.y = 100;
+    this->field_card_sep = 5;
+    // Initialize vector holding index reordering of the field cards.
+    for( int i = 0; i < this->possCardCnt; i++ ){
+        rdOrdIdx_Vect.push_back(i);
+    }
+
+    // Perform the first reset, which effectively acts as an initialization to variables
+    // which participate in resets.
+    this->reset();
 
 }
 
@@ -125,8 +107,6 @@ void CRG_SFML_eng::setMainFont( sf::Font mainFont ){
 void CRG_SFML_eng::update(){
     
     for( shared_ptr<SFML_button_XYQ> buttonX : this->possCard_vect ){
-        buttonX->setUPColor( upColor );
-        buttonX->setPColor( pColor );
         buttonX->update();
     }
 
@@ -136,15 +116,7 @@ void CRG_SFML_eng::update(){
 
 void CRG_SFML_eng::reset(){
     
-    this->cardReact::reset();
-
-    // Update the main card with the new target.
-    // mainCard->setTxtStr( to_string( mainCardID ) );
-    // mainCard->setTxtColor( noCardTxtColor );
-    // mainCard->disableSprite();
-    // mainCard->disableText();
-    
-    
+    this->cardReact::reset();    
 
     // Reset the card colors to before being pressed.
     this->upColor = upColorBef;
@@ -152,9 +124,14 @@ void CRG_SFML_eng::reset(){
     
     // Update the main card.
     this->upd_mainCard();
+    // Disable text and spirte to hide the card's new identity.
+    mainCard->disableText();
+    mainCard->disableSprite();
+
     // Update the field cards.
     this->upd_fieldCards(true);
 
+    // Update all SFML elements.
     this->update();
 
 }
@@ -170,23 +147,23 @@ void CRG_SFML_eng::upd_mainCard(){
     mainCard->setPColor( pColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
-    mainCard->disableText();
-    mainCard->disableSprite();
 
 }
 
-void CRG_SFML_eng::upd_fieldCards( bool shuffle = true ){
+void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
 
-    // Create an index vector.
-    vector<int> rdOrdIdx_Vect;
-    for( int i = 0; i < this->possCardCnt; i++ ){
-        rdOrdIdx_Vect.push_back(i);
-    }
+    
     // Shuffle the vector is required.
     if( shuffle ){
         // Shuffle this index vector.
         shuffleVector( rdOrdIdx_Vect );
     }
+
+    // Determine the number of rows and columns of cards depending on how many cards there
+    // are in total.
+    float tmp = std::sqrt( (float) possCardCnt );
+    rowColCnt.x = (int) std::ceil( ( (float) possCardCnt )/tmp );
+    rowColCnt.y = (int) std::ceil( tmp );
 
     // Card index variable.
     int z = 0;
@@ -278,6 +255,7 @@ bool CRG_SFML_eng::releaseButton(){
 
                 this->upColor = upColorAft;
                 this->pColor = pColorAft;
+                this->upd_fieldCards( false );
                 this->update();
                 cout << "Reaction time (ms): " << this->getPickCardMS() << endl;
 

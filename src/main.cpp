@@ -167,7 +167,7 @@ void play_cardReactGame(){
     }
 
     // Initialize the game object.
-    gameEngine::CRG_SFML_eng CRG_SFML_obj( 9, 3000, CGR_possCard_buttons );
+    gameEngine::CRG_SFML_eng CRG_SFML_obj( CGR_possCard_buttons, 3000 );
     CRG_SFML_obj.setMainFont( font );
     CRG_SFML_obj.update();
 
