@@ -75,10 +75,11 @@ public:
     void reset();
     
     /*
-    Shuffle the placement of the cards in a random manner.
-    NOTE: only the card placement is shuffled.
+    Distribute the possible cards in the card field in the form of a rectangle 
+    (That is as close to a square as possible). Positions are shuffled if specified.
+    NOTE: only the card placement is shuffled, not their indices.
     */
-    void shuffle();
+    void upd_pos( bool shuffle );
 
     /*
     Start the game.

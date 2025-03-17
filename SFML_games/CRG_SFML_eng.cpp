@@ -221,25 +221,25 @@ void CRG_SFML_eng::reset(){
     this->upColor = upColorBef;
     this->pColor = pColorBef;
     
+    this->upd_pos(true);
+
     this->update();
 
 }
 
 
-void CRG_SFML_eng::shuffle(){
+void CRG_SFML_eng::upd_pos( bool shuffle = true ){
 
     // Create an index vector.
     vector<int> rdOrdIdx_Vect;
     for( int i = 0; i < this->possCardCnt; i++ ){
         rdOrdIdx_Vect.push_back(i);
     }
-    // Shuffle this index vector.
-    shuffleVector( rdOrdIdx_Vect );
-
-    // Define the default locations and sizes of the buttons.
-    float x_start = 250;        float y_start = 100;
-    float butWidth = 100;       float butHeight = 100;
-    float butSep = 5;
+    // Shuffle the vector is required.
+    if( shuffle ){
+        // Shuffle this index vector.
+        shuffleVector( rdOrdIdx_Vect );
+    }
 
     // Card index variable.
     int z = 0;
@@ -250,8 +250,8 @@ void CRG_SFML_eng::shuffle(){
 
             shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at( rdOrdIdx_Vect.at(z) );
 
-            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
-                y_start + ( butHeight + butSep )*i );
+            buttonX->setPos( field_pos.x + ( field_card_dim.x + field_card_sep )*j, 
+                field_pos.y + ( field_card_dim.y + field_card_sep )*i );
 
             buttonX->update();
 
