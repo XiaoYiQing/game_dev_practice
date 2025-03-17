@@ -81,16 +81,7 @@ int main(int, char**){
 
     // tests::CRG_test1();
 
-    // play_cardReactGame();
-
-    vector<int> myVect = { 0, 1, 2, 3, 4, 5 };
-
-    shuffleVector( myVect );
-
-    for( int z : myVect ){
-        cout << z << ", ";
-    }
-    cout << endl;
+    play_cardReactGame();
     
     return 0;
 

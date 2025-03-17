@@ -218,6 +218,8 @@ void CRG_SFML_eng::reset(){
     this->upColor = upColorBef;
     this->pColor = pColorBef;
     
+    this->shuffle();
+
     this->update();
 
 }
@@ -225,23 +227,37 @@ void CRG_SFML_eng::reset(){
 
 void CRG_SFML_eng::shuffle(){
 
-    // randIntVectGen( 0, possCardCnt - 1, 1 ).at(0);
-    // vector<int> randIntVectGen( 0, possCardCnt - 1, unsigned int cnt );
+    // Create an index vector.
+    vector<int> rdOrdIdx_Vect;
+    for( int i = 0; i < this->possCardCnt; i++ ){
+        rdOrdIdx_Vect.push_back(i);
+    }
+    // Shuffle this index vector.
+    shuffleVector( rdOrdIdx_Vect );
 
-    // // Define the default locations and sizes of the buttons.
-    // float x_start = 250;        float y_start = 100;
-    // float butWidth = 100;       float butHeight = 100;
-    // float butSep = 5;
+    // Define the default locations and sizes of the buttons.
+    float x_start = 250;        float y_start = 100;
+    float butWidth = 100;       float butHeight = 100;
+    float butSep = 5;
 
-    // // Card index variable.
-    // int z = 0;
+    // Card index variable.
+    int z = 0;
 
-    // // Standard distribution of buttons into a rectangular formation (as close to square as possible).
-    // for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
-    //     for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
+    // Standard distribution of buttons into a rectangular formation (as close to square as possible).
+    for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
+        for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
 
-    //     }
-    // }
+            shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at( rdOrdIdx_Vect.at(z) );
+
+            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
+                y_start + ( butHeight + butSep )*i );
+
+            buttonX->update();
+
+            z++;
+
+        }
+    }
 
 }
 
