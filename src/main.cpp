@@ -116,21 +116,8 @@ void play_cardReactGame(){
     // Page initialization.
     SFML_page_XYQ page3_game = SFML_page_XYQ();
 
-    // Object: button for resetting the game board.
-    shared_ptr<SFML_button_XYQ> but3C_timeDisplay = 
-        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    but3C_timeDisplay->setPos( 75, 200 );
-    but3C_timeDisplay->setWidth( 100 );      
-    but3C_timeDisplay->setHeight( 50 );      
-    but3C_timeDisplay->setTxtFont( font );
-    but3C_timeDisplay->setTxtStr( "" );
-    but3C_timeDisplay->setTxtColor( 255, 255, 255, 255 );
-    but3C_timeDisplay->setUPColor( 0, 0, 255 );
-    but3C_timeDisplay->setPColor( 0, 0, 255 );
-    but3C_timeDisplay->disableSprite();
-    // Add to page.
-    page3_game.addObj( but3C_timeDisplay );
     
+    cardReact::CRG_STATE currCRGState = cardReact::CRG_STATE::UNSTARTED;
 
     // Object: button for resetting the game board.
     shared_ptr<SFML_button_XYQ> but3A_start = 
@@ -161,6 +148,38 @@ void play_cardReactGame(){
     // Add to page.
     page3_game.addObj( but3B_reset );
 
+
+    // Object: button for resetting the game board.
+    shared_ptr<SFML_button_XYQ> but3C_timeDisplay = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3C_timeDisplay->setPos( 75, 200 );
+    but3C_timeDisplay->setWidth( 100 );      
+    but3C_timeDisplay->setHeight( 50 );      
+    but3C_timeDisplay->setTxtFont( font );
+    but3C_timeDisplay->setTxtStr( "" );
+    but3C_timeDisplay->setTxtColor( 255, 255, 255, 255 );
+    but3C_timeDisplay->setUPColor( 0, 0, 255 );
+    but3C_timeDisplay->setPColor( 0, 0, 255 );
+    but3C_timeDisplay->disableSprite();
+    // Add to page.
+    page3_game.addObj( but3C_timeDisplay );
+
+
+    // Object: button for resetting the game board.
+    shared_ptr<SFML_button_XYQ> but3D_stateDisplay = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3D_stateDisplay->setPos( 50, 300 );
+    but3D_stateDisplay->setWidth( 150 );      
+    but3D_stateDisplay->setHeight( 50 );      
+    but3D_stateDisplay->setTxtFont( font );
+    but3D_stateDisplay->setTxtSize( 20 );
+    but3D_stateDisplay->setTxtStr( "" );
+    but3D_stateDisplay->setTxtColor( 255, 255, 255, 255 );
+    but3D_stateDisplay->setUPColor( 0, 0, 255 );
+    but3D_stateDisplay->setPColor( 0, 0, 255 );
+    but3D_stateDisplay->disableSprite();
+    // Add to page.
+    page3_game.addObj( but3D_stateDisplay );
 
 
     // Vector of all possible card buttons.
@@ -235,7 +254,9 @@ void play_cardReactGame(){
             
         }
 
-        switch( CRG_SFML_obj.getState() ){
+
+        currCRGState = CRG_SFML_obj.getState();
+        switch( currCRGState ){
         case cardReact::CRG_STATE::ONGOING:
             but3C_timeDisplay->setTxtStr( to_string( CRG_SFML_obj.getElapsedMS() - 
                 CRG_SFML_obj.getCountDownMS() ) );
@@ -252,6 +273,10 @@ void play_cardReactGame(){
             break;
         }
         but3C_timeDisplay->update();
+        // Update the game state.
+        but3D_stateDisplay->setTxtStr( cardReact::get_CRG_STATE_Str( currCRGState ) );
+        but3D_stateDisplay->update();
+
 
         // Clear the window.
         window.clear(sf::Color::Black); // Background color

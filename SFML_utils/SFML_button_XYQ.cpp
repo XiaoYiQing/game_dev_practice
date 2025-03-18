@@ -424,6 +424,10 @@ void SFML_button_XYQ::setTxtColor( unsigned int red, unsigned int green,
     this->txtColor = sf::Color( red, green, blue, alpha );
 }
 
+void SFML_button_XYQ::setTxtSize( unsigned int txtSize ){
+    this->txtSize = txtSize;
+}
+
 float SFML_button_XYQ::getTxtX() const
     {return this->txtX;}
 void SFML_button_XYQ::setTxtX( float txtX )

@@ -201,6 +201,8 @@ public:
     // Set the text color using RGB code (0 to 255) and alpha=opacity (0 to 255).
     void setTxtColor( unsigned int red, unsigned int green, unsigned int blue, 
         unsigned int alpha = 255 );
+    
+    void setTxtSize( unsigned int txtSize );
 
     float getTxtX() const;
     void setTxtX( float txtX );
