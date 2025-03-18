@@ -43,6 +43,7 @@ TODO: Create a base checkers game engine.
 #include "numUtils.h"
 
 using namespace std;
+using namespace gameEngine;
 
 void play_cardReactGame();
 
@@ -115,10 +116,25 @@ void play_cardReactGame(){
     // Page initialization.
     SFML_page_XYQ page3_game = SFML_page_XYQ();
 
+    // Object: button for resetting the game board.
+    shared_ptr<SFML_button_XYQ> but3C_timeDisplay = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3C_timeDisplay->setPos( 75, 200 );
+    but3C_timeDisplay->setWidth( 100 );      
+    but3C_timeDisplay->setHeight( 50 );      
+    but3C_timeDisplay->setTxtFont( font );
+    but3C_timeDisplay->setTxtStr( "" );
+    but3C_timeDisplay->setTxtColor( 50, 50, 50, 255 );
+    but3C_timeDisplay->setUPColor( 150, 150, 255 );
+    but3C_timeDisplay->setPColor( 150, 150, 255 );
+    but3C_timeDisplay->disableSprite();
+    // Add to page.
+    page3_game.addObj( but3C_timeDisplay );
+    
 
     // Object: button for resetting the game board.
     shared_ptr<SFML_button_XYQ> but3A_start = 
-    shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
     but3A_start->setPos( 200, 500 );
     but3A_start->setWidth( 150 );      
     but3A_start->setHeight( 50 );      
@@ -147,16 +163,13 @@ void play_cardReactGame(){
 
 
 
-
-
-
     // Vector of all possible card buttons.
     vector<shared_ptr<SFML_button_XYQ>> CGR_possCard_buttons;
 
     sf::Color noCardColor = sf::Color( 255, 255, 255, 255 );
     sf::Color noCardTxtColor = sf::Color( 255, 0, 0, 255 );
 
-    int possCardCnt = 12;
+    int possCardCnt = 9;
 
     for( int z = 0; z < possCardCnt; z++ ){
         shared_ptr<SFML_button_XYQ> buttonX = 
@@ -221,6 +234,22 @@ void play_cardReactGame(){
             }
             
         }
+
+        switch( CRG_SFML_obj.getState() ){
+        case cardReact::CRG_STATE::ONGOING:
+            but3C_timeDisplay->setTxtStr( to_string( CRG_SFML_obj.getElapsedMS() ) );
+            break;
+        case cardReact::CRG_STATE::UNSTARTED:
+            but3C_timeDisplay->setTxtStr( "-----" );
+            break;
+        case cardReact::CRG_STATE::WIN:
+            but3C_timeDisplay->setTxtColor( 0, 255, 0 );
+            break;
+        case cardReact::CRG_STATE::LOSS:
+            but3C_timeDisplay->setTxtColor( 255, 0, 0 );
+            break;
+        }
+        but3C_timeDisplay->update();
 
         // Clear the window.
         window.clear(sf::Color::Black); // Background color

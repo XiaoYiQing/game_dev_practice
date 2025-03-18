@@ -17,7 +17,7 @@ using namespace std;
 namespace gameEngine{
 
 
-class CRG_SFML_eng : cardReact{
+class CRG_SFML_eng : public cardReact{
 
 
 public:
