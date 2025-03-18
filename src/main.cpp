@@ -237,10 +237,11 @@ void play_cardReactGame(){
 
         switch( CRG_SFML_obj.getState() ){
         case cardReact::CRG_STATE::ONGOING:
-            but3C_timeDisplay->setTxtStr( to_string( CRG_SFML_obj.getElapsedMS() ) );
+            but3C_timeDisplay->setTxtStr( to_string( CRG_SFML_obj.getElapsedMS() - 
+                CRG_SFML_obj.getCountDownMS() ) );
             break;
         case cardReact::CRG_STATE::UNSTARTED:
-            but3C_timeDisplay->setTxtStr( "-----" );
+            but3C_timeDisplay->setTxtStr( to_string( -CRG_SFML_obj.getCountDownMS() ) );
             break;
         case cardReact::CRG_STATE::WIN:
             but3C_timeDisplay->setTxtColor( 0, 255, 0 );

@@ -83,6 +83,11 @@ public:
     */
     long long getPickCardMS() const;
 
+    /*
+    Obtain the countdown time amount (Before a user card pick can be registered).
+    */
+    long long getCountDownMS() const;
+
     // Determines if the main card is revealed.
     bool isMainCardRevealed() const;
 

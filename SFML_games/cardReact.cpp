@@ -80,6 +80,10 @@ long long cardReact::getPickCardMS() const{
     }
 }
 
+long long cardReact::getCountDownMS() const{
+    return cntDownT;
+}
+
 bool cardReact::isMainCardRevealed() const{
 
     if( this->state == CRG_STATE::UNSTARTED ){
