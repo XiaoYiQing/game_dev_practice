@@ -22,6 +22,9 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     cardReact( possCardCnt, cntDownT )
 {
 
+    // Set the main card color.
+    mainCardColor = sf::Color( 138, 43, 226, 255 );
+
     // Initialize the main card.
     this->mainCard = shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
@@ -50,6 +53,9 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
 CRG_SFML_eng::CRG_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> possCard_vect, 
     long long cntDownT ) : cardReact( possCard_vect.size(), cntDownT )
 {
+
+    // Set the main card color.
+    mainCardColor = sf::Color( 138, 43, 226, 255 );
 
     // Use the given card pointer vector.
     this->possCard_vect = possCard_vect;
@@ -142,8 +148,8 @@ void CRG_SFML_eng::upd_mainCard(){
 
     mainCard->setWidth( field_card_dim.x );      
     mainCard->setHeight( field_card_dim.y );
-    mainCard->setUPColor( upColor );
-    mainCard->setPColor( pColor );
+    mainCard->setUPColor( mainCardColor );
+    mainCard->setPColor( mainCardColor );
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
 

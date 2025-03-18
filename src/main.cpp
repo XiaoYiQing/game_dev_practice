@@ -152,8 +152,8 @@ void play_cardReactGame(){
     // Object: button for resetting the game board.
     shared_ptr<SFML_button_XYQ> but3C_timeDisplay = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    but3C_timeDisplay->setPos( 75, 200 );
-    but3C_timeDisplay->setWidth( 100 );      
+    but3C_timeDisplay->setPos( 70, 200 );
+    but3C_timeDisplay->setWidth( 120 );      
     but3C_timeDisplay->setHeight( 50 );      
     but3C_timeDisplay->setTxtFont( font );
     but3C_timeDisplay->setTxtStr( "" );
@@ -259,11 +259,11 @@ void play_cardReactGame(){
         switch( currCRGState ){
         case cardReact::CRG_STATE::ONGOING:
             but3C_timeDisplay->setTxtStr( to_string( CRG_SFML_obj.getElapsedMS() - 
-                CRG_SFML_obj.getCountDownMS() ) );
+                CRG_SFML_obj.getCountDownMS() ) + "ms" );
             break;
         case cardReact::CRG_STATE::UNSTARTED:
             but3C_timeDisplay->setTxtColor( 255, 255, 255, 255 );
-            but3C_timeDisplay->setTxtStr( to_string( -CRG_SFML_obj.getCountDownMS() ) );
+            but3C_timeDisplay->setTxtStr( to_string( -CRG_SFML_obj.getCountDownMS() ) + "ms" );
             break;
         case cardReact::CRG_STATE::WIN:
             but3C_timeDisplay->setTxtColor( 0, 255, 0 );

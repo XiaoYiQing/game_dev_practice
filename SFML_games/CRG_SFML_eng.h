@@ -136,6 +136,8 @@ protected:
     sf::Color upColor;
     // The color of the button when pressed
     sf::Color pColor;
+    // The color of the main card background.
+    sf::Color mainCardColor;
 
     /*
     The font adopted by text in this class.
