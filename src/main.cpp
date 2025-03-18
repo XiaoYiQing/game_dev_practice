@@ -124,9 +124,9 @@ void play_cardReactGame(){
     but3C_timeDisplay->setHeight( 50 );      
     but3C_timeDisplay->setTxtFont( font );
     but3C_timeDisplay->setTxtStr( "" );
-    but3C_timeDisplay->setTxtColor( 50, 50, 50, 255 );
-    but3C_timeDisplay->setUPColor( 150, 150, 255 );
-    but3C_timeDisplay->setPColor( 150, 150, 255 );
+    but3C_timeDisplay->setTxtColor( 255, 255, 255, 255 );
+    but3C_timeDisplay->setUPColor( 0, 0, 255 );
+    but3C_timeDisplay->setPColor( 0, 0, 255 );
     but3C_timeDisplay->disableSprite();
     // Add to page.
     page3_game.addObj( but3C_timeDisplay );
@@ -241,6 +241,7 @@ void play_cardReactGame(){
                 CRG_SFML_obj.getCountDownMS() ) );
             break;
         case cardReact::CRG_STATE::UNSTARTED:
+            but3C_timeDisplay->setTxtColor( 255, 255, 255, 255 );
             but3C_timeDisplay->setTxtStr( to_string( -CRG_SFML_obj.getCountDownMS() ) );
             break;
         case cardReact::CRG_STATE::WIN:

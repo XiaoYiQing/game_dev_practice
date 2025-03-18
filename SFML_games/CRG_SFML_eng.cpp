@@ -196,6 +196,11 @@ void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
 
 
 void CRG_SFML_eng::start(){
+    
+    // Prevent the game from starting if it is not ready.
+    if( this->state != CRG_STATE::UNSTARTED ){
+        return;
+    }
 
     cardReact::start();
 
