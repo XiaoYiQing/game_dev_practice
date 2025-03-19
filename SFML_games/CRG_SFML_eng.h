@@ -150,7 +150,7 @@ protected:
     /*
     Vector holding the number of rows (x) and columns (y).
     */
-    sf::Vector2i rowColCnt;
+    sf::Vector2u rowColCnt;
     
     // Position (Upper-left corner) of the field of possible cards.
     sf::Vector2f field_pos;
@@ -159,7 +159,7 @@ protected:
     // Separation between cards from the field.
     float field_card_sep;
     // The cards ordering.
-    vector<int> rdOrdIdx_Vect;
+    vector<unsigned int> rdOrdIdx_Vect;
 
     /*
     The main card which is hidden at first when the game starts and is then

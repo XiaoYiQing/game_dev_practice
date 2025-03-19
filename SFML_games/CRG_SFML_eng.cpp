@@ -75,12 +75,12 @@ CRG_SFML_eng::CRG_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> possCard_vect,
     this->field_card_dim.y = 100;
     this->field_card_sep = 5;
     // Initialize vector holding index reordering of the field cards.
-    for( int i = 0; i < this->possCardCnt; i++ ){
+    for( unsigned int i = 0; i < this->possCardCnt; i++ ){
         rdOrdIdx_Vect.push_back(i);
     }
 
     // Insert a set of dummy textures.
-    for( int i = 0; i < possCardCnt; i++ ){
+    for( unsigned int i = 0; i < possCardCnt; i++ ){
         possCardTex_vect.push_back( shared_ptr<sf::Texture>( new sf::Texture() ) );
     }
 
@@ -197,13 +197,13 @@ void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
     rowColCnt.y = (int) std::ceil( tmp );
 
     // Card index variable.
-    int z = 0;
+    unsigned int z = 0;
 
     // Standard distribution of buttons into a rectangular formation (as close to square as possible).
-    for( int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
-        for( int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
+    for( unsigned int i = 0; ( i < rowColCnt.x && z < possCardCnt ); i++ ){
+        for( unsigned int j = 0; ( j < rowColCnt.y && z < possCardCnt ); j++ ){
 
-            int orig_idx = rdOrdIdx_Vect.at(z);
+            unsigned int orig_idx = rdOrdIdx_Vect.at(z);
             shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at( orig_idx );
 
             buttonX->setPos( field_pos.x + ( field_card_dim.x + field_card_sep )*j, 
@@ -261,7 +261,7 @@ bool CRG_SFML_eng::pressButton( const sf::RenderWindow& window ){
 
     bool success = false;
 
-    for( int z = 0; z < possCardCnt; z++ ){
+    for( unsigned int z = 0; z < possCardCnt; z++ ){
 
         // Get the current button.
         shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at(z);
@@ -288,7 +288,7 @@ bool CRG_SFML_eng::releaseButton(){
     
     bool released = false;
 
-    for( int z = 0; z < possCardCnt; z++ ){
+    for( unsigned int z = 0; z < possCardCnt; z++ ){
 
         // Get the current button.
         shared_ptr<SFML_button_XYQ> buttonX = this->possCard_vect.at(z);

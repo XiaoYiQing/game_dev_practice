@@ -32,7 +32,7 @@ cardReact::CRG_STATE get_CRG_STATE_AtIdx( int idx ){
 //      Constructor
 // ====================================================================== >>>>>
 
-cardReact::cardReact( int possCardCnt, long long cntDownT ){
+cardReact::cardReact( unsigned int possCardCnt, long long cntDownT ){
 
     this->state = CRG_STATE::UNSTARTED;
     this->possCardCnt = possCardCnt;
