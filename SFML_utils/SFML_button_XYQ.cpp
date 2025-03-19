@@ -291,7 +291,7 @@ void SFML_button_XYQ::setPColor( unsigned int red, unsigned int green,
 
 
 bool SFML_button_XYQ::setUPTexture( string imgFFName ){
-
+    
     if ( !( upTexture->loadFromFile( imgFFName ) ) ) { 
         std::cerr << "Error loading image file!\n";
         return false;
@@ -307,8 +307,10 @@ bool SFML_button_XYQ::setUPTexture( string imgFFName ){
 }
 bool SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
 
-    // Check for empty pointer.
-    if( !upTexture ){
+    sf::Vector2u upT_size = upTexture->getSize();
+    
+    // Check for empty texture.
+    if( upT_size.x == 0 || upT_size.y == 0 ){
         return false;
     }
 
@@ -322,7 +324,8 @@ bool SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
 
 }
 bool SFML_button_XYQ::hasUPTexture() const{
-    return (bool) upTexture;
+    sf::Vector2u upT_size = upTexture->getSize();
+    return ( upT_size.x != 0 && upT_size.y != 0 );
 }
 
 bool SFML_button_XYQ::setPTexture( string imgFFName ){
@@ -342,11 +345,13 @@ bool SFML_button_XYQ::setPTexture( string imgFFName ){
 }
 bool SFML_button_XYQ::setPTexture( shared_ptr<sf::Texture> pTexture ){
 
-    // Check for empty pointer.
-    if( !pTexture ){
+    sf::Vector2u pT_size = pTexture->getSize();
+    
+    // Check for empty texture.
+    if( pT_size.x == 0 || pT_size.y == 0 ){
         return false;
     }
-
+    
     this->pTexture = pTexture;
     pSprite->setTexture( *pTexture, true );
     // Update the sprite.
@@ -356,7 +361,8 @@ bool SFML_button_XYQ::setPTexture( shared_ptr<sf::Texture> pTexture ){
 
 }
 bool SFML_button_XYQ::hasPTexture() const{
-    return (bool) pTexture;
+    sf::Vector2u pT_size = pTexture->getSize();
+    return ( pT_size.x != 0 && pT_size.y != 0 );
 }
 
 void SFML_button_XYQ::setUpSprtScale( float x, float y ){
