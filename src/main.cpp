@@ -112,7 +112,7 @@ void play_cardReactGame(){
     shared_ptr<sf::Texture> funny_img_texture = SFMLUtilsXYQ::genTexture( funny_img_FFN );
 
     vector< shared_ptr< sf::Texture > > CRG_img_texture_vec;
-    for( int i = 0; i < CRG_img_cnt; i++ ){
+    for( int i = 0; i < CRG_img_cnt - 4; i++ ){
         shared_ptr<sf::Texture> tmp = SFMLUtilsXYQ::genTexture( CRG_img_FFN_vec.at(i) );
         CRG_img_texture_vec.push_back( tmp );
     }
@@ -199,11 +199,7 @@ void play_cardReactGame(){
 
     // Vector of all possible card buttons.
     vector<shared_ptr<SFML_button_XYQ>> CGR_possCard_buttons;
-
-    sf::Color noCardColor = sf::Color( 255, 255, 255, 255 );
-    sf::Color noCardTxtColor = sf::Color( 255, 0, 0, 255 );
-
-
+    // Fill the vector with initial set of buttons.
     for( int z = 0; z < possCardCnt; z++ ){
         shared_ptr<SFML_button_XYQ> buttonX = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
@@ -212,7 +208,7 @@ void play_cardReactGame(){
         page3_game.addObj( buttonX );
     }
 
-    // Initialize the game object.
+    // Initialize the game object with button vector.
     gameEngine::CRG_SFML_eng CRG_SFML_obj( CGR_possCard_buttons, 3000 );
     CRG_SFML_obj.setMainFont( font );
     CRG_SFML_obj.setPossCardTex_vect( CRG_img_texture_vec );

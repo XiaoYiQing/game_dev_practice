@@ -167,11 +167,13 @@ void CRG_SFML_eng::upd_mainCard(){
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
 
-    if( mainCard->setUPTexture( possCardTex_vect.at( mainCardID ) ) ){
-        mainCard->setPTexture( possCardTex_vect.at( mainCardID ) );
+    if( mainCardID < possCardTex_vect.size() && 
+        mainCard->setUPTexture( possCardTex_vect.at( mainCardID ) ) ){
 
+        mainCard->setPTexture( possCardTex_vect.at( mainCardID ) );
         mainCard->enableSprite();
         mainCard->disableText();
+
     }else{
         mainCard->disableSprite();
         mainCard->enableText();
@@ -217,7 +219,8 @@ void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
             buttonX->setTxtColor( noCardTxtColor );
 
             if( orig_idx < possCardCnt ){
-                if( buttonX->setUPTexture( possCardTex_vect.at(orig_idx) ) ){
+                if( orig_idx < possCardTex_vect.size() && 
+                    buttonX->setUPTexture( possCardTex_vect.at(orig_idx) ) ){
                     buttonX->setPTexture( possCardTex_vect.at(orig_idx) );
 
                     buttonX->enableSprite();
@@ -226,6 +229,9 @@ void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
                     buttonX->disableSprite();
                     buttonX->enableText();
                 }
+            }else{
+                buttonX->disableSprite();
+                buttonX->enableText();
             }
 
             z++;
