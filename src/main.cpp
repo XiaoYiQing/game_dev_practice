@@ -56,7 +56,7 @@ int main(int, char**){
 
     // tests::window_test_5();
 
-    // tests::doButtonObjTest_5();
+    // tests::doButtonObjTest_4();
 
     // tests::doTxtBoxTest_1();
 
@@ -81,6 +81,8 @@ int main(int, char**){
     // tests::checkers_test4();
 
     // tests::CRG_test1();
+
+    // game::play_Checkers();
 
     play_cardReactGame();
     
@@ -213,7 +215,7 @@ void play_cardReactGame(){
     // Initialize the game object.
     gameEngine::CRG_SFML_eng CRG_SFML_obj( CGR_possCard_buttons, 3000 );
     CRG_SFML_obj.setMainFont( font );
-    // CRG_SFML_obj.setPossCardTex_vect( CRG_img_texture_vec );
+    CRG_SFML_obj.setPossCardTex_vect( CRG_img_texture_vec );
     CRG_SFML_obj.reset();
     CRG_SFML_obj.update();
 
