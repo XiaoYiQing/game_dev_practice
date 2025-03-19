@@ -43,6 +43,11 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
         rdOrdIdx_Vect.push_back(i);
     }
     
+    // Insert a set of dummy textures.
+    for( int i = 0; i < possCardCnt; i++ ){
+        possCardTex_vect.push_back( shared_ptr<sf::Texture>( new sf::Texture() ) );
+    }
+
     // Perform the first reset, which effectively acts as an initialization to variables
     // which participate in resets.
     this->reset();
@@ -74,6 +79,11 @@ CRG_SFML_eng::CRG_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> possCard_vect,
         rdOrdIdx_Vect.push_back(i);
     }
 
+    // Insert a set of dummy textures.
+    for( int i = 0; i < possCardCnt; i++ ){
+        possCardTex_vect.push_back( shared_ptr<sf::Texture>( new sf::Texture() ) );
+    }
+
     // Perform the first reset, which effectively acts as an initialization to variables
     // which participate in resets.
     this->reset();
@@ -100,6 +110,10 @@ void CRG_SFML_eng::setMainFont( sf::Font mainFont ){
     }
     this->mainCard->setTxtFont( this->mainFont );
 
+}
+
+void CRG_SFML_eng::setPossCardTex_vect( vector<shared_ptr<sf::Texture>> possCardTex_vect ){
+    this->possCardTex_vect = possCardTex_vect;
 }
 
 // ====================================================================== <<<<<
@@ -192,6 +206,11 @@ void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
             buttonX->setTxtStr( to_string( orig_idx ) );
             buttonX->setTxtColor( noCardTxtColor );
             buttonX->enableText();
+
+            if( orig_idx < possCardCnt ){
+                buttonX->setUPTexture( possCardTex_vect.at(orig_idx) );
+                buttonX->setPTexture( possCardTex_vect.at(orig_idx) );
+            }
 
             z++;
 

@@ -58,6 +58,9 @@ public:
     // Also applies the font to all valid targets in the class.
     void setMainFont( sf::Font );
 
+    //possCardTex_vect
+    void setPossCardTex_vect( vector<shared_ptr<sf::Texture>> possCardTex_vect );
+
 // ====================================================================== <<<<<
 
 

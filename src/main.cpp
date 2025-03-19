@@ -91,16 +91,29 @@ int main(int, char**){
 
 void play_cardReactGame(){
 
+    // Define the number of cards at play.
+    int possCardCnt = 9;
 
     // Create a texture to hold the image
     string button_img_np_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_np.png";
     string button_img_p_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_p.png";
     string funny_img_FFN = RES_PATH_XYQ_str + "/funny_img_2.jpg";
 
+    vector<string> CRG_img_FFN_vec;
+    int CRG_img_cnt = 9;
+    for( int i = 0; i < CRG_img_cnt; i++ ){
+        CRG_img_FFN_vec.push_back( RES_PATH_XYQ_str + "/CRG_img_" + to_string(i+1) + ".jpg" );
+    }
 
     shared_ptr<sf::Texture> button_img_np_texture = SFMLUtilsXYQ::genTexture( button_img_np_FFN );
     shared_ptr<sf::Texture> button_img_p_texture = SFMLUtilsXYQ::genTexture( button_img_p_FFN );
     shared_ptr<sf::Texture> funny_img_texture = SFMLUtilsXYQ::genTexture( funny_img_FFN );
+
+    vector< shared_ptr< sf::Texture > > CRG_img_texture_vec;
+    for( int i = 0; i < CRG_img_cnt; i++ ){
+        shared_ptr<sf::Texture> tmp = SFMLUtilsXYQ::genTexture( CRG_img_FFN_vec.at(i) );
+        CRG_img_texture_vec.push_back( tmp );
+    }
 
     sf::Font font = SFMLUtilsXYQ::getArialFont( RES_PATH_XYQ_str );
 
@@ -188,7 +201,6 @@ void play_cardReactGame(){
     sf::Color noCardColor = sf::Color( 255, 255, 255, 255 );
     sf::Color noCardTxtColor = sf::Color( 255, 0, 0, 255 );
 
-    int possCardCnt = 9;
 
     for( int z = 0; z < possCardCnt; z++ ){
         shared_ptr<SFML_button_XYQ> buttonX = 
@@ -201,6 +213,7 @@ void play_cardReactGame(){
     // Initialize the game object.
     gameEngine::CRG_SFML_eng CRG_SFML_obj( CGR_possCard_buttons, 3000 );
     CRG_SFML_obj.setMainFont( font );
+    CRG_SFML_obj.setPossCardTex_vect( CRG_img_texture_vec );
     CRG_SFML_obj.update();
 
     shared_ptr<SFML_button_XYQ> mainCardBut = CRG_SFML_obj.getMainCard();
