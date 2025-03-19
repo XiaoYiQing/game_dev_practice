@@ -290,11 +290,11 @@ void SFML_button_XYQ::setPColor( unsigned int red, unsigned int green,
 }
 
 
-void SFML_button_XYQ::setUPTexture( string imgFFName ){
+bool SFML_button_XYQ::setUPTexture( string imgFFName ){
 
     if ( !( upTexture->loadFromFile( imgFFName ) ) ) { 
         std::cerr << "Error loading image file!\n";
-        return;
+        return false;
     }
 
     // Sprite adjustment.
@@ -302,12 +302,14 @@ void SFML_button_XYQ::setUPTexture( string imgFFName ){
     // Update the sprite.
     this->upd_UPB_sprite();
 
+    return true;
+
 }
-void SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
+bool SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
 
     // Check for empty pointer.
     if( !upTexture ){
-        return;
+        return false;
     }
 
     this->upTexture = upTexture;
@@ -315,13 +317,16 @@ void SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
     upSprite->setTexture( *upTexture, true );
     // Update the sprite.
     this->upd_UPB_sprite();
+
+    return true;
+
 }
 
-void SFML_button_XYQ::setPTexture( string imgFFName ){
+bool SFML_button_XYQ::setPTexture( string imgFFName ){
 
     if ( !( pTexture->loadFromFile( imgFFName ) ) ) { 
         std::cerr << "Error loading image file!\n";
-        return;
+        return false;
     }
 
     // Sprite adjustment.
@@ -329,18 +334,22 @@ void SFML_button_XYQ::setPTexture( string imgFFName ){
     // Update the sprite.
     this->upd_PB_sprite();
 
+    return true;
+
 }
-void SFML_button_XYQ::setPTexture( shared_ptr<sf::Texture> pTexture ){
+bool SFML_button_XYQ::setPTexture( shared_ptr<sf::Texture> pTexture ){
 
     // Check for empty pointer.
     if( !pTexture ){
-        return;
+        return false;
     }
 
     this->pTexture = pTexture;
     pSprite->setTexture( *pTexture, true );
     // Update the sprite.
     this->upd_PB_sprite();
+
+    return true;
 
 }
 

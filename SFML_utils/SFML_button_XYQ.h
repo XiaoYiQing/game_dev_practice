@@ -125,21 +125,21 @@ public:
     Set the sprite to illustrate the button when unpressed. 
     Input: target image file full file name.
     */
-    void setUPTexture( string imgFFName );
+    bool setUPTexture( string imgFFName );
     /* 
     Set the sprite to illustrate the button when unpressed. 
     Input: target image texture.
     */
-    void setUPTexture( shared_ptr<sf::Texture> upTexture );
+    bool setUPTexture( shared_ptr<sf::Texture> upTexture );
 
     // Set the sprite to illustrate the button when pressed. 
     // Input: target image file full file name.
-    void setPTexture( string imgFFName );
+    bool setPTexture( string imgFFName );
     /* 
     Set the sprite to illustrate the button when pressed. 
     Input: target image texture.
     */
-    void setPTexture( shared_ptr<sf::Texture> pTexture );
+    bool setPTexture( shared_ptr<sf::Texture> pTexture );
 
     void setUpSprtScale( float x, float y );
     void setUpSprtScale( sf::Vector2f upSprtScale );
