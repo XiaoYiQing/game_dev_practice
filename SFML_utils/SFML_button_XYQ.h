@@ -131,6 +131,8 @@ public:
     Input: target image texture.
     */
     bool setUPTexture( shared_ptr<sf::Texture> upTexture );
+    // Determine if the button has a texture for illustrating its unpressed state.
+    bool hasUPTexture() const;
 
     // Set the sprite to illustrate the button when pressed. 
     // Input: target image file full file name.
@@ -140,6 +142,8 @@ public:
     Input: target image texture.
     */
     bool setPTexture( shared_ptr<sf::Texture> pTexture );
+    // Determine if the button has a texture for illustrating its pressed state.
+    bool hasPTexture() const;
 
     void setUpSprtScale( float x, float y );
     void setUpSprtScale( sf::Vector2f upSprtScale );

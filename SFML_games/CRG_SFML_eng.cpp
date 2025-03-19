@@ -167,6 +167,16 @@ void CRG_SFML_eng::upd_mainCard(){
     mainCard->setTxtStr( to_string( mainCardID ) );
     mainCard->setTxtColor( noCardTxtColor );
 
+    if( mainCard->setUPTexture( possCardTex_vect.at( mainCardID ) ) ){
+        mainCard->setPTexture( possCardTex_vect.at( mainCardID ) );
+
+        mainCard->enableSprite();
+        mainCard->disableText();
+    }else{
+        mainCard->disableSprite();
+        mainCard->enableText();
+    }
+
 }
 
 void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
@@ -205,11 +215,17 @@ void CRG_SFML_eng::upd_fieldCards( bool shuffle = false ){
             buttonX->setTxtFont( mainFont );
             buttonX->setTxtStr( to_string( orig_idx ) );
             buttonX->setTxtColor( noCardTxtColor );
-            buttonX->enableText();
 
             if( orig_idx < possCardCnt ){
-                buttonX->setUPTexture( possCardTex_vect.at(orig_idx) );
-                buttonX->setPTexture( possCardTex_vect.at(orig_idx) );
+                if( buttonX->setUPTexture( possCardTex_vect.at(orig_idx) ) ){
+                    buttonX->setPTexture( possCardTex_vect.at(orig_idx) );
+
+                    buttonX->enableSprite();
+                    buttonX->disableText();
+                }else{
+                    buttonX->disableSprite();
+                    buttonX->enableText();
+                }
             }
 
             z++;
@@ -314,8 +330,12 @@ bool CRG_SFML_eng::releaseButton(){
 void CRG_SFML_eng::countDownThread( CRG_SFML_eng& tarObj ){
 
     std::this_thread::sleep_for( chrono::milliseconds( tarObj.cntDownT ) );
-    tarObj.mainCard->enableText();
-    tarObj.mainCard->enableSprite();
+    
+    if( tarObj.mainCard->hasUPTexture() && tarObj.mainCard->hasPTexture() ){
+        tarObj.mainCard->enableSprite();
+    }else{
+        tarObj.mainCard->enableText();
+    }
 
 }
 

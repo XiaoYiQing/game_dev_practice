@@ -321,6 +321,9 @@ bool SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
     return true;
 
 }
+bool SFML_button_XYQ::hasUPTexture() const{
+    return (bool) upTexture;
+}
 
 bool SFML_button_XYQ::setPTexture( string imgFFName ){
 
@@ -352,7 +355,9 @@ bool SFML_button_XYQ::setPTexture( shared_ptr<sf::Texture> pTexture ){
     return true;
 
 }
-
+bool SFML_button_XYQ::hasPTexture() const{
+    return (bool) pTexture;
+}
 
 void SFML_button_XYQ::setUpSprtScale( float x, float y ){
     this->upSprtScale.x = x;
