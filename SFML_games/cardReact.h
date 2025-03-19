@@ -38,7 +38,7 @@ public:
     /*
     Enum representing the states the game can be in.
     */
-    enum class CRG_STATE{ UNSTARTED, ONGOING, WIN, LOSS };
+    enum class CRG_STATE{ UNSTARTED, ONGOING, HIT, MISS };
 
     // The number of enum entries in the enum "CRG_STATE" (Uses magic enum).
     const static int CRG_STATE_Count = (int) magic_enum::enum_count<CRG_STATE>();

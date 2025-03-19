@@ -31,8 +31,8 @@ CRG_SFML_eng::CRG_SFML_eng( int possCardCnt, long long cntDownT ) :
     // Field of cards properties.
     this->field_pos.x = 250;
     this->field_pos.y = 50;
-    this->field_card_dim.x = 100;
-    this->field_card_dim.y = 100;
+    this->field_card_dim.x = 140;
+    this->field_card_dim.y = 120;
     this->field_card_sep = 5;
     // Initialize a set of cards and a vector holding index reordering of the field cards.
     for( int i = 0; i < possCardCnt; i++ ){
@@ -71,8 +71,8 @@ CRG_SFML_eng::CRG_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> possCard_vect,
     // Field of cards properties.
     this->field_pos.x = 250;
     this->field_pos.y = 50;
-    this->field_card_dim.x = 100;
-    this->field_card_dim.y = 100;
+    this->field_card_dim.x = 140;
+    this->field_card_dim.y = 120;
     this->field_card_sep = 5;
     // Initialize vector holding index reordering of the field cards.
     for( unsigned int i = 0; i < this->possCardCnt; i++ ){
@@ -158,7 +158,8 @@ void CRG_SFML_eng::reset(){
 void CRG_SFML_eng::upd_mainCard(){
 
     // Initialize the main card.
-    mainCard->setPos( field_pos.x - 150, field_pos.y );
+    // mainCard->setPos( field_pos.x - 150, field_pos.y );
+    mainCard->setPos( 50, field_pos.y );
 
     mainCard->setWidth( field_card_dim.x );      
     mainCard->setHeight( field_card_dim.y );

@@ -72,7 +72,7 @@ long long cardReact::getElapsedMS() const{
 }
 
 long long cardReact::getPickCardMS() const{
-    if( this->state == CRG_STATE::WIN || this->state == CRG_STATE::LOSS ){
+    if( this->state == CRG_STATE::HIT || this->state == CRG_STATE::MISS ){
         return duration_cast<chrono::milliseconds>( cardPickTimePt - 
             startTimePt ).count() - cntDownT;
     }else{
@@ -146,9 +146,9 @@ bool cardReact::selectCard( int cardVect_idx ){
 
         // Win/Loss verification.
         if( cardVect_idx == mainCardID ){
-            this->state = CRG_STATE::WIN;
+            this->state = CRG_STATE::HIT;
         }else{
-            this->state = CRG_STATE::LOSS;
+            this->state = CRG_STATE::MISS;
         }
 
         // Card is selected successfully.

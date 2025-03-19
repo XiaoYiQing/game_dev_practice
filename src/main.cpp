@@ -112,7 +112,7 @@ void play_cardReactGame(){
     shared_ptr<sf::Texture> funny_img_texture = SFMLUtilsXYQ::genTexture( funny_img_FFN );
 
     vector< shared_ptr< sf::Texture > > CRG_img_texture_vec;
-    for( int i = 0; i < CRG_img_cnt - 4; i++ ){
+    for( int i = 0; i < CRG_img_cnt; i++ ){
         shared_ptr<sf::Texture> tmp = SFMLUtilsXYQ::genTexture( CRG_img_FFN_vec.at(i) );
         CRG_img_texture_vec.push_back( tmp );
     }
@@ -131,7 +131,7 @@ void play_cardReactGame(){
     // Page initialization.
     SFML_page_XYQ page3_game = SFML_page_XYQ();
 
-    
+    // Initialize variable keeping track of the state of the game.
     cardReact::CRG_STATE currCRGState = cardReact::CRG_STATE::UNSTARTED;
 
     // Object: button for resetting the game board.
@@ -277,10 +277,10 @@ void play_cardReactGame(){
             but3C_timeDisplay->setTxtColor( 255, 255, 255, 255 );
             but3C_timeDisplay->setTxtStr( to_string( -CRG_SFML_obj.getCountDownMS() ) + "ms" );
             break;
-        case cardReact::CRG_STATE::WIN:
+        case cardReact::CRG_STATE::HIT:
             but3C_timeDisplay->setTxtColor( 0, 255, 0 );
             break;
-        case cardReact::CRG_STATE::LOSS:
+        case cardReact::CRG_STATE::MISS:
             but3C_timeDisplay->setTxtColor( 255, 0, 0 );
             break;
         }
