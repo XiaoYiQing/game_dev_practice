@@ -133,7 +133,10 @@ public:
     bool setUPTexture( shared_ptr<sf::Texture> upTexture );
     // Delete the texture used for unpressed state.
     void delUPTexture();
-    // Determine if the button has a texture for illustrating its unpressed state.
+    /* 
+    Determine if the button has a texture for illustrating its unpressed state.
+    A texture having 0 width or 0 height results in false.
+    */
     bool hasUPTexture() const;
 
     // Set the sprite to illustrate the button when pressed. 
@@ -146,7 +149,10 @@ public:
     bool setPTexture( shared_ptr<sf::Texture> pTexture );
     // Delete the texture used for pressed state.
     void delPTexture();
-    // Determine if the button has a texture for illustrating its pressed state.
+    /* 
+    Determine if the button has a texture for illustrating its pressed state.
+    A texture having 0 width or 0 height results in false.
+    */
     bool hasPTexture() const;
 
     void setUpSprtScale( float x, float y );

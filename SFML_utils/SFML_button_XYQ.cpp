@@ -307,8 +307,12 @@ bool SFML_button_XYQ::setUPTexture( string imgFFName ){
 }
 bool SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
 
+    // Check for empty pointer.
+    if(!upTexture){
+        return false;
+    }
+
     sf::Vector2u upT_size = upTexture->getSize();
-    
     // Check for empty texture.
     if( upT_size.x == 0 || upT_size.y == 0 ){
         return false;
@@ -351,8 +355,12 @@ bool SFML_button_XYQ::setPTexture( string imgFFName ){
 }
 bool SFML_button_XYQ::setPTexture( shared_ptr<sf::Texture> pTexture ){
 
+    // Check for empty pointer.
+    if(!pTexture){
+        return false;
+    }
+
     sf::Vector2u pT_size = pTexture->getSize();
-    
     // Check for empty texture.
     if( pT_size.x == 0 || pT_size.y == 0 ){
         return false;
