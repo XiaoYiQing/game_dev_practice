@@ -80,9 +80,11 @@ int main(int, char**){
 
     // tests::checkers_test4();
 
-    // tests::CRG_test1();
-
     // game::play_Checkers();
+
+    
+    
+    // tests::CRG_test1();
 
     play_cardReactGame();
     

@@ -77,7 +77,7 @@ public:
     /* 
     Obtain the amount of time (ms) elapsed between the card reveal time and 
     the time a card has been picked.
-    A real time is returned only when the game is finished (win/loss), otherwise
+    A real time is returned only when the game is finished (hit/miss), otherwise
     -1 is returned.
     */
     long long getPickCardMS() const;

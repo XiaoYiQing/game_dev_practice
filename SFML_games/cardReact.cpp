@@ -74,7 +74,9 @@ long long cardReact::getElapsedMS() const{
 long long cardReact::getPickCardMS() const{
     if( this->state == CRG_STATE::HIT || this->state == CRG_STATE::MISS ){
         return duration_cast<chrono::milliseconds>( cardPickTimePt - 
-            startTimePt ).count() - cntDownT;
+            cntDownEndTimePt ).count();
+        // return duration_cast<chrono::milliseconds>( cardPickTimePt - 
+        //     startTimePt ).count() - cntDownT;
     }else{
         return -1;
     }
@@ -88,13 +90,9 @@ bool cardReact::isMainCardRevealed() const{
 
     if( this->state == CRG_STATE::UNSTARTED || this->state == CRG_STATE::COUNTDOWN ){
         return false;
+    }else{
+        return true;
     }
-
-    auto tmp = chrono::high_resolution_clock::now();
-    long long elapsedTime = 
-        duration_cast<chrono::milliseconds>( tmp - startTimePt ).count();
-
-    return cntDownT < elapsedTime;
 
 }
 
@@ -131,7 +129,7 @@ void cardReact::start(){
     if( this->state != CRG_STATE::UNSTARTED ){
         return;
     }
-    
+
     // this->state = CRG_STATE::ONGOING;
     this->state = CRG_STATE::COUNTDOWN;
 
@@ -188,8 +186,9 @@ void cardReact::pickMainCard(){
 void cardReact::countDownThread( cardReact& tarObj ){
 
     std::this_thread::sleep_for( chrono::milliseconds( tarObj.cntDownT ) );
+    tarObj.cntDownEndTimePt = chrono::high_resolution_clock::now();
     tarObj.state = CRG_STATE::ONGOING;
-
+    
 }
 
 // ====================================================================== <<<<<
