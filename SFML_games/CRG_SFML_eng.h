@@ -9,9 +9,13 @@
 
 #include "cardReact.h"
 #include "SFML_button_XYQ.h"
+#include "SFML_infoBox_XYQ.h"
+#include "SFML_page_XYQ.h"
+
 
 using namespace std;
 
+extern string RES_PATH_XYQ_str;
 
 
 namespace gameEngine{
@@ -184,5 +188,14 @@ protected:
 
 };
 
+
+namespace game{
+    
+    /*
+    Initialize a game of checkers.
+    */
+    void play_cardReact();
+
+};
 
 #endif  // CRG_SFML_ENG_H
