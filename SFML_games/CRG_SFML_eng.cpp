@@ -250,7 +250,12 @@ void CRG_SFML_eng::start(){
         return;
     }
 
-    cardReact::start();
+    // Set the game state to
+    // cardReact::start();
+    this->state = CRG_STATE::COUNTDOWN;
+
+    startTimePt = chrono::high_resolution_clock::now();
+    cardPickTimePt = startTimePt;
 
     // Create a new thread that runs the runInThread function
     std::thread myThread( countDownThread, ref( *this ) );
@@ -337,7 +342,8 @@ bool CRG_SFML_eng::releaseButton(){
 void CRG_SFML_eng::countDownThread( CRG_SFML_eng& tarObj ){
 
     std::this_thread::sleep_for( chrono::milliseconds( tarObj.cntDownT ) );
-    
+    tarObj.state = CRG_STATE::ONGOING;
+
     if( tarObj.mainCard->hasUPTexture() && tarObj.mainCard->hasPTexture() ){
         tarObj.mainCard->enableSprite();
     }else{

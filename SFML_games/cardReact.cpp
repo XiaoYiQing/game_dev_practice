@@ -127,10 +127,20 @@ void cardReact::reset(){
 
 void cardReact::start(){
 
-    this->state = CRG_STATE::ONGOING;
+    // Prevent the game from starting if it is not ready.
+    if( this->state != CRG_STATE::UNSTARTED ){
+        return;
+    }
+    
+    // this->state = CRG_STATE::ONGOING;
+    this->state = CRG_STATE::COUNTDOWN;
 
     startTimePt = chrono::high_resolution_clock::now();
     cardPickTimePt = startTimePt;
+
+    // Create a new thread that runs the runInThread function
+    std::thread myThread( countDownThread, ref( *this ) );
+    myThread.detach();
 
 }
 
@@ -172,6 +182,13 @@ void cardReact::pickMainCard(){
     
     // Select a random card vector index.
     this->mainCardID = randIntVectGen( 0, possCardCnt - 1, 1 ).at(0);
+
+}
+
+void cardReact::countDownThread( cardReact& tarObj ){
+
+    std::this_thread::sleep_for( chrono::milliseconds( tarObj.cntDownT ) );
+    tarObj.state = CRG_STATE::ONGOING;
 
 }
 

@@ -1,7 +1,7 @@
 #ifndef CARDREACT_H
 #define CARDREACT_H
 
-
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <magic_enum.hpp>
@@ -9,7 +9,6 @@
 #include <thread>
 #include <vector>
 
-#include <chrono>
 
 #include "numUtils.h"
 
@@ -134,6 +133,12 @@ protected:
     Randomly assign the main card.
     */
     void pickMainCard();
+
+    /*
+    Perform a countdown, following which the hidden card is revealed.
+    NOTE: this function is meant to be used on a separate thread.
+    */
+    static void countDownThread( cardReact& tarObj );
 
 // ====================================================================== <<<<<
 

@@ -109,11 +109,7 @@ public:
     bool releaseButton();
 
 
-    /*
-    Perform a countdown, following which the hidden card is revealed.
-    NOTE: this function is meant to be used on a separate thread.
-    */
-    static void countDownThread( CRG_SFML_eng& tarObj );
+    
 
 // ====================================================================== <<<<<
 
@@ -123,7 +119,11 @@ protected:
 //      Gameplay Functions (Protected)
 // ====================================================================== >>>>>
 
-    
+    /*
+    Perform a countdown, following which the hidden card is revealed.
+    NOTE: this function is meant to be used on a separate thread.
+    */
+    static void countDownThread( CRG_SFML_eng& tarObj );
 
 // ====================================================================== <<<<<
 
