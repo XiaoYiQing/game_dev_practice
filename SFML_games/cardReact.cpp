@@ -139,7 +139,7 @@ void cardReact::start(){
     // Create a new thread that runs the runInThread function
     std::thread myThread( countDownThread, ref( *this ) );
     myThread.detach();
-
+    
 }
 
 

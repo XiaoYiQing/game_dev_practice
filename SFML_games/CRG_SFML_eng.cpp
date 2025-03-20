@@ -342,6 +342,7 @@ bool CRG_SFML_eng::releaseButton(){
 void CRG_SFML_eng::countDownThread( CRG_SFML_eng& tarObj ){
 
     std::this_thread::sleep_for( chrono::milliseconds( tarObj.cntDownT ) );
+    tarObj.cntDownEndTimePt = chrono::high_resolution_clock::now();
     tarObj.state = CRG_STATE::ONGOING;
 
     if( tarObj.mainCard->hasUPTexture() && tarObj.mainCard->hasPTexture() ){
