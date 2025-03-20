@@ -311,7 +311,6 @@ bool CRG_SFML_eng::releaseButton(){
 
             }else{
 
-
             }
 
             break;
