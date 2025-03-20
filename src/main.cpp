@@ -288,7 +288,7 @@ void play_cardReactGame(){
     page3_game.addObj( but3A_mmenu );
 
 
-    // Object: button for resetting the game board.
+    // Object: button for displaying time elapsed as well as count down time.
     shared_ptr<SFML_button_XYQ> but3C_timeDisplay = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
     but3C_timeDisplay->setPos( 70, 200 );
@@ -304,10 +304,10 @@ void play_cardReactGame(){
     page3_game.addObj( but3C_timeDisplay );
 
 
-    // Object: button for resetting the game board.
+    // Object: button for displaying the current state of the game.
     shared_ptr<SFML_button_XYQ> but3D_stateDisplay = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    but3D_stateDisplay->setPos( 50, 300 );
+    but3D_stateDisplay->setPos( 50, 275 );
     but3D_stateDisplay->setWidth( 150 );      
     but3D_stateDisplay->setHeight( 50 );      
     but3D_stateDisplay->setTxtFont( font );
@@ -319,6 +319,22 @@ void play_cardReactGame(){
     but3D_stateDisplay->disableSprite();
     // Add to page.
     page3_game.addObj( but3D_stateDisplay );
+
+    // Object: button for displaying the true card pick time.
+    shared_ptr<SFML_button_XYQ> but3E_truePickTimeDisplay = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3E_truePickTimeDisplay->setPos( 50, 350 );
+    but3E_truePickTimeDisplay->setWidth( 150 );      
+    but3E_truePickTimeDisplay->setHeight( 50 );      
+    but3E_truePickTimeDisplay->setTxtFont( font );
+    but3E_truePickTimeDisplay->setTxtSize( 20 );
+    but3E_truePickTimeDisplay->setTxtStr( "" );
+    but3E_truePickTimeDisplay->setTxtColor( 255, 255, 255, 255 );
+    but3E_truePickTimeDisplay->setUPColor( 0, 0, 255 );
+    but3E_truePickTimeDisplay->setPColor( 0, 0, 255 );
+    but3E_truePickTimeDisplay->disableSprite();
+    // Add to page.
+    page3_game.addObj( but3E_truePickTimeDisplay );
 
 
     // Vector of all possible card buttons.
@@ -424,6 +440,7 @@ void play_cardReactGame(){
             
         }
 
+        string trueCardPickTimeStr = "------";
 
         currCRGState = CRG_SFML_obj.getState();
         switch( currCRGState ){
@@ -438,15 +455,20 @@ void play_cardReactGame(){
             break;
         case cardReact::CRG_STATE::HIT:
             but3C_timeDisplay->setTxtColor( 0, 255, 0 );
+            trueCardPickTimeStr = to_string( CRG_SFML_obj.getPickCardMS() ) + "ms" ;
             break;
         case cardReact::CRG_STATE::MISS:
             but3C_timeDisplay->setTxtColor( 255, 0, 0 );
+            trueCardPickTimeStr = to_string( CRG_SFML_obj.getPickCardMS() ) + "ms" ;
             break;
         }
         but3C_timeDisplay->update();
         // Update the game state.
         but3D_stateDisplay->setTxtStr( cardReact::get_CRG_STATE_Str( currCRGState ) );
         but3D_stateDisplay->update();
+
+        but3E_truePickTimeDisplay->setTxtStr( trueCardPickTimeStr );
+        but3E_truePickTimeDisplay->update();
 
 
         // Clear the window.
