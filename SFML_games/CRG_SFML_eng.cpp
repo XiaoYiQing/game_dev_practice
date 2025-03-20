@@ -276,11 +276,7 @@ bool CRG_SFML_eng::pressButton( const sf::RenderWindow& window ){
         success = buttonX->pressButton( window );
 
         if( success ){
-
-            cout << "Button pressed: " << to_string(z) << endl;
-
             break;
-
         }
 
     }
@@ -304,8 +300,6 @@ bool CRG_SFML_eng::releaseButton(){
         // If current button is the one being released.
         if( released ){
 
-            cout << "Button released: " << to_string(z) << endl;
-
             bool selected = this->selectCard( z );
 
             if( selected ){
@@ -314,11 +308,9 @@ bool CRG_SFML_eng::releaseButton(){
                 this->pColor = pColorAft;
                 this->upd_fieldCards( false );
                 this->update();
-                cout << "Reaction time (ms): " << this->getPickCardMS() << endl;
 
             }else{
 
-                cout << "Well." << endl;
 
             }
 

@@ -291,7 +291,7 @@ void play_cardReactGame(){
     // Object: button for displaying time elapsed as well as count down time.
     shared_ptr<SFML_button_XYQ> but3C_timeDisplay = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    but3C_timeDisplay->setPos( 70, 200 );
+    but3C_timeDisplay->setPos( 50, 200 );
     but3C_timeDisplay->setWidth( 120 );      
     but3C_timeDisplay->setHeight( 50 );      
     but3C_timeDisplay->setTxtFont( font );
