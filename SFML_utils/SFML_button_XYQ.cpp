@@ -323,7 +323,13 @@ bool SFML_button_XYQ::setUPTexture( shared_ptr<sf::Texture> upTexture ){
     return true;
 
 }
+void SFML_button_XYQ::delUPTexture(){
+    upTexture.reset();
+}
 bool SFML_button_XYQ::hasUPTexture() const{
+    if(!upTexture){
+        return false;
+    }
     sf::Vector2u upT_size = upTexture->getSize();
     return ( upT_size.x != 0 && upT_size.y != 0 );
 }
@@ -360,7 +366,13 @@ bool SFML_button_XYQ::setPTexture( shared_ptr<sf::Texture> pTexture ){
     return true;
 
 }
+void SFML_button_XYQ::delPTexture(){
+    pTexture.reset();
+}
 bool SFML_button_XYQ::hasPTexture() const{
+    if(!pTexture){
+        return false;
+    }
     sf::Vector2u pT_size = pTexture->getSize();
     return ( pT_size.x != 0 && pT_size.y != 0 );
 }

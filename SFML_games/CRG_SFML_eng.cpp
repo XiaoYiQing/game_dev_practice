@@ -136,6 +136,7 @@ void CRG_SFML_eng::update(){
 void CRG_SFML_eng::reset(){
     
     this->cardReact::reset();    
+    
 
     // Reset the card colors to before being pressed.
     this->upColor = upColorBef;
@@ -158,7 +159,6 @@ void CRG_SFML_eng::reset(){
 void CRG_SFML_eng::upd_mainCard(){
 
     // Initialize the main card.
-    // mainCard->setPos( field_pos.x - 150, field_pos.y );
     mainCard->setPos( 50, field_pos.y );
 
     mainCard->setWidth( field_card_dim.x );      
@@ -170,12 +170,13 @@ void CRG_SFML_eng::upd_mainCard(){
 
     if( mainCardID < possCardTex_vect.size() && 
         mainCard->setUPTexture( possCardTex_vect.at( mainCardID ) ) ){
-
         mainCard->setPTexture( possCardTex_vect.at( mainCardID ) );
         mainCard->enableSprite();
         mainCard->disableText();
 
     }else{
+        mainCard->delUPTexture();
+        mainCard->delPTexture();
         mainCard->disableSprite();
         mainCard->enableText();
     }
@@ -357,7 +358,7 @@ void game::play_cardReact(){
 // ---------------------------------------------------------------------- >>>>>
 
     // Define the number of cards at play.
-    int possCardCnt = 9;
+    int possCardCnt = 6;
 
     // Create full file names for accessing the textures for button images.
     string button_img_np_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_np.png";
@@ -374,7 +375,7 @@ void game::play_cardReact(){
     shared_ptr<sf::Texture> button_img_p_texture = SFMLUtilsXYQ::genTexture( button_img_p_FFN );
     shared_ptr<sf::Texture> funny_img_texture = SFMLUtilsXYQ::genTexture( funny_img_FFN );
     vector< shared_ptr< sf::Texture > > CRG_img_texture_vec;
-    for( int i = 0; i < CRG_img_cnt; i++ ){
+    for( int i = 0; i < CRG_img_cnt - 6; i++ ){
         shared_ptr<sf::Texture> tmp = SFMLUtilsXYQ::genTexture( CRG_img_FFN_vec.at(i) );
         CRG_img_texture_vec.push_back( tmp );
     }

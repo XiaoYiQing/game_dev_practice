@@ -131,6 +131,8 @@ public:
     Input: target image texture.
     */
     bool setUPTexture( shared_ptr<sf::Texture> upTexture );
+    // Delete the texture used for unpressed state.
+    void delUPTexture();
     // Determine if the button has a texture for illustrating its unpressed state.
     bool hasUPTexture() const;
 
@@ -142,6 +144,8 @@ public:
     Input: target image texture.
     */
     bool setPTexture( shared_ptr<sf::Texture> pTexture );
+    // Delete the texture used for pressed state.
+    void delPTexture();
     // Determine if the button has a texture for illustrating its pressed state.
     bool hasPTexture() const;
 
