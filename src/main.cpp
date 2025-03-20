@@ -303,6 +303,8 @@ void play_cardReactGame(){
 
 }
 
+// TODO: Make a more accurate time measurement for the game.
+
 /*
 DONE: Button's sprite now can have their size adjusted through modying its scaling 
 value with respect to the rectangle's size.

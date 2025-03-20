@@ -38,7 +38,7 @@ public:
     /*
     Enum representing the states the game can be in.
     */
-    enum class CRG_STATE{ UNSTARTED, ONGOING, HIT, MISS };
+    enum class CRG_STATE{ UNSTARTED, COUNTDOWN, ONGOING, HIT, MISS };
 
     // The number of enum entries in the enum "CRG_STATE" (Uses magic enum).
     const static int CRG_STATE_Count = (int) magic_enum::enum_count<CRG_STATE>();
@@ -158,8 +158,12 @@ protected:
     */
     long long cntDownT;
 
+    // The time point when the game has officially stated (Going into "ONGOING" state).
     chrono::steady_clock::time_point startTimePt;
+    // The time point when a possible card has been selected.
     chrono::steady_clock::time_point cardPickTimePt;
+    // The time point when the countdown has finished.
+    chrono::steady_clock::time_point cntDownEndTimePt;
 
 private:
 
