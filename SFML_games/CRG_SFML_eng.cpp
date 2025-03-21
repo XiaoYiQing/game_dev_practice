@@ -358,7 +358,7 @@ void game::play_cardReact(){
 // ---------------------------------------------------------------------- >>>>>
 
     // Define the number of cards at play.
-    int possCardCnt = 6;
+    int possCardCnt = 9;
 
     // Create full file names for accessing the textures for button images.
     string button_img_np_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_np.png";
@@ -375,7 +375,7 @@ void game::play_cardReact(){
     shared_ptr<sf::Texture> button_img_p_texture = SFMLUtilsXYQ::genTexture( button_img_p_FFN );
     shared_ptr<sf::Texture> funny_img_texture = SFMLUtilsXYQ::genTexture( funny_img_FFN );
     vector< shared_ptr< sf::Texture > > CRG_img_texture_vec;
-    for( int i = 0; i < CRG_img_cnt - 6; i++ ){
+    for( int i = 0; i < CRG_img_cnt; i++ ){
         shared_ptr<sf::Texture> tmp = SFMLUtilsXYQ::genTexture( CRG_img_FFN_vec.at(i) );
         CRG_img_texture_vec.push_back( tmp );
     }
