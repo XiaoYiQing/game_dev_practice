@@ -57,6 +57,9 @@ bool TikTakTok::setBoard( unsigned int in_TTT_board[3][3] ){
         }
     }
 
+    // Update the game state.
+    this->updState();
+
     return success;
 
 }
@@ -223,3 +226,22 @@ void tests::TikTakTok_test1(){
     myGame.reset();         myGame.printBoard();
 
 }
+
+void tests::TikTakTok_test2(){
+    
+    gameEngine::TikTakTok myGame;
+
+    unsigned int tmp_TTT_board[3][3] = {
+        TikTakTok::X_val, TikTakTok::n_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::O_val
+    };
+
+    myGame.setBoard( tmp_TTT_board );
+    myGame.printBoard();
+    
+    myGame.play( 1, 1 );    myGame.printBoard();
+    
+
+}
+

@@ -17,6 +17,18 @@ class TikTakTok{
 
 public:
 
+    // The value of the unpressed square on the TTT board.
+    static const unsigned int n_val = 0;
+    /* 
+    The value of the O square on the TTT board.
+    WARNING: MUST RESPECT THE DIFFERENCE [3*O_val < X_val] OR [O_val > 3*X_val]
+    */
+    static const unsigned int O_val = 1;
+    /* 
+    The value of the X square on the TTT board.
+    WARNING: MUST RESPECT THE DIFFERENCE [3*O_val < X_val] OR [O_val > 3*X_val]
+    */
+    static const unsigned int X_val = 10;
 
 // ====================================================================== >>>>>
 //      Constructors
@@ -79,18 +91,7 @@ public:
 
 protected:
 
-    // The value of the unpressed square on the TTT board.
-    static const unsigned int n_val = 0;
-    /* 
-    The value of the O square on the TTT board.
-    WARNING: MUST RESPECT THE DIFFERENCE [3*O_val < X_val] OR [O_val > 3*X_val]
-    */
-    static const unsigned int O_val = 1;
-    /* 
-    The value of the X square on the TTT board.
-    WARNING: MUST RESPECT THE DIFFERENCE [3*O_val < X_val] OR [O_val > 3*X_val]
-    */
-    static const unsigned int X_val = 10;
+    
 
     // The state of the game: [0 = unfinished], [1 = O won], [2 = X won], [3 = draw].
     unsigned int state;
@@ -114,7 +115,16 @@ protected:
 
 namespace tests{
 
+    /*
+    General test to see if the flow of game advances as expected with a random set
+    of plays.
+    */
     void TikTakTok_test1();
+
+    /*
+    Test for directly insert initial board.
+    */
+    void TikTakTok_test2();
 
 }
 

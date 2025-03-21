@@ -67,8 +67,10 @@ int main(int, char**){
     // tests::doPageObjTest_2();
 
     // tests::TikTakTok_test1();
+
+    tests::TikTakTok_test2();
     
-    game::play_TikTakTok();
+    // game::play_TikTakTok();
 
 
 
