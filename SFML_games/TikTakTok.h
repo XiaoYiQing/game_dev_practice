@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <magic_enum.hpp>
 #include <string>
 
 using namespace std;
@@ -16,7 +17,28 @@ class TikTakTok{
 
 public:
 
+
+// ====================================================================== >>>>>
+//      Class Enum "TTT_PIECE" Help Functions
+// ====================================================================== >>>>>
+
+    /*
+    Enum representing the possible pieces placed on the board.
+    */
+    enum class TTT_PIECE{ NO_PCE, O_PCE, X_PCE };
+    // The number of enum entries in the enum "CHK_PIECE" (Uses magic enum).
+    const static int TTT_PIECE_Count = (int) magic_enum::enum_count<TTT_PIECE>();
+
+    // Obtain the string of the target enum case (Uses magic enum).
+    static string get_TTT_PIECE_Str( TTT_PIECE tar_TTT_PIECE );
+    // Obtain the enum matching the enum integer index.
+    static TTT_PIECE get_TTT_PIECE_AtIdx( int idx );
+
+// ====================================================================== <<<<<
+
     TikTakTok();
+
+    // TikTakTok( unsigned int TTT_board[3][3] );
 
     /* 
     Play at the specified square coordinate.
@@ -68,7 +90,7 @@ protected:
     // The state of the game: [0 = unfinished], [1 = O won], [2 = X won], [3 = draw].
     unsigned int state;
 
-    // The number of times a square has been pressed.
+    // The total number of times any square has been pressed.
     unsigned int TTT_press_cnt;
 
     // The numerical table representing the TTT playing board.

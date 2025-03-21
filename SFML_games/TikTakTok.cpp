@@ -4,6 +4,27 @@
 
 using namespace gameEngine;
 
+// ====================================================================== >>>>>
+//      Class Enum "TTT_PIECE" Help Functions
+// ====================================================================== >>>>>
+
+string TikTakTok::get_TTT_PIECE_Str( TikTakTok::TTT_PIECE tar_TTT_PIECE ){
+    return string( magic_enum::enum_name( tar_TTT_PIECE ) );
+}
+
+TikTakTok::TTT_PIECE TikTakTok::get_TTT_PIECE_AtIdx( int idx ){
+    if( idx >= 0 && idx < TikTakTok::TTT_PIECE_Count ){
+        return static_cast<TikTakTok::TTT_PIECE>(idx);
+    }else{
+        cout << "Invalid int index for accessing enum \"TTT_PIECE\"." << endl;
+        return static_cast<TikTakTok::TTT_PIECE>(-1);
+    }
+}
+
+// ====================================================================== <<<<<
+
+
+
 TikTakTok::TikTakTok(){
     
     state = 0;
@@ -11,6 +32,24 @@ TikTakTok::TikTakTok(){
     TTT_press_cnt = 0;
 
 }
+
+// TikTakTok::TikTakTok( unsigned int TTT_board[3][3] ){
+    
+//     unsigned int O_cnt = 0;
+//     unsigned int X_cnt = 0;
+
+//     for( unsigned int i = 0; i < 3; i++ ){
+//         for( unsigned int j = 0; j < 3; j++ ){
+//             this->TTT_board[i][j] = TTT_board[i][j];
+//             if( TTT_board[i][j] == O_val ){
+
+//             }else if( TTT_board[i][j] == X_val ){
+
+//             }
+//         }
+//     }
+
+// }
 
 unsigned int TikTakTok::checkState(){
 

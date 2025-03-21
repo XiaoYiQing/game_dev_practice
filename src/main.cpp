@@ -86,7 +86,7 @@ int main(int, char**){
     
     // tests::CRG_test1();
 
-    game::play_cardReact();
+    // game::play_cardReact();
     
     return 0;
 
