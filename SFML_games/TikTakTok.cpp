@@ -4,25 +4,6 @@
 
 using namespace gameEngine;
 
-// ====================================================================== >>>>>
-//      Class Enum "TTT_PIECE" Help Functions
-// ====================================================================== >>>>>
-
-string TikTakTok::get_TTT_PIECE_Str( TikTakTok::TTT_PIECE tar_TTT_PIECE ){
-    return string( magic_enum::enum_name( tar_TTT_PIECE ) );
-}
-
-TikTakTok::TTT_PIECE TikTakTok::get_TTT_PIECE_AtIdx( int idx ){
-    if( idx >= 0 && idx < TikTakTok::TTT_PIECE_Count ){
-        return static_cast<TikTakTok::TTT_PIECE>(idx);
-    }else{
-        cout << "Invalid int index for accessing enum \"TTT_PIECE\"." << endl;
-        return static_cast<TikTakTok::TTT_PIECE>(-1);
-    }
-}
-
-// ====================================================================== <<<<<
-
 
 // ====================================================================== >>>>>
 //      Constructors
@@ -36,23 +17,32 @@ TikTakTok::TikTakTok(){
 
 }
 
-// TikTakTok::TikTakTok( unsigned int TTT_board[3][3] ){
+bool TikTakTok::setBoard( unsigned int in_TTT_board[3][3] ){
     
-//     unsigned int O_cnt = 0;
-//     unsigned int X_cnt = 0;
+    bool success = true;
 
-//     for( unsigned int i = 0; i < 3; i++ ){
-//         for( unsigned int j = 0; j < 3; j++ ){
-//             this->TTT_board[i][j] = TTT_board[i][j];
-//             if( TTT_board[i][j] == O_val ){
+    unsigned int tmp_O_cnt = 0;
+    unsigned int tmp_X_cnt = 0;
 
-//             }else if( TTT_board[i][j] == X_val ){
+    for( unsigned int i = 0; i < 3; i++ ){
+        for( unsigned int j = 0; j < 3; j++ ){
+            this->TTT_board[i][j] = in_TTT_board[i][j];
+            if( in_TTT_board[i][j] == n_val ){
 
-//             }
-//         }
-//     }
+            }else if( in_TTT_board[i][j] == O_val ){
+                tmp_O_cnt++;
+            }else if( in_TTT_board[i][j] == X_val ){
+                tmp_X_cnt++;
+            }else{
+                cerr << "Invalid value in on the TTT board." << endl;
+                return false;
+            }
+        }
+    }
 
-// }
+    return success;
+
+}
 
 // ====================================================================== <<<<<
 
