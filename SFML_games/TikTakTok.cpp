@@ -17,53 +17,6 @@ TikTakTok::TikTakTok(){
 
 }
 
-bool TikTakTok::setBoard( unsigned int in_TTT_board[3][3] ){
-    
-    bool success = true;
-
-    unsigned int tmp_O_cnt = 0;
-    unsigned int tmp_X_cnt = 0;
-
-    // Check for illegal values on the board as well as count O and X.
-    for( unsigned int i = 0; i < 3; i++ ){
-        for( unsigned int j = 0; j < 3; j++ ){
-            
-            if( in_TTT_board[i][j] == n_val ){
-
-            }else if( in_TTT_board[i][j] == O_val ){
-                tmp_O_cnt++;
-            }else if( in_TTT_board[i][j] == X_val ){
-                tmp_X_cnt++;
-            }else{
-                cerr << "Invalid value in on the TTT board." << endl;
-                return false;
-            }
-
-        }
-    }
-
-    // Check for O/X count consistency.
-    if( tmp_O_cnt - tmp_X_cnt == 1 || tmp_O_cnt == tmp_X_cnt ){
-        TTT_press_cnt = tmp_O_cnt + tmp_X_cnt;
-    }else{
-        cerr << "The number of O and X on the board is impossible given O starts playing first." << endl;
-        return false;
-    }
-    
-    // Fill the current game with the given board configuration.
-    for( unsigned int i = 0; i < 3; i++ ){
-        for( unsigned int j = 0; j < 3; j++ ){
-            this->TTT_board[i][j] = in_TTT_board[i][j];
-        }
-    }
-
-    // Update the game state.
-    this->updState();
-
-    return success;
-
-}
-
 // ====================================================================== <<<<<
 
 
@@ -115,14 +68,13 @@ unsigned int TikTakTok::checkState(){
 
 }
 
-void TikTakTok::updState(){
-    this->state = checkState();
-    return;
-}
 
-unsigned int TikTakTok::getState() const{
-    return this->state;
-}
+
+
+
+// ====================================================================== >>>>>
+//      Gameplay Functions
+// ====================================================================== >>>>>
 
 unsigned int TikTakTok::play( unsigned int row_id, unsigned int col_id ){
 
@@ -151,10 +103,16 @@ unsigned int TikTakTok::play( unsigned int row_id, unsigned int col_id ){
 
 }
 
+void TikTakTok::updState(){
+    this->state = checkState();
+    return;
+}
+
+unsigned int TikTakTok::getState() const{
+    return this->state;
+}
 
 void TikTakTok::reset(){
-
-
 
     // Reset the board values.
     for( unsigned int i = 0; i < 3; i++ ){
@@ -205,11 +163,66 @@ void TikTakTok::printBoard() const{
 
 }
 
+// ====================================================================== <<<<<
 
+
+
+// ====================================================================== >>>>>
+//      Access Functions
+// ====================================================================== >>>>>
 
 unsigned int TikTakTok::getTTT_press_cnt() const{
     return TTT_press_cnt;
 }
+
+bool TikTakTok::setBoard( unsigned int in_TTT_board[3][3] ){
+    
+    bool success = true;
+
+    unsigned int tmp_O_cnt = 0;
+    unsigned int tmp_X_cnt = 0;
+
+    // Check for illegal values on the board as well as count O and X.
+    for( unsigned int i = 0; i < 3; i++ ){
+        for( unsigned int j = 0; j < 3; j++ ){
+            
+            if( in_TTT_board[i][j] == n_val ){
+
+            }else if( in_TTT_board[i][j] == O_val ){
+                tmp_O_cnt++;
+            }else if( in_TTT_board[i][j] == X_val ){
+                tmp_X_cnt++;
+            }else{
+                cerr << "Invalid value in on the TTT board." << endl;
+                return false;
+            }
+
+        }
+    }
+
+    // Check for O/X count consistency.
+    if( tmp_O_cnt - tmp_X_cnt == 1 || tmp_O_cnt == tmp_X_cnt ){
+        TTT_press_cnt = tmp_O_cnt + tmp_X_cnt;
+    }else{
+        cerr << "The number of O and X on the board is impossible given O starts playing first." << endl;
+        return false;
+    }
+    
+    // Fill the current game with the given board configuration.
+    for( unsigned int i = 0; i < 3; i++ ){
+        for( unsigned int j = 0; j < 3; j++ ){
+            this->TTT_board[i][j] = in_TTT_board[i][j];
+        }
+    }
+
+    // Update the game state.
+    this->updState();
+
+    return success;
+
+}
+
+// ====================================================================== <<<<<
 
 
 
@@ -239,7 +252,7 @@ void tests::TikTakTok_test2(){
 
     myGame.setBoard( tmp_TTT_board );
     myGame.printBoard();
-    
+
     myGame.play( 1, 1 );    myGame.printBoard();
     
 

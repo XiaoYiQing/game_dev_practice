@@ -36,8 +36,6 @@ public:
     
     TikTakTok();
 
-    TikTakTok( unsigned int TTT_board[3][3] );
-
 // ====================================================================== <<<<<
 
 
@@ -75,7 +73,7 @@ public:
     */
     void printBoard() const;
 
-    unsigned int getTTT_press_cnt() const;
+    
 
 // ====================================================================== <<<<<
 
@@ -83,6 +81,9 @@ public:
 // ====================================================================== >>>>>
 //      Access Functions
 // ====================================================================== >>>>>
+    
+
+    unsigned int getTTT_press_cnt() const;
 
     bool setBoard( unsigned int TTT_board[3][3] );
 
