@@ -27,7 +27,7 @@ button functionalities.
 The buttons used are based on the class SFML_button_XYQ, which are custom buttons
 I created using SFML libraries.
 */
-class TTT_wt_but_XYQ : TikTakTok{
+class TTT_wt_but_XYQ : public TikTakTok{
 
 public:
 
