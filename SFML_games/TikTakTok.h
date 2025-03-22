@@ -133,6 +133,11 @@ namespace tests{
     */
     void TikTakTok_test2();
 
+    /*
+    Test for the minmax method for TTT.
+    */
+    void TikTakTok_test3();
+
 }
 
 

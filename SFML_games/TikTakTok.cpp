@@ -193,12 +193,12 @@ int TikTakTok::minmax( bool O_is_AI ){
             for( unsigned int j = 0; j < 3; j++ ){
 
                 if( TTT_board[i][j] == n_val ){
-                    TTT_board[i][j] == O_val;   TTT_press_cnt++;
+                    TTT_board[i][j] = O_val;   TTT_press_cnt++;
                     this->updState();
                     // Recursive call to the next iteration.
                     currScore = this->minmax( false );
                     // Revert theoretical move.
-                    TTT_board[i][j] == n_val;   TTT_press_cnt--;
+                    TTT_board[i][j] = n_val;   TTT_press_cnt--;
                     // Update the highest score up to now.
                     bestScore = std::max( bestScore, currScore );
                 }
@@ -206,6 +206,7 @@ int TikTakTok::minmax( bool O_is_AI ){
             }
         }
 
+        this->updState();
         return bestScore;
 
     }else{
@@ -216,12 +217,12 @@ int TikTakTok::minmax( bool O_is_AI ){
             for( unsigned int j = 0; j < 3; j++ ){
 
                 if( TTT_board[i][j] == n_val ){
-                    TTT_board[i][j] == X_val;   TTT_press_cnt++;
+                    TTT_board[i][j] = X_val;   TTT_press_cnt++;
                     this->updState();
                     // Recursive call to the next iteration.
                     currScore = this->minmax( true );
                     // Revert theoretical move.
-                    TTT_board[i][j] == n_val;   TTT_press_cnt--;
+                    TTT_board[i][j] = n_val;   TTT_press_cnt--;
                     // Update the lowest score up to now.
                     bestScore = std::min( bestScore, currScore );
                 }
@@ -229,6 +230,7 @@ int TikTakTok::minmax( bool O_is_AI ){
             }
         }
 
+        this->updState();
         return bestScore;
 
     }
@@ -330,3 +332,23 @@ void tests::TikTakTok_test2(){
 
 }
 
+
+void tests::TikTakTok_test3(){
+
+    gameEngine::TikTakTok myGame;
+
+    unsigned int tmp_TTT_board[3][3] = {
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val, 
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::O_val
+    };
+
+    myGame.setBoard( tmp_TTT_board );
+    myGame.printBoard();
+
+    bool is_O_turn = remainder( myGame.getTTT_press_cnt(), 2 ) == 0;
+    cout << is_O_turn << endl;
+    int score = myGame.minmax( is_O_turn );
+    cout << score << endl;
+
+}
