@@ -163,6 +163,78 @@ void TikTakTok::printBoard() const{
 
 }
 
+
+int TikTakTok::minmax( bool O_is_AI ){
+
+    // Return the end game cases;
+    switch( this->state ){
+    // O wins
+    case 1:
+        return 10;
+        break;
+    // X wins
+    case 2:
+        return -10;
+        break;
+    // Draw
+    case 3:
+        // No point for drawing the game.
+        return 0;
+        break;
+    }
+
+    int bestScore = 0;
+    int currScore = 0;
+    if ( O_is_AI ) {
+
+        bestScore = std::numeric_limits<int>::min();
+
+        for( unsigned int i = 0; i < 3; i++ ){
+            for( unsigned int j = 0; j < 3; j++ ){
+
+                if( TTT_board[i][j] == n_val ){
+                    TTT_board[i][j] == O_val;   TTT_press_cnt++;
+                    this->updState();
+                    // Recursive call to the next iteration.
+                    currScore = this->minmax( false );
+                    // Revert theoretical move.
+                    TTT_board[i][j] == n_val;   TTT_press_cnt--;
+                    // Update the highest score up to now.
+                    bestScore = std::max( bestScore, currScore );
+                }
+
+            }
+        }
+
+        return bestScore;
+
+    }else{
+
+        bestScore = std::numeric_limits<int>::max();
+
+        for( unsigned int i = 0; i < 3; i++ ){
+            for( unsigned int j = 0; j < 3; j++ ){
+
+                if( TTT_board[i][j] == n_val ){
+                    TTT_board[i][j] == X_val;   TTT_press_cnt++;
+                    this->updState();
+                    // Recursive call to the next iteration.
+                    currScore = this->minmax( true );
+                    // Revert theoretical move.
+                    TTT_board[i][j] == n_val;   TTT_press_cnt--;
+                    // Update the lowest score up to now.
+                    bestScore = std::min( bestScore, currScore );
+                }
+
+            }
+        }
+
+        return bestScore;
+
+    }
+
+}
+
 // ====================================================================== <<<<<
 
 

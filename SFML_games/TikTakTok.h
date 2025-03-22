@@ -30,6 +30,7 @@ public:
     */
     static const unsigned int X_val = 10;
 
+
 // ====================================================================== >>>>>
 //      Constructors
 // ====================================================================== >>>>>
@@ -73,7 +74,12 @@ public:
     */
     void printBoard() const;
 
-    
+    /*
+    minmax function for helping the game A.I. to make the best possible move.
+    This function does not determine the best move, but helps in attributing numerical
+    values to each possible move.
+    */
+    int minmax( bool O_is_AI );
 
 // ====================================================================== <<<<<
 
