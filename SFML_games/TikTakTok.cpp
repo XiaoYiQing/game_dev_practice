@@ -164,28 +164,25 @@ void TikTakTok::printBoard() const{
 }
 
 
-int TikTakTok::minmax( bool O_is_AI ){
+int TikTakTok::minmax( bool isMaximizing ){
 
     // Return the end game cases;
     switch( this->state ){
-    // O wins
-    case 1:
+    case 1:     // O wins
         return 10;
         break;
-    // X wins
-    case 2:
+    case 2:     // X wins
         return -10;
         break;
-    // Draw
-    case 3:
-        // No point for drawing the game.
+    case 3:     // Draw
+        // No point for game draw.
         return 0;
         break;
     }
 
     int bestScore = 0;
     int currScore = 0;
-    if ( O_is_AI ) {
+    if ( isMaximizing ) {
 
         bestScore = std::numeric_limits<int>::min();
 
@@ -337,18 +334,26 @@ void tests::TikTakTok_test3(){
 
     gameEngine::TikTakTok myGame;
 
-    unsigned int tmp_TTT_board[3][3] = {
+    unsigned int tmp_TTT_board_A[3][3] = {
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val, 
+        TikTakTok::n_val, TikTakTok::X_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::O_val
+    };
+
+    myGame.setBoard( tmp_TTT_board_A );
+    myGame.printBoard();
+
+    bool is_O_turn = remainder( myGame.getTTT_press_cnt(), 2 ) == 0;
+    int score = myGame.minmax( true );
+    cout << "When set to maxing, score = " << score << endl;
+    score = myGame.minmax( false );
+    cout << "When set to minimizing, score = " << score << endl;
+
+
+    unsigned int tmp_TTT_board_B[3][3] = {
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val, 
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val, 
         TikTakTok::n_val, TikTakTok::O_val, TikTakTok::O_val
     };
-
-    myGame.setBoard( tmp_TTT_board );
-    myGame.printBoard();
-
-    bool is_O_turn = remainder( myGame.getTTT_press_cnt(), 2 ) == 0;
-    cout << is_O_turn << endl;
-    int score = myGame.minmax( is_O_turn );
-    cout << score << endl;
 
 }
