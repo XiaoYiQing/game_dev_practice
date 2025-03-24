@@ -85,7 +85,7 @@ public:
     /*
     Determine the best move to make in the current turn at the current board state.
     */
-    bool bestMove();
+    sf::Vector2u bestMove();
 
 // ====================================================================== <<<<<
 
@@ -97,6 +97,11 @@ public:
 
     unsigned int getTTT_press_cnt() const;
 
+    /*
+    Set the board with given game state.
+    Will fail if the given board has unrecognized values.
+    If successful, updState() is called during this function.
+    */
     bool setBoard( unsigned int TTT_board[3][3] );
 
 // ====================================================================== <<<<<
@@ -143,6 +148,11 @@ namespace tests{
     Test for the minmax method for TTT.
     */
     void TikTakTok_test3();
+
+    /*
+    Test for the bestMove function for TTT>
+    */
+    void TikTakTok_test4();
 
 }
 

@@ -268,7 +268,7 @@ sf::Vector2u TikTakTok::bestMove(){
                 if( is_O_turn ){
 
                     score = this->minmax( true );
-
+                    // cout << "(" << i << "," << j << "): " << score << endl;
                     if( score >= bestScore ){
 
                         bestCoord = sf::Vector2u( i, j );
@@ -410,14 +410,11 @@ void tests::TikTakTok_test3(){
     myGame.setBoard( tmp_TTT_board_A );
     myGame.printBoard();
 
-    //bool is_O_turn = remainder( myGame.getTTT_press_cnt(), 2 ) == 0;
+    // bool is_O_turn = remainder( myGame.getTTT_press_cnt(), 2 ) == 0;
     int score = myGame.minmax( true );
     cout << "When set to maxing, score = " << score << endl;
     score = myGame.minmax( false );
     cout << "When set to minimizing, score = " << score << endl;
-
-
-
 
 
     unsigned int tmp_TTT_board_B[3][3] = {
@@ -432,5 +429,24 @@ void tests::TikTakTok_test3(){
     cout << "When set to maxing, score = " << score << endl;
     score = myGame.minmax( false );
     cout << "When set to minimizing, score = " << score << endl;
+
+}
+
+
+void tests::TikTakTok_test4(){
+
+    gameEngine::TikTakTok myGame;
+
+    unsigned int tmp_TTT_board_A[3][3] = {
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val, 
+        TikTakTok::n_val, TikTakTok::X_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::O_val
+    };
+
+    myGame.setBoard( tmp_TTT_board_A );
+    myGame.printBoard();
+
+    sf::Vector2u bestCoord = myGame.bestMove();
+    cout << bestCoord.x << ", " << bestCoord.y << endl;
 
 }
