@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <magic_enum.hpp>
+#include <SFML/Graphics.hpp>
 #include <string>
 
 using namespace std;
@@ -80,6 +81,11 @@ public:
     values to each possible move.
     */
     int minmax( bool O_is_AI );
+
+    /*
+    Determine the best move to make in the current turn at the current board state.
+    */
+    bool bestMove();
 
 // ====================================================================== <<<<<
 

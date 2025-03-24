@@ -234,6 +234,73 @@ int TikTakTok::minmax( bool isMaximizing ){
 
 }
 
+
+sf::Vector2u TikTakTok::bestMove(){
+    
+    // Initialize the best move coorindate.
+    sf::Vector2u bestCoord = sf::Vector2u( UINT_MAX, UINT_MAX );
+
+    if( this->state != 0 ){
+        // Return impossible coordinate if the game is already over or not active.
+        return bestCoord;
+    }
+    
+    // Determine the turn.
+    bool is_O_turn = remainder( this->getTTT_press_cnt(), 2 ) == 0;
+
+    // Initialize score recording variables.
+    int bestScore = 0;
+    int score = 0;
+
+    // Obtain the current best score.
+    if( is_O_turn ){
+        bestScore = this->minmax( true );
+    }else{
+        bestScore = this->minmax( false );
+    }
+    
+    // Parse through all possible moves and determine the best one.
+    for( unsigned int i = 0; i < 3; i++ ){
+        for( unsigned int j = 0; j < 3; j++ ){
+
+            if( play( i, j ) ){
+
+                if( is_O_turn ){
+
+                    score = this->minmax( true );
+
+                    if( score >= bestScore ){
+
+                        bestCoord = sf::Vector2u( i, j );
+                        bestScore = score;
+
+                    }
+                    
+                }else{
+
+                    score = this->minmax( false );
+                    
+                    if( score <= bestScore ){
+
+                        bestCoord = sf::Vector2u( i, j );
+                        bestScore = score;
+
+                    }
+
+                }
+
+                // Revert theoretical move.
+                TTT_board[i][j] = n_val;   TTT_press_cnt--;
+
+            }
+
+        }
+    }
+
+    return bestCoord;
+
+}
+
 // ====================================================================== <<<<<
 
 
@@ -343,11 +410,14 @@ void tests::TikTakTok_test3(){
     myGame.setBoard( tmp_TTT_board_A );
     myGame.printBoard();
 
-    bool is_O_turn = remainder( myGame.getTTT_press_cnt(), 2 ) == 0;
+    //bool is_O_turn = remainder( myGame.getTTT_press_cnt(), 2 ) == 0;
     int score = myGame.minmax( true );
     cout << "When set to maxing, score = " << score << endl;
     score = myGame.minmax( false );
     cout << "When set to minimizing, score = " << score << endl;
+
+
+
 
 
     unsigned int tmp_TTT_board_B[3][3] = {
@@ -355,5 +425,12 @@ void tests::TikTakTok_test3(){
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val, 
         TikTakTok::n_val, TikTakTok::O_val, TikTakTok::O_val
     };
+    myGame.setBoard( tmp_TTT_board_B );
+    myGame.printBoard();
+
+    score = myGame.minmax( true );
+    cout << "When set to maxing, score = " << score << endl;
+    score = myGame.minmax( false );
+    cout << "When set to minimizing, score = " << score << endl;
 
 }
