@@ -31,6 +31,10 @@ public:
     */
     static const unsigned int X_val = 10;
 
+    /*
+    The maximum score of the minmax function.
+    */
+    static const int minmaxTopVal = 10;
 
 // ====================================================================== >>>>>
 //      Constructors
@@ -80,7 +84,15 @@ public:
     This function does not determine the best move, but helps in attributing numerical
     values to each possible move.
     */
-    int minmax( bool O_is_AI );
+    int minmax( bool isMaximizing );
+
+    /*
+    minmax function for helping the game A.I. to make the best possible move with 
+    additional consideration of the amount of turn required to reach the final outcome.
+    This function does not determine the best move, but helps in attributing numerical
+    values to each possible move. 
+    */
+    int minmax( bool isMaximizing, unsigned int turnCnt );
 
     /*
     Determine the best move to make in the current turn at the current board state.

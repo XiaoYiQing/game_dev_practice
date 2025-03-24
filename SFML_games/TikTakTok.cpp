@@ -169,10 +169,10 @@ int TikTakTok::minmax( bool isMaximizing ){
     // Return the end game cases;
     switch( this->state ){
     case 1:     // O wins
-        return 10;
+        return minmaxTopVal;
         break;
     case 2:     // X wins
-        return -10;
+        return -minmaxTopVal;
         break;
     case 3:     // Draw
         // No point for game draw.
@@ -190,6 +190,7 @@ int TikTakTok::minmax( bool isMaximizing ){
             for( unsigned int j = 0; j < 3; j++ ){
 
                 if( TTT_board[i][j] == n_val ){
+
                     TTT_board[i][j] = O_val;   TTT_press_cnt++;
                     this->updState();
                     // Recursive call to the next iteration.
@@ -198,6 +199,7 @@ int TikTakTok::minmax( bool isMaximizing ){
                     TTT_board[i][j] = n_val;   TTT_press_cnt--;
                     // Update the highest score up to now.
                     bestScore = std::max( bestScore, currScore );
+
                 }
 
             }
@@ -234,6 +236,78 @@ int TikTakTok::minmax( bool isMaximizing ){
 
 }
 
+int TikTakTok::minmax( bool isMaximizing, unsigned int turnCnt ){
+
+    // Return the end game cases;
+    switch( this->state ){
+        case 1:     // O wins
+            return minmaxTopVal - turnCnt;
+            break;
+        case 2:     // X wins
+            return -minmaxTopVal + turnCnt;
+            break;
+        case 3:     // Draw
+            // No point for game draw.
+            return 0;
+            break;
+    }
+
+
+    int bestScore = 0;
+    int currScore = 0;
+    if ( isMaximizing ) {
+
+        bestScore = std::numeric_limits<int>::min();
+
+        for( unsigned int i = 0; i < 3; i++ ){
+            for( unsigned int j = 0; j < 3; j++ ){
+
+                if( TTT_board[i][j] == n_val ){
+
+                    TTT_board[i][j] = O_val;   TTT_press_cnt++;
+                    this->updState();
+                    // Recursive call to the next iteration.
+                    currScore = this->minmax( false, turnCnt+1 );
+                    // Revert theoretical move.
+                    TTT_board[i][j] = n_val;   TTT_press_cnt--;
+                    // Update the highest score up to now.
+                    bestScore = std::max( bestScore, currScore );
+
+                }
+
+            }
+        }
+
+        this->updState();
+        return bestScore;
+
+    }else{
+
+        bestScore = std::numeric_limits<int>::max();
+
+        for( unsigned int i = 0; i < 3; i++ ){
+            for( unsigned int j = 0; j < 3; j++ ){
+
+                if( TTT_board[i][j] == n_val ){
+                    TTT_board[i][j] = X_val;   TTT_press_cnt++;
+                    this->updState();
+                    // Recursive call to the next iteration.
+                    currScore = this->minmax( true, turnCnt+1 );
+                    // Revert theoretical move.
+                    TTT_board[i][j] = n_val;   TTT_press_cnt--;
+                    // Update the lowest score up to now.
+                    bestScore = std::min( bestScore, currScore );
+                }
+
+            }
+        }
+
+        this->updState();
+        return bestScore;
+
+    }
+
+}
 
 sf::Vector2u TikTakTok::bestMove(){
     
@@ -267,8 +341,8 @@ sf::Vector2u TikTakTok::bestMove(){
 
                 if( is_O_turn ){
 
-                    score = this->minmax( true );
-                    // cout << "(" << i << "," << j << "): " << score << endl;
+                    score = this->minmax( true, 0 );
+                    cout << "(" << i << "," << j << "): " << score << endl;
                     if( score >= bestScore ){
 
                         bestCoord = sf::Vector2u( i, j );
@@ -278,7 +352,7 @@ sf::Vector2u TikTakTok::bestMove(){
                     
                 }else{
 
-                    score = this->minmax( false );
+                    score = this->minmax( false, 0 );
                     
                     if( score <= bestScore ){
 
@@ -291,6 +365,7 @@ sf::Vector2u TikTakTok::bestMove(){
 
                 // Revert theoretical move.
                 TTT_board[i][j] = n_val;   TTT_press_cnt--;
+                this->updState();
 
             }
 
@@ -438,9 +513,9 @@ void tests::TikTakTok_test4(){
     gameEngine::TikTakTok myGame;
 
     unsigned int tmp_TTT_board_A[3][3] = {
-        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val, 
-        TikTakTok::n_val, TikTakTok::X_val, TikTakTok::n_val, 
-        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::O_val
+        TikTakTok::n_val, TikTakTok::X_val, TikTakTok::X_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::O_val
     };
 
     myGame.setBoard( tmp_TTT_board_A );
@@ -448,5 +523,7 @@ void tests::TikTakTok_test4(){
 
     sf::Vector2u bestCoord = myGame.bestMove();
     cout << bestCoord.x << ", " << bestCoord.y << endl;
+
+    myGame.printBoard();
 
 }
