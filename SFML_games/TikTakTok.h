@@ -162,9 +162,14 @@ namespace tests{
     void TikTakTok_test3();
 
     /*
-    Test for the bestMove function for TTT>
+    Test for the alternative (considers number of turns) minmax method for TTT.
     */
     void TikTakTok_test4();
+
+    /*
+    Test for the bestMove function for TTT.
+    */
+    void TikTakTok_test5();
 
 }
 
