@@ -168,6 +168,7 @@ namespace tests{
 
     /*
     Test for the bestMove function for TTT.
+    A sequence of moves are made to see if the optimal move makes sense at each step.
     */
     void TikTakTok_test5();
 

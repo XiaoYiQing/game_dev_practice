@@ -236,15 +236,15 @@ int TikTakTok::minmax( bool isMaximizing ){
 
 }
 
-int TikTakTok::minmax( bool isMaximizing, unsigned int turnCnt ){
+int TikTakTok::minmax( bool isMaximizing, unsigned int stepCnt ){
 
     // Return the end game cases;
     switch( this->state ){
         case 1:     // O wins
-            return minmaxTopVal - turnCnt;
+            return minmaxTopVal - stepCnt;
             break;
         case 2:     // X wins
-            return -minmaxTopVal + turnCnt;
+            return -minmaxTopVal + stepCnt;
             break;
         case 3:     // Draw
             // No point for game draw.
@@ -267,7 +267,7 @@ int TikTakTok::minmax( bool isMaximizing, unsigned int turnCnt ){
                     TTT_board[i][j] = O_val;   TTT_press_cnt++;
                     this->updState();
                     // Recursive call to the next iteration.
-                    currScore = this->minmax( false, turnCnt+1 );
+                    currScore = this->minmax( false, stepCnt+1 );
                     // Revert theoretical move.
                     TTT_board[i][j] = n_val;   TTT_press_cnt--;
                     // Update the highest score up to now.
@@ -292,7 +292,7 @@ int TikTakTok::minmax( bool isMaximizing, unsigned int turnCnt ){
                     TTT_board[i][j] = X_val;   TTT_press_cnt++;
                     this->updState();
                     // Recursive call to the next iteration.
-                    currScore = this->minmax( true, turnCnt+1 );
+                    currScore = this->minmax( true, stepCnt+1 );
                     // Revert theoretical move.
                     TTT_board[i][j] = n_val;   TTT_press_cnt--;
                     // Update the lowest score up to now.
@@ -593,29 +593,79 @@ void tests::TikTakTok_test4(){
 void tests::TikTakTok_test5(){
 
     gameEngine::TikTakTok myGame;
+    sf::Vector2u bestCoord;
 
     unsigned int tmp_TTT_board_A[3][3] = {
-        TikTakTok::O_val, TikTakTok::X_val, TikTakTok::n_val, 
-        TikTakTok::n_val, TikTakTok::X_val, TikTakTok::n_val, 
-        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::O_val
-    };
-    unsigned int tmp_TTT_board_B[3][3] = {
-        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::O_val, 
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val, 
-        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val
     };
-
     myGame.setBoard( tmp_TTT_board_A );
     myGame.printBoard();
 
-    sf::Vector2u bestCoord = myGame.bestMove();
+
+    bestCoord = myGame.bestMove();
+    cout << bestCoord.x << ", " << bestCoord.y << endl;
+
+    unsigned int tmp_TTT_board_B[3][3] = {
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val
+    };
+    myGame.setBoard( tmp_TTT_board_B );
+    myGame.printBoard();
+
+    bestCoord = myGame.bestMove();
+    cout << bestCoord.x << ", " << bestCoord.y << endl;
+
+
+    unsigned int tmp_TTT_board_C[3][3] = {
+        TikTakTok::O_val, TikTakTok::n_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::n_val, TikTakTok::X_val
+    };
+    myGame.setBoard( tmp_TTT_board_C );
+    myGame.printBoard();
+
+    bestCoord = myGame.bestMove();
+    cout << bestCoord.x << ", " << bestCoord.y << endl;
+
+
+    unsigned int tmp_TTT_board_D[3][3] = {
+        TikTakTok::O_val, TikTakTok::n_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::n_val, 
+        TikTakTok::X_val, TikTakTok::n_val, TikTakTok::X_val
+    };
+    myGame.setBoard( tmp_TTT_board_D );
+    myGame.printBoard();
+
+    bestCoord = myGame.bestMove();
+    cout << bestCoord.x << ", " << bestCoord.y << endl;
+
+
+    unsigned int tmp_TTT_board_E[3][3] = {
+        TikTakTok::O_val, TikTakTok::n_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::n_val, 
+        TikTakTok::X_val, TikTakTok::O_val, TikTakTok::X_val
+    };
+    myGame.setBoard( tmp_TTT_board_E );
+    myGame.printBoard();
+
+    bestCoord = myGame.bestMove();
+    cout << bestCoord.x << ", " << bestCoord.y << endl;
+
+
+    unsigned int tmp_TTT_board_F[3][3] = {
+        TikTakTok::O_val, TikTakTok::X_val, TikTakTok::n_val, 
+        TikTakTok::n_val, TikTakTok::O_val, TikTakTok::n_val, 
+        TikTakTok::X_val, TikTakTok::O_val, TikTakTok::X_val
+    };
+    myGame.setBoard( tmp_TTT_board_F );
+    myGame.printBoard();
+
+    bestCoord = myGame.bestMove();
     cout << bestCoord.x << ", " << bestCoord.y << endl;
 
     
-    // myGame.setBoard( tmp_TTT_board_A );
-    // myGame.printBoard();
-
-    // bestCoord = myGame.bestMove();
-    // cout << bestCoord.x << ", " << bestCoord.y << endl;
 
 }
