@@ -62,6 +62,11 @@ public:
     bool releaseButton();
 
     /*
+    The same, but includes A.I. response.
+    */
+    bool releaseButton_alt();
+
+    /*
     Obtain the current state of the game.
     Possible states: [0 = unfinished], [1 = O won], [2 = X won], [3 = draw].
     */

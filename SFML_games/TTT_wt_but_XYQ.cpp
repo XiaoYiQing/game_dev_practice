@@ -20,8 +20,8 @@ TTT_wt_but_XYQ::TTT_wt_but_XYQ() : TikTakTok()
             shared_ptr<SFML_button_XYQ> buttonX = 
                 shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
-            buttonX->setPos( x_start + ( butWidth + butSep )*i, 
-                y_start + ( butHeight + butSep )*j );
+            buttonX->setPos( x_start + ( butWidth + butSep )*j, 
+                y_start + ( butHeight + butSep )*i );
             buttonX->setWidth( butWidth );      
             buttonX->setHeight( butHeight );    
             buttonX->setUPColor( 255, 255, 255, 255 );  
@@ -311,8 +311,8 @@ void game::play_TikTakTok(){
             shared_ptr<SFML_button_XYQ> button3X = 
                 shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
             
-            button3X->setPos( x_start + ( butWidth + butSep )*i, 
-                y_start + ( butHeight + butSep )*j );
+            button3X->setPos( x_start + ( butWidth + butSep )*j, 
+                y_start + ( butHeight + butSep )*i );
             button3X->setWidth( butWidth );      
             button3X->setHeight( butHeight );    
             button3X->setUPColor( 255, 255, 255, 255 );  
@@ -636,8 +636,8 @@ void game::test_TikTakTok(){
             shared_ptr<SFML_button_XYQ> button3X = 
                 shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
             
-            button3X->setPos( x_start + ( butWidth + butSep )*i, 
-                y_start + ( butHeight + butSep )*j );
+            button3X->setPos( x_start + ( butWidth + butSep )*j, 
+                y_start + ( butHeight + butSep )*i );
             button3X->setWidth( butWidth );      
             button3X->setHeight( butHeight );    
             button3X->setUPColor( 255, 255, 255, 255 );  
