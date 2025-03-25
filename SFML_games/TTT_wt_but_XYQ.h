@@ -31,6 +31,10 @@ class TTT_wt_but_XYQ : public TikTakTok{
 
 public:
 
+// ====================================================================== >>>>>
+//      Constructor
+// ====================================================================== >>>>>
+
     /*
     The default constructor provides a set of buttons set at a default location,
     but it is strongly advised you use the alternative constructor which takes 
@@ -44,6 +48,13 @@ public:
     */
     TTT_wt_but_XYQ( vector<shared_ptr<SFML_button_XYQ>> TTT_buttons,
         shared_ptr<sf::Texture> TTT_O_img_texture, shared_ptr<sf::Texture> TTT_X_img_texture );
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Game Functionalities
+// ====================================================================== >>>>>
 
     /*
     Try to perform a press button action on all nine buttons.
@@ -84,6 +95,14 @@ public:
     */
     void reset();
 
+// ====================================================================== <<<<<
+
+
+
+// ====================================================================== >>>>>
+//      Access Functions
+// ====================================================================== >>>>>
+
     /*
     Set the texture the square is assigned with when O is selected.
     */
@@ -92,6 +111,15 @@ public:
     Set the texture the square is assigned with when X is selected.
     */
     void set_X_Texture( shared_ptr<sf::Texture> TTT_X_img_texture );
+
+    // Return status of whether AI is enabled.
+    bool is_AI_enabled() const;
+    // Enable AI.
+    void enable_AI();
+    // Disable AI.
+    void disable_AI();
+
+// ====================================================================== <<<<<
 
 protected:
 

@@ -3,6 +3,12 @@
 
 using namespace gameEngine;
 
+
+
+// ====================================================================== >>>>>
+//      Constructor
+// ====================================================================== >>>>>
+
 TTT_wt_but_XYQ::TTT_wt_but_XYQ() : TikTakTok()
 {
 
@@ -36,6 +42,7 @@ TTT_wt_but_XYQ::TTT_wt_but_XYQ() : TikTakTok()
 
         }
     }
+
 }
 
 
@@ -50,9 +57,15 @@ TTT_wt_but_XYQ::TTT_wt_but_XYQ( vector<shared_ptr<SFML_button_XYQ>> TTT_buttons,
     this->TTT_O_img_texture = TTT_O_img_texture;
     this->TTT_X_img_texture = TTT_X_img_texture;
     this->TTT_buttons = TTT_buttons;
+
 }
 
+// ====================================================================== <<<<<
 
+
+// ====================================================================== >>>>>
+//      Game Functionalities
+// ====================================================================== >>>>>
 
 bool TTT_wt_but_XYQ::pressButton( const sf::RenderWindow& window ){
 
@@ -151,7 +164,7 @@ bool TTT_wt_but_XYQ::releaseButton_alt(){
                         for( shared_ptr<SFML_button_XYQ> button_y : TTT_buttons ){
                             button_y->lock();
                         }
-                    }else{
+                    }else if( vsAI ){
 
                         AI_play();
 
@@ -222,7 +235,13 @@ void TTT_wt_but_XYQ::reset() {
 
 }
 
+// ====================================================================== <<<<<
 
+
+
+// ====================================================================== >>>>>
+//      Access Functions
+// ====================================================================== >>>>>
 
 void TTT_wt_but_XYQ::set_O_Texture( shared_ptr<sf::Texture> TTT_O_img_texture ){
     this->TTT_O_img_texture = TTT_O_img_texture;
@@ -230,6 +249,22 @@ void TTT_wt_but_XYQ::set_O_Texture( shared_ptr<sf::Texture> TTT_O_img_texture ){
 void TTT_wt_but_XYQ::set_X_Texture( shared_ptr<sf::Texture> TTT_X_img_texture ){
     this->TTT_X_img_texture = TTT_X_img_texture;
 }
+
+// Return status of whether AI is enabled.
+bool TTT_wt_but_XYQ::is_AI_enabled() const{
+    return this->vsAI;
+}
+// Enable AI.
+void TTT_wt_but_XYQ::enable_AI(){
+    this->vsAI = true;
+}
+// Disable AI.
+void TTT_wt_but_XYQ::disable_AI(){
+    this->vsAI = false;
+}
+
+// ====================================================================== <<<<<
+
 
 
 
