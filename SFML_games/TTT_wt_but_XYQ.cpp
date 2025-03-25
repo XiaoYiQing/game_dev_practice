@@ -6,8 +6,10 @@ using namespace gameEngine;
 TTT_wt_but_XYQ::TTT_wt_but_XYQ() : TikTakTok()
 {
 
-    TTT_O_img_texture = shared_ptr<sf::Texture>( new sf::Texture() );
-    TTT_X_img_texture = shared_ptr<sf::Texture>( new sf::Texture() );
+    this->vsAI = true;
+
+    this->TTT_O_img_texture = shared_ptr<sf::Texture>( new sf::Texture() );
+    this->TTT_X_img_texture = shared_ptr<sf::Texture>( new sf::Texture() );
 
     // Define the default locations and sizes of the buttons.
     float x_start = 100;        float y_start = 100;
@@ -42,6 +44,9 @@ TTT_wt_but_XYQ::TTT_wt_but_XYQ( vector<shared_ptr<SFML_button_XYQ>> TTT_buttons,
     shared_ptr<sf::Texture> TTT_O_img_texture, 
     shared_ptr<sf::Texture> TTT_X_img_texture ) : TikTakTok()
 {
+
+    this->vsAI = true;
+
     this->TTT_O_img_texture = TTT_O_img_texture;
     this->TTT_X_img_texture = TTT_X_img_texture;
     this->TTT_buttons = TTT_buttons;
@@ -149,34 +154,6 @@ bool TTT_wt_but_XYQ::releaseButton_alt(){
                     }else{
 
                         AI_play();
-
-                        // // Let AI perform the next move.
-                        // sf::Vector2u AI_move = this->bestMove();
-                        // unsigned int AIPlayRes = play( AI_move.x, AI_move.y );
-
-                        // shared_ptr<SFML_button_XYQ> buttonY = TTT_buttons.at( AI_move.x*3 + AI_move.y );
-                        // if( AIPlayRes == 2 ){
-                        //     buttonY->setUPTexture( TTT_X_img_texture );
-                        //     buttonY->setPTexture( TTT_X_img_texture );
-                        // }else if( AIPlayRes == 1 ){
-                        //     buttonY->setUPTexture( TTT_O_img_texture );
-                        //     buttonY->setPTexture( TTT_O_img_texture );
-                        // }
-                        // buttonY->enableSprite();
-                        // buttonY->update();
-
-                        // // Update the state of the game.
-                        // this->updState();
-                        // /*
-                        // Check for game end scenario.
-                        // */
-                        // if( this->state != 0 ){
-                        //     // When game is over, prevent the buttons from being pressed.
-                        //     for( shared_ptr<SFML_button_XYQ> button_y : TTT_buttons ){
-                        //         button_y->lock();
-                        //     }
-
-                        // }
 
                     }
 
