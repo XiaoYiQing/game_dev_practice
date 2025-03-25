@@ -58,6 +58,12 @@ public:
     unsigned int play( unsigned int row_id, unsigned int col_id );
 
     /*
+    Let the A.I. make the next move. 
+    Return value meaning: [0 = failed], [1 = O played], [2 = X played].
+    */
+    unsigned int play_by_AI();
+
+    /*
     Update the state of the game: [0 = unfinished], [1 = O won], [2 = X won], [3 = draw].
     */
     void updState();
@@ -171,6 +177,11 @@ namespace tests{
     A sequence of moves are made to see if the optimal move makes sense at each step.
     */
     void TikTakTok_test5();
+
+    /*
+    Test for the play_by_AI.
+    */
+    void TikTakTok_test6();
 
 }
 

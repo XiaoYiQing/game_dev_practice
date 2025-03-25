@@ -108,6 +108,12 @@ namespace game{
     Initialize a game of Tik-Tak-Tok.
     */
     void play_TikTakTok();
+
+    /*
+    Test of TikTakTok.
+    */
+    void test_TikTakTok();
+
 }
 
 #endif  // TTT_WT_BUT_XYQ_H

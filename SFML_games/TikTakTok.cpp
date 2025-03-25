@@ -103,6 +103,14 @@ unsigned int TikTakTok::play( unsigned int row_id, unsigned int col_id ){
 
 }
 
+unsigned int TikTakTok::play_by_AI(){
+
+    sf::Vector2u newMove = bestMove();
+
+    return this->play( newMove.x, newMove.y );
+
+}
+
 void TikTakTok::updState(){
     this->state = checkState();
     return;
@@ -344,7 +352,7 @@ sf::Vector2u TikTakTok::bestMove(){
                 if( is_O_turn ){
 
                     score = this->minmax( false, 1 );
-                    cout << "(" << i << "," << j << "): " << score << endl;
+                    // cout << "(" << i << "," << j << "): " << score << endl;
                     if( score >= bestScore ){
 
                         bestCoord = sf::Vector2u( i, j );
@@ -355,7 +363,7 @@ sf::Vector2u TikTakTok::bestMove(){
                 }else{
 
                     score = this->minmax( true, 1 );
-                    cout << "(" << i << "," << j << "): " << score << endl;
+                    // cout << "(" << i << "," << j << "): " << score << endl;
                     if( score <= bestScore ){
 
                         bestCoord = sf::Vector2u( i, j );
@@ -666,6 +674,29 @@ void tests::TikTakTok_test5(){
     bestCoord = myGame.bestMove();
     cout << bestCoord.x << ", " << bestCoord.y << endl;
 
+}
+
+void tests::TikTakTok_test6(){
+
+    gameEngine::TikTakTok myGame;
+    sf::Vector2u bestCoord;
+
+    myGame.reset();
     
+    myGame.play( 1, 1 );
+    myGame.play_by_AI();
+    myGame.printBoard();
+
+    myGame.play( 0, 1 );
+    myGame.play_by_AI();
+    myGame.printBoard();
+
+    myGame.play( 2, 0 );
+    myGame.play_by_AI();
+    myGame.printBoard();
+
+    myGame.play( 1, 2 );
+    myGame.play_by_AI();
+    myGame.printBoard();
 
 }
