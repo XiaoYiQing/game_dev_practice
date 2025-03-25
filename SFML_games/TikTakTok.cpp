@@ -341,7 +341,7 @@ sf::Vector2u TikTakTok::bestMove(){
 
                 if( is_O_turn ){
 
-                    score = this->minmax( true, 0 );
+                    score = this->minmax( false, 0 );
                     cout << "(" << i << "," << j << "): " << score << endl;
                     if( score >= bestScore ){
 
@@ -352,7 +352,7 @@ sf::Vector2u TikTakTok::bestMove(){
                     
                 }else{
 
-                    score = this->minmax( false, 0 );
+                    score = this->minmax( true, 0 );
                     cout << "(" << i << "," << j << "): " << score << endl;
                     if( score <= bestScore ){
 
@@ -505,13 +505,15 @@ void tests::TikTakTok_test3(){
     score = myGame.minmax( false );
     cout << "When set to minimizing, score = " << score << endl;
 
-    unsigned int tmp_TTT_board_C[3][3] = {
+    
+
+    unsigned int tmp_TTT_board_Z[3][3] = {
         TikTakTok::O_val, TikTakTok::X_val, TikTakTok::n_val, 
         TikTakTok::n_val, TikTakTok::X_val, TikTakTok::n_val, 
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::O_val
     };
 
-    myGame.setBoard( tmp_TTT_board_C );
+    myGame.setBoard( tmp_TTT_board_Z );
     myGame.printBoard();
 
     score = myGame.minmax( true );
@@ -525,12 +527,13 @@ void tests::TikTakTok_test4(){
 
     gameEngine::TikTakTok myGame;
 
+
+
     unsigned int tmp_TTT_board_A[3][3] = {
         TikTakTok::O_val, TikTakTok::n_val, TikTakTok::X_val, 
         TikTakTok::n_val, TikTakTok::X_val, TikTakTok::n_val, 
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::O_val
     };
-
     myGame.setBoard( tmp_TTT_board_A );
     myGame.printBoard();
 
@@ -539,13 +542,43 @@ void tests::TikTakTok_test4(){
     score = myGame.minmax( false, 0 );
     cout << "When set to minimizing, score = " << score << endl;
 
+
     unsigned int tmp_TTT_board_B[3][3] = {
+        TikTakTok::O_val, TikTakTok::n_val, TikTakTok::X_val, 
+        TikTakTok::n_val, TikTakTok::X_val, TikTakTok::n_val, 
+        TikTakTok::O_val, TikTakTok::n_val, TikTakTok::O_val
+    };
+    myGame.setBoard( tmp_TTT_board_B );
+    myGame.printBoard();
+
+    score = myGame.minmax( true, 0 );
+    cout << "When set to maxing, score = " << score << endl;
+    score = myGame.minmax( false, 0 );
+    cout << "When set to minimizing, score = " << score << endl;
+
+
+    unsigned int tmp_TTT_board_C[3][3] = {
+        TikTakTok::O_val, TikTakTok::n_val, TikTakTok::X_val, 
+        TikTakTok::X_val, TikTakTok::X_val, TikTakTok::n_val, 
+        TikTakTok::O_val, TikTakTok::n_val, TikTakTok::O_val
+    };
+    myGame.setBoard( tmp_TTT_board_C );
+    myGame.printBoard();
+
+    score = myGame.minmax( true, 0 );
+    cout << "When set to maxing, score = " << score << endl;
+    score = myGame.minmax( false, 0 );
+    cout << "When set to minimizing, score = " << score << endl;
+
+
+
+    unsigned int tmp_TTT_board_Z[3][3] = {
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val, 
         TikTakTok::X_val, TikTakTok::O_val, TikTakTok::n_val, 
         TikTakTok::n_val, TikTakTok::n_val, TikTakTok::n_val
     };
 
-    myGame.setBoard( tmp_TTT_board_B );
+    myGame.setBoard( tmp_TTT_board_Z );
     myGame.printBoard();
 
     score = myGame.minmax( true, 0 );
