@@ -109,6 +109,89 @@ bool TTT_wt_but_XYQ::releaseButton(){
 
 }
 
+
+bool TTT_wt_but_XYQ::releaseButton_alt(){
+
+    bool released = false;
+    for( unsigned int i = 0; i < 3; i++ ){
+        for( unsigned int j = 0; j < 3; j++ ){
+
+            shared_ptr<SFML_button_XYQ> buttonX = TTT_buttons.at( (i)*3 + j );
+
+            // Case when the present button is the one being released.
+            released = buttonX->releaseButton();
+            if( released ){
+                if( buttonX->getPressCnt() < 2 ){
+                    
+                    // Set the button to show correct sprite.
+                    unsigned int playRes = this->play( i, j );
+                    if( playRes == 2 ){
+                        buttonX->setUPTexture( TTT_X_img_texture );
+                        buttonX->setPTexture( TTT_X_img_texture );
+                    }else if( playRes == 1 ){
+                        buttonX->setUPTexture( TTT_O_img_texture );
+                        buttonX->setPTexture( TTT_O_img_texture );
+                    }
+                    buttonX->enableSprite();
+                    buttonX->update();
+
+                    // Update the state of the game.
+                    this->updState();
+
+                    /*
+                    Check for game end scenario.
+                    */
+                    if( this->state != 0 ){
+                        // When game is over, prevent the buttons from being pressed.
+                        for( shared_ptr<SFML_button_XYQ> button_y : TTT_buttons ){
+                            button_y->lock();
+                        }
+                    }else{
+
+                        // Let AI perform the next move.
+                        sf::Vector2u AI_move = this->bestMove();
+                        unsigned int AIPlayRes = play( AI_move.x, AI_move.y );
+
+                        shared_ptr<SFML_button_XYQ> buttonY = TTT_buttons.at( AI_move.x*3 + AI_move.y );
+                        if( AIPlayRes == 2 ){
+                            buttonY->setUPTexture( TTT_X_img_texture );
+                            buttonY->setPTexture( TTT_X_img_texture );
+                        }else if( AIPlayRes == 1 ){
+                            buttonY->setUPTexture( TTT_O_img_texture );
+                            buttonY->setPTexture( TTT_O_img_texture );
+                        }
+                        buttonY->enableSprite();
+                        buttonY->update();
+
+                        // Update the state of the game.
+                        this->updState();
+                        /*
+                        Check for game end scenario.
+                        */
+                        if( this->state != 0 ){
+                        // When game is over, prevent the buttons from being pressed.
+                        for( shared_ptr<SFML_button_XYQ> button_y : TTT_buttons ){
+                            button_y->lock();
+                        }
+
+                    }
+
+                }
+
+                }
+
+                // Immediately stop once first released button is found.
+                return true;
+            }
+
+        }
+    }
+    
+    return false;
+
+}
+
+
 unsigned int TTT_wt_but_XYQ::getState() const{
     return this->TikTakTok::getState();
 }
@@ -748,7 +831,7 @@ void game::test_TikTakTok(){
                     }
 
                     // TTT button release scenario.
-                    bool released = TTT_game_obj.releaseButton();
+                    bool released = TTT_game_obj.releaseButton_alt();
                     if( released ){
 
                         // Change the infobox message depending on the state of the game.
