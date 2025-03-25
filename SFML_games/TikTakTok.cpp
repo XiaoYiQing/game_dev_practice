@@ -324,6 +324,7 @@ sf::Vector2u TikTakTok::bestMove(){
 
     // Initialize score recording variables.
     int bestScore = 0;
+    int bestScore_adj = 0;
     int score = 0;
 
     // Obtain the current best score.
@@ -332,7 +333,8 @@ sf::Vector2u TikTakTok::bestMove(){
     }else{
         bestScore = this->minmax( false, 0 );
     }
-    
+
+
     // Parse through all possible moves and determine the best one.
     for( unsigned int i = 0; i < 3; i++ ){
         for( unsigned int j = 0; j < 3; j++ ){
@@ -341,7 +343,7 @@ sf::Vector2u TikTakTok::bestMove(){
 
                 if( is_O_turn ){
 
-                    score = this->minmax( false, 0 );
+                    score = this->minmax( false, 1 );
                     cout << "(" << i << "," << j << "): " << score << endl;
                     if( score >= bestScore ){
 
@@ -352,7 +354,7 @@ sf::Vector2u TikTakTok::bestMove(){
                     
                 }else{
 
-                    score = this->minmax( true, 0 );
+                    score = this->minmax( true, 1 );
                     cout << "(" << i << "," << j << "): " << score << endl;
                     if( score <= bestScore ){
 
