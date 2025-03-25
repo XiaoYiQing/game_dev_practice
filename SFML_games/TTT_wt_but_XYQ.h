@@ -52,6 +52,7 @@ public:
     click is performed.
     */
     bool pressButton( const sf::RenderWindow& window );
+
     /*
     Try to perform a button release on all nine buttons.
     If any one of the nine buttons is released, return true, else false.
@@ -65,6 +66,12 @@ public:
     The same, but includes A.I. response.
     */
     bool releaseButton_alt();
+    
+    /*
+    Let the A.I. make the next move.
+    Return the board coordinate where the move was made.
+    */
+    sf::Vector2u AI_play();
 
     /*
     Obtain the current state of the game.
@@ -99,6 +106,9 @@ protected:
     shared_ptr<sf::Texture> TTT_O_img_texture;
     // The square texture when X is assigned to the square.
     shared_ptr<sf::Texture> TTT_X_img_texture;
+    
+    // Flag indicating the use of AI for this game.
+    bool vsAI;
 
 };
 

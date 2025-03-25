@@ -148,35 +148,37 @@ bool TTT_wt_but_XYQ::releaseButton_alt(){
                         }
                     }else{
 
-                        // Let AI perform the next move.
-                        sf::Vector2u AI_move = this->bestMove();
-                        unsigned int AIPlayRes = play( AI_move.x, AI_move.y );
+                        AI_play();
 
-                        shared_ptr<SFML_button_XYQ> buttonY = TTT_buttons.at( AI_move.x*3 + AI_move.y );
-                        if( AIPlayRes == 2 ){
-                            buttonY->setUPTexture( TTT_X_img_texture );
-                            buttonY->setPTexture( TTT_X_img_texture );
-                        }else if( AIPlayRes == 1 ){
-                            buttonY->setUPTexture( TTT_O_img_texture );
-                            buttonY->setPTexture( TTT_O_img_texture );
-                        }
-                        buttonY->enableSprite();
-                        buttonY->update();
+                        // // Let AI perform the next move.
+                        // sf::Vector2u AI_move = this->bestMove();
+                        // unsigned int AIPlayRes = play( AI_move.x, AI_move.y );
 
-                        // Update the state of the game.
-                        this->updState();
-                        /*
-                        Check for game end scenario.
-                        */
-                        if( this->state != 0 ){
-                        // When game is over, prevent the buttons from being pressed.
-                        for( shared_ptr<SFML_button_XYQ> button_y : TTT_buttons ){
-                            button_y->lock();
-                        }
+                        // shared_ptr<SFML_button_XYQ> buttonY = TTT_buttons.at( AI_move.x*3 + AI_move.y );
+                        // if( AIPlayRes == 2 ){
+                        //     buttonY->setUPTexture( TTT_X_img_texture );
+                        //     buttonY->setPTexture( TTT_X_img_texture );
+                        // }else if( AIPlayRes == 1 ){
+                        //     buttonY->setUPTexture( TTT_O_img_texture );
+                        //     buttonY->setPTexture( TTT_O_img_texture );
+                        // }
+                        // buttonY->enableSprite();
+                        // buttonY->update();
+
+                        // // Update the state of the game.
+                        // this->updState();
+                        // /*
+                        // Check for game end scenario.
+                        // */
+                        // if( this->state != 0 ){
+                        //     // When game is over, prevent the buttons from being pressed.
+                        //     for( shared_ptr<SFML_button_XYQ> button_y : TTT_buttons ){
+                        //         button_y->lock();
+                        //     }
+
+                        // }
 
                     }
-
-                }
 
                 }
 
@@ -191,6 +193,37 @@ bool TTT_wt_but_XYQ::releaseButton_alt(){
 
 }
 
+sf::Vector2u TTT_wt_but_XYQ::AI_play(){
+
+    // Let AI perform the next move.
+    sf::Vector2u AI_move = this->bestMove();
+    unsigned int AIPlayRes = play( AI_move.x, AI_move.y );
+
+    shared_ptr<SFML_button_XYQ> buttonY = TTT_buttons.at( AI_move.x*3 + AI_move.y );
+    if( AIPlayRes == 2 ){
+        buttonY->setUPTexture( TTT_X_img_texture );
+        buttonY->setPTexture( TTT_X_img_texture );
+    }else if( AIPlayRes == 1 ){
+        buttonY->setUPTexture( TTT_O_img_texture );
+        buttonY->setPTexture( TTT_O_img_texture );
+    }
+    buttonY->enableSprite();
+    buttonY->update();
+
+    // Update the state of the game.
+    this->updState();
+
+    // Check for game end scenario.
+    if( this->state != 0 ){
+        // When game is over, prevent the buttons from being pressed.
+        for( shared_ptr<SFML_button_XYQ> button_y : TTT_buttons ){
+            button_y->lock();
+        }
+    }
+
+    return AI_move;
+
+}
 
 unsigned int TTT_wt_but_XYQ::getState() const{
     return this->TikTakTok::getState();
