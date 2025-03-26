@@ -118,6 +118,8 @@ public:
     void enable_AI();
     // Disable AI.
     void disable_AI();
+    // Toggle AI usage.
+    void toggle_AI();
 
 // ====================================================================== <<<<<
 

@@ -262,6 +262,10 @@ void TTT_wt_but_XYQ::enable_AI(){
 void TTT_wt_but_XYQ::disable_AI(){
     this->vsAI = false;
 }
+// Toggle AI usage flag.
+void TTT_wt_but_XYQ::toggle_AI(){
+    this->vsAI = !vsAI;
+}
 
 // ====================================================================== <<<<<
 
@@ -615,8 +619,12 @@ void game::test_TikTakTok(){
     sf::Font font = SFMLUtilsXYQ::getArialFont( RES_PATH_XYQ_str );
 
 // ---------------------------------------------------------------------- >>>>>
-//      Page 1 Setup
+//      Page 1 Main Menu
 // ---------------------------------------------------------------------- >>>>>
+
+    float p1_x_start = 300;
+    float p1_y_start = 100;
+    float p1_but_y_leap = 100;
 
     // Page initialization.
     SFML_page_XYQ myPage1 = SFML_page_XYQ();
@@ -624,7 +632,7 @@ void game::test_TikTakTok(){
     // Object: start game button.
     shared_ptr<SFML_button_XYQ> button1A = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    button1A->setPos( 300, 100 );
+    button1A->setPos( p1_x_start, p1_y_start + 0*p1_but_y_leap );
     button1A->setWidth( 200 );
     button1A->setHeight( 50 );      
     button1A->setTxtFont( font );
@@ -637,7 +645,7 @@ void game::test_TikTakTok(){
     // Object: read me button.
     shared_ptr<SFML_button_XYQ> button1B = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    button1B->setPos( 300, 200 );
+    button1B->setPos( p1_x_start, p1_y_start + 1*p1_but_y_leap );
     button1B->setWidth( 200 );      
     button1B->setHeight( 50 );      
     button1B->setTxtFont( font );
@@ -647,10 +655,25 @@ void game::test_TikTakTok(){
     button1B->setPTexture( button_img_p_texture );
     myPage1.addObj( button1B );
 
+
+    // Object: Options button.
+    shared_ptr<SFML_button_XYQ> button1D = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    button1D->setPos( p1_x_start, p1_y_start + 2*p1_but_y_leap );
+    button1D->setWidth( 200 );      
+    button1D->setHeight( 50 );      
+    button1D->setTxtFont( font );
+    button1D->setTxtStr( "Options" );
+    button1D->setTxtColor( 50, 50, 50, 255 );
+    button1D->setUPTexture( button_img_np_texture );
+    button1D->setPTexture( button_img_p_texture );
+    myPage1.addObj( button1D );
+
+
     // Object: exit button.
     shared_ptr<SFML_button_XYQ> button1C = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    button1C->setPos( 300, 300 );
+    button1C->setPos( p1_x_start, p1_y_start + 3*p1_but_y_leap );
     button1C->setWidth( 200 );      
     button1C->setHeight( 50 );      
     button1C->setTxtFont( font );
@@ -660,13 +683,15 @@ void game::test_TikTakTok(){
     button1C->setPTexture( button_img_p_texture );
     myPage1.addObj( button1C );
 
+    
+
     myPage1.update();
     myPage1.enable();
     
 // ---------------------------------------------------------------------- <<<<<
 
 // ---------------------------------------------------------------------- >>>>>
-//      Page 2 Setup
+//      Page 2 Read Me
 // ---------------------------------------------------------------------- >>>>>
 
     // Page initialization.
@@ -716,7 +741,7 @@ void game::test_TikTakTok(){
 // ---------------------------------------------------------------------- <<<<<
 
 // ---------------------------------------------------------------------- >>>>>
-//      Page 3 Setup
+//      Page 3 Game
 // ---------------------------------------------------------------------- >>>>>
     
     // Page initialization.
@@ -783,7 +808,9 @@ void game::test_TikTakTok(){
     // Create TTT game object.
     gameEngine::TTT_wt_but_XYQ TTT_game_obj(TTT_buttons,TTT_O_img_texture,TTT_X_img_texture);
     
+    TTT_game_obj.enable_AI();
 
+    // Game state display object.
     shared_ptr<SFML_TxtBox_XYQ> txtBox3A = 
         shared_ptr<SFML_TxtBox_XYQ>( new SFML_TxtBox_XYQ( font ) );
     txtBox3A->txt.setString( "Game: Ongoing." );
@@ -796,6 +823,59 @@ void game::test_TikTakTok(){
 
     myPage3.update();
     myPage3.disable();
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Page 4 Options
+// ---------------------------------------------------------------------- >>>>>
+    
+    float p4_x_start = 300;
+    float p4_y_start = 100;
+    float p4_but_y_leap = 100;
+    string enabledAI_str = "VS AI: enabled";
+    string disabledAI_str = "VS AI: disabled";
+
+    // Page initialization.
+    SFML_page_XYQ myPage4 = SFML_page_XYQ();
+
+    // Object: button for enabling/disabling AI.
+    shared_ptr<SFML_button_XYQ> button4B = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    button4B->setPos( p4_x_start, p4_y_start + 1*p4_but_y_leap );
+    button4B->setWidth( 200 );      
+    button4B->setHeight( 50 );      
+    button4B->setTxtFont( font );
+    if( TTT_game_obj.is_AI_enabled() ){
+        button4B->setTxtStr( enabledAI_str );
+    }else{
+        button4B->setTxtStr( disabledAI_str );
+    }
+    button4B->setTxtColor( 50, 50, 50, 255 );
+    button4B->setUPTexture( button_img_np_texture );
+    button4B->setPTexture( button_img_p_texture );
+    // Add to page.
+    myPage4.addObj( button4B );
+
+    // Object: button for returning to the main page.
+    shared_ptr<SFML_button_XYQ> button4A = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    button4A->setPos( p4_x_start, p4_y_start + 0*p4_but_y_leap );
+    button4A->setWidth( 200 );      
+    button4A->setHeight( 50 );      
+    button4A->setTxtFont( font );
+    button4A->setTxtStr( "Back" );
+    button4A->setTxtColor( 50, 50, 50, 255 );
+    button4A->setUPTexture( button_img_np_texture );
+    button4A->setPTexture( button_img_p_texture );
+    // Add to page.
+    myPage4.addObj( button4A );
+
+    
+
+    myPage4.update();
+    myPage4.disable();
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -825,12 +905,16 @@ void game::test_TikTakTok(){
                     if( button1A->pressButton( window ) ){}
                     if( button1B->pressButton( window ) ){}
                     if( button1C->pressButton( window ) ){}
+                    if( button1D->pressButton( window ) ){}
 
                     if( button2A->pressButton( window ) ){}
 
                     if( button3A->pressButton( window ) ){}
                     if( button3B->pressButton( window ) ){}
                     TTT_game_obj.pressButton( window );
+
+                    if( button4A->pressButton( window ) ){}
+                    if( button4B->pressButton( window ) ){}
 
                 }
             }
@@ -848,6 +932,10 @@ void game::test_TikTakTok(){
                     }
                     if( button1C->releaseButton() ){
                         window.close();
+                    }
+                    if( button1D->releaseButton() ){
+                        myPage1.disable();
+                        myPage4.enable();
                     }
 
                     if( button2A->releaseButton() ){
@@ -895,6 +983,20 @@ void game::test_TikTakTok(){
                         }
                     }
 
+                    if( button4A->releaseButton() ){
+                        myPage4.disable();
+                        myPage1.enable();
+                    }
+                    if( button4B->releaseButton() ){
+                        TTT_game_obj.toggle_AI();
+                        if( TTT_game_obj.is_AI_enabled() ){
+                            button4B->setTxtStr( enabledAI_str );
+                        }else{
+                            button4B->setTxtStr( disabledAI_str );
+                        }
+                        button4B->update();
+                    }
+
                 }
             }
 // ---------------------------------------------------------------------- <<<<<
@@ -910,6 +1012,8 @@ void game::test_TikTakTok(){
         myPage2.beDrawn( window );
         // Draw the page.
         myPage3.beDrawn( window );
+        // Draw the page.
+        myPage4.beDrawn( window );
 
         // Display what has been rendered to the window
         window.display();
