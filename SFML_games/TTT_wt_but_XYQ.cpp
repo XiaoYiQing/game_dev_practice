@@ -364,8 +364,8 @@ void game::play_TikTakTok(){
         shared_ptr<SFML_infoBox_XYQ>( new SFML_infoBox_XYQ() );
 
     string infoBox2A_msg = "This is a practice tik-tac-toc game. ";
-    infoBox2A_msg += "Control is shared between both players. ";
-    infoBox2A_msg += "There is no A.I. yet.";
+    infoBox2A_msg += "You can do versus AI or versus player mode. ";
+    infoBox2A_msg += "In versus player mode, control is shared.";
 
 
     infoBox2A->setPos( 200, 100 );
