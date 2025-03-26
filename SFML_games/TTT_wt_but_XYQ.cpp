@@ -190,6 +190,10 @@ void TTT_wt_but_XYQ::reset() {
         buttonX->update();
     }
 
+    if( this->vsAI && this->AI_first ){
+        this->AI_play();
+    }
+
 }
 
 // ====================================================================== <<<<<
@@ -481,7 +485,7 @@ void game::play_TikTakTok(){
     string enabledAI_str = "VS AI: enabled";
     string disabledAI_str = "VS AI: disabled";
 
-    bool AI_first = true;
+    bool AI_first = false;
     string AI_first_str = "AI first";
     string AI_not_first_str = "Player first";
 
@@ -598,6 +602,7 @@ void game::play_TikTakTok(){
                     if( button1A->releaseButton() ){
                         myPage1.disable();
                         myPage3.enable();
+                        TTT_game_obj.reset();
                     }
                     if( button1B->releaseButton() ){
                         myPage1.disable();
@@ -673,8 +678,10 @@ void game::play_TikTakTok(){
                         AI_first = !AI_first;
                         if( AI_first ){
                             button4C->setTxtStr( AI_first_str );
+                            TTT_game_obj.set_AI_first();
                         }else{
                             button4C->setTxtStr( AI_not_first_str );
+                            TTT_game_obj.set_AI_not_first();
                         }
                         button4C->update();
                     }
