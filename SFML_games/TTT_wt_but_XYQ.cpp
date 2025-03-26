@@ -13,6 +13,7 @@ TTT_wt_but_XYQ::TTT_wt_but_XYQ() : TikTakTok()
 {
 
     this->vsAI = true;
+    this->AI_first = false;
 
     this->TTT_O_img_texture = shared_ptr<sf::Texture>( new sf::Texture() );
     this->TTT_X_img_texture = shared_ptr<sf::Texture>( new sf::Texture() );
@@ -53,6 +54,7 @@ TTT_wt_but_XYQ::TTT_wt_but_XYQ( vector<shared_ptr<SFML_button_XYQ>> TTT_buttons,
 {
 
     this->vsAI = true;
+    this->AI_first = false;
 
     this->TTT_O_img_texture = TTT_O_img_texture;
     this->TTT_X_img_texture = TTT_X_img_texture;
@@ -220,6 +222,19 @@ void TTT_wt_but_XYQ::disable_AI(){
 // Toggle AI usage flag.
 void TTT_wt_but_XYQ::toggle_AI(){
     this->vsAI = !vsAI;
+}
+
+bool TTT_wt_but_XYQ::is_AI_first() const{
+    return this->AI_first;
+}
+void TTT_wt_but_XYQ::set_AI_first(){
+    this->AI_first = true;
+}
+void TTT_wt_but_XYQ::set_AI_not_first(){
+    this->AI_first = false;
+}
+void TTT_wt_but_XYQ::toggle_AI_first(){
+    this->AI_first = !AI_first;
 }
 
 // ====================================================================== <<<<<

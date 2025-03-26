@@ -117,6 +117,11 @@ public:
     // Toggle AI usage.
     void toggle_AI();
 
+    bool is_AI_first() const;
+    void set_AI_first();
+    void set_AI_not_first();
+    void toggle_AI_first();
+
 // ====================================================================== <<<<<
 
 protected:
@@ -135,6 +140,9 @@ protected:
     
     // Flag indicating the use of AI for this game.
     bool vsAI;
+
+    // Flag indicating whether the AI plays first.
+    bool AI_first;
 
 };
 
