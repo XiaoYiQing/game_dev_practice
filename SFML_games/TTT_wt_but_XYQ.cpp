@@ -135,6 +135,11 @@ bool TTT_wt_but_XYQ::releaseButton(){
 
 sf::Vector2u TTT_wt_but_XYQ::AI_play(){
 
+    // Return empty vector if no AI play enabled.
+    if( !( this->vsAI ) ){
+        return sf::Vector2u();
+    }
+
     // Let AI perform the next move.
     sf::Vector2u AI_move = this->bestMove();
     unsigned int AIPlayRes = play( AI_move.x, AI_move.y );
@@ -455,10 +460,15 @@ void game::play_TikTakTok(){
 // ---------------------------------------------------------------------- >>>>>
     
     float p4_x_start = 300;
-    float p4_y_start = 100;
+    float p4_y_start = 150;
     float p4_but_y_leap = 100;
+    unsigned int but_cnt = 0;
     string enabledAI_str = "VS AI: enabled";
     string disabledAI_str = "VS AI: disabled";
+
+    bool AI_first = true;
+    string AI_first_str = "AI first";
+    string AI_not_first_str = "Player first";
 
     // Page initialization.
     SFML_page_XYQ myPage4 = SFML_page_XYQ();
@@ -466,7 +476,7 @@ void game::play_TikTakTok(){
     // Object: button for enabling/disabling AI.
     shared_ptr<SFML_button_XYQ> button4B = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    button4B->setPos( p4_x_start, p4_y_start + 1*p4_but_y_leap );
+    button4B->setPos( p4_x_start, p4_y_start + but_cnt*p4_but_y_leap );
     button4B->setWidth( 200 );      
     button4B->setHeight( 50 );      
     button4B->setTxtFont( font );
@@ -480,11 +490,33 @@ void game::play_TikTakTok(){
     button4B->setPTexture( button_img_p_texture );
     // Add to page.
     myPage4.addObj( button4B );
+    // Button count increment.
+    but_cnt++;
+
+    // Object: button for enabling/disabling AI.
+    shared_ptr<SFML_button_XYQ> button4C = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    button4C->setPos( p4_x_start, p4_y_start + but_cnt*p4_but_y_leap );
+    button4C->setWidth( 200 );      
+    button4C->setHeight( 50 );      
+    button4C->setTxtFont( font );
+    if( AI_first ){
+        button4C->setTxtStr( AI_first_str );
+    }else{
+        button4C->setTxtStr( AI_not_first_str );
+    }
+    button4C->setTxtColor( 50, 50, 50, 255 );
+    button4C->setUPTexture( button_img_np_texture );
+    button4C->setPTexture( button_img_p_texture );
+    // Add to page.
+    myPage4.addObj( button4C );
+    // Button count increment.
+    but_cnt++;
 
     // Object: button for returning to the main page.
     shared_ptr<SFML_button_XYQ> button4A = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    button4A->setPos( p4_x_start, p4_y_start + 0*p4_but_y_leap );
+    button4A->setPos( p4_x_start, p4_y_start + but_cnt*p4_but_y_leap );
     button4A->setWidth( 200 );      
     button4A->setHeight( 50 );      
     button4A->setTxtFont( font );
@@ -494,7 +526,9 @@ void game::play_TikTakTok(){
     button4A->setPTexture( button_img_p_texture );
     // Add to page.
     myPage4.addObj( button4A );
-
+    // Button count increment.
+    but_cnt++;
+    
     
 
     myPage4.update();
@@ -538,6 +572,7 @@ void game::play_TikTakTok(){
 
                     if( button4A->pressButton( window ) ){}
                     if( button4B->pressButton( window ) ){}
+                    if( button4C->pressButton( window ) ){};
 
                 }
             }
@@ -618,6 +653,15 @@ void game::play_TikTakTok(){
                             button4B->setTxtStr( disabledAI_str );
                         }
                         button4B->update();
+                    }
+                    if( button4C->releaseButton() ){
+                        AI_first = !AI_first;
+                        if( AI_first ){
+                            button4C->setTxtStr( AI_first_str );
+                        }else{
+                            button4C->setTxtStr( AI_not_first_str );
+                        }
+                        button4C->update();
                     }
 
                 }
