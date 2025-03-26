@@ -70,13 +70,9 @@ public:
     A button being released triggers a series of checks which attempt to see if
     the associated square is to be assigned either O or X and if so, is the game
     to be continued or ended now.
+    An A.I. follow up play is made if AI versus is enabled.
     */
     bool releaseButton();
-
-    /*
-    The same, but includes A.I. response.
-    */
-    bool releaseButton_alt();
     
     /*
     Let the A.I. make the next move.
@@ -149,15 +145,11 @@ protected:
 
 
 namespace game{
+
     /*
     Initialize a game of Tik-Tak-Tok.
     */
     void play_TikTakTok();
-
-    /*
-    Test of TikTakTok.
-    */
-    void test_TikTakTok();
 
 }
 
