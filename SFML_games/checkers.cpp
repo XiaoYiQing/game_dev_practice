@@ -873,23 +873,23 @@ void checkers::resetBoard(){
 /*
 Provide a numerical score to the current state of the game.
 */
-float checkers::gameStateEval(){
+int checkers::gameStateEval(){
 
-    float stateValue = 0;
+    int stateValue = 0;
 
     /*
     Values of pieces.
     TODO: eventually, you should put these values as constant static variables 
     for this class.
     */
-    float RED_P_val = -5;
-    float CRED_P_val = -10;
-    float BLK_P_val = 5;
-    float CBLK_P_val = 10;
+    int RED_P_val = -5;
+    int CRED_P_val = -10;
+    int BLK_P_val = 5;
+    int CBLK_P_val = 10;
 
-    float RED_win_val = -130;
-    float BLK_win_val = 130;
-    float draw_val = 0;
+    int RED_win_val = -130;
+    int BLK_win_val = 130;
+    int draw_val = 0;
 
 
     switch( this->state ){

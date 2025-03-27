@@ -283,7 +283,9 @@ Update the state of the game:
 /*
 Provide a numerical score to the current state of the game.
 */
-float gameStateEval();
+int gameStateEval();
+
+int minmax( bool isMaximizing );
 
 // ====================================================================== <<<<<
 
