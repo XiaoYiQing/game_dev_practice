@@ -97,6 +97,31 @@ Update the state of the game:
 
 
 // ====================================================================== >>>>>
+//      Specialized Nested Class for Moves
+// ====================================================================== >>>>>
+
+    /*
+    Simplest class for identifying a move, with minimal information.
+    Starting location + direction.
+    Whether it is an attack or just a displacement can be discerned by the board situation. 
+    Whether this move is legal for the target piece is also checked on the board.
+    */
+    class CHK_move{
+
+        public:
+        
+        CHK_move( unsigned int i, unsigned int j, CHK_DIREC k );
+
+        unsigned int i;
+        unsigned int j;
+        CHK_DIREC k;
+
+    };
+
+// ====================================================================== >>>>>
+
+
+// ====================================================================== >>>>>
 //      Constructors
 // ====================================================================== >>>>>
     checkers();
@@ -265,12 +290,14 @@ Update the state of the game:
     /*
     Place a new piece at the target coordinate on the board.
     Overwrites existing piece by default.
+    Does not update game state or turn count.
     */
     bool insertPiece( unsigned int i, unsigned int j, CHK_PIECE newPiece );
 
     /*
     Directly insert the desired board set to this game object.
-    The given board is copied by the class' board, and an update is performed.
+    The given board is copied by the class' board.
+    Does not update game state or turn count.
     */
     void insertBoard( CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] );
 

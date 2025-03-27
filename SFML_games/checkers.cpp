@@ -64,6 +64,19 @@ checkers::CHK_STATE get_CHK_STATE_AtIdx( int idx ){
 // ====================================================================== <<<<<
 
 
+// ====================================================================== >>>>>
+//      Specialized Nested Class for Moves
+// ====================================================================== >>>>>
+
+
+checkers::CHK_move::CHK_move( unsigned int i, unsigned int j, checkers::CHK_DIREC k ){
+    this->i = i;
+    this->j = j;
+    this->k = k;
+}
+
+// ====================================================================== <<<<<
+
 
 // ====================================================================== >>>>>
 //      Constructors
@@ -959,13 +972,10 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
     }
 
-    // Make a copy
-    CHK_PIECE CHK_board_tmp[BOARD_SIZE][BOARD_SIZE];
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
-            CHK_board_tmp[i][j] = CHK_board[i][j];
-        }
-    }
+    // Make a copy of the current game.
+    checkers newGame = *this;
+
+    return retVal;
 
 }
 
