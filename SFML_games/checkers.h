@@ -332,6 +332,14 @@ Update the state of the game:
     */
     int minmax( bool isMaximizing, int depth );
 
+    /*
+    Obtain all currently valid moves.
+    Turn is based on the current checkers instance's turn count.
+    NOTE: Attacks take precedence over displacement, so if a single piece
+    can attack, no other piece of the same color can be displaced.
+    */
+    vector<CHK_move> get_valid_moves();
+
 // ====================================================================== <<<<<
 
 

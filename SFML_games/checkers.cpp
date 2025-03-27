@@ -1026,6 +1026,49 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
 }
 
+
+vector<checkers::CHK_move> checkers::get_valid_moves(){
+
+    vector<checkers::CHK_move> valid_move_vect;
+    
+    switch( this->getCurrTurn() ){
+    
+    // Black turn
+    case 0:
+
+        if( B_atk_list.size() == 0 ){
+            // Return list of possible displacements if no attack possible.
+            valid_move_vect = B_displ_list;
+        }else{
+            // Return list of possible attacks if even one attack is possible.
+            valid_move_vect = B_atk_list;
+        }
+        break;
+
+    // Red turn
+    case 1:
+        
+        if( R_atk_list.size() == 0 ){
+            // Return list of possible displacements if no attack possible.
+            valid_move_vect = R_displ_list;
+        }else{
+            // Return list of possible attacks if even one attack is possible.
+            valid_move_vect = R_atk_list;
+        }
+        break;
+
+    default:
+        cerr << "Invalid turn ID." << endl;
+        return valid_move_vect;
+
+    };
+
+
+    
+    return valid_move_vect;
+
+}
+
 // ====================================================================== <<<<<
 
 
@@ -1134,7 +1177,7 @@ void tests::checkers_test1(){
     cout << endl;
 
     myGame.printBoard();
-    
+
 }
 
 
