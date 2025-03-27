@@ -1012,6 +1012,7 @@ void tests::checkers_test1(){
     myGame.insertPiece( 3, 1, checkers::CHK_PIECE::BLK_P );
     myGame.insertPiece( 7, 5, checkers::CHK_PIECE::RED_P );
     myGame.insertPiece( 6, 6, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 1, 5, checkers::CHK_PIECE::BLK_P );
     myGame.printBoard();
 
     
@@ -1046,13 +1047,15 @@ void tests::checkers_test1(){
 
     cout << "Possible black attack points: ";
     for( unsigned int x = 0; x < B_atk_list.size(); x++ ){
-        cout << "(" << B_atk_list.at(x).i << "," << B_atk_list.at(x).j << ")" << " ";
+        cout << "(" << B_atk_list.at(x).i << "," << B_atk_list.at(x).j << "," <<
+            checkers::get_CHK_DIREC_Str( B_atk_list.at(x).k ) << ")" << " ";
     }
     cout << endl;
 
     cout << "Possible red attack points: ";
     for( unsigned int x = 0; x < R_atk_list.size(); x++ ){
-        cout << "(" << R_atk_list.at(x).i << "," << R_atk_list.at(x).j << ")" << " ";
+        cout << "(" << R_atk_list.at(x).i << "," << R_atk_list.at(x).j << "," <<
+            checkers::get_CHK_DIREC_Str( R_atk_list.at(x).k ) << ")" << " ";
     }
     cout << endl;
 
