@@ -877,6 +877,9 @@ int checkers::gameStateEval(){
 
     int stateValue = 0;
 
+    // Update the game state before proceeding.
+    this->upd_game_state();
+
     /*
     Values of pieces.
     TODO: eventually, you should put these values as constant static variables 
@@ -915,6 +918,11 @@ int checkers::gameStateEval(){
     }
 
     return stateValue;
+
+}
+
+
+int checkers::minmax( bool isMaximizing, int depth ){
 
 }
 

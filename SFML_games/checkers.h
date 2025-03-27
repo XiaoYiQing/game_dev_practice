@@ -282,10 +282,17 @@ Update the state of the game:
 
 /*
 Provide a numerical score to the current state of the game.
+Calling this function automatically calls the upd_game_state();
 */
 int gameStateEval();
 
-int minmax( bool isMaximizing );
+/*
+minmax function for helping the game A.I. to make the best possible move.
+This function does not determine the best move, but helps in attributing numerical
+values to each possible move up to a specified depth/turn into the future.
+NOTE: maximizing when black, minimizing when red.
+*/
+int minmax( bool isMaximizing, int depth );
 
 // ====================================================================== <<<<<
 
