@@ -924,6 +924,27 @@ int checkers::gameStateEval(){
 
 int checkers::minmax( bool isMaximizing, int depth ){
 
+    int retVal = 0;
+
+    switch( this->state ){
+
+        case CHK_STATE::BWIN:
+        case CHK_STATE::RWIN:
+        case CHK_STATE::DRAW:
+            // When game is over, return value immediately.
+            return this->gameStateEval();
+            break;
+        case CHK_STATE::ONGOING:
+        case CHK_STATE::LOCKED:
+            if( depth <= 0 ){
+                return this->gameStateEval();
+            }
+            break;
+        default:
+            cerr << "Unrecognized game state. Abort." << endl;
+            return false;
+    }
+
 }
 
 // ====================================================================== <<<<<
