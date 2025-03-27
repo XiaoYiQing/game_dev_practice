@@ -269,6 +269,12 @@ Update the state of the game:
     bool insertPiece( unsigned int i, unsigned int j, CHK_PIECE newPiece );
 
     /*
+    Directly insert the desired board set to this game object.
+    The given board is copied by the class' board, and an update is performed.
+    */
+    void insertBoard( CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] );
+
+    /*
     Reset the board to the state of a fresh new game.
     */
     void resetBoard();
@@ -280,19 +286,19 @@ Update the state of the game:
 //      AI Related Functions
 // ====================================================================== >>>>>
 
-/*
-Provide a numerical score to the current state of the game.
-Calling this function automatically calls the upd_game_state();
-*/
-int gameStateEval();
+    /*
+    Provide a numerical score to the current state of the game.
+    Calling this function automatically calls the upd_game_state();
+    */
+    int gameStateEval();
 
-/*
-minmax function for helping the game A.I. to make the best possible move.
-This function does not determine the best move, but helps in attributing numerical
-values to each possible move up to a specified depth/turn into the future.
-NOTE: maximizing when black, minimizing when red.
-*/
-int minmax( bool isMaximizing, int depth );
+    /*
+    minmax function for helping the game A.I. to make the best possible move.
+    This function does not determine the best move, but helps in attributing numerical
+    values to each possible move up to a specified depth/turn into the future.
+    NOTE: maximizing when black, minimizing when red.
+    */
+    int minmax( bool isMaximizing, int depth );
 
 // ====================================================================== <<<<<
 

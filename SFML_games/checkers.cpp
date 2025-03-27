@@ -661,6 +661,7 @@ void checkers::upd_game_state(){
     // Initialize turn ID.
     int turnID = -1;
 
+    // Count the current number of each piece type.
     for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
         for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
 
@@ -837,6 +838,17 @@ bool checkers::insertPiece( unsigned int i, unsigned int j, checkers::CHK_PIECE 
 
 }
 
+void checkers::insertBoard( CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] ){
+
+    // Make a copy of the board.
+    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
+        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+            CHK_board[i][j] = in_CHK_board[i][j];
+        }
+    }
+
+}
+
 void checkers::resetBoard(){
     
     // Clear the board first.
@@ -936,6 +948,7 @@ int checkers::minmax( bool isMaximizing, int depth ){
             break;
         case CHK_STATE::ONGOING:
         case CHK_STATE::LOCKED:
+            // If we reached the maximum allowed depth, return value immediately.
             if( depth <= 0 ){
                 return this->gameStateEval();
             }
@@ -943,6 +956,15 @@ int checkers::minmax( bool isMaximizing, int depth ){
         default:
             cerr << "Unrecognized game state. Abort." << endl;
             return false;
+
+    }
+
+    // Make a copy
+    CHK_PIECE CHK_board_tmp[BOARD_SIZE][BOARD_SIZE];
+    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
+        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+            CHK_board_tmp[i][j] = CHK_board[i][j];
+        }
     }
 
 }
