@@ -777,6 +777,54 @@ void checkers::upd_atk_posb(){
 }
 
 
+void checkers::upd_displ_posb(){
+    
+    // Clear the previous list of possible attack points.
+    B_displ_list.clear();
+    R_displ_list.clear();
+
+    /* 
+    Initialize vector keeping track of all directions of possible attack
+    at each piece investogated.
+    */
+    vector<CHK_DIREC> direcVec;   
+
+    // Parse through the entire board.
+    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
+        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+
+            // Obtain current piece.
+            CHK_PIECE currPiece = CHK_board[i][j];
+            // Skip if no piece at current coordinate.
+            if( currPiece == CHK_PIECE::NO_P ){
+                continue;
+            }
+            // Check curr piece color.
+            int currColor = getTurnID( currPiece );
+            // Check current piece's all possible direction of displacement.
+            direcVec = theoMoveCheckAll( i, j, currPiece );
+            // Add current coordinate as possible move point in appropriate vector.
+            if( direcVec.size() != 0 ){
+                // Black
+                if( currColor == 0 ){
+                    for( checkers::CHK_DIREC tmp_direct : direcVec ){
+                        B_displ_list.push_back( CHK_move( i, j, tmp_direct ) );
+                    }
+                // Red
+                }else if( currColor == 1 ){
+                    for( checkers::CHK_DIREC tmp_direct : direcVec ){
+                        R_displ_list.push_back( CHK_move( i, j, tmp_direct ) );
+                    }
+                }else{
+                    cerr << "A checker piece of unrecognized color somehow got a possible move." << endl;
+                    continue;
+                }
+            }
+
+        }
+    }
+}
+
 
 void checkers::printBoard() const{
 
@@ -879,6 +927,8 @@ void checkers::resetBoard(){
     // Clear the possible attack lists.
     R_atk_list.clear();
     B_atk_list.clear();
+    R_displ_list.clear();
+    B_displ_list.clear();
 
     // Clear the lock target.
     lock_tar.clear();
@@ -987,6 +1037,11 @@ vector<checkers::CHK_move> checkers::getR_atk_list() const
     {return R_atk_list;}
 vector<checkers::CHK_move> checkers::getB_atk_list() const
     {return B_atk_list;}
+vector<checkers::CHK_move> checkers::getR_displ_list() const
+    {return R_displ_list;}
+vector<checkers::CHK_move> checkers::getB_displ_list() const
+    {return B_displ_list;}
+
 // ====================================================================== <<<<<
 
 
@@ -1013,7 +1068,7 @@ void tests::checkers_test1(){
     myGame.insertPiece( 7, 5, checkers::CHK_PIECE::RED_P );
     myGame.insertPiece( 6, 6, checkers::CHK_PIECE::BLK_P );
     myGame.insertPiece( 1, 5, checkers::CHK_PIECE::BLK_P );
-    myGame.printBoard();
+    
 
     
     // Check possible moves on all directions for our piece.
@@ -1060,6 +1115,26 @@ void tests::checkers_test1(){
     cout << endl;
 
 
+    myGame.upd_displ_posb();
+    vector<checkers::CHK_move> B_displ_list = myGame.getB_displ_list();
+    vector<checkers::CHK_move> R_displ_list = myGame.getR_displ_list();
+
+    cout << "Possible black displacement points: ";
+    for( unsigned int x = 0; x < B_displ_list.size(); x++ ){
+        cout << "(" << B_displ_list.at(x).i << "," << B_displ_list.at(x).j << "," <<
+            checkers::get_CHK_DIREC_Str( B_displ_list.at(x).k ) << ")" << " ";
+    }
+    cout << endl;
+    
+    cout << "Possible red displacement points: ";
+    for( unsigned int x = 0; x < R_displ_list.size(); x++ ){
+        cout << "(" << R_displ_list.at(x).i << "," << R_displ_list.at(x).j << "," <<
+            checkers::get_CHK_DIREC_Str( R_displ_list.at(x).k ) << ")" << " ";
+    }
+    cout << endl;
+
+    myGame.printBoard();
+    
 }
 
 

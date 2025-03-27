@@ -272,6 +272,11 @@ Update the state of the game:
     void upd_atk_posb();
 
     /*
+    Update the list of possible displacements.
+    */
+    void upd_displ_posb();
+
+    /*
     Print to terminal the state of the board.
     This is a debug tool, and may be deleted.
     */
@@ -337,6 +342,9 @@ Update the state of the game:
     vector<CHK_move> getR_atk_list() const;
     vector<CHK_move> getB_atk_list() const;
 
+    vector<CHK_move> getR_displ_list() const;
+    vector<CHK_move> getB_displ_list() const;
+
 // ====================================================================== <<<<<
     
 protected:
@@ -372,6 +380,11 @@ protected:
     vector<CHK_move> R_atk_list;
     // The list of black pieces that can attack.
     vector<CHK_move> B_atk_list;
+
+    // The list of red piece's displacement possibilities.
+    vector<CHK_move> R_displ_list;
+    // The list of black piece's displacement possibilities.
+    vector<CHK_move> B_displ_list;
 
 
     // The state of the game.
