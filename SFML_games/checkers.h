@@ -375,6 +375,11 @@ namespace tests{
     */
     void checkers_test4();
 
+    /*
+    Check if the board state value evaluation functions.
+    */
+    void checkers_test5();
+
 }
 
 #endif  // CHECKERS

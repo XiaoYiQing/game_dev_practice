@@ -699,7 +699,6 @@ void checkers::upd_game_state(){
     }else{
         no_change_turn_cnt = 0;
     }
-    cout << no_change_turn_cnt << endl;
 
 
     // Game State Update.
@@ -876,10 +875,47 @@ Provide a numerical score to the current state of the game.
 */
 float checkers::gameStateEval(){
 
-    // pieceCounter;
+    float stateValue = 0;
 
-    return 0;
-    
+    /*
+    Values of pieces.
+    TODO: eventually, you should put these values as constant static variables 
+    for this class.
+    */
+    float RED_P_val = -5;
+    float CRED_P_val = -10;
+    float BLK_P_val = 5;
+    float CBLK_P_val = 10;
+
+    float RED_win_val = -130;
+    float BLK_win_val = 130;
+    float draw_val = 0;
+
+
+    switch( this->state ){
+        case CHK_STATE::BWIN:
+            stateValue = BLK_win_val;
+            break;
+        case CHK_STATE::RWIN:
+            stateValue = RED_win_val;
+            break;
+        case CHK_STATE::DRAW:
+            stateValue = draw_val;
+            break;
+        case CHK_STATE::ONGOING:
+        case CHK_STATE::LOCKED:
+            stateValue += RED_P_val * pieceCounter.at(0);
+            stateValue += BLK_P_val * pieceCounter.at(1);
+            stateValue += CRED_P_val * pieceCounter.at(2);
+            stateValue += CBLK_P_val * pieceCounter.at(3);
+            break;
+
+        default:
+            cerr << "Unrecognized game state error. Abort." << endl;
+    }
+
+    return stateValue;
+
 }
 
 // ====================================================================== <<<<<
@@ -1061,6 +1097,61 @@ void tests::checkers_test4(){
     myGame.printBoard();
 
 
+
+}
+
+
+void tests::checkers_test5(){
+
+    using namespace gameEngine;
+
+    checkers myGame;
+
+    myGame.clearBoard();
+
+    // Draw case.
+    myGame.upd_game_state();
+    cout << "Draw case evaluation: " << myGame.gameStateEval() << endl;
+
+    // Red win case.
+    myGame.insertPiece( 1, 1, checkers::CHK_PIECE::RED_P );
+    myGame.upd_game_state();
+    cout << "Red win case evaluation: " << myGame.gameStateEval() << endl;
+
+    // Black win case.
+    myGame.clearBoard();
+    myGame.insertPiece( 6, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.upd_game_state();
+    cout << "Black win case evaluation: " << myGame.gameStateEval() << endl;
+
+    // Ongoing case 1 (Matching piece counts).
+    myGame.insertPiece( 4, 2, checkers::CHK_PIECE::RED_P );
+    myGame.upd_game_state();
+    cout << "Ongoing evaluation (equal piece counts): " << myGame.gameStateEval() << endl;
+
+    // Ongoing case 2 (Red leads by 1 piece).
+    myGame.insertPiece( 1, 5, checkers::CHK_PIECE::RED_P );
+    myGame.upd_game_state();
+    cout << "Ongoing evaluation (Red leads by 1 piece): " << myGame.gameStateEval() << endl;
+
+    // Ongoing case 3 (Black leads by 1 piece).
+    myGame.insertPiece( 7, 3, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 7, 5, checkers::CHK_PIECE::BLK_P );
+    myGame.upd_game_state();
+    cout << "Ongoing evaluation (Black leads by 1 piece): " << myGame.gameStateEval() << endl;
+
+    // Ongoing case 4 (Red leads by 1 crown piece).
+    myGame.insertPiece( 0, 0, checkers::CHK_PIECE::CRED_P );
+    myGame.upd_game_state();
+    cout << "Ongoing evaluation (Red leads by 1 crown piece but falls by 1 piece): " << myGame.gameStateEval() << endl;
+
+    // Ongoing case 5 (Black leads by 1 piece).
+    myGame.insertPiece( 0, 2, checkers::CHK_PIECE::CBLK_P );
+    myGame.upd_game_state();
+    cout << "Ongoing evaluation (Black leads by 1 piece after adding a crown piece): " << myGame.gameStateEval() << endl;
+
+
+    myGame.printBoard();
 
 }
 
