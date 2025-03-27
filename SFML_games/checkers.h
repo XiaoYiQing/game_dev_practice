@@ -334,10 +334,8 @@ Update the state of the game:
 //      Class Variables Access Functions
 // ====================================================================== >>>>>
 
-    vector<unsigned int> getB_atk_i_list() const;
-    vector<unsigned int> getB_atk_j_list() const;
-    vector<unsigned int> getR_atk_i_list() const;
-    vector<unsigned int> getR_atk_j_list() const;
+    vector<CHK_move> getR_atk_list() const;
+    vector<CHK_move> getB_atk_list() const;
 
 // ====================================================================== <<<<<
     
@@ -371,11 +369,9 @@ protected:
     CHK_PIECE CHK_board[BOARD_SIZE][BOARD_SIZE];
 
     // The list of red pieces that can attack.
-    vector<unsigned int> R_atk_i_list;
-    vector<unsigned int> R_atk_j_list;
+    vector<CHK_move> R_atk_list;
     // The list of black pieces that can attack.
-    vector<unsigned int> B_atk_i_list;
-    vector<unsigned int> B_atk_j_list;
+    vector<CHK_move> B_atk_list;
 
 
     // The state of the game.

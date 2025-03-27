@@ -68,7 +68,6 @@ checkers::CHK_STATE get_CHK_STATE_AtIdx( int idx ){
 //      Specialized Nested Class for Moves
 // ====================================================================== >>>>>
 
-
 checkers::CHK_move::CHK_move( unsigned int i, unsigned int j, checkers::CHK_DIREC k ){
     this->i = i;
     this->j = j;
@@ -222,7 +221,7 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
         The black piece is not allowed to move if another black piece is in 
         position to attack.
         */
-        if( B_atk_i_list.size() > 0 ){
+        if( B_atk_list.size() > 0 ){
             cout << playMsg << " failed: current black piece cannot move if an attack by a black piece is possible." << endl;
             return false;
         }
@@ -233,7 +232,7 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
         The red piece is not allowed to move if another red piece is in 
         position to attack.
         */
-        if( R_atk_i_list.size() > 0 ){
+        if( R_atk_list.size() > 0 ){
             cout << playMsg << " failed: current red piece cannot move if an attack by a red piece is possible." << endl;
             return false;
         }
@@ -731,10 +730,8 @@ void checkers::upd_game_state(){
 void checkers::upd_atk_posb(){
 
     // Clear the previous list of possible attack points.
-    B_atk_i_list.clear();
-    B_atk_j_list.clear();
-    R_atk_i_list.clear();
-    R_atk_j_list.clear();
+    B_atk_list.clear();
+    R_atk_list.clear();
     
     /* 
     Initialize vector keeping track of all directions of possible attack
@@ -760,12 +757,14 @@ void checkers::upd_atk_posb(){
             if( direcVec.size() != 0 ){
                 // Black
                 if( currColor == 0 ){
-                    B_atk_i_list.push_back(i);
-                    B_atk_j_list.push_back(j);
+                    for( checkers::CHK_DIREC tmp_direct : direcVec ){
+                        B_atk_list.push_back( CHK_move( i, j, tmp_direct ) );
+                    }
                 // Red
                 }else if( currColor == 1 ){
-                    R_atk_i_list.push_back(i);
-                    R_atk_j_list.push_back(j);
+                    for( checkers::CHK_DIREC tmp_direct : direcVec ){
+                        R_atk_list.push_back( CHK_move( i, j, tmp_direct ) );
+                    }
                 }else{
                     cerr << "A checker piece of unrecognized color somehow got a possible attack." << endl;
                     continue;
@@ -878,10 +877,8 @@ void checkers::resetBoard(){
     state = CHK_STATE::ONGOING;
 
     // Clear the possible attack lists.
-    R_atk_i_list.clear();
-    R_atk_j_list.clear();
-    B_atk_i_list.clear();
-    B_atk_j_list.clear();
+    R_atk_list.clear();
+    B_atk_list.clear();
 
     // Clear the lock target.
     lock_tar.clear();
@@ -986,15 +983,10 @@ int checkers::minmax( bool isMaximizing, int depth ){
 //      Class Variables Access Functions
 // ====================================================================== >>>>>
 
-vector<unsigned int> checkers::getB_atk_i_list() const
-    {return B_atk_i_list;}
-vector<unsigned int> checkers::getB_atk_j_list() const
-    {return B_atk_j_list;}
-vector<unsigned int> checkers::getR_atk_i_list() const
-    {return R_atk_i_list;}
-vector<unsigned int> checkers::getR_atk_j_list() const
-    {return R_atk_j_list;}
-
+vector<checkers::CHK_move> checkers::getR_atk_list() const
+    {return R_atk_list;}
+vector<checkers::CHK_move> checkers::getB_atk_list() const
+    {return B_atk_list;}
 // ====================================================================== <<<<<
 
 
@@ -1049,20 +1041,18 @@ void tests::checkers_test1(){
 
 
     myGame.upd_atk_posb();
-    vector<unsigned int>B_atk_i_list = myGame.getB_atk_i_list();
-    vector<unsigned int>B_atk_j_list = myGame.getB_atk_j_list();
-    vector<unsigned int>R_atk_i_list = myGame.getR_atk_i_list();
-    vector<unsigned int>R_atk_j_list = myGame.getR_atk_j_list();
+    vector<checkers::CHK_move> B_atk_list = myGame.getB_atk_list();
+    vector<checkers::CHK_move> R_atk_list = myGame.getR_atk_list();
 
     cout << "Possible black attack points: ";
-    for( unsigned int x = 0; x < B_atk_i_list.size(); x++ ){
-        cout << "(" << B_atk_i_list.at(x) << "," << B_atk_j_list.at(x) << ")" << " ";
+    for( unsigned int x = 0; x < B_atk_list.size(); x++ ){
+        cout << "(" << B_atk_list.at(x).i << "," << B_atk_list.at(x).j << ")" << " ";
     }
     cout << endl;
 
     cout << "Possible red attack points: ";
-    for( unsigned int x = 0; x < R_atk_i_list.size(); x++ ){
-        cout << "(" << R_atk_i_list.at(x) << "," << R_atk_j_list.at(x) << ")" << " ";
+    for( unsigned int x = 0; x < R_atk_list.size(); x++ ){
+        cout << "(" << R_atk_list.at(x).i << "," << R_atk_list.at(x).j << ")" << " ";
     }
     cout << endl;
 
