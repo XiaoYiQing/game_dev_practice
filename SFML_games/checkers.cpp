@@ -1045,7 +1045,11 @@ int checkers::minmax( bool isMaximizing, int depth ){
             newGame.play( move_z.i, move_z.j, move_z.k );
 
             // Perform next layer minmax.
-            currScore = newGame.minmax( false, depth - 1 );
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmax( true, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmax( false, depth - 1 );
+            }
 
             // Update the highest score up to now.
             bestScore = std::max( bestScore, currScore );
@@ -1064,10 +1068,13 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
             // In the game copy, make a play with the next available move.
             newGame.play( move_z.i, move_z.j, move_z.k );
-            newGame.printBoard();
 
             // Perform next layer minmax.
-            currScore = newGame.minmax( true, depth - 1 );
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmax( true, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmax( false, depth - 1 );
+            }
 
             // Update the highest score up to now.
             bestScore = std::min( bestScore, currScore );
