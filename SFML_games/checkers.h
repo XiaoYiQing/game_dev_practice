@@ -447,6 +447,11 @@ namespace tests{
     */
     void checkers_test6();
 
+    /*
+    Check the minmax function.
+    */
+    void checkers_test7();
+
 }
 
 #endif  // CHECKERS
