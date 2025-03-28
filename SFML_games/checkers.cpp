@@ -1351,7 +1351,7 @@ void tests::checkers_test6(){
             checkers::get_CHK_DIREC_Str( move_z.k ) << ")" << " ";
     }
 
-    // Scenario 1.
+    // Scenario 1 (One black piece, black turn).
     myGame.insertPiece( 1, 1, checkers::CHK_PIECE::BLK_P );
     myGame.upd_atk_posb();
     validMoveVect = myGame.get_valid_moves();
@@ -1361,8 +1361,37 @@ void tests::checkers_test6(){
     }
     cout << endl;
 
-    // Scenario 2.
+    // Scenario 2 (One black piece + One red piece, black turn).
     myGame.insertPiece( 5, 5, checkers::CHK_PIECE::RED_P );
+    myGame.upd_atk_posb();
+    validMoveVect = myGame.get_valid_moves();
+    for( checkers::CHK_move move_z : validMoveVect ){
+        cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ")" << " ";
+    }
+    cout << endl;
+
+    // Scenario 3 (One black piece + One red piece, red turn).
+    myGame.setTurn_cnt( myGame.getTurn_cnt() + 1 );
+    validMoveVect = myGame.get_valid_moves();
+    for( checkers::CHK_move move_z : validMoveVect ){
+        cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ")" << " ";
+    }
+    cout << endl;
+
+    // Scenario 4 (Added a black piece that can be attacked by red).
+    myGame.insertPiece( 4, 6, checkers::CHK_PIECE::BLK_P );
+    myGame.upd_atk_posb();
+    validMoveVect = myGame.get_valid_moves();
+    for( checkers::CHK_move move_z : validMoveVect ){
+        cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ")" << " ";
+    }
+    cout << endl;
+
+    // Scenraio 5 (Added crown red piece in position for attack backwards).
+    myGame.insertPiece( 0, 2, checkers::CHK_PIECE::CRED_P );
     myGame.upd_atk_posb();
     validMoveVect = myGame.get_valid_moves();
     for( checkers::CHK_move move_z : validMoveVect ){
