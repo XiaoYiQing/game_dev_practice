@@ -997,6 +997,12 @@ int checkers::gameStateEval(){
 
 int checkers::minmax( bool isMaximizing, int depth ){
 
+    if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
+    this->getCurrTurn() == 1 && isMaximizing ){
+        cerr << "Mismatch of minmax objective with the current turn order." << endl;
+        return 0;
+    }
+
     switch( this->state ){
 
         case CHK_STATE::BWIN:
@@ -1059,7 +1065,7 @@ int checkers::minmax( bool isMaximizing, int depth ){
             // In the game copy, make a play with the next available move.
             newGame.play( move_z.i, move_z.j, move_z.k );
             newGame.printBoard();
-            
+
             // Perform next layer minmax.
             currScore = newGame.minmax( true, depth - 1 );
 

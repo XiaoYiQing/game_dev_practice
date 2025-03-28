@@ -393,18 +393,35 @@ void tests::checkers_test7(){
     // myGame.printBoard();
 
 
+    // /* 
+    // [Scenario 8]: 1 red in attack position against one black and one crowned black.
+    // */
+    // scenario_cnt++;
+    // myGame.clearBoard();
+    // myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
+    // myGame.insertPiece( 2, 4, checkers::CHK_PIECE::CBLK_P );
+    // myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+    // myGame.setTurn_cnt( 1 );    // Force red turn.
+    // myGame.upd_atk_posb();
+    // myGame.upd_game_state();
+    // isMaximizing = false;    depth = 1;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+    // myGame.printBoard();
+
     /* 
-    [Scenario 8]: 1 red in attack position against one black and one crowned black.
+    [Scenario 9]: 1 red in attack position against a black pieces that leads to the possible 
+    attack of another.
     */
     scenario_cnt++;
     myGame.clearBoard();
-    myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
-    myGame.insertPiece( 2, 4, checkers::CHK_PIECE::CBLK_P );
-    myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+    myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 2, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 5, 3, checkers::CHK_PIECE::RED_P );
     myGame.setTurn_cnt( 1 );    // Force red turn.
     myGame.upd_atk_posb();
     myGame.upd_game_state();
-    isMaximizing = false;    depth = 1;
+    isMaximizing = false;    depth = 2;
     finalScore = myGame.minmax( isMaximizing, depth );
     cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
     myGame.printBoard();
