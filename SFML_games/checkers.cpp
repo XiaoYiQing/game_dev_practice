@@ -1058,7 +1058,8 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
             // In the game copy, make a play with the next available move.
             newGame.play( move_z.i, move_z.j, move_z.k );
-
+            newGame.printBoard();
+            
             // Perform next layer minmax.
             currScore = newGame.minmax( true, depth - 1 );
 

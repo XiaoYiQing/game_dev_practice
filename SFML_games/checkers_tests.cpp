@@ -321,13 +321,97 @@ void tests::checkers_test7(){
     checkers myGame;
     myGame.clearBoard();
 
+    int scenario_cnt = 0;
+
     bool isMaximizing = false;
     int depth = 0;
-    // Game draw scenario.
-    myGame.upd_game_state();
-    isMaximizing = true;    depth = 2;
-    myGame.minmax( isMaximizing, depth );
+    int finalScore = 0;
 
+    // // [Scenario 1]: Game draw scenario.
+    // scenario_cnt++;
+    // myGame.upd_game_state();
+    // isMaximizing = true;    depth = 0;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+
+    // // [Scenario 2]: Red win scenario.
+    // scenario_cnt++;
+    // myGame.insertPiece( 1, 1, checkers::CHK_PIECE::RED_P );
+    // myGame.upd_game_state();
+    // isMaximizing = true;    depth = 0;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+
+    // // [Scenario 3]: Black win scenario.
+    // scenario_cnt++;
+    // myGame.clearBoard();
+    // myGame.insertPiece( 1, 1, checkers::CHK_PIECE::BLK_P );
+    // myGame.upd_game_state();
+    // isMaximizing = true;    depth = 0;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+
+    // // [Scenario 4]: Red superiority in value.
+    // scenario_cnt++;
+    // myGame.insertPiece( 2, 2, checkers::CHK_PIECE::CRED_P );
+    // myGame.upd_game_state();
+    // isMaximizing = true;    depth = 0;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+
+    // // [Scenario 5]: Black superiority in value.
+    // scenario_cnt++;
+    // myGame.insertPiece( 4, 6, checkers::CHK_PIECE::CBLK_P );
+    // myGame.upd_game_state();
+    // isMaximizing = true;    depth = 0;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+
+    // // [Scenario 6]: 1 red vs 1 black in position to attack each other with 1 depth, black turn.
+    // scenario_cnt++;
+    // myGame.clearBoard();
+    // myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
+    // myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+    // myGame.upd_atk_posb();
+    // myGame.upd_game_state();
+    // isMaximizing = true;    depth = 1;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+    // myGame.printBoard();
+
+    // // [Scenario 7]: 1 red vs 1 black in position to attack each other with 1 depth, red turn.
+    // scenario_cnt++;
+    // myGame.clearBoard();
+    // myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
+    // myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+    // myGame.setTurn_cnt( 1 );     // Force red turn.
+    // myGame.upd_atk_posb();
+    // myGame.upd_game_state();
+    // isMaximizing = false;    depth = 1;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+    // myGame.printBoard();
+
+
+    /* 
+    [Scenario 8]: 1 red in attack position against one black and one crowned black.
+    */
+    scenario_cnt++;
+    myGame.clearBoard();
+    myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 2, 4, checkers::CHK_PIECE::CBLK_P );
+    myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+    myGame.setTurn_cnt( 1 );    // Force red turn.
+    myGame.upd_atk_posb();
+    myGame.upd_game_state();
+    isMaximizing = false;    depth = 1;
+    finalScore = myGame.minmax( isMaximizing, depth );
+    cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
     myGame.printBoard();
+
+
+
+
+    // myGame.printBoard();
 
 }
