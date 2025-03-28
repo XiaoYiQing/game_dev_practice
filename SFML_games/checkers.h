@@ -435,9 +435,14 @@ namespace tests{
     void checkers_test4();
 
     /*
-    Check if the board state value evaluation functions.
+    Check if the board state value evaluation works.
     */
     void checkers_test5();
+
+    /*
+    Check the valid moves function.
+    */
+    void checkers_test6();
 
 }
 

@@ -1038,6 +1038,7 @@ vector<checkers::CHK_move> checkers::get_valid_moves(){
 
         if( B_atk_list.size() == 0 ){
             // Return list of possible displacements if no attack possible.
+            this->upd_displ_posb();
             valid_move_vect = B_displ_list;
         }else{
             // Return list of possible attacks if even one attack is possible.
@@ -1050,6 +1051,7 @@ vector<checkers::CHK_move> checkers::get_valid_moves(){
         
         if( R_atk_list.size() == 0 ){
             // Return list of possible displacements if no attack possible.
+            this->upd_displ_posb();
             valid_move_vect = R_displ_list;
         }else{
             // Return list of possible attacks if even one attack is possible.
@@ -1064,7 +1066,6 @@ vector<checkers::CHK_move> checkers::get_valid_moves(){
     };
 
 
-    
     return valid_move_vect;
 
 }
@@ -1327,6 +1328,47 @@ void tests::checkers_test5(){
 
 }
 
+
+
+void tests::checkers_test6(){
+
+    using namespace gameEngine;
+
+    checkers myGame;
+    myGame.clearBoard();
+
+    vector<checkers::CHK_move> validMoveVect;
+
+    // No piece case:
+    validMoveVect = myGame.get_valid_moves();
+    for( checkers::CHK_move move_z : validMoveVect ){
+        cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ")" << " ";
+    }
+
+    // Scenario 1.
+    myGame.insertPiece( 1, 1, checkers::CHK_PIECE::BLK_P );
+    myGame.upd_atk_posb();
+    validMoveVect = myGame.get_valid_moves();
+    for( checkers::CHK_move move_z : validMoveVect ){
+        cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ")" << " ";
+    }
+    cout << endl;
+
+    // Scenario 2.
+    myGame.insertPiece( 5, 5, checkers::CHK_PIECE::RED_P );
+    myGame.upd_atk_posb();
+    validMoveVect = myGame.get_valid_moves();
+    for( checkers::CHK_move move_z : validMoveVect ){
+        cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ")" << " ";
+    }
+    cout << endl;
+
+    myGame.printBoard();
+
+}
 
 
 // DONE: update the chain attack functionality.
