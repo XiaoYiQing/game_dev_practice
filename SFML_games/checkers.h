@@ -353,6 +353,9 @@ Update the state of the game:
     vector<CHK_move> getR_displ_list() const;
     vector<CHK_move> getB_displ_list() const;
 
+    unsigned int getTurn_cnt() const;
+    void setTurn_cnt( unsigned int );
+
 // ====================================================================== <<<<<
     
 protected:

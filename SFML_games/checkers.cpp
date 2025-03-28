@@ -1086,6 +1086,11 @@ vector<checkers::CHK_move> checkers::getR_displ_list() const
 vector<checkers::CHK_move> checkers::getB_displ_list() const
     {return B_displ_list;}
 
+unsigned int checkers::getTurn_cnt() const
+    {return this->turn_cnt;}
+void checkers::setTurn_cnt( unsigned int turn_cnt )
+    {this->turn_cnt = turn_cnt;}
+
 // ====================================================================== <<<<<
 
 
