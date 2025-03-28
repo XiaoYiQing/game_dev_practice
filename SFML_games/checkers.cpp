@@ -719,7 +719,8 @@ void checkers::upd_game_state(){
         state = CHK_STATE::RWIN;
     }else if( ( blk_cnt + cblk_cnt ) != 0 && ( red_cnt + cred_cnt ) == 0 ){
         state = CHK_STATE::BWIN;
-    }else if( no_change_turn_cnt >= DRAWTURNCOUNTMAX ){
+    }else if( no_change_turn_cnt >= DRAWTURNCOUNTMAX || 
+        ( blk_cnt + cblk_cnt + red_cnt + cred_cnt ) == 0 ){
         state = CHK_STATE::DRAW;
     }else if( ( blk_cnt + cblk_cnt ) != 0 && ( red_cnt + cred_cnt ) != 0 ){
         state = CHK_STATE::ONGOING;

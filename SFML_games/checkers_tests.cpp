@@ -311,3 +311,23 @@ void tests::checkers_test6(){
     myGame.printBoard();
 
 }
+
+
+
+void tests::checkers_test7(){
+
+    using namespace gameEngine;
+
+    checkers myGame;
+    myGame.clearBoard();
+
+    bool isMaximizing = false;
+    int depth = 0;
+    // Game draw scenario.
+    myGame.upd_game_state();
+    isMaximizing = true;    depth = 2;
+    myGame.minmax( isMaximizing, depth );
+
+    myGame.printBoard();
+
+}
