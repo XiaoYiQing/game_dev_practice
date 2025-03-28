@@ -996,8 +996,6 @@ int checkers::gameStateEval(){
 
 int checkers::minmax( bool isMaximizing, int depth ){
 
-    int retVal = 0;
-
     switch( this->state ){
 
         case CHK_STATE::BWIN:
@@ -1019,10 +1017,58 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
     }
 
-    // Make a copy of the current game.
-    checkers newGame = *this;
 
-    return retVal;
+    int bestScore = 0;
+    int currScore = 0;
+
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
+
+    if ( isMaximizing ) {
+
+        for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = validMovesVect.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = *this;
+
+            // In the game copy, make a play with the next available move.
+            newGame.play( move_z.i, move_z.j, move_z.k );
+
+            // Perform next layer minmax.
+            currScore = newGame.minmax( false, depth - 1 );
+
+            // Update the highest score up to now.
+            bestScore = std::max( bestScore, currScore );
+
+        }
+
+    }else{
+
+        for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = validMovesVect.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = *this;
+
+            // In the game copy, make a play with the next available move.
+            newGame.play( move_z.i, move_z.j, move_z.k );
+
+            // Perform next layer minmax.
+            currScore = newGame.minmax( true, depth - 1 );
+
+            // Update the highest score up to now.
+            bestScore = std::min( bestScore, currScore );
+            
+        }
+
+    }
+
+    return bestScore;
 
 }
 
