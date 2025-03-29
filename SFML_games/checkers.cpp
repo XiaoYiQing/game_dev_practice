@@ -637,7 +637,7 @@ vector<checkers::CHK_DIREC> checkers::theoMoveCheckAll( unsigned int i, unsigned
 // ====================================================================== >>>>>
 
 int checkers::getCurrTurn() const{
-    return (int) remainder( turn_cnt, 2 );
+    return turn_cnt % 2;
 }
 
 int checkers::getTurnID( CHK_PIECE piece ) const{
@@ -1045,7 +1045,7 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
     if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
     this->getCurrTurn() == 1 && isMaximizing ){
-        cerr << "Mismatch of minmax objective with the current turn order." << endl;
+        cout << "Mismatch of minmax objective with the current turn order." << endl;
         return 0;
     }
 
@@ -1055,17 +1055,25 @@ int checkers::minmax( bool isMaximizing, int depth ){
         case CHK_STATE::RWIN:
         case CHK_STATE::DRAW:
             // When game is over, return value immediately.
+            for( int i = 0 ; i < 4 - depth; i++ ){
+                cout << "  ";
+            }
+            cout << "Score: " << this->gameStateEval() << endl;
             return this->gameStateEval();
             break;
         case CHK_STATE::ONGOING:
         case CHK_STATE::LOCKED:
             // If we reached the maximum allowed depth, return value immediately.
             if( depth <= 0 ){
+                for( int i = 0 ; i < 4 - depth; i++ ){
+                    cout << "  ";
+                }
+                cout << "Score: " << this->gameStateEval() << endl;
                 return this->gameStateEval();
             }
             break;
         default:
-            cerr << "Unrecognized game state. Abort." << endl;
+            cout << "Unrecognized game state. Abort." << endl;
             return false;
 
     }
@@ -1088,7 +1096,17 @@ int checkers::minmax( bool isMaximizing, int depth ){
             checkers newGame = *this;
 
             // In the game copy, make a play with the next available move.
-            newGame.play( move_z.i, move_z.j, move_z.k );
+            if( newGame.play( move_z.i, move_z.j, move_z.k ) ){
+                // cout << "Played! " << newGame.getCurrTurn() << endl;
+            }else{
+                // cout << "Failed to play! " << newGame.getCurrTurn() << endl;
+            }
+            
+            for( int i = 0 ; i < 4 - depth; i++ ){
+                cout << "  ";
+            }
+            cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ") MAX" << endl;
 
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
@@ -1096,6 +1114,12 @@ int checkers::minmax( bool isMaximizing, int depth ){
             }else if( newGame.getCurrTurn() == 1 ){
                 currScore = newGame.minmax( false, depth - 1 );
             }
+
+            for( int i = 0 ; i < 4 - depth; i++ ){
+                cout << "  ";
+            }
+            cout << "MAX: currScore = " << currScore << ", " <<
+                "bestScore = " << bestScore << endl;
 
             // Update the highest score up to now.
             bestScore = std::max( bestScore, currScore );
@@ -1115,12 +1139,24 @@ int checkers::minmax( bool isMaximizing, int depth ){
             // In the game copy, make a play with the next available move.
             newGame.play( move_z.i, move_z.j, move_z.k );
 
+            for( int i = 0 ; i < 4 - depth; i++ ){
+                cout << "  ";
+            }
+            cout << "(" << move_z.i << "," << move_z.j << "," <<
+            checkers::get_CHK_DIREC_Str( move_z.k ) << ") MIN" << endl;
+
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
                 currScore = newGame.minmax( true, depth - 1 );
             }else if( newGame.getCurrTurn() == 1 ){
                 currScore = newGame.minmax( false, depth - 1 );
             }
+
+            for( int i = 0 ; i < 4 - depth; i++ ){
+                cout << "  ";
+            }
+            cout << "MIN: CS = " << currScore << ", " <<
+                "BS = " << bestScore << endl;
 
             // Update the highest score up to now.
             bestScore = std::min( bestScore, currScore );
@@ -1135,7 +1171,7 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
 
 
-sf::Vector2u checkers::bestMove(){
+sf::Vector2u checkers::bestMove( int depth ){
 
     // Initialize the best move coorindate.
     sf::Vector2u bestCoord = sf::Vector2u( UINT_MAX, UINT_MAX );
@@ -1155,12 +1191,14 @@ sf::Vector2u checkers::bestMove(){
 
     // Obtain the current best score.
     if( is_BLK_turn ){
-        bestScore = this->minmax( true, this->minmax_depth );
+        bestScore = this->minmax( true, depth );
     }else{
-        bestScore = this->minmax( false, this->minmax_depth );
+        bestScore = this->minmax( false, depth );
     }
 
-    
+    int lol = 0;
+
+    return sf::Vector2u( 0, 0 );
 
 }
 

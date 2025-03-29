@@ -346,7 +346,7 @@ Update the state of the game:
     /*
     Determine the best move to make in the current turn at the current board state.
     */
-    sf::Vector2u bestMove();
+    sf::Vector2u bestMove( int depth );
 
 
 // ====================================================================== <<<<<
@@ -376,7 +376,7 @@ protected:
 //      AI Related Functions (Protected)
 // ====================================================================== >>>>>
 
-    int minmax_depth;
+    int minmax_depth = 5;
 
 // ====================================================================== <<<<<
 
@@ -470,6 +470,11 @@ namespace tests{
     Check the minmax function.
     */
     void checkers_test7();
+
+    /*
+    Check the bestMove function.
+    */
+    void checkers_test8();
 
 }
 

@@ -442,7 +442,7 @@ void tests::checkers_test7(){
     myGame.setTurn_cnt( 1 );    // Force red turn.
     myGame.upd_atk_posb();
     myGame.upd_game_state();
-    isMaximizing = false;    depth = 2;
+    isMaximizing = false;    depth = 3;
     finalScore = myGame.minmax( isMaximizing, depth );
     cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
     myGame.printBoard();
@@ -451,5 +451,42 @@ void tests::checkers_test7(){
 
 
     // myGame.printBoard();
+
+}
+
+
+void tests::checkers_test8(){
+
+    using namespace gameEngine;
+
+    checkers myGame;
+    myGame.clearBoard();
+
+    int scenario_cnt = 0;
+
+    bool isMaximizing = false;
+    int depth = 0;
+    int finalScore = 0;
+
+
+    scenario_cnt++;
+    myGame.clearBoard();
+    myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 4, 2, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 2, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 5, 3, checkers::CHK_PIECE::RED_P );
+    myGame.insertPiece( 5, 7, checkers::CHK_PIECE::RED_P );
+    myGame.setTurn_cnt( 1 );    // Force red turn.
+    myGame.upd_atk_posb();
+    myGame.upd_game_state();
+    
+    depth = 3;
+
+    myGame.printBoard();
+
+    myGame.bestMove( depth );
+
+    
+
 
 }
