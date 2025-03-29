@@ -1087,6 +1087,8 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
     if ( isMaximizing ) {
 
+        bestScore = std::numeric_limits<int>::min();
+
         for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
 
             // Current valid move.
@@ -1127,6 +1129,8 @@ int checkers::minmax( bool isMaximizing, int depth ){
         }
 
     }else{
+
+        bestScore = std::numeric_limits<int>::max();
 
         for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
 
