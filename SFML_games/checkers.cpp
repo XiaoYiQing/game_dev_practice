@@ -1283,26 +1283,26 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
 
 
-sf::Vector2u checkers::bestMove( int depth ){
+checkers::CHK_move checkers::bestMove( int depth ){
 
-    // Initialize the best move coorindate.
-    sf::Vector2u bestCoord = sf::Vector2u( UINT_MAX, UINT_MAX );
+    // Initialize the best move coordindate.
+    CHK_move optimMove = CHK_move( UINT_MAX, UINT_MAX, CHK_DIREC::NO_D );
 
     if( this->state == CHK_STATE::BWIN || this->state == CHK_STATE::RWIN || 
         this->state == CHK_STATE::DRAW ){
         // Return impossible coordinate if the game is already over or not active.
-        return bestCoord;
+        return optimMove;
     }
 
     // Determine the turn.
-    bool is_BLK_turn = this->getCurrTurn() == 0;
+    bool is_BLK_init_turn = this->isBlackTurn();
 
     // Initialize score recording variables.
     int bestScore = 0;
-    int score = 0;
+    int score_z = 0;
 
     // Obtain the current best score.
-    if( is_BLK_turn ){
+    if( is_BLK_init_turn ){
         bestScore = this->minmax( true, depth );
     }else{
         bestScore = this->minmax( false, depth );
@@ -1312,13 +1312,42 @@ sf::Vector2u checkers::bestMove( int depth ){
     // Obtain the entire set of currently valid moves.
     vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
     
-    for( checkers::CHK_move move_z : validMovesVect ){
+    for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
 
+        // Current valid move.
+        checkers::CHK_move move_z = validMovesVect.at(z);
+    
+        // Make a copy of the current game.
+        checkers newGame = *this;
 
+        // Perform the current play.
+        newGame.play( move_z.i, move_z.j, move_z.k );
 
+        // Perform next layer minmax.
+        if( newGame.isBlackTurn() ){
+            score_z = newGame.minmax( true, depth - 1 );
+        }else{
+            score_z = newGame.minmax( false, depth - 1 );
+        }
+
+        if( is_BLK_init_turn ){
+            if( score_z >= bestScore ){
+                
+                optimMove = move_z;
+                bestScore = score_z;
+
+            }
+        }else{
+            if( score_z <= bestScore ){
+
+                optimMove = move_z;
+                bestScore = score_z;
+                
+            }
+        }
     }
 
-    return sf::Vector2u( 0, 0 );
+    return optimMove;
 
 }
 

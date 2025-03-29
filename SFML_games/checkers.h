@@ -349,7 +349,7 @@ Update the state of the game:
     /*
     Determine the best move to make in the current turn at the current board state.
     */
-    sf::Vector2u bestMove( int depth );
+    CHK_move bestMove( int depth );
 
 
 // ====================================================================== <<<<<
