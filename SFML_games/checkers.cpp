@@ -86,6 +86,7 @@ checkers::checkers(){
     no_change_turn_cnt = 0;
     pieceCounter = { 0, 0, 0, 0 };
     state = CHK_STATE::ONGOING;
+    minmax_depth = 5;
 
     // Initialize the checker board.
     for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
@@ -995,6 +996,51 @@ int checkers::gameStateEval(){
 }
 
 
+
+vector<checkers::CHK_move> checkers::get_valid_moves(){
+
+    vector<checkers::CHK_move> valid_move_vect;
+    
+    switch( this->getCurrTurn() ){
+    
+    // Black turn
+    case 0:
+
+        if( B_atk_list.size() == 0 ){
+            // Return list of possible displacements if no attack possible.
+            this->upd_displ_posb();
+            valid_move_vect = B_displ_list;
+        }else{
+            // Return list of possible attacks if even one attack is possible.
+            valid_move_vect = B_atk_list;
+        }
+        break;
+
+    // Red turn
+    case 1:
+        
+        if( R_atk_list.size() == 0 ){
+            // Return list of possible displacements if no attack possible.
+            this->upd_displ_posb();
+            valid_move_vect = R_displ_list;
+        }else{
+            // Return list of possible attacks if even one attack is possible.
+            valid_move_vect = R_atk_list;
+        }
+        break;
+
+    default:
+        cerr << "Invalid turn ID." << endl;
+        return valid_move_vect;
+
+    };
+
+
+    return valid_move_vect;
+
+}
+
+
 int checkers::minmax( bool isMaximizing, int depth ){
 
     if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
@@ -1088,48 +1134,37 @@ int checkers::minmax( bool isMaximizing, int depth ){
 }
 
 
-vector<checkers::CHK_move> checkers::get_valid_moves(){
 
-    vector<checkers::CHK_move> valid_move_vect;
+sf::Vector2u checkers::bestMove(){
+
+    // Initialize the best move coorindate.
+    sf::Vector2u bestCoord = sf::Vector2u( UINT_MAX, UINT_MAX );
+
+    if( this->state == CHK_STATE::BWIN || this->state == CHK_STATE::RWIN || 
+        this->state == CHK_STATE::DRAW ){
+        // Return impossible coordinate if the game is already over or not active.
+        return bestCoord;
+    }
+
+    // Determine the turn.
+    bool is_BLK_turn = this->getCurrTurn() == 0;
+
+    // Initialize score recording variables.
+    int bestScore = 0;
+    int score = 0;
+
+    // Obtain the current best score.
+    if( is_BLK_turn ){
+        bestScore = this->minmax( true, this->minmax_depth );
+    }else{
+        bestScore = this->minmax( false, this->minmax_depth );
+    }
+
     
-    switch( this->getCurrTurn() ){
-    
-    // Black turn
-    case 0:
-
-        if( B_atk_list.size() == 0 ){
-            // Return list of possible displacements if no attack possible.
-            this->upd_displ_posb();
-            valid_move_vect = B_displ_list;
-        }else{
-            // Return list of possible attacks if even one attack is possible.
-            valid_move_vect = B_atk_list;
-        }
-        break;
-
-    // Red turn
-    case 1:
-        
-        if( R_atk_list.size() == 0 ){
-            // Return list of possible displacements if no attack possible.
-            this->upd_displ_posb();
-            valid_move_vect = R_displ_list;
-        }else{
-            // Return list of possible attacks if even one attack is possible.
-            valid_move_vect = R_atk_list;
-        }
-        break;
-
-    default:
-        cerr << "Invalid turn ID." << endl;
-        return valid_move_vect;
-
-    };
-
-
-    return valid_move_vect;
 
 }
+
+
 
 // ====================================================================== <<<<<
 
@@ -1151,6 +1186,11 @@ unsigned int checkers::getTurn_cnt() const
     {return this->turn_cnt;}
 void checkers::setTurn_cnt( unsigned int turn_cnt )
     {this->turn_cnt = turn_cnt;}
+
+int checkers::getMinmax_depth() const
+    {return this->minmax_depth;}
+void checkers::setMindmax_depth( int in_minmax_depth )
+    {this->minmax_depth = in_minmax_depth;}
 
 // ====================================================================== <<<<<
 

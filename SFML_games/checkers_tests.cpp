@@ -401,6 +401,7 @@ void tests::checkers_test7(){
     // myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
     // myGame.insertPiece( 2, 4, checkers::CHK_PIECE::CBLK_P );
     // myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+    // myGame.insertPiece( 5, 5, checkers::CHK_PIECE::RED_P );
     // myGame.setTurn_cnt( 1 );    // Force red turn.
     // myGame.upd_atk_posb();
     // myGame.upd_game_state();
@@ -409,15 +410,35 @@ void tests::checkers_test7(){
     // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
     // myGame.printBoard();
 
-    /* 
-    [Scenario 9]: 1 red in attack position against a black pieces that leads to the possible 
-    attack of another.
+    // /* 
+    // [Scenario 9]: 1 red in attack position against a black piece that leads to the possible 
+    // attack of another black piece.
+    // */
+    // scenario_cnt++;
+    // myGame.clearBoard();
+    // myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
+    // myGame.insertPiece( 2, 4, checkers::CHK_PIECE::BLK_P );
+    // myGame.insertPiece( 5, 3, checkers::CHK_PIECE::RED_P );
+    // myGame.insertPiece( 5, 7, checkers::CHK_PIECE::RED_P );
+    // myGame.setTurn_cnt( 1 );    // Force red turn.
+    // myGame.upd_atk_posb();
+    // myGame.upd_game_state();
+    // isMaximizing = false;    depth = 2;
+    // finalScore = myGame.minmax( isMaximizing, depth );
+    // cout << "Scenario " << scenario_cnt << " score: " << finalScore << endl;
+    // myGame.printBoard();
+
+    /*
+    [Scenario 10]: 1 red in attack position against two black pieces, one of which 
+    leads to the possible attack of another black piece.
     */
     scenario_cnt++;
     myGame.clearBoard();
     myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 4, 2, checkers::CHK_PIECE::BLK_P );
     myGame.insertPiece( 2, 4, checkers::CHK_PIECE::BLK_P );
     myGame.insertPiece( 5, 3, checkers::CHK_PIECE::RED_P );
+    myGame.insertPiece( 5, 7, checkers::CHK_PIECE::RED_P );
     myGame.setTurn_cnt( 1 );    // Force red turn.
     myGame.upd_atk_posb();
     myGame.upd_game_state();

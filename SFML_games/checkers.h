@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <magic_enum.hpp>
+#include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
 
@@ -318,11 +319,21 @@ Update the state of the game:
 //      AI Related Functions
 // ====================================================================== >>>>>
 
+
+
     /*
     Provide a numerical score to the current state of the game.
     Calling this function automatically calls the upd_game_state();
     */
     int gameStateEval();
+
+    /*
+    Obtain all currently valid moves.
+    Turn is based on the current checkers instance's turn count.
+    NOTE: Attacks take precedence over displacement, so if a single piece
+    can attack, no other piece of the same color can be displaced.
+    */
+    vector<CHK_move> get_valid_moves();
 
     /*
     minmax function for helping the game A.I. to make the best possible move.
@@ -333,12 +344,10 @@ Update the state of the game:
     int minmax( bool isMaximizing, int depth );
 
     /*
-    Obtain all currently valid moves.
-    Turn is based on the current checkers instance's turn count.
-    NOTE: Attacks take precedence over displacement, so if a single piece
-    can attack, no other piece of the same color can be displaced.
+    Determine the best move to make in the current turn at the current board state.
     */
-    vector<CHK_move> get_valid_moves();
+    sf::Vector2u bestMove();
+
 
 // ====================================================================== <<<<<
 
@@ -356,10 +365,20 @@ Update the state of the game:
     unsigned int getTurn_cnt() const;
     void setTurn_cnt( unsigned int );
 
+    int getMinmax_depth() const;
+    void setMindmax_depth( int in_minmax_depth );
+
 // ====================================================================== <<<<<
     
 protected:
 
+// ====================================================================== >>>>>
+//      AI Related Functions (Protected)
+// ====================================================================== >>>>>
+
+    int minmax_depth;
+
+// ====================================================================== <<<<<
 
     // The number of times a play has been made. Black start at turn 0.
     unsigned int turn_cnt;
