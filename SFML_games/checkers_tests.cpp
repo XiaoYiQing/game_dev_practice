@@ -484,8 +484,9 @@ void tests::checkers_test8(){
 
     myGame.printBoard();
 
-    myGame.bestMove( depth );
+    sf::Vector2u move_tmp = myGame.bestMove( depth );
 
+    int lol = 1;
     
 
 

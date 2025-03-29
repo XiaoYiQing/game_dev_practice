@@ -640,6 +640,10 @@ int checkers::getCurrTurn() const{
     return turn_cnt % 2;
 }
 
+bool checkers::isBlackTurn() const{
+    return ( turn_cnt % 2 == 0 );
+}
+
 int checkers::getTurnID( CHK_PIECE piece ) const{
     switch(piece){
         case( CHK_PIECE::NO_P ):
@@ -1041,7 +1045,7 @@ vector<checkers::CHK_move> checkers::get_valid_moves(){
 }
 
 
-int checkers::minmax( bool isMaximizing, int depth ){
+int checkers::minmax_debug( bool isMaximizing, int depth ){
 
     if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
     this->getCurrTurn() == 1 && isMaximizing ){
@@ -1174,6 +1178,110 @@ int checkers::minmax( bool isMaximizing, int depth ){
 }
 
 
+int checkers::minmax( bool isMaximizing, int depth ){
+
+    if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
+    this->getCurrTurn() == 1 && isMaximizing ){
+        cout << "Mismatch of minmax objective with the current turn order." << endl;
+        return 0;
+    }
+
+    switch( this->state ){
+
+        case CHK_STATE::BWIN:
+        case CHK_STATE::RWIN:
+        case CHK_STATE::DRAW:
+            // When game is over, return value immediately.
+            return this->gameStateEval();
+            break;
+        case CHK_STATE::ONGOING:
+        case CHK_STATE::LOCKED:
+            // If we reached the maximum allowed depth, return value immediately.
+            if( depth <= 0 ){
+                return this->gameStateEval();
+            }
+            break;
+        default:
+            cout << "Unrecognized game state. Abort." << endl;
+            return false;
+
+    }
+
+
+    int bestScore = 0;
+    int currScore = 0;
+
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
+
+    if ( isMaximizing ) {
+
+        bestScore = std::numeric_limits<int>::min();
+
+        for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = validMovesVect.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = *this;
+
+            // In the game copy, make a play with the next available move.
+            if( newGame.play( move_z.i, move_z.j, move_z.k ) ){
+
+            }else{
+
+            }
+            
+
+            // Perform next layer minmax.
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmax( true, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmax( false, depth - 1 );
+            }
+
+            // Update the highest score up to now.
+            bestScore = std::max( bestScore, currScore );
+
+        }
+
+    }else{
+
+        bestScore = std::numeric_limits<int>::max();
+
+        for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = validMovesVect.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = *this;
+
+            // In the game copy, make a play with the next available move.
+            newGame.play( move_z.i, move_z.j, move_z.k );
+
+
+            // Perform next layer minmax.
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmax( true, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmax( false, depth - 1 );
+            }
+
+
+            // Update the highest score up to now.
+            bestScore = std::min( bestScore, currScore );
+            
+        }
+
+    }
+
+    return bestScore;
+
+}
+
+
 
 sf::Vector2u checkers::bestMove( int depth ){
 
@@ -1200,7 +1308,15 @@ sf::Vector2u checkers::bestMove( int depth ){
         bestScore = this->minmax( false, depth );
     }
 
-    int lol = 0;
+
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
+    
+    for( checkers::CHK_move move_z : validMovesVect ){
+
+
+
+    }
 
     return sf::Vector2u( 0, 0 );
 

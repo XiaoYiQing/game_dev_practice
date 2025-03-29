@@ -249,6 +249,9 @@ Update the state of the game:
     */
     int getCurrTurn() const;
 
+    // Return true if current game instance is at black's turn.
+    bool isBlackTurn() const;
+
     /*
     Obtain the turn id of the target piece.
     [-1 = no piece]
@@ -319,8 +322,6 @@ Update the state of the game:
 //      AI Related Functions
 // ====================================================================== >>>>>
 
-
-
     /*
     Provide a numerical score to the current state of the game.
     Calling this function automatically calls the upd_game_state();
@@ -342,6 +343,8 @@ Update the state of the game:
     NOTE: maximizing when black, minimizing when red.
     */
     int minmax( bool isMaximizing, int depth );
+
+    int minmax_debug( bool isMaximizing, int depth );
 
     /*
     Determine the best move to make in the current turn at the current board state.
