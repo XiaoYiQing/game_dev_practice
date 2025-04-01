@@ -1353,11 +1353,11 @@ checkers::CHK_move checkers::bestMove( int depth ){
 
     // Obtain the current best score.
     if( is_BLK_init_turn ){
-        // bestScore = this->minmax( true, depth );
-        bestScore = this->minmax_debug( true, depth );
+        bestScore = this->minmax( true, depth );
+        // bestScore = this->minmax_debug( true, depth );
     }else{
-        // bestScore = this->minmax( false, depth );
-        bestScore = this->minmax_debug( false, depth );
+        bestScore = this->minmax( false, depth );
+        // bestScore = this->minmax_debug( false, depth );
     }
 
     // Obtain the entire set of currently valid moves.

@@ -512,7 +512,7 @@ namespace tests{
     /*
     Check the AI_play() function.
     */
-    void checkers_test9();
+    void checkers_test9( int tar_scenario_id = 0 );
 
 }
 

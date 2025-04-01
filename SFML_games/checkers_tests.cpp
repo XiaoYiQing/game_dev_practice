@@ -462,14 +462,12 @@ void tests::checkers_test8( int tar_scenario_id ){
     checkers myGame;
     myGame.clearBoard();
 
-    int scenario_cnt = 0;
-
     bool isMaximizing = false;
     int depth = 0;
     int finalScore = 0;
     checkers::CHK_move move_tmp( 0, 0, checkers::CHK_DIREC::NO_D );
 
-
+    int scenario_cnt = 0;
     if( tar_scenario_id == scenario_cnt ){
 
         myGame.clearBoard();
@@ -556,11 +554,28 @@ void tests::checkers_test9( int tar_scenario_id ){
     checkers myGame;
     myGame.clearBoard();
 
-    int scenario_cnt = 0;
 
     bool isMaximizing = false;
     int depth = 0;
 
+
+    int scenario_cnt = 0;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 7, 2, checkers::CHK_PIECE::RED_P );
+        myGame.insertPiece( 6, 1, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 5, 5, checkers::CHK_PIECE::RED_P );
+        myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
+        myGame.setTurn_cnt( 1 );    // Force red turn.
+        
+        myGame.AI_play();
+        myGame.printBoard();
+
+        myGame.AI_play();
+        myGame.printBoard();
+
+    }
 
 
 }
