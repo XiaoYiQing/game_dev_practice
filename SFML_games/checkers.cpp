@@ -1404,16 +1404,25 @@ checkers::CHK_move checkers::bestMove( int depth ){
 
 
 
-sf::Vector2u checkers::AI_play(){
+checkers::CHK_move checkers::AI_play(){
 
     // Return empty vector if no AI play enabled.
     if( !( this->vsAI ) ){
-        return sf::Vector2u();
+        return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
     }
 
 
     // Let AI perform the next move.
     checkers::CHK_move AI_move = this->bestMove();
+
+    // Perform the play determined as the current best by the AI.
+    bool AIPlayRes = play( AI_move.i, AI_move.j, AI_move.k );
+
+    if( AIPlayRes ){
+        return AI_move;
+    }else{
+        return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
+    }
 
 }
 

@@ -370,8 +370,9 @@ Update the state of the game:
 
     /*
     Let the AI perform the next move.
+    If move fails, a move object with no direction (CHK_DIREC::NO_D) is returned.
     */
-    sf::Vector2u AI_play();
+    CHK_move AI_play();
 
 // ====================================================================== <<<<<
 
