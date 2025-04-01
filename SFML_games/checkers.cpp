@@ -1085,6 +1085,13 @@ vector<checkers::CHK_move> checkers::get_valid_moves(){
 
 int checkers::minmax_debug( bool isMaximizing, int depth ){
 
+    return minmax_debug_loop( isMaximizing, depth, depth );
+
+}
+
+
+int checkers::minmax_debug_loop( bool isMaximizing, int depth, int max_depth ){
+
     if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
     this->getCurrTurn() == 1 && isMaximizing ){
         cout << "Mismatch of minmax objective with the current turn order." << endl;
@@ -1097,7 +1104,7 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
         case CHK_STATE::RWIN:
         case CHK_STATE::DRAW:
             // When game is over, return value immediately.
-            for( int i = 0 ; i < 4 - depth; i++ ){
+            for( int i = 0 ; i < max_depth - depth; i++ ){
                 cout << "  ";
             }
             cout << "Score: " << this->gameStateEval() << endl;
@@ -1107,7 +1114,7 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
         case CHK_STATE::LOCKED:
             // If we reached the maximum allowed depth, return value immediately.
             if( depth <= 0 ){
-                for( int i = 0 ; i < 4 - depth; i++ ){
+                for( int i = 0 ; i < max_depth - depth; i++ ){
                     cout << "  ";
                 }
                 cout << "Score: " << this->gameStateEval() << endl;
@@ -1146,7 +1153,7 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
                 // cout << "Failed to play! " << newGame.getCurrTurn() << endl;
             }
             
-            for( int i = 0 ; i < 4 - depth; i++ ){
+            for( int i = 0 ; i < max_depth - depth; i++ ){
                 cout << "  ";
             }
             cout << "(" << move_z.i << "," << move_z.j << "," <<
@@ -1154,12 +1161,12 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
 
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
-                currScore = newGame.minmax_debug( true, depth - 1 );
+                currScore = newGame.minmax_debug_loop( true, depth - 1, max_depth );
             }else if( newGame.getCurrTurn() == 1 ){
-                currScore = newGame.minmax_debug( false, depth - 1 );
+                currScore = newGame.minmax_debug_loop( false, depth - 1, max_depth );
             }
 
-            for( int i = 0 ; i < 4 - depth; i++ ){
+            for( int i = 0 ; i < max_depth - depth; i++ ){
                 cout << "  ";
             }
             cout << "MAX: currScore = " << currScore << ", " <<
@@ -1185,7 +1192,7 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
             // In the game copy, make a play with the next available move.
             newGame.play( move_z.i, move_z.j, move_z.k );
 
-            for( int i = 0 ; i < 4 - depth; i++ ){
+            for( int i = 0 ; i < max_depth - depth; i++ ){
                 cout << "  ";
             }
             cout << "(" << move_z.i << "," << move_z.j << "," <<
@@ -1193,12 +1200,12 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
 
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
-                currScore = newGame.minmax_debug( true, depth - 1 );
+                currScore = newGame.minmax_debug_loop( true, depth - 1, max_depth );
             }else if( newGame.getCurrTurn() == 1 ){
-                currScore = newGame.minmax_debug( false, depth - 1 );
+                currScore = newGame.minmax_debug_loop( false, depth - 1, max_depth );
             }
 
-            for( int i = 0 ; i < 4 - depth; i++ ){
+            for( int i = 0 ; i < max_depth - depth; i++ ){
                 cout << "  ";
             }
             cout << "MIN: CS = " << currScore << ", " <<
@@ -1214,6 +1221,7 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
     return bestScore;
 
 }
+
 
 
 int checkers::minmax( bool isMaximizing, int depth ){
@@ -1415,7 +1423,7 @@ void checkers::setTurn_cnt( unsigned int turn_cnt )
 
 int checkers::getMinmax_depth() const
     {return this->minmax_depth;}
-void checkers::setMindmax_depth( int in_minmax_depth )
+void checkers::setMinmax_depth( int in_minmax_depth )
     {this->minmax_depth = in_minmax_depth;}
 
 // ====================================================================== <<<<<

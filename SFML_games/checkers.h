@@ -344,7 +344,19 @@ Update the state of the game:
     */
     int minmax( bool isMaximizing, int depth );
 
+    /*
+    minmax function for helping the game A.I. to make the best possible move.
+    This function does not determine the best move, but helps in attributing numerical
+    values to each possible move up to a specified depth/turn into the future.
+    NOTE: maximizing when black, minimizing when red.
+    NOTE: debug version prints every step on the console.
+    */
     int minmax_debug( bool isMaximizing, int depth );
+
+    /*
+    The actual recursive portion of the minmax function.
+    */
+    int minmax_debug_loop( bool isMaximizing, int depth, int max_depth );
 
     /*
     Determine the best move to make in the current turn at the current board state.
@@ -369,7 +381,7 @@ Update the state of the game:
     void setTurn_cnt( unsigned int );
 
     int getMinmax_depth() const;
-    void setMindmax_depth( int in_minmax_depth );
+    void setMinmax_depth( int in_minmax_depth );
 
 // ====================================================================== <<<<<
     
@@ -379,6 +391,9 @@ protected:
 //      AI Related Functions (Protected)
 // ====================================================================== >>>>>
 
+    /*
+    The depth of the minmax function used by this game instance.
+    */
     int minmax_depth = 5;
 
 // ====================================================================== <<<<<
