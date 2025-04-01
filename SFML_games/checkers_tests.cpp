@@ -490,15 +490,38 @@ void tests::checkers_test8(){
 
     
     
+    // scenario_cnt++;
+    // myGame.clearBoard();
+    // myGame.insertPiece( 3, 3, checkers::CHK_PIECE::BLK_P );
+    // myGame.insertPiece( 3, 1, checkers::CHK_PIECE::CBLK_P );
+    // myGame.insertPiece( 1, 3, checkers::CHK_PIECE::CBLK_P );
+    // myGame.insertPiece( 4, 2, checkers::CHK_PIECE::RED_P );
+    // myGame.insertPiece( 4, 6, checkers::CHK_PIECE::RED_P );
+    // myGame.insertPiece( 4, 4, checkers::CHK_PIECE::RED_P );
+    // myGame.setTurn_cnt( 0 );    // Force black turn.
+    // myGame.upd_atk_posb();
+    // myGame.upd_game_state();
+
+    // depth = 3;
+
+    // myGame.printBoard();
+
+    // move_tmp = myGame.bestMove( depth );
+    // cout << "(" << move_tmp.i << "," << move_tmp.j << "," <<
+    //     checkers::get_CHK_DIREC_Str( move_tmp.k ) << ")" << endl;
+
+    
+    /*
+    Multiple choices of attack from red, but one black piece is on the verge
+    of crowning.
+    */
     scenario_cnt++;
     myGame.clearBoard();
-    myGame.insertPiece( 3, 3, checkers::CHK_PIECE::BLK_P );
-    myGame.insertPiece( 3, 1, checkers::CHK_PIECE::CBLK_P );
-    myGame.insertPiece( 1, 3, checkers::CHK_PIECE::CBLK_P );
-    myGame.insertPiece( 4, 2, checkers::CHK_PIECE::RED_P );
-    myGame.insertPiece( 4, 6, checkers::CHK_PIECE::RED_P );
-    myGame.insertPiece( 4, 4, checkers::CHK_PIECE::RED_P );
-    myGame.setTurn_cnt( 0 );    // Force black turn.
+    myGame.insertPiece( 7, 2, checkers::CHK_PIECE::RED_P );
+    myGame.insertPiece( 6, 1, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 6, 5, checkers::CHK_PIECE::RED_P );
+    myGame.insertPiece( 5, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.setTurn_cnt( 1 );    // Force red turn.
     myGame.upd_atk_posb();
     myGame.upd_game_state();
 
@@ -509,9 +532,5 @@ void tests::checkers_test8(){
     move_tmp = myGame.bestMove( depth );
     cout << "(" << move_tmp.i << "," << move_tmp.j << "," <<
         checkers::get_CHK_DIREC_Str( move_tmp.k ) << ")" << endl;
-
-    
-    
-
 
 }

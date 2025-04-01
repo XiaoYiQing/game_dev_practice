@@ -759,7 +759,7 @@ void checkers::upd_atk_posb(){
         direcVec = theoAtkCheckAll( i, j, currPiece );
         // Check curr piece color.
         int currColor = getTurnID( currPiece );
-        
+
         // Black
         if( currColor == 0 ){
             for( checkers::CHK_DIREC tmp_direct : direcVec ){
@@ -1002,9 +1002,9 @@ int checkers::gameStateEval(){
     for this class.
     */
     int RED_P_val = -5;
-    int CRED_P_val = -10;
+    int CRED_P_val = -20;
     int BLK_P_val = 5;
-    int CBLK_P_val = 10;
+    int CBLK_P_val = 20;
 
     int RED_win_val = -130;
     int BLK_win_val = 130;
@@ -1154,9 +1154,9 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
 
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
-                currScore = newGame.minmax( true, depth - 1 );
+                currScore = newGame.minmax_debug( true, depth - 1 );
             }else if( newGame.getCurrTurn() == 1 ){
-                currScore = newGame.minmax( false, depth - 1 );
+                currScore = newGame.minmax_debug( false, depth - 1 );
             }
 
             for( int i = 0 ; i < 4 - depth; i++ ){
@@ -1193,9 +1193,9 @@ int checkers::minmax_debug( bool isMaximizing, int depth ){
 
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
-                currScore = newGame.minmax( true, depth - 1 );
+                currScore = newGame.minmax_debug( true, depth - 1 );
             }else if( newGame.getCurrTurn() == 1 ){
-                currScore = newGame.minmax( false, depth - 1 );
+                currScore = newGame.minmax_debug( false, depth - 1 );
             }
 
             for( int i = 0 ; i < 4 - depth; i++ ){
@@ -1341,11 +1341,12 @@ checkers::CHK_move checkers::bestMove( int depth ){
 
     // Obtain the current best score.
     if( is_BLK_init_turn ){
-        bestScore = this->minmax( true, depth );
+        // bestScore = this->minmax( true, depth );
+        bestScore = this->minmax_debug( true, depth );
     }else{
-        bestScore = this->minmax( false, depth );
+        // bestScore = this->minmax( false, depth );
+        bestScore = this->minmax_debug( false, depth );
     }
-
 
     // Obtain the entire set of currently valid moves.
     vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
