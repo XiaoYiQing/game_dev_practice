@@ -507,7 +507,12 @@ namespace tests{
     /*
     Check the bestMove function.
     */
-    void checkers_test8();
+    void checkers_test8( int tar_scenario_id = 0 );
+
+    /*
+    Check the AI_play() function.
+    */
+    void checkers_test9();
 
 }
 

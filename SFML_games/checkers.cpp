@@ -1329,7 +1329,7 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
 checkers::CHK_move checkers::bestMove( ){
 
-    bestMove( this->minmax_depth );
+    return bestMove( this->minmax_depth );
 
 }
 
