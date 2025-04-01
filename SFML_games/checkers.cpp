@@ -1006,8 +1006,8 @@ int checkers::gameStateEval(){
     int BLK_P_val = 5;
     int CBLK_P_val = 20;
 
-    int RED_win_val = -130;
-    int BLK_win_val = 130;
+    int RED_win_val = -1000;
+    int BLK_win_val = 1000;
     int draw_val = 0;
 
 

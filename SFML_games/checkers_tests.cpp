@@ -519,8 +519,8 @@ void tests::checkers_test8(){
     myGame.clearBoard();
     myGame.insertPiece( 7, 2, checkers::CHK_PIECE::RED_P );
     myGame.insertPiece( 6, 1, checkers::CHK_PIECE::BLK_P );
-    myGame.insertPiece( 6, 5, checkers::CHK_PIECE::RED_P );
-    myGame.insertPiece( 5, 4, checkers::CHK_PIECE::BLK_P );
+    myGame.insertPiece( 5, 5, checkers::CHK_PIECE::RED_P );
+    myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
     myGame.setTurn_cnt( 1 );    // Force red turn.
     myGame.upd_atk_posb();
     myGame.upd_game_state();
