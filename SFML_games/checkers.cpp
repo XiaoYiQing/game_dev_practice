@@ -743,7 +743,45 @@ void checkers::upd_atk_posb(){
     Initialize vector keeping track of all directions of possible attack
     at each piece investogated.
     */
-    vector<CHK_DIREC> direcVec;    
+    vector<CHK_DIREC> direcVec;
+
+    // Check the special case when a piece is locking the game in an attack sequence.
+    if( this->state == CHK_STATE::LOCKED ){
+
+        // Obtain the target piece coordinate.
+        int i = lock_tar.at(0);
+        int j = lock_tar.at(1);
+
+        // Obtain current piece.
+        CHK_PIECE currPiece = CHK_board[i][j];
+
+        // Check current piece's all possible direction of attack
+        direcVec = theoAtkCheckAll( i, j, currPiece );
+        // Check curr piece color.
+        int currColor = getTurnID( currPiece );
+        
+        // Black
+        if( currColor == 0 ){
+            for( checkers::CHK_DIREC tmp_direct : direcVec ){
+                B_atk_list.push_back( CHK_move( i, j, tmp_direct ) );
+            }
+        // Red
+        }else if( currColor == 1 ){
+            for( checkers::CHK_DIREC tmp_direct : direcVec ){
+                R_atk_list.push_back( CHK_move( i, j, tmp_direct ) );
+            }
+        }else{
+            cerr << "A checker piece of unrecognized color somehow got a possible attack." << endl;
+            return;
+        }
+
+        return;
+
+    }
+
+
+
+        
 
     // Parse through the entire board.
     for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
