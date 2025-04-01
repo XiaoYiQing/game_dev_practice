@@ -31,7 +31,7 @@ button functionalities.
 The buttons used are based on the class SFML_button_XYQ, which are custom buttons
 I created using SFML libraries.
 */
-class CHK_SFML_eng : checkers{
+class CHK_SFML_eng : public checkers{
 
 public:
 
