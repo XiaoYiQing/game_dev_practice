@@ -70,7 +70,7 @@ public:
 
      /*
     Try to perform a button release on all buttons.
-    If any one of the nine buttons is released, return true, else false.
+    If any button is released, return true, else false.
     A button being released triggers a series of checks.
     */
     bool releaseButton();
@@ -129,8 +129,6 @@ protected:
 // ====================================================================== <<<<<
 
 
-
-    
 
     /*
     The vector of buttons representing the CHK board squares.

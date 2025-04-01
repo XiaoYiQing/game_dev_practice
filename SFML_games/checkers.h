@@ -352,17 +352,26 @@ Update the state of the game:
     NOTE: debug version prints every step on the console.
     */
     int minmax_debug( bool isMaximizing, int depth );
-
     /*
-    The actual recursive portion of the minmax function.
+    The actual recursive portion of the debug minmax function.
     */
     int minmax_debug_loop( bool isMaximizing, int depth, int max_depth );
 
     /*
     Determine the best move to make in the current turn at the current board state.
     */
+    CHK_move bestMove( );
+    /*
+    Determine the best move to make in the current turn at the current board state.
+    NOTE: depth directly specified.
+    */
     CHK_move bestMove( int depth );
 
+
+    /*
+    Let the AI perform the next move.
+    */
+    sf::Vector2u AI_play();
 
 // ====================================================================== <<<<<
 
@@ -395,6 +404,11 @@ protected:
     The depth of the minmax function used by this game instance.
     */
     int minmax_depth = 5;
+
+    /*
+    Flag indicating if this game allows use of AI.
+    */
+    bool vsAI = true;
 
 // ====================================================================== <<<<<
 

@@ -1327,7 +1327,11 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
 }
 
+checkers::CHK_move checkers::bestMove( ){
 
+    bestMove( this->minmax_depth );
+
+}
 
 checkers::CHK_move checkers::bestMove( int depth ){
 
@@ -1399,6 +1403,19 @@ checkers::CHK_move checkers::bestMove( int depth ){
 }
 
 
+
+sf::Vector2u checkers::AI_play(){
+
+    // Return empty vector if no AI play enabled.
+    if( !( this->vsAI ) ){
+        return sf::Vector2u();
+    }
+
+
+    // Let AI perform the next move.
+    checkers::CHK_move AI_move = this->bestMove();
+
+}
 
 // ====================================================================== <<<<<
 

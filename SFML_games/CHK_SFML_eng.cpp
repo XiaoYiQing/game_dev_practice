@@ -129,7 +129,7 @@ bool CHK_SFML_eng::releaseButton(){
                     sf::Vector2i ij_diff = sf::Vector2i( curr_ij.x - act_set_lock_coords.x, 
                         curr_ij.y - act_set_lock_coords.y );
                     
-
+                    // Determine direction of action.
                     checkers::CHK_DIREC vect_direct;
                     if( ij_diff.x == 1 && ij_diff.y == -1 ){
                         vect_direct = CHK_DIREC::DOWNLEFT;
@@ -143,7 +143,7 @@ bool CHK_SFML_eng::releaseButton(){
                         vect_direct = CHK_DIREC::NO_D;
                     }
 
-                    // cout << this->get_CHK_DIREC_Str( vect_direct ) << endl;
+                    // Attempts a play on the target button along the target direction.
                     this->play( act_set_lock_coords.x, act_set_lock_coords.y, vect_direct );
                     this->updateCHKBoard();
 
