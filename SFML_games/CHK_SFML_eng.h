@@ -2,12 +2,12 @@
 #define CHK_SFML_ENG_H
 
 
-
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>
-
+#include <thread>
 
 #include "checkers.h"
 #include "SFML_button_XYQ.h"
@@ -88,6 +88,7 @@ public:
 
     /*
     Let the AI perform the next play.
+    NOTE: this function is meant to be used on a separate thread.
     */
     static bool AI_play( CHK_SFML_eng& tarGame );
 

@@ -221,13 +221,6 @@ bool CHK_SFML_eng::releaseButton_alt(){
                     // Update the visual components representing the game.
                     this->updateCHKBoard();
 
-                    // if( played ){
-                        
-                    //     CHK_SFML_eng::AI_play( *this );
-
-                    // }
-                    
-
                 }else{
 
                     act_set_lock_but = buttonX;
@@ -283,7 +276,7 @@ bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
         return false;
     }
 
-    // Continue makeing the AI play if the first AI move initiated a locked state.
+    // Continue making the AI play if the first AI move initiated a locked state.
     while( tarGame.state == CHK_STATE::LOCKED ){
 
         AI_move = tarGame.checkers::AI_play();
@@ -1083,7 +1076,11 @@ void game::play_Checkers_alt(){
                     // bool gameButRel = CHK_game_obj.releaseButton();
                     bool playMade = CHK_game_obj.releaseButton_alt();
                     if( playMade ){
-                        CHK_game_obj.AI_play( CHK_game_obj );
+
+                        // Create a new thread that runs the runInThread function
+                        std::thread myThread( CHK_SFML_eng::AI_play, ref( CHK_game_obj ) );
+                        myThread.detach();
+
                     }
 
                 }
