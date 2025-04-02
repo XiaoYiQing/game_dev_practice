@@ -81,6 +81,11 @@ public:
     */
     bool releaseButton_alt();
 
+    /*
+    Let the AI perform the next play.
+    */
+    static bool AI_play( CHK_SFML_eng& tarGame );
+
 // ====================================================================== <<<<<
 
 
@@ -171,6 +176,11 @@ namespace game{
     Initialize a game of checkers.
     */
     void play_Checkers();
+
+    /*
+    TODO: Please delete this after you are done with your testing.
+    */
+    void play_Checkers_alt();
 
 }
 
