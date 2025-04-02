@@ -1080,8 +1080,11 @@ void game::play_Checkers_alt(){
 
                     }
 
-                    bool gameButRel = CHK_game_obj.releaseButton();
-
+                    // bool gameButRel = CHK_game_obj.releaseButton();
+                    bool playMade = CHK_game_obj.releaseButton_alt();
+                    if( playMade ){
+                        CHK_game_obj.AI_play( CHK_game_obj );
+                    }
 
                 }
             }
