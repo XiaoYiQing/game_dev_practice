@@ -393,6 +393,11 @@ Update the state of the game:
     int getMinmax_depth() const;
     void setMinmax_depth( int in_minmax_depth );
 
+    void enabledAI();
+    void disableAI();
+    void toggleAI();
+    bool is_vsAI() const;
+
 // ====================================================================== <<<<<
     
 protected:

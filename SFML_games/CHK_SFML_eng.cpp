@@ -260,6 +260,11 @@ void CHK_SFML_eng::unlock_buttons(){
 
 
 bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
+    
+    // Only allow AI play if AI is enabled.
+    if( !( tarGame.vsAI ) ){
+        return false;
+    }
 
     if( tarGame.state == CHK_STATE::LOCKED ){
         cerr << "The game cannot perform an AI play while in the locked state." << endl;

@@ -1452,6 +1452,15 @@ int checkers::getMinmax_depth() const
 void checkers::setMinmax_depth( int in_minmax_depth )
     {this->minmax_depth = in_minmax_depth;}
 
+void checkers::enabledAI()
+    { this->vsAI = true; }
+void checkers::disableAI()
+    { this->vsAI = false; }
+void checkers::toggleAI()
+    { this->vsAI = !( this->vsAI ); }
+bool checkers::is_vsAI() const
+    { return this->vsAI; }
+
 // ====================================================================== <<<<<
 
 
