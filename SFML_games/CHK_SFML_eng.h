@@ -81,6 +81,11 @@ public:
     */
     bool releaseButton_alt();
 
+    // Lock all buttons.
+    void lock_buttons();
+    // Unlock all buttons.
+    void unlock_buttons();
+
     /*
     Let the AI perform the next play.
     */

@@ -251,6 +251,20 @@ bool CHK_SFML_eng::releaseButton_alt(){
 
 }
 
+// Lock all buttons.
+void CHK_SFML_eng::lock_buttons(){
+    for( shared_ptr<SFML_button_XYQ> button_z : CHK_buttons ){
+        button_z->lock();
+    }
+}
+
+// Unlock all buttons.
+void CHK_SFML_eng::unlock_buttons(){
+    for( shared_ptr<SFML_button_XYQ> button_z : CHK_buttons ){
+        button_z->unlock();
+    }
+}
+
 
 bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
 
@@ -258,6 +272,9 @@ bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
         cerr << "The game cannot perform an AI play while in the locked state." << endl;
         return false;
     }
+
+    
+    
 
     // Let the AI perform the next play.
     checkers::CHK_move AI_move = tarGame.checkers::AI_play();
