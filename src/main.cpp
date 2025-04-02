@@ -87,7 +87,7 @@ int main(int, char**){
 
     // tests::checkers_test8( 2 );
 
-    tests::checkers_test9(0);
+    tests::checkers_test9(1);
 
     // game::play_Checkers();
 

@@ -75,7 +75,11 @@ public:
     */
     bool releaseButton();
 
-    
+    /*
+    TODO: Eventually delete this or integrate this as or into the main releaseButton.
+    Temporary version of releaseButton, with additional AI play feature.
+    */
+    bool releaseButton_alt();
 
 // ====================================================================== <<<<<
 

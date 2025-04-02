@@ -169,6 +169,75 @@ bool CHK_SFML_eng::releaseButton(){
 }
 
 
+bool CHK_SFML_eng::releaseButton_alt(){
+
+    bool released = false;
+    for( unsigned int i = 0; i < BOARDWIDTH; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+            shared_ptr<SFML_button_XYQ> buttonX = this->get_button_at_ij( i, j );
+
+            released = buttonX->releaseButton();
+            if( released ){
+                
+                if( act_set_lock ){
+                    
+                    // Reset the tile color of the locked coordinate.
+                    if( remainder( act_set_lock_coords.x + act_set_lock_coords.y, 2 ) ){
+                        act_set_lock_but->setUPColor( LTILECOLOR );
+                    }else{
+                        act_set_lock_but->setUPColor( DTILECOLOR );
+                    }
+                    act_set_lock_but->update();
+
+                    // Reset the lock.
+                    act_set_lock = false;
+
+                    // Obtain the coordinate of the current button pressed.
+                    sf::Vector2i curr_ij = sf::Vector2i( i, j );
+                    // Compute the vector from the initial lock position to the currently clicked position.
+                    sf::Vector2i ij_diff = sf::Vector2i( curr_ij.x - act_set_lock_coords.x, 
+                        curr_ij.y - act_set_lock_coords.y );
+                    
+                    // Determine direction of action.
+                    checkers::CHK_DIREC vect_direct;
+                    if( ij_diff.x == 1 && ij_diff.y == -1 ){
+                        vect_direct = CHK_DIREC::DOWNLEFT;
+                    }else if( ij_diff.x == 1 && ij_diff.y == 1 ){
+                        vect_direct = CHK_DIREC::DOWNRIGHT;
+                    }else if( ij_diff.x == -1 && ij_diff.y == -1 ){
+                        vect_direct = CHK_DIREC::UPLEFT;
+                    }else if( ij_diff.x == -1 && ij_diff.y == 1 ){
+                        vect_direct = CHK_DIREC::UPRIGHT;
+                    }else{
+                        vect_direct = CHK_DIREC::NO_D;
+                    }
+
+                    // Attempts a play on the target button along the target direction.
+                    this->play( act_set_lock_coords.x, act_set_lock_coords.y, vect_direct );
+                    this->updateCHKBoard();
+
+                }else{
+                    act_set_lock_but = buttonX;
+                    act_set_lock_but->setUPColor( LOCKTILECOLOR );
+                    act_set_lock_but->update();
+
+                    act_set_lock = true;
+                }
+
+                break;
+            }
+        }
+
+        if(released){
+            break;
+        }
+    }
+    
+    return released;
+    
+}
+
+
 void CHK_SFML_eng::updateCHKBoard(){
 
     for( unsigned int i = 0; i < BOARDWIDTH; i++ ){

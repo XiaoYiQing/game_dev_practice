@@ -561,7 +561,7 @@ void tests::checkers_test9( int tar_scenario_id ){
 
     int scenario_cnt = 0;
     if( tar_scenario_id == scenario_cnt ){
-
+        
         myGame.clearBoard();
         myGame.insertPiece( 7, 2, checkers::CHK_PIECE::RED_P );
         myGame.insertPiece( 6, 1, checkers::CHK_PIECE::BLK_P );
@@ -569,11 +569,36 @@ void tests::checkers_test9( int tar_scenario_id ){
         myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
         myGame.setTurn_cnt( 1 );    // Force red turn.
         
+
+        myGame.printBoard();
+
         myGame.AI_play();
         myGame.printBoard();
 
         myGame.AI_play();
         myGame.printBoard();
+
+        myGame.AI_play();
+        myGame.printBoard();
+
+    }
+
+    /*
+    A blunt scenario of just the AI playing against itself for a specified number of turns.
+    */
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.resetBoard();
+
+        myGame.printBoard();
+
+        int maxTurnCnt = 10;
+
+        for( int i = 0; i < maxTurnCnt; i++ ){
+            myGame.AI_play();
+            myGame.printBoard();
+        }
 
     }
 
