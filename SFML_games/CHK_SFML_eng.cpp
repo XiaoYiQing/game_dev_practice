@@ -174,6 +174,7 @@ bool CHK_SFML_eng::releaseButton(){
 
 bool CHK_SFML_eng::releaseButton_alt(){
 
+    bool played = false;
     bool released = false;
     for( unsigned int i = 0; i < BOARDWIDTH; i++ ){
         for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
@@ -215,17 +216,16 @@ bool CHK_SFML_eng::releaseButton_alt(){
                         vect_direct = CHK_DIREC::NO_D;
                     }
 
-                    bool play_success = false;
                     // Attempts a play on the target button along the target direction.
-                    play_success = this->play( act_set_lock_coords.x, act_set_lock_coords.y, vect_direct );
+                    played = this->play( act_set_lock_coords.x, act_set_lock_coords.y, vect_direct );
                     // Update the visual components representing the game.
                     this->updateCHKBoard();
 
-                    if( play_success ){
+                    // if( played ){
                         
-                        CHK_SFML_eng::AI_play( *this );
+                    //     CHK_SFML_eng::AI_play( *this );
 
-                    }
+                    // }
                     
 
                 }else{
@@ -247,7 +247,7 @@ bool CHK_SFML_eng::releaseButton_alt(){
         }
     }
     
-    return released;
+    return played;
 
 }
 
@@ -272,14 +272,14 @@ bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
         cerr << "The game cannot perform an AI play while in the locked state." << endl;
         return false;
     }
-
-    
-    
+    // Lock all buttons when the AI is performing a play.
+    tarGame.lock_buttons();
 
     // Let the AI perform the next play.
     checkers::CHK_move AI_move = tarGame.checkers::AI_play();
     // If the play failed.
     if( AI_move.k == CHK_DIREC::NO_D ){
+        tarGame.unlock_buttons();
         return false;
     }
 
@@ -288,10 +288,14 @@ bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
 
         AI_move = tarGame.checkers::AI_play();
         if( AI_move.k == CHK_DIREC::NO_D ){
+            tarGame.unlock_buttons();
             return false;
         }
 
     }
+    
+    // Unlock the buttons.
+    tarGame.unlock_buttons();
 
     // Update the visual components representing the game.
     tarGame.updateCHKBoard();
@@ -1076,7 +1080,8 @@ void game::play_Checkers_alt(){
 
                     }
 
-                    bool gameButRel = CHK_game_obj.releaseButton_alt();
+                    bool gameButRel = CHK_game_obj.releaseButton();
+
 
                 }
             }
