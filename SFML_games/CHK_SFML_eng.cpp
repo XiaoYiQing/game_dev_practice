@@ -384,6 +384,7 @@ void CHK_SFML_eng::updateCHKBoard(){
 
             }
 
+            but_ij->unlock();
             but_ij->update();
 
         }
@@ -1060,7 +1061,7 @@ void game::play_Checkers_alt(){
                     if( but3A_mmenu->releaseButton() ){
 
                         CHK_game_obj.resetBoard();
-
+                        
                         page3_game.disable();
                         page1_mmenu.enable();
                         
