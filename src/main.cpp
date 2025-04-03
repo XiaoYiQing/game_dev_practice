@@ -89,7 +89,7 @@ int main(int, char**){
 
     // tests::checkers_test9(1);
 
-    game::play_Checkers_alt();
+    game::play_Checkers();
 
     
 

@@ -75,11 +75,6 @@ public:
     */
     bool releaseButton();
 
-    /*
-    TODO: Eventually delete this or integrate this as or into the main releaseButton.
-    Temporary version of releaseButton, with additional AI play feature.
-    */
-    bool releaseButton_alt();
 
     // Lock all buttons.
     void lock_buttons();
@@ -183,10 +178,6 @@ namespace game{
     */
     void play_Checkers();
 
-    /*
-    TODO: Please delete this after you are done with your testing.
-    */
-    void play_Checkers_alt();
 
 }
 
