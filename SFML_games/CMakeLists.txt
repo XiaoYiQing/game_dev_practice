@@ -15,6 +15,7 @@ set( SFML_games_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/checkers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/checkers_tests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CHK_SFML_eng.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CHK_SFML_eng_game.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cardReact.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CRG_SFML_eng.cpp
 )

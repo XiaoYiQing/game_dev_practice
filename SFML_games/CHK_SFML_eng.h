@@ -184,5 +184,4 @@ namespace game{
 
 
 
-
 #endif  // CHK_SFML_ENG_H

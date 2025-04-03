@@ -16,6 +16,9 @@
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CHK_SFML_eng.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\CHK_SFML_eng_game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Yi Qing Xiao\Documents\Cpp_learning\game_dev_practice\SFML_games\cardReact.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
