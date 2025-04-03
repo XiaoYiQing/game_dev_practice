@@ -403,14 +403,20 @@ Update the state of the game:
 
     void enabledAI();
     void disableAI();
-    void toggleAI();
-    bool is_vsAI() const;
+    void toggle_AI();
+    bool is_AI_enabled() const;
 
     // Turn off the AI process flag. This will turn off the thread running the AI
     // at the earliest convenience.
     void disableAI_proc();
     // Turn off the AI process flag. 
     void enableAI_proc();
+
+
+    bool is_AI_first() const;
+    void set_AI_first();
+    void set_AI_not_first();
+    void toggle_AI_first();
 
 // ====================================================================== <<<<<
     
@@ -431,6 +437,11 @@ protected:
     Flag indicating if this game allows use of AI.
     */
     bool vsAI = true;
+    
+    /*
+    Flag indicating if the AI plays first over a versus AI game.
+    */
+    bool AI_first = false;
 
     /*
     Flag used for separate thread running the AI process.

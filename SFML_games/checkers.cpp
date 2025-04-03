@@ -89,6 +89,8 @@ checkers::checkers(){
     this->pieceCounter = { 0, 0, 0, 0 };
     this->state = CHK_STATE::ONGOING;
     this->minmax_depth = 5;
+    this->vsAI = true;
+    this->AI_first = false;
     this->AI_proc_flag = false;
 
     // Initialize the checker board.
@@ -983,6 +985,11 @@ void checkers::resetBoard(){
     R_displ_list.clear();
     B_displ_list.clear();
 
+    // Let the AI make the first move if AI is enabled and AI goes first.
+    if( this->vsAI && this->AI_first ){
+        AI_play( *this );
+    }
+
 }
 
 // ====================================================================== <<<<<
@@ -1486,15 +1493,24 @@ void checkers::enabledAI()
     { this->vsAI = true; }
 void checkers::disableAI()
     { this->vsAI = false; }
-void checkers::toggleAI()
+void checkers::toggle_AI()
     { this->vsAI = !( this->vsAI ); }
-bool checkers::is_vsAI() const
+bool checkers::is_AI_enabled() const
     { return this->vsAI; }
 
 void checkers::disableAI_proc()
     { this->AI_proc_flag = false; }
 void checkers::enableAI_proc()
     { this->AI_proc_flag = true; }
+
+bool checkers::is_AI_first() const
+    { return this->AI_first; }
+void checkers::set_AI_first()
+    { this->AI_first = true; }
+void checkers::set_AI_not_first()
+    { this->AI_first = false; }
+void checkers::toggle_AI_first()
+    { this->AI_first = !( this->AI_first ); }
 
 // ====================================================================== <<<<<
 

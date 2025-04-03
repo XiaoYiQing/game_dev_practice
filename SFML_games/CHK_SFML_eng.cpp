@@ -336,6 +336,7 @@ void CHK_SFML_eng::resetBoard(){
 
     checkers::resetBoard();
 
+
     this->updateCHKBoard();
 
 }

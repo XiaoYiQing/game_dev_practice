@@ -162,7 +162,7 @@ protected:
     bool act_set_lock;
     shared_ptr<SFML_button_XYQ> act_set_lock_but;
     sf::Vector2i act_set_lock_coords;
-
+    
 };
 
 }
