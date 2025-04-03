@@ -318,6 +318,8 @@ Update the state of the game:
 
     /*
     Reset the board to the state of a fresh new game.
+    This function serves as a game instance reset, though some class variables
+    may not be affected.
     */
     void resetBoard();
 
@@ -403,6 +405,12 @@ Update the state of the game:
     void disableAI();
     void toggleAI();
     bool is_vsAI() const;
+
+    // Turn off the AI process flag. This will turn off the thread running the AI
+    // at the earliest convenience.
+    void disableAI_proc();
+    // Turn off the AI process flag. 
+    void enableAI_proc();
 
 // ====================================================================== <<<<<
     

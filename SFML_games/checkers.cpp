@@ -84,12 +84,12 @@ const checkers::CHK_move checkers::IMPOS_MOVE( UINT_MAX, UINT_MAX, checkers::CHK
 // ====================================================================== >>>>>
 checkers::checkers(){
 
-    turn_cnt = 0;
-    no_change_turn_cnt = 0;
-    pieceCounter = { 0, 0, 0, 0 };
-    state = CHK_STATE::ONGOING;
-    minmax_depth = 5;
-    AI_proc_flag = false;
+    this->turn_cnt = 0;
+    this->no_change_turn_cnt = 0;
+    this->pieceCounter = { 0, 0, 0, 0 };
+    this->state = CHK_STATE::ONGOING;
+    this->minmax_depth = 5;
+    this->AI_proc_flag = false;
 
     // Initialize the checker board.
     for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
@@ -960,7 +960,7 @@ void checkers::resetBoard(){
     
     // Clear the board first.
     this->clearBoard();
-
+    // Refill the board with the standard game configuration.
     for( unsigned int i = 0; i < BOARD_SIZE/2 - 1; i++ ){
         for( unsigned int j = (unsigned int) remainder(i,2); j < BOARD_SIZE; j+=2 ){
             CHK_board[i][j] = CHK_PIECE::BLK_P;
@@ -968,17 +968,20 @@ void checkers::resetBoard(){
         }
     }
 
-    turn_cnt = 0;
-    state = CHK_STATE::ONGOING;
+    // Reset the relevant class variables.
+    this->turn_cnt = 0;
+    this->no_change_turn_cnt = 0;
+    this->AI_proc_flag = false;
+    this->lock_tar.clear();
+
+    // Update the game state based on the reset.
+    upd_game_state();
 
     // Clear the possible attack lists.
     R_atk_list.clear();
     B_atk_list.clear();
     R_displ_list.clear();
     B_displ_list.clear();
-
-    // Clear the lock target.
-    lock_tar.clear();
 
 }
 
@@ -1487,6 +1490,11 @@ void checkers::toggleAI()
     { this->vsAI = !( this->vsAI ); }
 bool checkers::is_vsAI() const
     { return this->vsAI; }
+
+void checkers::disableAI_proc()
+    { this->AI_proc_flag = false; }
+void checkers::enableAI_proc()
+    { this->AI_proc_flag = true; }
 
 // ====================================================================== <<<<<
 
