@@ -128,7 +128,7 @@ void game::play_Checkers(){
 
     string infoBox2A_msg = "This is a checkers game software developped as coding practice. ";
     infoBox2A_msg += "Control is shared between both players. ";
-    infoBox2A_msg += "There is no A.I. yet.";
+    infoBox2A_msg += "Play versus A.I. can be enabled/disabled in the option menu.";
 
 
     infoBox2A->setPos( 200, 100 );
