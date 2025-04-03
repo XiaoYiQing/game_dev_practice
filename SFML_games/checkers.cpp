@@ -74,6 +74,8 @@ checkers::CHK_move::CHK_move( unsigned int i, unsigned int j, checkers::CHK_DIRE
     this->k = k;
 }
 
+const checkers::CHK_move checkers::IMPOS_MOVE( UINT_MAX, UINT_MAX, checkers::CHK_DIREC::NO_D );
+
 // ====================================================================== <<<<<
 
 
@@ -1279,13 +1281,16 @@ int checkers::minmax( bool isMaximizing, int depth ){
             }else{
 
             }
-            
 
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
                 currScore = newGame.minmax( true, depth - 1 );
             }else if( newGame.getCurrTurn() == 1 ){
                 currScore = newGame.minmax( false, depth - 1 );
+            }
+            // Thread exit point.
+            if( !this->AI_proc_flag ){
+                return bestScore;
             }
 
             // Update the highest score up to now.
@@ -1315,6 +1320,10 @@ int checkers::minmax( bool isMaximizing, int depth ){
             }else if( newGame.getCurrTurn() == 1 ){
                 currScore = newGame.minmax( false, depth - 1 );
             }
+            // Thread exit point.
+            if( !this->AI_proc_flag ){
+                return bestScore;
+            }
 
 
             // Update the highest score up to now.
@@ -1336,12 +1345,12 @@ checkers::CHK_move checkers::bestMove( ){
 
 checkers::CHK_move checkers::bestMove( int depth ){
 
-    // Initialize the best move coordindate.
-    CHK_move optimMove = CHK_move( UINT_MAX, UINT_MAX, CHK_DIREC::NO_D );
+    // Initialize the best move coordindate with an impossible move with no direction.
+    CHK_move optimMove = IMPOS_MOVE;
 
     if( this->state == CHK_STATE::BWIN || this->state == CHK_STATE::RWIN || 
         this->state == CHK_STATE::DRAW ){
-        // Return impossible coordinate if the game is already over or not active.
+        // Return impossible move if the game is already over or not active.
         return optimMove;
     }
 
@@ -1359,6 +1368,10 @@ checkers::CHK_move checkers::bestMove( int depth ){
     }else{
         bestScore = this->minmax( false, depth );
         // bestScore = this->minmax_debug( false, depth );
+    }
+    // Thread exit point.
+    if( !this->AI_proc_flag ){
+        return IMPOS_MOVE;
     }
 
     // Obtain the entire set of currently valid moves.
@@ -1380,6 +1393,10 @@ checkers::CHK_move checkers::bestMove( int depth ){
             score_z = newGame.minmax( true, depth - 1 );
         }else{
             score_z = newGame.minmax( false, depth - 1 );
+        }
+        // Thread exit point.
+        if( !this->AI_proc_flag ){
+            return IMPOS_MOVE;
         }
 
         if( is_BLK_init_turn ){
@@ -1407,14 +1424,23 @@ checkers::CHK_move checkers::bestMove( int depth ){
 
 checkers::CHK_move checkers::AI_play( checkers& tarGame ){
 
-    // Return empty vector if no AI play enabled.
+    // If the bestMove function exited with AI_proc_flag turned off, return
+    // impossible move with no direction if no AI play enabled.
     if( !( tarGame.vsAI ) ){
         return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
     }
 
-
+    // Turn on the AI process flag flag.
+    tarGame.AI_proc_flag = true;
     // Let AI perform the next move.
     checkers::CHK_move AI_move = tarGame.bestMove();
+    // If the bestMove function exited with AI_proc_flag turned off, return
+    // impossible move with no direction.
+    if( !tarGame.AI_proc_flag ){
+        return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
+    }
+    // Turn off the AI process flag after use.
+    tarGame.AI_proc_flag = false;
 
     // Perform the play determined as the current best by the AI.
     bool AIPlayRes = tarGame.play( AI_move.i, AI_move.j, AI_move.k );

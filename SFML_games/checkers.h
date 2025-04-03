@@ -119,6 +119,12 @@ Update the state of the game:
 
     };
 
+    /*
+    Define an impossible move serving as reference for indicating failure to
+    attain a usable move.
+    */
+    static const CHK_move IMPOS_MOVE;
+
 // ====================================================================== >>>>>
 
 
@@ -419,10 +425,10 @@ protected:
     bool vsAI = true;
 
     /*
-    Flag used for separate thread runnig the AI process.
+    Flag used for separate thread running the AI process.
     This flag is normally turned on when the AI process starts to run.
     If this flag is turned off during an AI process run, the AI process 
-    is thread is to stop at the earliest convenience.
+    is to stop at the earliest convenience.
     */
     bool AI_proc_flag;
 
