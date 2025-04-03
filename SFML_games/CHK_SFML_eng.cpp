@@ -274,7 +274,7 @@ bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
     tarGame.lock_buttons();
 
     // Let the AI perform the next play.
-    checkers::CHK_move AI_move = tarGame.checkers::AI_play();
+    checkers::CHK_move AI_move = checkers::AI_play( tarGame );
     // If the play failed.
     if( AI_move.k == CHK_DIREC::NO_D ){
         tarGame.unlock_buttons();
@@ -284,7 +284,7 @@ bool CHK_SFML_eng::AI_play( CHK_SFML_eng& tarGame ){
     // Continue making the AI play if the first AI move initiated a locked state.
     while( tarGame.state == CHK_STATE::LOCKED ){
 
-        AI_move = tarGame.checkers::AI_play();
+        AI_move = checkers::AI_play( tarGame );
         if( AI_move.k == CHK_DIREC::NO_D ){
             tarGame.unlock_buttons();
             return false;

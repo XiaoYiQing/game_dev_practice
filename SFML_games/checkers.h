@@ -372,7 +372,7 @@ Update the state of the game:
     Let the AI perform the next move.
     If move fails, a move object with no direction (CHK_DIREC::NO_D) is returned.
     */
-    CHK_move AI_play();
+    static CHK_move AI_play( checkers& tarGame );
 
 // ====================================================================== <<<<<
 
@@ -400,7 +400,9 @@ Update the state of the game:
 
 // ====================================================================== <<<<<
     
+
 protected:
+
 
 // ====================================================================== >>>>>
 //      AI Related Functions (Protected)
@@ -415,6 +417,14 @@ protected:
     Flag indicating if this game allows use of AI.
     */
     bool vsAI = true;
+
+    /*
+    Flag used for separate thread runnig the AI process.
+    This flag is normally turned on when the AI process starts to run.
+    If this flag is turned off during an AI process run, the AI process 
+    is thread is to stop at the earliest convenience.
+    */
+    bool AI_proc_flag;
 
 // ====================================================================== <<<<<
 

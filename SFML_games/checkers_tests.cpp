@@ -572,13 +572,13 @@ void tests::checkers_test9( int tar_scenario_id ){
 
         myGame.printBoard();
 
-        myGame.AI_play();
+        checkers::AI_play( myGame );
         myGame.printBoard();
 
-        myGame.AI_play();
+        checkers::AI_play( myGame );
         myGame.printBoard();
 
-        myGame.AI_play();
+        checkers::AI_play( myGame );
         myGame.printBoard();
 
     }
@@ -596,7 +596,7 @@ void tests::checkers_test9( int tar_scenario_id ){
         int maxTurnCnt = 10;
 
         for( int i = 0; i < maxTurnCnt; i++ ){
-            myGame.AI_play();
+            checkers::AI_play( myGame );
             myGame.printBoard();
         }
 

@@ -87,6 +87,7 @@ checkers::checkers(){
     pieceCounter = { 0, 0, 0, 0 };
     state = CHK_STATE::ONGOING;
     minmax_depth = 5;
+    AI_proc_flag = false;
 
     // Initialize the checker board.
     for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
@@ -1404,19 +1405,19 @@ checkers::CHK_move checkers::bestMove( int depth ){
 
 
 
-checkers::CHK_move checkers::AI_play(){
+checkers::CHK_move checkers::AI_play( checkers& tarGame ){
 
     // Return empty vector if no AI play enabled.
-    if( !( this->vsAI ) ){
+    if( !( tarGame.vsAI ) ){
         return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
     }
 
 
     // Let AI perform the next move.
-    checkers::CHK_move AI_move = this->bestMove();
+    checkers::CHK_move AI_move = tarGame.bestMove();
 
     // Perform the play determined as the current best by the AI.
-    bool AIPlayRes = play( AI_move.i, AI_move.j, AI_move.k );
+    bool AIPlayRes = tarGame.play( AI_move.i, AI_move.j, AI_move.k );
 
     if( AIPlayRes ){
         return AI_move;
