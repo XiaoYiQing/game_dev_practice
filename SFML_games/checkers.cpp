@@ -985,11 +985,6 @@ void checkers::resetBoard(){
     R_displ_list.clear();
     B_displ_list.clear();
 
-    // Let the AI make the first move if AI is enabled and AI goes first.
-    if( this->vsAI && this->AI_first ){
-        AI_play( *this );
-    }
-
 }
 
 // ====================================================================== <<<<<

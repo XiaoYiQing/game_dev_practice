@@ -336,8 +336,15 @@ void CHK_SFML_eng::resetBoard(){
 
     checkers::resetBoard();
 
-
     this->updateCHKBoard();
+
+    // Let the AI make the first move if AI is enabled and AI goes first.
+    if( this->vsAI && this->AI_first ){
+        // CHK_SFML_eng::AI_play( *this );
+        // Create a new thread that runs the AI play function.
+        std::thread myThread( CHK_SFML_eng::AI_play, ref( *this ) );
+        myThread.detach();
+    }
 
 }
 
