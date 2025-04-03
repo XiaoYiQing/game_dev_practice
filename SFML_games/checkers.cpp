@@ -1430,7 +1430,7 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     // If the bestMove function exited with AI_proc_flag turned off, return
     // impossible move with no direction if no AI play enabled.
     if( !( tarGame.vsAI ) ){
-        return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
+        return IMPOS_MOVE;
     }
 
     // Turn on the AI process flag flag.
@@ -1440,7 +1440,7 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     // If the bestMove function exited with AI_proc_flag turned off, return
     // impossible move with no direction.
     if( !tarGame.AI_proc_flag ){
-        return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
+        return IMPOS_MOVE;
     }
     // Turn off the AI process flag after use.
     tarGame.AI_proc_flag = false;
@@ -1451,7 +1451,7 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     if( AIPlayRes ){
         return AI_move;
     }else{
-        return CHK_move( INT_MAX, INT_MAX, CHK_DIREC::NO_D );
+        return IMPOS_MOVE;
     }
 
 }
