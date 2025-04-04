@@ -1789,6 +1789,7 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     // Let AI perform the next move.
     // checkers::CHK_move AI_move = tarGame.bestMove();
     checkers::CHK_move AI_move = tarGame.bestMove_ABP();
+    
     // If the bestMove function exited with AI_proc_flag turned off, return
     // impossible move with no direction.
     if( !tarGame.AI_proc_flag ){

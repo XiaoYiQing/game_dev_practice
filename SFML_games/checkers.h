@@ -4,7 +4,9 @@
 #include <cmath>
 #include <iostream>
 #include <magic_enum.hpp>
+#include <mutex>
 #include <SFML/Graphics.hpp>
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -385,8 +387,11 @@ Update the state of the game:
     static int minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth, 
         vector<CHK_move> initMoveSet );
 
-
+    /*
+    The starting point of the split.
+    */
     static int minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth );
+
 
 
     /*
@@ -526,6 +531,13 @@ protected:
     // The list of black piece's displacement possibilities.
     vector<CHK_move> B_displ_list;
 
+    /*
+    This is a shared list of moves.
+    This list serves as a shared pool of moves to be dipped by multiple threads
+    at the same time.
+    As such, you need to use mutex to ensure synchronization. 
+    */
+    static stack<CHK_move> shared_move_list;
 
     // The state of the game.
     CHK_STATE state;
