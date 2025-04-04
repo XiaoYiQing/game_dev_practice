@@ -366,14 +366,32 @@ Update the state of the game:
     int minmax_debug_loop( bool isMaximizing, int depth, int max_depth );
 
     /*
+    The minmax function with AB-pruning.
+    The process and results are basically the same as the standard minmax function,
+    but branches of the search may be skipped depending on best results found in
+    the immediate higher node of the search tree.
+    */
+    int minmaxAB( bool isMaximizing, int depth );
+
+    /*
+    The actual recursive portion of the minmax AB-pruning algorithm.
+    */
+    int minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth );
+
+    /*
     Determine the best move to make in the current turn at the current board state.
     */
-    CHK_move bestMove( );
+    CHK_move bestMove();
     /*
     Determine the best move to make in the current turn at the current board state.
     NOTE: depth directly specified.
     */
     CHK_move bestMove( int depth );
+
+    /*
+    TODO: please delete this after you are done testing for minmax AB-pruning.
+    */
+    CHK_move bestMove_tmp( int depth );
 
 
     /*

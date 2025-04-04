@@ -1342,9 +1342,220 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
 }
 
-checkers::CHK_move checkers::bestMove( ){
+int checkers::minmaxAB( bool isMaximizing, int depth ){
 
-    return bestMove( this->minmax_depth );
+    // Initial alpha and beta.
+    int alpha = INT32_MIN;
+    int beta = INT32_MAX;
+
+    return minmaxAB_loop( isMaximizing, alpha, beta, depth );
+    
+}
+
+int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth ){
+
+    if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
+    this->getCurrTurn() == 1 && isMaximizing ){
+        cout << "Mismatch of minmax objective with the current turn order." << endl;
+        return 0;
+    }
+
+    switch( this->state ){
+
+        case CHK_STATE::BWIN:
+        case CHK_STATE::RWIN:
+        case CHK_STATE::DRAW:
+            // When game is over, return value immediately.
+            return this->gameStateEval();
+            break;
+        case CHK_STATE::ONGOING:
+        case CHK_STATE::LOCKED:
+            // If we reached the maximum allowed depth, return value immediately.
+            if( depth <= 0 ){
+                return this->gameStateEval();
+            }
+            break;
+        default:
+            cout << "Unrecognized game state. Abort." << endl;
+            return false;
+
+    }
+
+
+    int bestScore = 0;
+    int currScore = 0;
+
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
+
+    if ( isMaximizing ) {
+
+        bestScore = std::numeric_limits<int>::min();
+
+        for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = validMovesVect.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = *this;
+
+            // In the game copy, make a play with the next available move.
+            if( newGame.play( move_z.i, move_z.j, move_z.k ) ){
+
+            }else{
+
+            }
+
+            // Perform next layer minmax.
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmaxAB_loop( true, alpha, beta, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmaxAB_loop( false, alpha, beta, depth - 1 );
+            }
+            // Thread exit point.
+            if( !this->AI_proc_flag ){
+                return bestScore;
+            }
+
+            // Update the highest score up to now.
+            bestScore = std::max( bestScore, currScore );
+            // Update the alpha value.
+            alpha = std::max( alpha, currScore );
+            // If current alpha exceeds previous beta, no need to keep looking in 
+            // this search branch.
+            if (beta <= alpha){
+                break;
+            }
+
+        }
+
+    }else{
+
+        bestScore = std::numeric_limits<int>::max();
+
+        for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = validMovesVect.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = *this;
+
+            // In the game copy, make a play with the next available move.
+            newGame.play( move_z.i, move_z.j, move_z.k );
+
+
+            // Perform next layer minmax.
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmaxAB_loop( true, alpha, beta, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmaxAB_loop( false, alpha, beta, depth - 1 );
+            }
+            // Thread exit point.
+            if( !this->AI_proc_flag ){
+                return bestScore;
+            }
+
+
+            // Update the highest score up to now.
+            bestScore = std::min( bestScore, currScore );
+            // Update the alpha value.
+            beta = std::min( beta, currScore );
+            // If current beta is inferior to previous alpha, no need to keep looking in 
+            // this search branch.
+            if( beta <= alpha ){
+                break;
+            }
+
+        }
+
+    }
+
+    return bestScore;
+
+}
+
+checkers::CHK_move checkers::bestMove(){
+
+    // return bestMove( this->minmax_depth );
+    return bestMove_tmp( this->minmax_depth );
+
+}
+
+
+checkers::CHK_move checkers::bestMove_tmp( int depth ){
+
+    // Initialize the best move coordindate with an impossible move with no direction.
+    CHK_move optimMove = IMPOS_MOVE;
+
+    if( this->state == CHK_STATE::BWIN || this->state == CHK_STATE::RWIN || 
+        this->state == CHK_STATE::DRAW ){
+        // Return impossible move if the game is already over or not active.
+        return optimMove;
+    }
+
+    // Determine the turn.
+    bool is_BLK_init_turn = this->isBlackTurn();
+
+    // Initialize score recording variables.
+    int bestScore = 0;
+    int score_z = 0;
+
+    // Obtain the current best score.
+    if( is_BLK_init_turn ){
+        bestScore = this->minmaxAB( true, depth );
+    }else{
+        bestScore = this->minmaxAB( false, depth );
+    }
+    // Thread exit point.
+    if( !this->AI_proc_flag ){
+        return IMPOS_MOVE;
+    }
+
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
+    
+    for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+        // Current valid move.
+        checkers::CHK_move move_z = validMovesVect.at(z);
+    
+        // Make a copy of the current game.
+        checkers newGame = *this;
+
+        // Perform the current play.
+        newGame.play( move_z.i, move_z.j, move_z.k );
+
+        // Perform next layer minmax.
+        if( newGame.isBlackTurn() ){
+            score_z = newGame.minmaxAB( true, depth - 1 );
+        }else{
+            score_z = newGame.minmaxAB( false, depth - 1 );
+        }
+        // Thread exit point.
+        if( !this->AI_proc_flag ){
+            return IMPOS_MOVE;
+        }
+
+        if( is_BLK_init_turn ){
+            if( score_z >= bestScore ){
+                
+                optimMove = move_z;
+                bestScore = score_z;
+
+            }
+        }else{
+            if( score_z <= bestScore ){
+
+                optimMove = move_z;
+                bestScore = score_z;
+                
+            }
+        }
+    }
+
+    return optimMove;
 
 }
 
