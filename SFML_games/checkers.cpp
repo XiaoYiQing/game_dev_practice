@@ -1345,8 +1345,8 @@ int checkers::minmax( bool isMaximizing, int depth ){
 int checkers::minmaxAB( bool isMaximizing, int depth ){
 
     // Initial alpha and beta.
-    int alpha = INT32_MIN;
-    int beta = INT32_MAX;
+    int alpha = std::numeric_limits<int>::min();
+    int beta = std::numeric_limits<int>::max();
 
     // Initialize the minmiax process with AB-pruning.
     return minmaxAB_loop( isMaximizing, alpha, beta, depth );
@@ -1476,6 +1476,135 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
     return bestScore;
 
 }
+
+
+int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth, 
+    vector<CHK_move> initMoveSet ){
+    
+    if( ( tarGame.getCurrTurn() == 0 && !isMaximizing ) ||
+    tarGame.getCurrTurn() == 1 && isMaximizing ){
+        cout << "Mismatch of minmax objective with the current turn order." << endl;
+        return 0;
+    }
+    
+    switch( tarGame.state ){
+
+        case CHK_STATE::BWIN:
+        case CHK_STATE::RWIN:
+        case CHK_STATE::DRAW:
+            // When game is over, return value immediately.
+            return tarGame.gameStateEval();
+            break;
+        case CHK_STATE::ONGOING:
+        case CHK_STATE::LOCKED:
+            // If we reached the maximum allowed depth, return value immediately.
+            if( depth <= 0 ){
+                return tarGame.gameStateEval();
+            }
+            break;
+        default:
+            cout << "Unrecognized game state. Abort." << endl;
+            return false;
+
+    }
+
+    // Initial alpha and beta.
+    int alpha = std::numeric_limits<int>::min();
+    int beta = std::numeric_limits<int>::max();
+
+    // Initial score keeping variables.
+    int bestScore = 0;
+    int currScore = 0;
+
+    if ( isMaximizing ) {
+
+        bestScore = std::numeric_limits<int>::min();
+
+        for( unsigned int z = 0; z < initMoveSet.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = initMoveSet.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = tarGame;
+
+            // In the game copy, make a play with the next available move.
+            if( newGame.play( move_z.i, move_z.j, move_z.k ) ){
+
+            }else{
+
+            }
+
+            // Perform next layer minmax.
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmaxAB_loop( true, alpha, beta, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmaxAB_loop( false, alpha, beta, depth - 1 );
+            }
+            // Thread exit point.
+            if( !tarGame.AI_proc_flag ){
+                return bestScore;
+            }
+
+            // Update the highest score up to now.
+            bestScore = std::max( bestScore, currScore );
+            // Update the alpha value.
+            alpha = std::max( alpha, currScore );
+            // If current alpha exceeds previous beta, no need to keep looking in 
+            // this search branch.
+            if (beta <= alpha){
+                break;
+            }
+
+        }
+
+    }else{
+
+        bestScore = std::numeric_limits<int>::max();
+
+        for( unsigned int z = 0; z < initMoveSet.size(); z++ ){
+
+            // Current valid move.
+            checkers::CHK_move move_z = initMoveSet.at(z);
+    
+            // Make a copy of the current game.
+            checkers newGame = tarGame;
+
+            // In the game copy, make a play with the next available move.
+            newGame.play( move_z.i, move_z.j, move_z.k );
+
+
+            // Perform next layer minmax.
+            if( newGame.getCurrTurn() == 0 ){
+                currScore = newGame.minmaxAB_loop( true, alpha, beta, depth - 1 );
+            }else if( newGame.getCurrTurn() == 1 ){
+                currScore = newGame.minmaxAB_loop( false, alpha, beta, depth - 1 );
+            }
+            // Thread exit point.
+            if( !tarGame.AI_proc_flag ){
+                return bestScore;
+            }
+
+
+            // Update the highest score up to now.
+            bestScore = std::min( bestScore, currScore );
+            // Update the alpha value.
+            beta = std::min( beta, currScore );
+            // If current beta is inferior to previous alpha, no need to keep looking in 
+            // this search branch.
+            if( beta <= alpha ){
+                break;
+            }
+
+        }
+
+    }
+
+    return bestScore;
+
+}
+
+
 
 checkers::CHK_move checkers::bestMove(){
 

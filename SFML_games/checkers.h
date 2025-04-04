@@ -372,11 +372,22 @@ Update the state of the game:
     the immediate higher node of the search tree.
     */
     int minmaxAB( bool isMaximizing, int depth );
-
     /*
     The actual recursive portion of the minmax AB-pruning algorithm.
     */
     int minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth );
+
+    /*
+    Minmax with AP-pruning, with additional specified set of moves to perform the 
+    minmax process on.
+    This function is meant to be used with its own thread.
+    */
+    static int minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth, 
+        vector<CHK_move> initMoveSet );
+
+
+    static int minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth );
+
 
     /*
     Determine the best move to make in the current turn at the current board state.
@@ -457,7 +468,7 @@ protected:
     /*
     The depth of the minmax function used by this game instance.
     */
-    int minmax_depth = 5;
+    int minmax_depth = 6;
 
     /*
     Flag indicating if this game allows use of AI.
