@@ -383,15 +383,23 @@ Update the state of the game:
     */
     CHK_move bestMove();
     /*
-    Determine the best move to make in the current turn at the current board state.
+    Determine the best move to make in the current turn at the current board state
+    using the minmax algorithm.
     NOTE: depth directly specified.
     */
     CHK_move bestMove( int depth );
 
     /*
-    TODO: please delete this after you are done testing for minmax AB-pruning.
+    Determine the best move to make in the current turn at the current board state
+    using the minmax AB-pruning algorithm.
     */
-    CHK_move bestMove_tmp( int depth );
+    CHK_move bestMove_ABP();
+    /*
+    Determine the best move to make in the current turn at the current board state
+    using the minmax AB-pruning algorithm.
+    NOTE: depth directly specified.
+    */
+    CHK_move bestMove_ABP( int depth );
 
 
     /*
