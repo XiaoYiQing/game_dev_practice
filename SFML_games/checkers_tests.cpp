@@ -604,3 +604,29 @@ void tests::checkers_test9( int tar_scenario_id ){
 
 
 }
+
+
+
+void tests::checkers_test10( int tar_scenario_id ){
+
+    using namespace gameEngine;
+
+    checkers myGame;
+
+
+    bool isMaximizing = false;
+    int depth = 4;
+
+
+    int scenario_cnt = 0;
+
+    
+    if( tar_scenario_id == scenario_cnt ){
+
+        checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
+
+    }
+
+    scenario_cnt++;
+    
+}

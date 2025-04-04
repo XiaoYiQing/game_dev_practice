@@ -4,6 +4,8 @@
 using namespace gameEngine;
 
 
+
+
 // ====================================================================== >>>>>
 //      Class Enum "CHK_PIECE" Help Functions
 // ====================================================================== >>>>>
@@ -77,6 +79,7 @@ checkers::CHK_move::CHK_move( unsigned int i, unsigned int j, checkers::CHK_DIRE
 const checkers::CHK_move checkers::IMPOS_MOVE( UINT_MAX, UINT_MAX, checkers::CHK_DIREC::NO_D );
 
 // ====================================================================== <<<<<
+
 
 
 // ====================================================================== >>>>>
@@ -994,6 +997,11 @@ void checkers::resetBoard(){
 //      AI Related Functions
 // ====================================================================== >>>>>
 
+
+stack<checkers::CHK_move> checkers::shared_move_stk;
+
+std::mutex checkers::mtx_shared_move_list;
+
 /*
 Provide a numerical score to the current state of the game.
 */
@@ -1477,9 +1485,32 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
 
 }
 
+int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
-int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth, 
-    vector<CHK_move> initMoveSet ){
+    // Define number of threads.
+    int thread_cnt = 2;
+
+
+    // Empty the shared move stack.
+    while ( !shared_move_stk.empty() ) {
+        shared_move_stk.pop(); 
+    }
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = tarGame.get_valid_moves();
+    // Push the entire set of valid moves unto the shared stack.
+    for( checkers::CHK_move move_z : validMovesVect ){
+        shared_move_stk.push( move_z );
+    }
+
+    std::thread myThread( checkers::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
+
+
+
+    return 0;
+
+}
+
+int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
     
     if( ( tarGame.getCurrTurn() == 0 && !isMaximizing ) ||
     tarGame.getCurrTurn() == 1 && isMaximizing ){
@@ -1515,25 +1546,37 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth,
     // Initial score keeping variables.
     int bestScore = 0;
     int currScore = 0;
+    bool hasMoveLeft = false;
 
     if ( isMaximizing ) {
 
         bestScore = std::numeric_limits<int>::min();
 
-        for( unsigned int z = 0; z < initMoveSet.size(); z++ ){
+        while(true){
 
-            // Current valid move.
-            checkers::CHK_move move_z = initMoveSet.at(z);
-    
+            // Initialize current move.
+            checkers::CHK_move move_z = checkers::IMPOS_MOVE;
+
+            // mutex lock start ----------------------------------------- >>>>>
+            mtx_shared_move_list.lock();
+            hasMoveLeft = checkers::shared_move_stk.empty();
+            if( hasMoveLeft ){
+                // Current valid move.
+                move_z = shared_move_stk.top();
+            }
+            mtx_shared_move_list.unlock();
+            // mutex lock end ------------------------------------------- <<<<<
+
+            // Exit condition.
+            if( !hasMoveLeft ){
+                break;
+            }
+
             // Make a copy of the current game.
             checkers newGame = tarGame;
 
             // In the game copy, make a play with the next available move.
-            if( newGame.play( move_z.i, move_z.j, move_z.k ) ){
-
-            }else{
-
-            }
+            newGame.play( move_z.i, move_z.j, move_z.k );
 
             // Perform next layer minmax.
             if( newGame.getCurrTurn() == 0 ){
@@ -1562,10 +1605,28 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth,
 
         bestScore = std::numeric_limits<int>::max();
 
-        for( unsigned int z = 0; z < initMoveSet.size(); z++ ){
+        while(true){
 
-            // Current valid move.
-            checkers::CHK_move move_z = initMoveSet.at(z);
+            // Initialize current move.
+            checkers::CHK_move move_z = checkers::IMPOS_MOVE;
+
+            // mutex lock start ----------------------------------------- >>>>>
+
+            mtx_shared_move_list.lock();
+            hasMoveLeft = checkers::shared_move_stk.empty();
+            if( hasMoveLeft ){
+                // Current valid move.
+                move_z = shared_move_stk.top();
+            }
+            mtx_shared_move_list.unlock();
+            
+            // mutex lock end ------------------------------------------- <<<<<
+
+            // Exit condition.
+            if( !hasMoveLeft ){
+                break;
+            }
+
     
             // Make a copy of the current game.
             checkers newGame = tarGame;
@@ -1789,7 +1850,7 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     // Let AI perform the next move.
     // checkers::CHK_move AI_move = tarGame.bestMove();
     checkers::CHK_move AI_move = tarGame.bestMove_ABP();
-    
+
     // If the bestMove function exited with AI_proc_flag turned off, return
     // impossible move with no direction.
     if( !tarGame.AI_proc_flag ){

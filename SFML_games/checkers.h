@@ -16,6 +16,8 @@ using namespace std;
 
 namespace gameEngine{
 
+
+
 class checkers{
 
 
@@ -39,6 +41,10 @@ public:
     // Define the maximum number of turns with no capture or promotion before a draw is declared.
     static const unsigned int DRAWTURNCOUNTMAX = 40;
     
+
+    
+
+
 // ====================================================================== >>>>>
 //      Class Enum "CHK_PIECE" Help Functions
 // ====================================================================== >>>>>
@@ -129,6 +135,9 @@ Update the state of the game:
 
 // ====================================================================== >>>>>
 
+    
+
+   
 
 // ====================================================================== >>>>>
 //      Constructors
@@ -384,8 +393,7 @@ Update the state of the game:
     minmax process on.
     This function is meant to be used with its own thread.
     */
-    static int minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth, 
-        vector<CHK_move> initMoveSet );
+    static int minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth );
 
     /*
     The starting point of the split.
@@ -493,6 +501,19 @@ protected:
     */
     bool AI_proc_flag;
 
+    /*
+    Mutex for the purpose of synchronizing use of the shared list.
+    */
+    static std::mutex mtx_shared_move_list;
+
+    /*
+    This is a shared list of moves.
+    This list serves as a shared pool of moves to be dipped by multiple threads
+    at the same time.
+    As such, you need to use mutex to ensure synchronization. 
+    */
+    static stack<checkers::CHK_move> shared_move_stk;
+
 // ====================================================================== <<<<<
 
     // The number of times a play has been made. Black start at turn 0.
@@ -531,13 +552,7 @@ protected:
     // The list of black piece's displacement possibilities.
     vector<CHK_move> B_displ_list;
 
-    /*
-    This is a shared list of moves.
-    This list serves as a shared pool of moves to be dipped by multiple threads
-    at the same time.
-    As such, you need to use mutex to ensure synchronization. 
-    */
-    static stack<CHK_move> shared_move_list;
+    
 
     // The state of the game.
     CHK_STATE state;
@@ -602,6 +617,11 @@ namespace tests{
     Check the AI_play() function.
     */
     void checkers_test9( int tar_scenario_id = 0 );
+
+    /*
+    Check multi-thread minmax AB-pruning function.
+    */
+    void checkers_test10( int tar_scenario_id = 0 );
 
 }
 
