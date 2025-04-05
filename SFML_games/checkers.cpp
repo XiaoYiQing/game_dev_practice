@@ -1889,6 +1889,87 @@ checkers::CHK_move checkers::bestMove_ABP( int depth ){
 
 }
 
+checkers::CHK_move checkers::bestMove_ABP_split(){
+
+    return bestMove_ABP_split( this->minmax_depth );
+
+}
+
+checkers::CHK_move checkers::bestMove_ABP_split( int depth ){
+
+    // Initialize the best move coordindate with an impossible move with no direction.
+    CHK_move optimMove = IMPOS_MOVE;
+
+    if( this->state == CHK_STATE::BWIN || this->state == CHK_STATE::RWIN || 
+        this->state == CHK_STATE::DRAW ){
+        // Return impossible move if the game is already over or not active.
+        return optimMove;
+    }
+
+    // Determine the turn.
+    bool is_BLK_init_turn = this->isBlackTurn();
+
+    // Initialize score recording variables.
+    int bestScore = 0;
+    int score_z = 0;
+
+    // Obtain the current best score.
+    if( is_BLK_init_turn ){
+        bestScore = minmaxAB_split_init( *this, true, depth );
+    }else{
+        bestScore = minmaxAB_split_init( *this, false, depth );
+    }
+    // Thread exit point.
+    if( !this->AI_proc_flag ){
+        return IMPOS_MOVE;
+    }
+
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = this->get_valid_moves();
+    
+    for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+        // Current valid move.
+        checkers::CHK_move move_z = validMovesVect.at(z);
+    
+        // Make a copy of the current game.
+        checkers newGame = *this;
+
+        // Perform the current play.
+        newGame.play( move_z.i, move_z.j, move_z.k );
+
+        // Perform next layer minmax.
+        if( newGame.isBlackTurn() ){
+            score_z = minmaxAB_split_init( newGame, true, depth - 1 );
+        }else{
+            score_z = minmaxAB_split_init( newGame, false, depth - 1 );
+        }
+        // Thread exit point.
+        if( !this->AI_proc_flag ){
+            return IMPOS_MOVE;
+        }
+
+        if( is_BLK_init_turn ){
+            if( score_z >= bestScore ){
+                
+                optimMove = move_z;
+                bestScore = score_z;
+
+            }
+        }else{
+            if( score_z <= bestScore ){
+
+                optimMove = move_z;
+                bestScore = score_z;
+                
+            }
+        }
+    }
+
+    return optimMove;
+
+}
+
 
 checkers::CHK_move checkers::AI_play( checkers& tarGame ){
 
@@ -1902,7 +1983,8 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     tarGame.AI_proc_flag = true;
     // Let AI perform the next move.
     // checkers::CHK_move AI_move = tarGame.bestMove();
-    checkers::CHK_move AI_move = tarGame.bestMove_ABP();
+    // checkers::CHK_move AI_move = tarGame.bestMove_ABP();
+    checkers::CHK_move AI_move = tarGame.bestMove_ABP_split();
 
     // If the bestMove function exited with AI_proc_flag turned off, return
     // impossible move with no direction.

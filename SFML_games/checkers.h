@@ -425,6 +425,17 @@ Update the state of the game:
     */
     CHK_move bestMove_ABP( int depth );
 
+    /*
+    Determine the best move to make in the current turn at the current board state
+    using the minmax AB-pruning algorithm with multi-thread capability.
+    */
+    CHK_move bestMove_ABP_split();
+    /*
+    Determine the best move to make in the current turn at the current board state
+    using the minmax AB-pruning algorithm with multi-thread capability.
+    NOTE: depth directly specified.
+    */
+    CHK_move bestMove_ABP_split( int depth );
 
     /*
     Let the AI perform the next move.

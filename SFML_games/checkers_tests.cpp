@@ -650,7 +650,6 @@ void tests::checkers_test10( int tar_scenario_id ){
 
     }
 
-
     // [Scenario 3]: Black win scenario.
     scenario_cnt++;
     if( tar_scenario_id == scenario_cnt ){
@@ -662,7 +661,6 @@ void tests::checkers_test10( int tar_scenario_id ){
         isMaximizing = true;    depth = 0;
 
     }
-
 
     // [Scenario 4]: Red superiority in value.
     scenario_cnt++;
@@ -677,7 +675,6 @@ void tests::checkers_test10( int tar_scenario_id ){
 
     }
 
-
     // [Scenario 5]: Black superiority in value.
     scenario_cnt++;
     if( tar_scenario_id == scenario_cnt ){
@@ -691,7 +688,6 @@ void tests::checkers_test10( int tar_scenario_id ){
         isMaximizing = true;    depth = 0;
 
     }
-
 
     // [Scenario 6]: 1 red vs 1 black in position to attack each other with 1 depth, black turn.
     scenario_cnt++;
@@ -719,7 +715,6 @@ void tests::checkers_test10( int tar_scenario_id ){
         isMaximizing = false;    depth = 1;
 
     }
-
 
     /* 
     [Scenario 8]: 1 red in attack position against one black and one crowned black.
@@ -780,14 +775,15 @@ void tests::checkers_test10( int tar_scenario_id ){
 
 
 
-
     myGame.enableAI_proc();
-    score_ref = myGame.minmax( isMaximizing, depth );
+    // score_ref = myGame.minmax( isMaximizing, depth );
+    score_ref = myGame.minmaxAB( isMaximizing, depth );
     score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
     myGame.disableAI_proc();
 
     cout << "Scenario " << scenario_cnt << " [score ref: " << score_ref << 
         "] [score test: " << score_test << "]" << endl;
     myGame.printBoard();
+
     
 }
