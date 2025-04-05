@@ -1519,8 +1519,8 @@ int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int dep
         }
     }
 
-    tarGame.shared_minmax_res;
-
+    // Summarize the best score results from the individual results generated
+    // from the individual threads.
     int bestScore = 0;
     if( isMaximizing ){
         bestScore = std::numeric_limits<int>::min();
@@ -1548,21 +1548,38 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
         return 0;
     }
     
+    int finalRes = 0;
+
     switch( tarGame.state ){
 
         case CHK_STATE::BWIN:
         case CHK_STATE::RWIN:
         case CHK_STATE::DRAW:
+
+            finalRes = tarGame.gameStateEval();
             // When game is over, return value immediately.
-            return tarGame.gameStateEval();
+            mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
+            // Add the best score to the shared stack.
+            shared_minmax_res.push( finalRes );
+            mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+            return finalRes;
             break;
+
         case CHK_STATE::ONGOING:
         case CHK_STATE::LOCKED:
+
             // If we reached the maximum allowed depth, return value immediately.
             if( depth <= 0 ){
-                return tarGame.gameStateEval();
+                finalRes = tarGame.gameStateEval();
+                // When game is over, return value immediately.
+                mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
+                // Add the best score to the shared stack.
+                shared_minmax_res.push( finalRes );
+                mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+                return finalRes;
             }
             break;
+
         default:
             cout << "Unrecognized game state. Abort." << endl;
             return false;

@@ -616,9 +616,10 @@ void tests::checkers_test10( int tar_scenario_id ){
 
     bool isMaximizing = false;
     int depth = 4;
-
-
     int scenario_cnt = 0;
+
+    int score_ref = 0;
+    int score_test = 0;
 
     
     if( tar_scenario_id == scenario_cnt ){
@@ -633,6 +634,20 @@ void tests::checkers_test10( int tar_scenario_id ){
 
     }
 
+    // [Scenario 2]: Red win scenario.
     scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+        myGame.clearBoard();
+        myGame.insertPiece( 1, 1, checkers::CHK_PIECE::RED_P );
+        myGame.upd_game_state();
+        isMaximizing = true;    depth = 0;
+
+        score_ref = myGame.minmax( isMaximizing, depth );
+        score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
+
+        cout << "Scenario " << scenario_cnt << " [score ref: " << score_ref << 
+            "] [score test: " << score_test << "]" << endl;
+    }
+
     
 }
