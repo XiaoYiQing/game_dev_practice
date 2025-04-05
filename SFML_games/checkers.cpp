@@ -1492,7 +1492,7 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
 int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
     // Define number of threads.
-    int thread_cnt = 2;
+    unsigned int thread_cnt = 2;
 
 
     // Empty the shared move stack.
@@ -1506,11 +1506,36 @@ int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int dep
         shared_move_stk.push( move_z );
     }
 
-    // std::thread myThread( checkers::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
+    // Create separate threads to run the split minmax function.
+    vector< std::thread > myThreads;
+    for( unsigned int z = 0; z < thread_cnt; z++ ){
+        myThreads.emplace_back( checkers::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
+    }
 
-    checkers::minmaxAB_split( tarGame, isMaximizing, depth );
+    for( unsigned int z = 0; z < thread_cnt; z++ ){
+        if( myThreads.at(z).joinable() ){
+            myThreads.at(z).join();
+        }
+    }
 
-    return 0;
+    tarGame.shared_minmax_res;
+
+    int bestScore = 0;
+    if( isMaximizing ){
+        bestScore = std::numeric_limits<int>::min();
+        while( !tarGame.shared_minmax_res.empty() ){
+            bestScore = std::max( bestScore, shared_minmax_res.top() );
+            shared_minmax_res.pop();
+        }
+    }else{
+        bestScore = std::numeric_limits<int>::max();
+        while( !tarGame.shared_minmax_res.empty() ){
+            bestScore = std::min( bestScore, shared_minmax_res.top() );
+            shared_minmax_res.pop();
+        }
+    }
+
+    return bestScore;
 
 }
 
@@ -1561,8 +1586,7 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
             // Initialize current move.
             checkers::CHK_move move_z = checkers::IMPOS_MOVE;
 
-            // mutex lock start ----------------------------------------- >>>>>
-            mtx_shared_move_list.lock();
+            mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
             hasMoveLeft = !( checkers::shared_move_stk.empty() );
             if( hasMoveLeft ){
                 // Get current valid move.
@@ -1570,8 +1594,7 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
                 // Delete obtained move from stack.
                 shared_move_stk.pop();
             }
-            mtx_shared_move_list.unlock();
-            // mutex lock end ------------------------------------------- <<<<<
+            mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
 
             // Exit condition.
             if( !hasMoveLeft ){
@@ -1616,8 +1639,8 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
             // Initialize current move.
             checkers::CHK_move move_z = checkers::IMPOS_MOVE;
 
-            // mutex lock start ----------------------------------------- >>>>>
-            mtx_shared_move_list.lock();
+            
+            mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
             hasMoveLeft = !( checkers::shared_move_stk.empty() );
             if( hasMoveLeft ){
                 // Get current valid move.
@@ -1625,8 +1648,8 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
                 // Delete obtained move from stack.
                 shared_move_stk.pop();
             }
-            mtx_shared_move_list.unlock();
-            // mutex lock end ------------------------------------------- <<<<<
+            mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+            
 
             // Exit condition.
             if( !hasMoveLeft ){
@@ -1666,6 +1689,11 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
         }
 
     }
+
+    mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
+    // Add the best score to the shared stack.
+    shared_minmax_res.push( bestScore );
+    mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
 
     return bestScore;
 
