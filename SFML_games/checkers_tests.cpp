@@ -621,9 +621,11 @@ void tests::checkers_test10( int tar_scenario_id ){
     int score_ref = 0;
     int score_test = 0;
 
-    // Enable the functions meant to be used by the AI.
     
+    // [Scenario 0]: nothing.
+    if( tar_scenario_id == scenario_cnt ){
 
+    }
 
     // [Scenario 1]: draw scenario.
     scenario_cnt++;
@@ -633,15 +635,6 @@ void tests::checkers_test10( int tar_scenario_id ){
         myGame.upd_game_state();
         myGame.setTurn_cnt(0);
         isMaximizing = true;    depth = 3;
-
-        myGame.enableAI_proc();
-        score_ref = myGame.minmax( isMaximizing, depth );
-        // myGame.minmaxAB( isMaximizing, depth );
-        score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
-        myGame.disableAI_proc();
-
-        cout << "Scenario " << scenario_cnt << " [score ref: " << score_ref << 
-            "] [score test: " << score_test << "]" << endl;
 
     }
 
@@ -655,21 +648,151 @@ void tests::checkers_test10( int tar_scenario_id ){
         myGame.setTurn_cnt(0);
         isMaximizing = true;    depth = 0;
 
-        myGame.enableAI_proc();
-        score_ref = myGame.minmax( isMaximizing, depth );
-        score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
-        myGame.disableAI_proc();
+    }
 
-        cout << "Scenario " << scenario_cnt << " [score ref: " << score_ref << 
-            "] [score test: " << score_test << "]" << endl;
+
+    // [Scenario 3]: Black win scenario.
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 1, 1, checkers::CHK_PIECE::BLK_P );
+        myGame.upd_game_state();
+        myGame.setTurn_cnt(0);
+        isMaximizing = true;    depth = 0;
 
     }
 
 
+    // [Scenario 4]: Red superiority in value.
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 1, 1, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 2, 2, checkers::CHK_PIECE::CRED_P );
+        myGame.upd_game_state();
+        myGame.setTurn_cnt(0);
+        isMaximizing = true;    depth = 0;
+
+    }
+
+
+    // [Scenario 5]: Black superiority in value.
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 1, 1, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 2, 2, checkers::CHK_PIECE::CRED_P );
+        myGame.insertPiece( 4, 6, checkers::CHK_PIECE::CBLK_P );
+        myGame.upd_game_state();
+        myGame.setTurn_cnt(0);
+        isMaximizing = true;    depth = 0;
+
+    }
+
+
+    // [Scenario 6]: 1 red vs 1 black in position to attack each other with 1 depth, black turn.
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+        myGame.upd_atk_posb();
+        myGame.upd_game_state();
+        isMaximizing = true;    depth = 1;
+
+    }
     
+    // [Scenario 7]: 1 red vs 1 black in position to attack each other with 1 depth, red turn.
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+        myGame.setTurn_cnt( 1 );     // Force red turn.
+        myGame.upd_atk_posb();
+        myGame.upd_game_state();
+        isMaximizing = false;    depth = 1;
+
+    }
 
 
-    
+    /* 
+    [Scenario 8]: 1 red in attack position against one black and one crowned black.
+    */
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
 
+        myGame.clearBoard();
+        myGame.insertPiece( 2, 2, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 2, 4, checkers::CHK_PIECE::CBLK_P );
+        myGame.insertPiece( 3, 3, checkers::CHK_PIECE::RED_P );
+        myGame.insertPiece( 5, 5, checkers::CHK_PIECE::RED_P );
+        myGame.setTurn_cnt( 1 );    // Force red turn.
+        myGame.upd_atk_posb();
+        myGame.upd_game_state();
+        isMaximizing = false;    depth = 1;
+
+    }
+
+    /* 
+    [Scenario 9]: 1 red in attack position against a black piece that leads to the possible 
+    attack of another black piece.
+    */
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 2, 4, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 5, 3, checkers::CHK_PIECE::RED_P );
+        myGame.insertPiece( 5, 7, checkers::CHK_PIECE::RED_P );
+        myGame.setTurn_cnt( 1 );    // Force red turn.
+        myGame.upd_atk_posb();
+        myGame.upd_game_state();
+        isMaximizing = false;    depth = 2;
+
+    }
+
+    /*
+    [Scenario 10]: 1 red in attack position against two black pieces, one of which 
+    leads to the possible attack of another black piece.
+    */
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        myGame.clearBoard();
+        myGame.insertPiece( 4, 4, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 4, 2, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 2, 4, checkers::CHK_PIECE::BLK_P );
+        myGame.insertPiece( 5, 3, checkers::CHK_PIECE::RED_P );
+        myGame.insertPiece( 5, 7, checkers::CHK_PIECE::RED_P );
+        myGame.setTurn_cnt( 1 );    // Force red turn.
+        myGame.upd_atk_posb();
+        myGame.upd_game_state();
+        isMaximizing = false;    depth = 3;
+            
+    }
+
+
+
+
+
+
+
+
+
+    myGame.enableAI_proc();
+    score_ref = myGame.minmax( isMaximizing, depth );
+    score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
+    myGame.disableAI_proc();
+
+    cout << "Scenario " << scenario_cnt << " [score ref: " << score_ref << 
+        "] [score test: " << score_test << "]" << endl;
+    myGame.printBoard();
     
 }

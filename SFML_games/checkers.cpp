@@ -1520,7 +1520,7 @@ int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int dep
     }
 
     // Summarize the best score results from the individual results generated
-    // from the individual threads.
+    // from the threads.
     int bestScore = 0;
     if( isMaximizing ){
         bestScore = std::numeric_limits<int>::min();
