@@ -1512,6 +1512,7 @@ int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int dep
         myThreads.emplace_back( checkers::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
     }
 
+    // Wait for all separate threads to finish.
     for( unsigned int z = 0; z < thread_cnt; z++ ){
         if( myThreads.at(z).joinable() ){
             myThreads.at(z).join();
@@ -1615,7 +1616,7 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
             }
             // Thread exit point.
             if( !tarGame.AI_proc_flag ){
-                return bestScore;
+                break;
             }
 
             // Update the highest score up to now.
@@ -1639,7 +1640,6 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
             // Initialize current move.
             checkers::CHK_move move_z = checkers::IMPOS_MOVE;
 
-            
             mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
             hasMoveLeft = !( checkers::shared_move_stk.empty() );
             if( hasMoveLeft ){
@@ -1649,7 +1649,6 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
                 shared_move_stk.pop();
             }
             mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
-            
 
             // Exit condition.
             if( !hasMoveLeft ){
@@ -1672,7 +1671,7 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
             }
             // Thread exit point.
             if( !tarGame.AI_proc_flag ){
-                return bestScore;
+                break;
             }
 
 
