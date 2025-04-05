@@ -621,33 +621,55 @@ void tests::checkers_test10( int tar_scenario_id ){
     int score_ref = 0;
     int score_test = 0;
 
+    // Enable the functions meant to be used by the AI.
     
+
+
+    // [Scenario 1]: draw scenario.
+    scenario_cnt++;
     if( tar_scenario_id == scenario_cnt ){
 
-        isMaximizing = true;
+        myGame.resetBoard();
+        myGame.upd_game_state();
+        myGame.setTurn_cnt(0);
+        isMaximizing = true;    depth = 3;
 
         myGame.enableAI_proc();
+        score_ref = myGame.minmax( isMaximizing, depth );
         // myGame.minmaxAB( isMaximizing, depth );
-        checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
-
+        score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
         myGame.disableAI_proc();
+
+        cout << "Scenario " << scenario_cnt << " [score ref: " << score_ref << 
+            "] [score test: " << score_test << "]" << endl;
 
     }
 
     // [Scenario 2]: Red win scenario.
     scenario_cnt++;
     if( tar_scenario_id == scenario_cnt ){
+
         myGame.clearBoard();
         myGame.insertPiece( 1, 1, checkers::CHK_PIECE::RED_P );
         myGame.upd_game_state();
+        myGame.setTurn_cnt(0);
         isMaximizing = true;    depth = 0;
 
+        myGame.enableAI_proc();
         score_ref = myGame.minmax( isMaximizing, depth );
         score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
+        myGame.disableAI_proc();
 
         cout << "Scenario " << scenario_cnt << " [score ref: " << score_ref << 
             "] [score test: " << score_test << "]" << endl;
+
     }
+
+
+    
+
+
+    
 
     
 }
