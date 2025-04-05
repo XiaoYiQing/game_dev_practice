@@ -998,9 +998,13 @@ void checkers::resetBoard(){
 // ====================================================================== >>>>>
 
 
+std::mutex checkers::mtx_shared_move_list;
+
 stack<checkers::CHK_move> checkers::shared_move_stk;
 
-std::mutex checkers::mtx_shared_move_list;
+stack<int> checkers::shared_minmax_res;
+
+
 
 /*
 Provide a numerical score to the current state of the game.
@@ -1502,9 +1506,9 @@ int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int dep
         shared_move_stk.push( move_z );
     }
 
-    std::thread myThread( checkers::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
+    // std::thread myThread( checkers::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
 
-
+    checkers::minmaxAB_split( tarGame, isMaximizing, depth );
 
     return 0;
 
@@ -1559,10 +1563,12 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
 
             // mutex lock start ----------------------------------------- >>>>>
             mtx_shared_move_list.lock();
-            hasMoveLeft = checkers::shared_move_stk.empty();
+            hasMoveLeft = !( checkers::shared_move_stk.empty() );
             if( hasMoveLeft ){
-                // Current valid move.
+                // Get current valid move.
                 move_z = shared_move_stk.top();
+                // Delete obtained move from stack.
+                shared_move_stk.pop();
             }
             mtx_shared_move_list.unlock();
             // mutex lock end ------------------------------------------- <<<<<
@@ -1611,15 +1617,15 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
             checkers::CHK_move move_z = checkers::IMPOS_MOVE;
 
             // mutex lock start ----------------------------------------- >>>>>
-
             mtx_shared_move_list.lock();
-            hasMoveLeft = checkers::shared_move_stk.empty();
+            hasMoveLeft = !( checkers::shared_move_stk.empty() );
             if( hasMoveLeft ){
-                // Current valid move.
+                // Get current valid move.
                 move_z = shared_move_stk.top();
+                // Delete obtained move from stack.
+                shared_move_stk.pop();
             }
             mtx_shared_move_list.unlock();
-            
             // mutex lock end ------------------------------------------- <<<<<
 
             // Exit condition.

@@ -623,7 +623,13 @@ void tests::checkers_test10( int tar_scenario_id ){
     
     if( tar_scenario_id == scenario_cnt ){
 
+        isMaximizing = true;
+
+        myGame.enableAI_proc();
+        // myGame.minmaxAB( isMaximizing, depth );
         checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
+
+        myGame.disableAI_proc();
 
     }
 

@@ -514,6 +514,13 @@ protected:
     */
     static stack<checkers::CHK_move> shared_move_stk;
 
+    /*
+    This is a stack of shared minmax operation results.
+    This stack serves as the deposit point of results from running minmax over 
+    several threads at the same time.
+    */
+    static stack<int> shared_minmax_res;
+
 // ====================================================================== <<<<<
 
     // The number of times a play has been made. Black start at turn 0.
