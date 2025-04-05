@@ -1508,12 +1508,15 @@ int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int dep
 
     // Create separate threads to run the split minmax function.
     vector< std::thread > myThreads;
-    for( unsigned int z = 0; z < thread_cnt; z++ ){
+    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
         myThreads.emplace_back( checkers::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
     }
+    // The current thread starts its own split minmax run after initiating the 
+    // other threads.
+    minmaxAB_split( ref( tarGame ), isMaximizing, depth );
 
     // Wait for all separate threads to finish.
-    for( unsigned int z = 0; z < thread_cnt; z++ ){
+    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
         if( myThreads.at(z).joinable() ){
             myThreads.at(z).join();
         }
