@@ -611,6 +611,7 @@ void tests::checkers_test9( int tar_scenario_id ){
 
         
         int maxTurnCnt = 20;
+        int AI_opt_ID = 0;
 
         // Record the start time
         auto start_t = std::chrono::high_resolution_clock::now();
@@ -620,34 +621,47 @@ void tests::checkers_test9( int tar_scenario_id ){
         std::chrono::duration<double> duration = end_t - start_t;
 
         myGame.resetBoard();
-        myGame.setAI_opt(0);
+        myGame.setAI_opt( AI_opt_ID );
         start_t = std::chrono::high_resolution_clock::now();
         for( int i = 0; i < maxTurnCnt; i++ ){
             checkers::AI_play( myGame );
         }
         end_t = std::chrono::high_resolution_clock::now();
         duration = end_t - start_t;
-        cout << "Option 0 time: " << duration.count() << endl;
+        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
+
 
         myGame.resetBoard();
-        myGame.setAI_opt(1);
+        AI_opt_ID++; myGame.setAI_opt( AI_opt_ID );
         start_t = std::chrono::high_resolution_clock::now();
         for( int i = 0; i < maxTurnCnt; i++ ){
             checkers::AI_play( myGame );
         }
         end_t = std::chrono::high_resolution_clock::now();
         duration = end_t - start_t;
-        cout << "Option 1 time: " << duration.count() << endl;
+        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
+
 
         myGame.resetBoard();
-        myGame.setAI_opt(2);
+        AI_opt_ID++; myGame.setAI_opt( AI_opt_ID );
         start_t = std::chrono::high_resolution_clock::now();
         for( int i = 0; i < maxTurnCnt; i++ ){
             checkers::AI_play( myGame );
         }
         end_t = std::chrono::high_resolution_clock::now();
         duration = end_t - start_t;
-        cout << "Option 2 time: " << duration.count() << endl;
+        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
+
+
+        myGame.resetBoard();
+        AI_opt_ID++; myGame.setAI_opt( AI_opt_ID );
+        start_t = std::chrono::high_resolution_clock::now();
+        for( int i = 0; i < maxTurnCnt; i++ ){
+            checkers::AI_play( myGame );
+        }
+        end_t = std::chrono::high_resolution_clock::now();
+        duration = end_t - start_t;
+        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
 
 
     }

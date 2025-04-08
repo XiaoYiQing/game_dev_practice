@@ -362,6 +362,16 @@ Update the state of the game:
     NOTE: maximizing when black, minimizing when red.
     */
     int minmax( bool isMaximizing, int depth );
+    /*
+    Minmax with additional specified set of moves to perform the 
+    minmax process on.
+    This function is meant to be used with its own thread.
+    */
+    static int minmax_split( checkers& tarGame, bool isMaximizing, int depth );
+    /*
+    The starting point of the minmax_split.
+    */
+    static int minmax_split_init( checkers& tarGame, bool isMaximizing, int depth );
 
     /*
     minmax function for helping the game A.I. to make the best possible move.
@@ -400,8 +410,6 @@ Update the state of the game:
     */
     static int minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth );
 
-
-
     /*
     Determine the best move to make in the current turn at the current board state.
     */
@@ -412,6 +420,18 @@ Update the state of the game:
     NOTE: depth directly specified.
     */
     CHK_move bestMove( int depth );
+
+    /*
+    Determine the best move to make in the current turn at the current board state
+    using the minmax algorithm with multi-thread capability.
+    */
+    CHK_move bestMove_split();
+    /*
+    Determine the best move to make in the current turn at the current board state
+    using the minmax algorithm with multi-thread capability.
+    NOTE: depth directly specified.
+    */
+    CHK_move bestMove_split( int depth );
 
     /*
     Determine the best move to make in the current turn at the current board state
