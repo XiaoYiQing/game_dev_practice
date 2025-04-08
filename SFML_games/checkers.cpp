@@ -91,6 +91,7 @@ checkers::checkers(){
     this->no_change_turn_cnt = 0;
     this->pieceCounter = { 0, 0, 0, 0 };
     this->state = CHK_STATE::ONGOING;
+    this->AI_opt = 3;
     this->minmax_depth = 5;
     this->vsAI = true;
     this->AI_first = false;
@@ -1492,7 +1493,7 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
 int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
     // Define number of threads.
-    unsigned int thread_cnt = 2;
+    unsigned int thread_cnt = 3;
 
 
     // Empty the shared move stack.
@@ -1979,13 +1980,30 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
         return IMPOS_MOVE;
     }
 
+    
     // Turn on the AI process flag flag.
     tarGame.AI_proc_flag = true;
+    checkers::CHK_move AI_move = checkers::IMPOS_MOVE;
     // Let AI perform the next move.
-    // checkers::CHK_move AI_move = tarGame.bestMove();
-    // checkers::CHK_move AI_move = tarGame.bestMove_ABP();
-    checkers::CHK_move AI_move = tarGame.bestMove_ABP_split();
+    switch( tarGame.AI_opt ){
 
+    case 0:
+
+        AI_move = tarGame.bestMove();
+        break;
+
+    case 1:
+
+        AI_move = tarGame.bestMove_ABP();
+        break;
+
+    case 2:
+    default:
+        AI_move = tarGame.bestMove_ABP_split();
+        break;
+
+    }
+    
     // If the bestMove function exited with AI_proc_flag turned off, return
     // impossible move with no direction.
     if( !tarGame.AI_proc_flag ){
@@ -2025,6 +2043,11 @@ unsigned int checkers::getTurn_cnt() const
     {return this->turn_cnt;}
 void checkers::setTurn_cnt( unsigned int turn_cnt )
     {this->turn_cnt = turn_cnt;}
+
+int checkers::getAI_opt() const
+    {return this->AI_opt;}
+void checkers::setAI_opt( int in_AI_opt )
+    {this->AI_opt = in_AI_opt;}
 
 int checkers::getMinmax_depth() const
     {return this->minmax_depth;}

@@ -459,6 +459,10 @@ Update the state of the game:
     unsigned int getTurn_cnt() const;
     void setTurn_cnt( unsigned int );
 
+
+    int getAI_opt() const;
+    void setAI_opt( int opt );
+
     int getMinmax_depth() const;
     void setMinmax_depth( int in_minmax_depth );
 
@@ -490,6 +494,14 @@ protected:
 // ====================================================================== >>>>>
 
     /*
+    Options with AI selection.
+    [0 = standard minmax]
+    [1 = minmax with AB-pruning]
+    [2 = multi-threaded minmax with AB-pruning]
+    */
+    int AI_opt;
+
+    /*
     The depth of the minmax function used by this game instance.
     */
     int minmax_depth = 6;
@@ -513,15 +525,15 @@ protected:
     bool AI_proc_flag;
 
     /*
-    Mutex for the purpose of synchronizing use of the shared list.
+    Mutex for the purpose of synchronizing use of the shared variables.
     */
     static std::mutex mtx_shared_move_list;
 
     /*
     This is a shared list of moves.
     This list serves as a shared pool of moves to be dipped by multiple threads
-    at the same time.
-    As such, you need to use mutex to ensure synchronization. 
+    at the same time. To prevent the same move from being analysed by more than
+    one thread, you need to use mutex to ensure synchronization. 
     */
     static stack<checkers::CHK_move> shared_move_stk;
 
@@ -529,6 +541,7 @@ protected:
     This is a stack of shared minmax operation results.
     This stack serves as the deposit point of results from running minmax over 
     several threads at the same time.
+    As such you need to use mutex around access of this variable.
     */
     static stack<int> shared_minmax_res;
 

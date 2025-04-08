@@ -602,6 +602,55 @@ void tests::checkers_test9( int tar_scenario_id ){
 
     }
 
+    /*
+    Blunt scenario of playing the game a certain number of times using the 
+    available AI options and record the time taken for each option taken.
+    */
+    scenario_cnt++;
+    if( tar_scenario_id == scenario_cnt ){
+
+        
+        int maxTurnCnt = 20;
+
+        // Record the start time
+        auto start_t = std::chrono::high_resolution_clock::now();
+        // Record the end time
+        auto end_t = std::chrono::high_resolution_clock::now();
+        // Calculate the duration
+        std::chrono::duration<double> duration = end_t - start_t;
+
+        myGame.resetBoard();
+        myGame.setAI_opt(0);
+        start_t = std::chrono::high_resolution_clock::now();
+        for( int i = 0; i < maxTurnCnt; i++ ){
+            checkers::AI_play( myGame );
+        }
+        end_t = std::chrono::high_resolution_clock::now();
+        duration = end_t - start_t;
+        cout << "Option 0 time: " << duration.count() << endl;
+
+        myGame.resetBoard();
+        myGame.setAI_opt(1);
+        start_t = std::chrono::high_resolution_clock::now();
+        for( int i = 0; i < maxTurnCnt; i++ ){
+            checkers::AI_play( myGame );
+        }
+        end_t = std::chrono::high_resolution_clock::now();
+        duration = end_t - start_t;
+        cout << "Option 1 time: " << duration.count() << endl;
+
+        myGame.resetBoard();
+        myGame.setAI_opt(2);
+        start_t = std::chrono::high_resolution_clock::now();
+        for( int i = 0; i < maxTurnCnt; i++ ){
+            checkers::AI_play( myGame );
+        }
+        end_t = std::chrono::high_resolution_clock::now();
+        duration = end_t - start_t;
+        cout << "Option 2 time: " << duration.count() << endl;
+
+
+    }
 
 }
 
