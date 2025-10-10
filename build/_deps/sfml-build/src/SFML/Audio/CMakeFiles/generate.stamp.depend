@@ -1,7 +1,0 @@
-# CMake generation dependency list for this directory.
-C:/Program Files/CMake/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files/CMake/share/cmake-3.30/Modules/FindPackageMessage.cmake
-C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/cmake/Modules/FindFLAC.cmake
-C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/cmake/Modules/FindOpenAL.cmake
-C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/cmake/Modules/FindVORBIS.cmake
-C:/Users/Yi Qing Xiao/Documents/Cpp_learning/game_dev_practice/build/_deps/sfml-src/src/SFML/Audio/CMakeLists.txt
