@@ -2281,6 +2281,8 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     // Let AI perform the next move.
     switch( tarGame.AI_opt ){
 
+<<<<<<< HEAD
+=======
     case 0:
 
         AI_move = tarGame.bestMove();
@@ -2303,6 +2305,7 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
 
     }
     
+>>>>>>> 2ab3143 (Added split version of the minmax function without AB-pruning. This is to see if the there is actual gain in time cost with multi-thread.)
     // If the bestMove function exited with AI_proc_flag turned off, return
     // impossible move with no direction.
     if( !tarGame.AI_proc_flag ){

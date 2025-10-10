@@ -602,6 +602,8 @@ void tests::checkers_test9( int tar_scenario_id ){
 
     }
 
+<<<<<<< HEAD
+=======
     /*
     Blunt scenario of playing the game a certain number of times using the 
     available AI options and record the time taken for each option taken.
@@ -665,6 +667,7 @@ void tests::checkers_test9( int tar_scenario_id ){
 
 
     }
+>>>>>>> 2ab3143 (Added split version of the minmax function without AB-pruning. This is to see if the there is actual gain in time cost with multi-thread.)
 
 }
 
