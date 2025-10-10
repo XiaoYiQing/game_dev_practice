@@ -10,13 +10,14 @@
 TODO: Create a base checkers game engine.
 */
 
+#include <algorithm>
 #include <chrono>
+#include <filesystem>
 #include <iostream>
+#include <random>
 #include <string>
 #include <thread>
 
-#include <algorithm>
-#include <random>
 
 
 
@@ -53,6 +54,16 @@ string RES_PATH_XYQ_str = string( RES_PATH_XYQ );
 
 int main(int, char**){
 
+    // Get the path to the executable
+    std::filesystem::path exePath = std::filesystem::current_path();
+
+    // Set resource directory relative to the executable
+    std::filesystem::path resourceDir = exePath / ".." / "res";
+
+    RES_PATH_XYQ_str = resourceDir.string();
+
+    // Replace backslashes with forward slashes
+    std::replace(RES_PATH_XYQ_str.begin(), RES_PATH_XYQ_str.end(), '\\', '/');
 
     // tests::window_test_5();
 
