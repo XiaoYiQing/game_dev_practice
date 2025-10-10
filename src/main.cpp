@@ -6,9 +6,6 @@
 #endif
 
 
-/*
-TODO: Create a base checkers game engine.
-*/
 
 #include <algorithm>
 #include <chrono>
@@ -46,7 +43,8 @@ TODO: Create a base checkers game engine.
 using namespace std;
 using namespace gameEngine;
 
-void play_cardReactGame();
+
+// TODO: Review your comments.
 
 // Global string variable holding the full path of the extra resource directory.
 string RES_PATH_XYQ_str = string( RES_PATH_XYQ );
@@ -123,6 +121,11 @@ int main(int, char**){
 }
 
 
+
+
+/*
+DONE: Create a base checkers game engine.
+*/
 
 /* 
 DONE: Make a more accurate time measurement for the game.

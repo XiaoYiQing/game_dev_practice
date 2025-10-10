@@ -120,7 +120,6 @@ long long cutUpperOrder( long long tarNum, int orderPos ){
 
 vector<int> intToArray(long long number) {
 
-    // TODO: make sure the vector is created on the heap.
     vector<int> digits;
     if (number == 0) {
         digits.push_back(0);
