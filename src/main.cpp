@@ -54,16 +54,21 @@ string RES_PATH_XYQ_str = string( RES_PATH_XYQ );
 
 int main(int, char**){
 
+
+// ====================================================================== >>>>>
+//      Resource Path Setup
+// ====================================================================== >>>>>
+
     // Get the path to the executable
     std::filesystem::path exePath = std::filesystem::current_path();
-
     // Set resource directory relative to the executable
     std::filesystem::path resourceDir = exePath / ".." / "res";
-
+    // Obtain the string representation and set it as the global resource path.
     RES_PATH_XYQ_str = resourceDir.string();
-
     // Replace backslashes with forward slashes
     std::replace(RES_PATH_XYQ_str.begin(), RES_PATH_XYQ_str.end(), '\\', '/');
+
+// ====================================================================== <<<<<
 
     // tests::window_test_5();
 
