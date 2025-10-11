@@ -130,7 +130,6 @@ void cardReact::start(){
         return;
     }
 
-    // this->state = CRG_STATE::ONGOING;
     this->state = CRG_STATE::COUNTDOWN;
 
     startTimePt = chrono::high_resolution_clock::now();

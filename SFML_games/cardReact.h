@@ -152,22 +152,26 @@ public:
 //      Game Functionality (Public)
 // ====================================================================== >>>>>
 
-    /*
-    Reset the state of the game.
-    */
+    /**
+     * Reset the state of the game to that of a fresh unstarted game.
+     */
     void reset();
 
-    /*
-    Start the game.
-    Triggers the countdown.
-    */
+    /**
+     * Start the game, which triggers the countdown.
+     */
     void start();
 
-    /*
-    Select the card which matches the hidden card.
-    Card selection will fail (false) if countdown has not yet finished yet.
-    Card selection will fail (false) if game is not ongoing.
-    */
+    /**
+     * \brief Perform the select card action.
+     * 
+     * - Card selection will fail if the countdown has not yet finished yet.
+     * 
+     * - Card selection will fail if game is not ongoing.
+     * 
+     * \param cardVect_idx The index of the selected card.
+     * \return Boolean indicating whether card selection is successful.
+     */
     bool selectCard( int cardVect_idx );
 
 // ====================================================================== <<<<<
@@ -180,38 +184,33 @@ protected:
 //      Game Functionality (Protected)
 // ====================================================================== >>>>>
 
-    /*
-    Randomly assign the main card.
-    */
+    /**
+     * Randomly select the main card.
+     */
     void pickMainCard();
 
-    /*
-    Perform a countdown, following which the hidden card is revealed.
-    NOTE: this function is meant to be used on a separate thread.
-    */
+    /**
+     * Perform a countdown, following which the hidden card is revealed.
+     * 
+     * \param tarObj The present CRG instance requiring the countdown triggering.
+     * 
+     * \note This function is meant to be used on a separate thread.
+     */
     static void countDownThread( cardReact& tarObj );
 
 // ====================================================================== <<<<<
 
-
-    /*
-    The state of the game.
-    */
+    // The state of the game.
     CRG_STATE state;
 
-    /*
-    The ID of the main card.
-    */
+    // The ID of the main card.
     unsigned int mainCardID;
 
-    
     // Number of possible cards.
     unsigned int possCardCnt;
 
-    /*
-    The amount of time in milliseconds for the count down before the main card is
-    revealed.
-    */
+    // The amount of time in milliseconds for the countdown before the main 
+    // card is revealed.
     long long cntDownT;
 
     // The time point when the game has officially stated (Going into "ONGOING" state).
