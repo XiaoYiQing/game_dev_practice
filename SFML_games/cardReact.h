@@ -90,12 +90,16 @@ public:
     /**
      * Obtain the main card's ID.
      * 
+     * The ID is simply an integer in the range [ 0, possCardCnt - 1 ].
+     * 
      * @return The ID of the hidden card, which is simply the index of the chosen
      *  card serving as the hidden card in the array of possible cards.
      */
     int getMainCardID() const;
     /**
      * Set the ID of the main card.
+     * 
+     * The ID is simply an integer in the range [ 0, possCardCnt - 1 ].
      * 
      * @param mainCardID The ID or the index of that chosen card.
      */
@@ -139,6 +143,18 @@ public:
 
     /**
      * Return the current game state enum.
+     * 
+     * CRG_STATE:
+     * 
+     *  - UNSTARTED: Game is in a fresh standby state.
+     * 
+     *  - COUNTDOWN: Game is running and is in the middle of the countdown.
+     * 
+     *  - ONGOING: Game is running and the countdown has already ended.
+     * 
+     *  - HIT: Game has ended with the correct card selected.
+     * 
+     *  - MISS: Game has ended with the incorrect card selected.
      * 
      * @return The current game state enum.
      */
