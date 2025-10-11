@@ -46,6 +46,9 @@ using namespace gameEngine;
 
 // TODO: Review your comments.
 
+// TODO: Make a more official form of comments. Use this opportunity to review your code.
+
+// TODO: Create a print state function for your game engines.
 
 void do_tests( unsigned int test_id );
 

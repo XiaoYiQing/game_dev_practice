@@ -516,8 +516,9 @@ protected:
     /*
     Options with AI selection.
     [0 = standard minmax]
-    [1 = minmax with AB-pruning]
-    [2 = multi-threaded minmax with AB-pruning]
+    [1 = multi-threaded standard minmax]
+    [2 = minmax with AB-pruning]
+    [3 = multi-threaded minmax with AB-pruning]
     */
     int AI_opt;
 

@@ -228,7 +228,7 @@ void game::play_Checkers(){
 
 
 
-    // Create TTT game object.
+    // Create checkers game object.
     gameEngine::CHK_SFML_eng CHK_game_obj( CHK_buttons );
 
     CHK_game_obj.setCHK_pieceText( gameEngine::checkers::CHK_PIECE::RED_P, CHK_red_img_texture );

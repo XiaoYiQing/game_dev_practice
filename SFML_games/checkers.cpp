@@ -92,7 +92,7 @@ checkers::checkers(){
     this->pieceCounter = { 0, 0, 0, 0 };
     this->state = CHK_STATE::ONGOING;
     this->AI_opt = 3;
-    this->minmax_depth = 5;
+    this->minmax_depth = 8;
     this->vsAI = true;
     this->AI_first = false;
     this->AI_proc_flag = false;
