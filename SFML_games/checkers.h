@@ -525,7 +525,7 @@ protected:
     /*
     The depth of the minmax function used by this game instance.
     */
-    int minmax_depth = 6;
+    int minmax_depth;
 
     /*
     Flag indicating if this game allows use of AI.
