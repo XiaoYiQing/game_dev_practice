@@ -54,7 +54,7 @@ string checkers::get_CHK_STATE_Str( CHK_STATE tar_CHK_STATE ){
     return string( magic_enum::enum_name( tar_CHK_STATE ) );
 }
 
-checkers::CHK_STATE get_CHK_STATE_AtIdx( int idx ){
+checkers::CHK_STATE checkers::get_CHK_STATE_AtIdx( int idx ){
     if( idx >= 0 && idx < checkers::CHK_STATE_Count ){
         return static_cast<checkers::CHK_STATE>(idx);
     }else{
@@ -76,6 +76,10 @@ checkers::CHK_move::CHK_move( unsigned int i, unsigned int j, checkers::CHK_DIRE
     this->k = k;
 }
 
+/**
+ * Define an impossible move serving as reference for indicating failure to
+ * attain a usable move.
+ */
 const checkers::CHK_move checkers::IMPOS_MOVE( UINT_MAX, UINT_MAX, checkers::CHK_DIREC::NO_D );
 
 // ====================================================================== <<<<<

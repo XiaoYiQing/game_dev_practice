@@ -16,25 +16,27 @@ using namespace std;
 
 namespace gameEngine{
 
-
-
+/**
+ * An implementation of the base checkers' game functionalities.
+ * 
+ * Win/Lost conditions:
+ * - Opponent/you lost all his/her pieces.
+ * - Opponent/you cannot perform any move.
+ * 
+ * Draw conditions:
+ * - When neither side can force a victory and continuous unproductive plays is recorded, draw.
+ */
 class checkers{
 
 
-/*
-Win/Lost conditions:
-> Opponent/you lost all his/her pieces.
-> Opponent/you cannot perform any move.
-Draw conditions:
-> When neither side can force a victory and repetitive play is recorded, draw.
-*/
+
 
 public:
 
-    /*
-    The size of the board.
-    */
+    // The size of the checker board.
     static const unsigned int BOARD_SIZE = 8;
+    // TODO: you might need to apply the board width and height variables instead of 
+    // the unified size variable above.
     static const unsigned int BOARDWIDTH = 8;
     static const unsigned int BOARDHEIGHT = 8;
 
@@ -48,35 +50,59 @@ public:
 // ====================================================================== >>>>>
 //      Class Enum "CHK_PIECE" Help Functions
 // ====================================================================== >>>>>
-    /*
-    Enum representing the possible pieces placed on the board.
-    */
+
+    /**
+     * Enum representing the possible pieces placed on the board.
+     */
     enum class CHK_PIECE{ NO_P, RED_P, BLK_P, CRED_P, CBLK_P };
 
     // The number of enum entries in the enum "CHK_PIECE" (Uses magic enum).
     const static int CHK_PIECE_Count = (int) magic_enum::enum_count<CHK_PIECE>();
 
-    // Obtain the string of the target enum case (Uses magic enum).
+    /**
+     * Obtain the string of the target enum case (Uses magic enum).
+     * 
+     * @param tar_CHK_PIECE The target CHK_PIECE enum.
+     * @return The string representation of the target CHK_PIECE enum.
+     */
     static string get_CHK_PIECE_Str( CHK_PIECE tar_CHK_PIECE );
-    // Obtain the enum matching the enum integer index.
+    /**
+     * Obtain the CHK_PIECE enum whose native index matches the target index.
+     * 
+     * @param idx The target index for which we seek a matching CHK_PIECE enum.
+     * @return The matching CHK_PIECE enum to the target index, if it exists.
+     */
     static CHK_PIECE get_CHK_PIECE_AtIdx( int idx );
+
 // ====================================================================== <<<<<
 
 
 // ====================================================================== >>>>>
 //      Class Enum "CHK_DIREC" Help Functions
 // ====================================================================== >>>>>
-    /*
-    Enum representing the directions in which pieces can attack or move.
-    */
+
+    /**
+     * Enum representing the directions in which pieces can attack or move.
+     */
     enum class CHK_DIREC{ NO_D, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT };
 
     // The number of enum entries in the enum "CHK_DIREC" (Uses magic enum).
     const static int CHK_DIREC_Count = (int) magic_enum::enum_count<CHK_DIREC>();
-    // Obtain the string of the target enum case (Uses magic enum).
+    /**
+     * Obtain the string of the target enum case (Uses magic enum).
+     * 
+     * @param tar_CHK_DIREC The target CHK_DIREC enum.
+     * @return The string representation of the target CHK_DIREC enum.
+     */
     static string get_CHK_DIREC_Str( CHK_DIREC tar_CHK_DIREC );
-    // Obtain the enum matching the enum integer index.
+    /**
+     * Obtain the CHK_DIREC enum whose native index matches the target index.
+     * 
+     * @param idx The target index for which we seek a matching CHK_DIREC enum.
+     * @return The matching CHK_DIREC enum to the target index, if it exists.
+     */
     static CHK_DIREC get_CHK_DIREC_AtIdx( int idx );
+
 // ====================================================================== <<<<<
 
     
@@ -91,17 +117,29 @@ Update the state of the game:
 // ====================================================================== >>>>>
 //      Class Enum "CHK_STATE" Help Functions
 // ====================================================================== >>>>>
-    /*
-    Enum representing the states the game can be in.
-    */
+
+    /**
+     * Enum representing the states the game can be in.
+     */
     enum class CHK_STATE{ ONGOING, LOCKED, BWIN, RWIN, DRAW };
 
     // The number of enum entries in the enum "CHK_STATE" (Uses magic enum).
     const static int CHK_STATE_Count = (int) magic_enum::enum_count<CHK_STATE>();
-    // Obtain the string of the target enum case (Uses magic enum).
+    /**
+     * Obtain the string of the target enum case (Uses magic enum).
+     * 
+     * @param tar_CHK_STATE The target CHK_STATE enum.
+     * @return The string representation of the target CHK_STATE enum.
+     */
     static string get_CHK_STATE_Str( CHK_STATE tar_CHK_STATE );
-    // Obtain the enum matching the enum integer index.
+    /**
+     * Obtain the CHK_STATE enum whose native index matches the target index.
+     * 
+     * @param idx The target index for which we seek a matching CHK_STATE enum.
+     * @return The matching CHK_STATE enum to the target index, if it exists.
+     */
     static CHK_STATE get_CHK_STATE_AtIdx( int idx );
+
 // ====================================================================== <<<<<
 
 
@@ -111,26 +149,48 @@ Update the state of the game:
 
     /*
     Simplest class for identifying a move, with minimal information.
-    Starting location + direction.
+    
     Whether it is an attack or just a displacement can be discerned by the board situation. 
     Whether this move is legal for the target piece is also checked on the board.
     */
+
+    /**
+     * Simplest class for identifying a move, with minimal information:
+     * 
+     * - Starting location + direction.
+     * 
+     * \note Whether it is an attack or just a displacement can be discerned by the board situation. 
+     * \note Whether this move is legal for the target piece is also checked on the board.
+     * 
+     */
     class CHK_move{
 
         public:
         
+        // TODO: Please verify whether i is row or col.
+
+        /**
+         * Initialize a checkers' move with position (i,j) and direction k.
+         * 
+         * @param i The row index.
+         * @param j The column index.
+         * @param k The relative direction.
+         */
         CHK_move( unsigned int i, unsigned int j, CHK_DIREC k );
 
+        // Row index.
         unsigned int i;
+        // Column index.
         unsigned int j;
+        // Relative direction.
         CHK_DIREC k;
 
     };
 
-    /*
-    Define an impossible move serving as reference for indicating failure to
-    attain a usable move.
-    */
+    /**
+     * Define an impossible move serving as reference for indicating failure to
+     * attain a usable move.
+     */
     static const CHK_move IMPOS_MOVE;
 
 // ====================================================================== >>>>>
@@ -142,7 +202,12 @@ Update the state of the game:
 // ====================================================================== >>>>>
 //      Constructors
 // ====================================================================== >>>>>
+
+    /**
+     * Initialize a checkers game in a completely fresh state.
+     */
     checkers();
+
 // ====================================================================== <<<<<
 
 
@@ -150,26 +215,35 @@ Update the state of the game:
 //      Gameplay Functions
 // ====================================================================== >>>>>
 
-    /*
-    Perform a play using the piece located at coordinate [i,j].
-    A play can be made under the following conditions:
-    > The piece chosen must have the color matching the current turn color.
-    > A move is valid. A valid move is defined following the rules:
-        1- All possible attack moves take priority. A simple displacement move is invalid
-            if there is even one other piece that can perform an attack.
-        2- The attack move is possible if your piece face the enemy piece in the 
-            direct next diagonal space and there is a free space behind the enemy 
-            piece on this same diagonal line.
-        3- The attack move does not end the turn if the piece end up on a square
-            where another attack presents itself. In fact, it MUST continue attacking
-            until the same piece can no longer attack.
-        4- If an attacking piece has multiple avenue of attacks, it may choose which
-            attack to perform.
-        5- If a piece arrives on the last row (closest to the opponent), it must be crowned
-            which gives it the ability to move and capture backward.
-            If the piece was crowned whilst attacking, the attack MUST continue if possible 
-            now that it can capture backward.
-    */
+    /**
+     * \brief Perform a play using the piece located at coordinate [i,j].
+     * 
+     * \param i Row of the target piece.
+     * \param j Column of the target piece.
+     * \param direction The direction for the piece to displace or attack towards.
+     * \return Boolean indicating whether a play is successful.
+     * 
+     * A play can be made under the following conditions:
+     * 
+     * 1. All possible attack moves take priority. A simple displacement move is 
+     *  invalid if there is even one other piece that can perform an attack. 
+     * 
+     * 2. The attack move is possible if your piece face the enemy piece in the 
+     *  direct next diagonal space and there is a free space behind the enemy 
+     *  piece on this same diagonal line.
+     * 
+     * 3. The attack move does not end the turn if the piece end up on a square 
+     *  where another attack presents itself. In fact, it MUST continue attacking
+     *  until the same piece can no longer attack.
+     * 
+     * 4. If an attacking piece has multiple avenue of attacks, it may choose which 
+     *  attack to perform.
+     * 
+     * 5. If a piece arrives on the last row (closest to the opponent), it must be crowned 
+     *  which gives it the ability to move and capture backward.
+     *  If the piece was crowned whilst attacking, the attack MUST continue if possible 
+     *  now that it can capture backward.
+     */
     bool play( unsigned int i, unsigned int j, CHK_DIREC direction );
 
     /*

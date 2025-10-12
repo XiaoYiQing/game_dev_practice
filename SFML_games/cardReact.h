@@ -53,7 +53,6 @@ public:
      * @return The string representation of the target CRG_STATE enum.
      */
     static string get_CRG_STATE_Str( CRG_STATE tar_CRG_STATE );
-    // Obtain the enum matching the enum integer index.
 
     /**
      * Obtain the CRG_STATE enum whose native index matches the target index.
@@ -244,7 +243,7 @@ private:
 }
 
 
-
+// TODO: Perhaps the test should be in a file of its own.
 namespace tests{
 
     void CRG_test1();
