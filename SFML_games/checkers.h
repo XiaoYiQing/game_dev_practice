@@ -13,6 +13,7 @@
 
 using namespace std;
 
+//TODO: Switch simple error messages into exceptions.
 
 namespace gameEngine{
 
@@ -215,6 +216,9 @@ Update the state of the game:
 //      Gameplay Functions
 // ====================================================================== >>>>>
 
+
+    //TODO: The move validity check step where we check if any other piece of the same color
+    // can attack should be put in the move check function, not directly in the play function.
     /**
      * \brief Perform a play using the piece located at coordinate [i,j].
      * 
@@ -246,84 +250,159 @@ Update the state of the game:
      */
     bool play( unsigned int i, unsigned int j, CHK_DIREC direction );
 
-    /*
-    Perform an attack using the piece at the target coordinate against the (supposed)
-    piece at its immediate adjascent diagonal along the specified direction.
-    Strictly performs the attack after checking attack is possible and nothing else.
-    */
+    /**
+     * \brief Perform an attack using the piece at the target coordinate against the (supposed) 
+     * piece at its immediate adjascent diagonal along the specified direction.
+     * 
+     * Strictly performs the attack after checking attack is possible and nothing else.
+     * 
+     * \param i Target attacking piece's row index.
+     * \param j Target attacking piece's column index.
+     * \param direction Target piece's attacking direction.
+     * 
+     * \return Coordinate of the target piece's final destination post-attack. 
+     *  If attack failed, coordinate is empty.
+     */
     vector<unsigned int> attack( unsigned int i, unsigned int j, CHK_DIREC direction );
 
-    /*
-    Perform a move using the piece at the target coordinate and displace it
-    one diagonal unit in the specified direction.
-    This function only ensures that a move is possible, but does not consider 
-    if a move is legal (attacks normally take precedence over moves).
-    Strickly performs the move after checking move is possible and nothing else.
-    */
+    /**
+     * \brief Perform a move using the piece at the target coordinate and displace it 
+     * one diagonal unit in the specified direction.
+     * 
+     * Strickly performs the move after checking move is possible and nothing else.
+     * 
+     * \warning This function only ensures that a move is possible, but does not consider 
+     * if a move is legal (attacks normally take precedence over moves).
+     * 
+     * \param i Target moving piece's row index.
+     * \param j Target moving piece's column index.
+     * \param direction Target piece's moving direction.
+     * \return Coordinate of the target piece's final destination post-move. 
+     *  If the move failed, coordinate is empty.
+     */
     vector<unsigned int> move( unsigned int i, unsigned int j, CHK_DIREC direction );
 
-    /*
-    Perform the crowning action on the black piece at specified column.
-    */
+    /**
+     * \brief Perform the crowning action on the black piece at the specified column.
+     * 
+     * \param j Target column's index where a black piece promotion is performed.
+     * \return Flag indicating whether a crowning was successfully performed.
+     */
     bool crownBlkPiece( unsigned int j );
-    /*
-    Perform the crowning action on the red piece at specified column.
-    */
+    /**
+     * \brief Perform the crowning action on the red piece at the specified column.
+     * 
+     * \param j Target column's index where a red piece promotion is performed.
+     * \return Flag indicating whether a crowning was successfully performed.
+     */
     bool crownRedPiece( unsigned int j );
     
-    /*
-    Checks if the target piece can attack in the desired direction.
-    Beyond the base validities, a theoretical attack check is performed.
-    */
+    /**
+     * \brief Checks if the target piece can attack in the desired direction.
+     * 
+     * Beyond the base validities, a theoretical attack check is performed.
+     * 
+     * \param i Target attacking piece's row index.
+     * \param j Target attacking piece's column index.
+     * \param direction Target piece's attacking direction.
+     * \return Flag indicating whether the specified attack is valid to perform.
+     */
     bool validAtkCheck( unsigned int i, unsigned int j, CHK_DIREC direction ) const;
     
-    /*
-    Checks if the target piece can move in the desired direction.
-    Beyond the base validities, a theoretical move check is performed.
-    */
+    /**
+     * \brief Checks if the target piece can move in the desired direction.
+     * 
+     * Beyond the base validities, a theoretical move check is performed.
+     * 
+     * \param i Target moving piece's row index.
+     * \param j Target moving piece's column index.
+     * \param direction Target piece's move direction.
+     * \return Flag indicating whether the specified move is valid to perform.
+     */
     bool validMoveCheck( unsigned int i, unsigned int j, CHK_DIREC direction ) const;
 
-    /*
-    First set of checks on whether a piece can be played:
-    > The coordinate is valid.
-    > There is a piece at the coordinate.
-    > The piece color matches the current turn order.
-    */
+    /**
+     * \brief First set of checks on whether a piece can be played.
+     * 
+     * The conditions are:
+     * 
+     * - The coordinate is valid.
+     * 
+     * - There is a piece at the coordinate.
+     * 
+     * - The piece color matches the current turn order.
+     * 
+     * \param i Target piece's row index.
+     * \param j Target piece's column index.
+     * \param direction Target piece's action direction.
+     * \return Flag indicating whether the piece meets minimum requirements to perform an action.
+     */
     bool validBasicCheck( unsigned int i, unsigned int j, CHK_DIREC direction ) const;
 
-    /*
-    A theoretical attack check, assuming a piece of target color and rank initiates
-    the attack at the desired position along the desired direction.
-    What is checked:
-    > The required attack direction matches the capability of the piece.
-    > If the attack is still within the limits of the board.
-    > If there is an enemy piece within the immediate next diagonal square along
-        the specified path of attack.
-    > If there is an empty square behind above said enemy piece allowing your piece
-        to land after the attack.
-    */
+    /**
+     * \brief A theoretical attack check, assuming a piece of target color and rank initiates
+     * the attack at the desired position along the desired direction.
+     * 
+     * The conditions checked are:
+     * 
+     * - The required attack direction matches the capability of the piece.
+     * 
+     * - If the attack is still within the limits of the board.
+     * 
+     * - If there is an enemy piece within the immediate next diagonal square along
+     *      the specified path of attack.
+     * 
+     * - If there is an empty square behind above said enemy piece allowing your piece
+     *      to land after the attack.
+     * 
+     * \param i Target attacking piece's row index.
+     * \param j Target attacking piece's column index.
+     * \param piece Target piece being verified, providing rank and color info of the piece.
+     * \param direction Target piece's attacking direction.
+     * \return Flag indicating whether the piece meets the requirements to perform an attack.
+     */
     bool theoAtkCheck( unsigned int i, unsigned int j, CHK_PIECE piece, CHK_DIREC direction ) const;
 
-    /*
-    A theoretical move check, assuming a piece of target color and rank initiates
-    the move at the desired position along the desired direction.
-    What is checked:
-    > The required move direction matches the capability of the piece.
-    > If the move is still within the limits of the board.
-    > If the move is impeded by an existing piece.
-    */
+    /**
+     * \brief A theoretical move check, assuming a piece of target color and rank initiates
+     *  the move at the desired position along the desired direction.
+     * 
+     * The conditions checked are:
+     * 
+     * - The required move direction matches the capability of the piece.
+     * 
+     * - If the move is still within the limits of the board.
+     * 
+     * - If the move is impeded by an existing piece.
+     * 
+     * \param i Target moving piece's row index.
+     * \param j Target moving piece's column index.
+     * \param piece Target piece being verified, providing rank and color info of the piece.
+     * \param direction Target piece's move direction.
+     * \return Flag indicating whether the piece meets the requirements to perform a move.
+     */
     bool theoMoveCheck( unsigned int i, unsigned int j, CHK_PIECE piece, CHK_DIREC direction ) const;
 
-    /*
-    A theoretical attack check on all directions, assuming a piece of target color 
-    and rank initiates the attack at the desired position.
-    */
+    /**
+     * \brief A theoretical attack check on all directions, assuming a piece of target color 
+     *  and rank initiates the attack at the desired position.
+     * 
+     * \param i Target attacking piece's row index.
+     * \param j Target attacking piece's column index.
+     * \param piece Target piece being verified, providing rank and color info of the piece.
+     * \return Vector of all directions the target piece can attack towards.
+     */
     vector<CHK_DIREC> theoAtkCheckAll( unsigned int i, unsigned int j, CHK_PIECE piece ) const;
 
-    /*
-    A theoretical move check on all directions, assuming a piece of target color
-    and rank initiates the move at the desired position.
-    */
+    /**
+     * \brief A theoretical move check on all directions, assuming a piece of target color 
+     *  and rank initiates the attack at the desired position.
+     * 
+     * \param i Target moving piece's row index.
+     * \param j Target moving piece's column index.
+     * \param piece Target piece being verified, providing rank and color info of the piece.
+     * \return Vector of all directions the target piece can move towards.
+     */
     vector<CHK_DIREC> theoMoveCheckAll( unsigned int i, unsigned int j, CHK_PIECE piece ) const;
 
 // ====================================================================== <<<<<
@@ -333,48 +412,80 @@ Update the state of the game:
 //      Game State Functions
 // ====================================================================== >>>>>
 
-    /*
-    Obtain the current turn of the game.
-        [0 = black]
-        [1 = red]
-    */
+    /**
+     * Obtain the current turn index representation.
+     * 
+     * \return Current turn index: [0 = black] [1 = red].
+     */
     int getCurrTurn() const;
 
-    // Return true if current game instance is at black's turn.
+    /**
+     * Determine if current turn is black turn.
+     * 
+     * \return Flag indicating if it is black's turn.
+     */
     bool isBlackTurn() const;
 
     /*
-    Obtain the turn id of the target piece.
+    
     [-1 = no piece]
     [0 = black]
     [1 = red]
     */
+
+    /**
+     * Obtain the turn id of the target piece.
+     * 
+     * Possible outcomes:
+     * - [-1 = no piece]
+     * - [0 = black]
+     * - [1 = red]
+     * 
+     * \return The turn index associated to the target piece.
+     */
     int getTurnID( CHK_PIECE ) const;
 
-    /*
-    Update the state of the game:
-        > 0 = unfinished ---> game is still in progress.
-        > 1 = locked -------> game is locked in an attack sequence by a certain piece.
-        > 2 = Black won: ---> game has ended with black being victorious.
-        > 3 = Red won: -----> game has ended with red being victorious.
-        > 4 = Draw: --------> game has ended with no one victorious (20 turns with no capture or crowning).
-    */
+
+    /**
+     * Perform a check on the current state of the game and update the game state variable.
+     * 
+     * The possible states are:
+     * 
+     * - unfinished ---> game is still in progress.
+     * - locked -------> game is locked in an attack sequence by a certain piece.
+     * - Black won: ---> game has ended with black being victorious.
+     * - Red won: -----> game has ended with red being victorious.
+     * - Draw: --------> game has ended with no one victorious (a number of turns with no capture or crowning).
+     * 
+     */
     void upd_game_state();
 
-    /*
-    Update the list of possible attacking pieces.
-    */
+    /**
+     * \brief Update the list of possible attacking pieces.
+     * 
+     * Both the list of red and black pieces that can perform an attack
+     * will be updated.
+     */
     void upd_atk_posb();
 
-    /*
-    Update the list of possible displacements.
-    */
+    /**
+     * \brief Update the list of possible displacements.
+     * 
+     * Both the list of red and black pieces that can perform a move
+     * will be updated.
+     */
     void upd_displ_posb();
 
     /*
     Print to terminal the state of the board.
     This is a debug tool, and may be deleted.
     */
+
+    /**
+     * \brief Print the state of the board onto the console terminal.
+     * 
+     * \note This is a debug tool and has no impact on actual game functionalities.
+     */
     void printBoard() const;
 
 // ====================================================================== <<<<<
