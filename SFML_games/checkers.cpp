@@ -955,7 +955,7 @@ bool checkers::insertPiece( unsigned int i, unsigned int j, checkers::CHK_PIECE 
 
 }
 
-void checkers::insertBoard( CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] ){
+void checkers::insertBoard( const CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] ){
 
     // Make a copy of the board.
     for( unsigned int i = 0; i < BOARD_SIZE; i++ ){

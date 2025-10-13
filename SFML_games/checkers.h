@@ -495,7 +495,11 @@ Update the state of the game:
 //      Game Direct Manipulation Functions
 // ====================================================================== >>>>>
 
-    // Set all pieces of the board to "no piece" state.
+    /**
+     * \brief Set the board as completely blank.
+     * 
+     * All pieces of the board adopt the "no piece" state.
+     */
     void clearBoard();
 
     /*
@@ -503,20 +507,36 @@ Update the state of the game:
     Overwrites existing piece by default.
     Does not update game state or turn count.
     */
+
+    /**
+     * \brief Place a new piece at the target coordinate on the board.
+     * 
+     * \note Overwrites existing piece by default.
+     * 
+     * \warning Does not update the game state or turn count.
+     * 
+     * \param i Target attacking piece's row index.
+     * \param j Target attacking piece's column index.
+     * \param piece Target piece being verified, providing rank and color info of the piece.
+     * \return The boolean indicating whether the piece insertion was successful.
+     */
     bool insertPiece( unsigned int i, unsigned int j, CHK_PIECE newPiece );
 
-    /*
-    Directly insert the desired board set to this game object.
-    The given board is copied by the class' board.
-    Does not update game state or turn count.
-    */
-    void insertBoard( CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] );
+    /**
+     * \brief Directly insert the desired board set to this game object.
+     * 
+     * \param in_CHK_board The given board that is copied by the class' board.
+     * 
+     * \warning Does not update game state or turn count.
+     */
+    void insertBoard( const CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] );
 
-    /*
-    Reset the board to the state of a fresh new game.
-    This function serves as a game instance reset, though some class variables
-    may not be affected.
-    */
+    /**
+     * Reset the board to the state of a fresh new game.
+     * 
+     * \note This function serves as a game instance reset, though some class
+     *  variables may not be affected.
+     */
     void resetBoard();
 
 // ====================================================================== <<<<<
