@@ -1107,60 +1107,6 @@ vector<checkers::CHK_move> checkers::get_valid_moves(){
 
 }
 
-int checkers::minmax_split_init( checkers& tarGame, bool isMaximizing, int depth ){
-
-    // Define number of threads.
-    unsigned int thread_cnt = 2;
-
-
-    // Empty the shared move stack.
-    while ( !shared_move_stk.empty() ) {
-        shared_move_stk.pop(); 
-    }
-    // Obtain the entire set of currently valid moves.
-    vector <checkers::CHK_move> validMovesVect = tarGame.get_valid_moves();
-    // Push the entire set of valid moves unto the shared stack.
-    for( checkers::CHK_move move_z : validMovesVect ){
-        shared_move_stk.push( move_z );
-    }
-
-    // Create separate threads to run the split minmax function.
-    vector< std::thread > myThreads;
-    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
-        myThreads.emplace_back( checkers::minmax_split, ref( tarGame ), isMaximizing, depth );
-    }
-    // The current thread starts its own split minmax run after initiating the 
-    // other threads.
-    minmax_split( ref( tarGame ), isMaximizing, depth );
-
-    // Wait for all separate threads to finish.
-    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
-        if( myThreads.at(z).joinable() ){
-            myThreads.at(z).join();
-        }
-    }
-
-    // Summarize the best score results from the individual results generated
-    // from the threads.
-    int bestScore = 0;
-    if( isMaximizing ){
-        bestScore = std::numeric_limits<int>::min();
-        while( !tarGame.shared_minmax_res.empty() ){
-            bestScore = std::max( bestScore, shared_minmax_res.top() );
-            shared_minmax_res.pop();
-        }
-    }else{
-        bestScore = std::numeric_limits<int>::max();
-        while( !tarGame.shared_minmax_res.empty() ){
-            bestScore = std::min( bestScore, shared_minmax_res.top() );
-            shared_minmax_res.pop();
-        }
-    }
-
-    return bestScore;
-
-}
-
 int checkers::minmax_debug( bool isMaximizing, int depth ){
 
     return minmax_debug_loop( isMaximizing, depth, depth );
@@ -1565,6 +1511,61 @@ int checkers::minmax_split( checkers& tarGame, bool isMaximizing, int depth ){
     // Add the best score to the shared stack.
     shared_minmax_res.push( bestScore );
     mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+
+    return bestScore;
+
+}
+
+
+int checkers::minmax_split_init( checkers& tarGame, bool isMaximizing, int depth ){
+
+    // Define number of threads.
+    unsigned int thread_cnt = 2;
+
+
+    // Empty the shared move stack.
+    while ( !shared_move_stk.empty() ) {
+        shared_move_stk.pop(); 
+    }
+    // Obtain the entire set of currently valid moves.
+    vector <checkers::CHK_move> validMovesVect = tarGame.get_valid_moves();
+    // Push the entire set of valid moves unto the shared stack.
+    for( checkers::CHK_move move_z : validMovesVect ){
+        shared_move_stk.push( move_z );
+    }
+
+    // Create separate threads to run the split minmax function.
+    vector< std::thread > myThreads;
+    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
+        myThreads.emplace_back( checkers::minmax_split, ref( tarGame ), isMaximizing, depth );
+    }
+    // The current thread starts its own split minmax run after initiating the 
+    // other threads.
+    minmax_split( ref( tarGame ), isMaximizing, depth );
+
+    // Wait for all separate threads to finish.
+    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
+        if( myThreads.at(z).joinable() ){
+            myThreads.at(z).join();
+        }
+    }
+
+    // Summarize the best score results from the individual results generated
+    // from the threads.
+    int bestScore = 0;
+    if( isMaximizing ){
+        bestScore = std::numeric_limits<int>::min();
+        while( !tarGame.shared_minmax_res.empty() ){
+            bestScore = std::max( bestScore, shared_minmax_res.top() );
+            shared_minmax_res.pop();
+        }
+    }else{
+        bestScore = std::numeric_limits<int>::max();
+        while( !tarGame.shared_minmax_res.empty() ){
+            bestScore = std::min( bestScore, shared_minmax_res.top() );
+            shared_minmax_res.pop();
+        }
+    }
 
     return bestScore;
 

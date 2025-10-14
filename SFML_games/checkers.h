@@ -426,13 +426,6 @@ Update the state of the game:
      */
     bool isBlackTurn() const;
 
-    /*
-    
-    [-1 = no piece]
-    [0 = black]
-    [1 = red]
-    */
-
     /**
      * Obtain the turn id of the target piece.
      * 
@@ -502,12 +495,6 @@ Update the state of the game:
      */
     void clearBoard();
 
-    /*
-    Place a new piece at the target coordinate on the board.
-    Overwrites existing piece by default.
-    Does not update game state or turn count.
-    */
-
     /**
      * \brief Place a new piece at the target coordinate on the board.
      * 
@@ -546,36 +533,88 @@ Update the state of the game:
 //      AI Related Functions
 // ====================================================================== >>>>>
 
-    /*
-    Provide a numerical score to the current state of the game.
-    Calling this function automatically calls the upd_game_state();
-    */
+    /**
+     * Provide a numerical score to the current state of the game.
+     * 
+     * This function call automatically calls the upd_game_state() function.
+     * 
+     * \return The numerical value of the current state of the game.
+     * 
+     * \note Negative value associated to red, positive value associated to black, so
+     *  a high positive value translates to a good board situation for red and vice versa.
+     */
     int gameStateEval();
 
-    /*
-    Obtain all currently valid moves.
-    Turn is based on the current checkers instance's turn count.
-    NOTE: Attacks take precedence over displacement, so if a single piece
-    can attack, no other piece of the same color can be displaced.
-    */
+    /**
+     * Obtain all current valid moves (displacements).
+     * 
+     * Turn is based on the current checkers instance's turn count.
+     * 
+     * \note Attacks take precedence over displacements, so if a single piece
+     *  can attack, no other piece of the same color can be displaced and this
+     *  function would return an empty vector.
+     */
     vector<CHK_move> get_valid_moves();
 
-    /*
-    minmax function for helping the game A.I. to make the best possible move.
-    This function does not determine the best move, but helps in attributing numerical
-    values to each possible move up to a specified depth/turn into the future.
-    NOTE: maximizing when black, minimizing when red.
-    */
+    /**
+     * \brief The minmax function for helping the game A.I. to make the best possible move.
+     * 
+     * Max for black, min for red.
+     * 
+     * \param isMaximizing flag for indicating whether the minmax function is 
+     *  aiming to maximize or not. If not, then it aims to minimize.
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * \return The computed minmax score.
+     * 
+     * \note This function does not determine the best move, but helps in 
+     *  attributing numerical values to each possible move up to a specified 
+     *  depth/turn into the future.
+     */
     int minmax( bool isMaximizing, int depth );
-    /*
-    Minmax with additional specified set of moves to perform the 
-    minmax process on.
-    This function is meant to be used with its own thread.
-    */
+
+
+    /**
+     * \brief The minmax function for helping the game A.I. to make the best 
+     *  possible move with multi-threaded design to be able to be run with multiple
+     *  instances at the same time.
+     * 
+     * Max for black, min for red.
+     * 
+     * \warning This function is not to be run by itself as a standalone function.
+     *  Please use the designated multi-thread minmax run starting function
+     *  minmax_split_init.
+     *
+     * \param tarGame The game for which the minmax value is to be calucalted at 
+     *  its current state.
+     * \param isMaximizing flag for indicating whether the minmax function is 
+     *  aiming to maximize or not. If not, then it aims to minimize.
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * \return The computed minmax score.
+     * 
+     * \note This function does not determine the best move, but helps in 
+     *  attributing numerical values to each possible move up to a specified 
+     *  depth/turn into the future.
+     */
     static int minmax_split( checkers& tarGame, bool isMaximizing, int depth );
-    /*
-    The starting point of the minmax_split.
-    */
+
+    // TODO: make the number of threads possible something the user can control. First
+    // check how many cores there are, then allow to the user to decide how many can
+    // be taken.
+    
+    /**
+     * \brief The starting point of the multi-threaded minmax_split run.
+     * 
+     * Like the normal minmax function version, this function generates a score for
+     * helping the game A.I. to make the best possible move.
+     * 
+     * \param tarGame The game for which the minmax value is to be calucalted at 
+     *  its current state.
+     * \param isMaximizing flag for indicating whether the minmax function is 
+     *  aiming to maximize or not. If not, then it aims to minimize.
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * \return The computed minmax score.
+     * 
+     */
     static int minmax_split_init( checkers& tarGame, bool isMaximizing, int depth );
 
     /*
@@ -584,35 +623,93 @@ Update the state of the game:
     values to each possible move up to a specified depth/turn into the future.
     NOTE: maximizing when black, minimizing when red.
     NOTE: debug version prints every step on the console.
+
+    NOTE: If this is still here in the official version ... feel free to delete.
     */
     int minmax_debug( bool isMaximizing, int depth );
     /*
     The actual recursive portion of the debug minmax function.
+
+    NOTE: If this is still here in the official version ... feel free to delete.
     */
     int minmax_debug_loop( bool isMaximizing, int depth, int max_depth );
 
-    /*
-    The minmax function with AB-pruning.
-    The process and results are basically the same as the standard minmax function,
-    but branches of the search may be skipped depending on best results found in
-    the immediate higher node of the search tree.
-    */
+
+    /**
+     * \brief The minmax function with AB-pruning capability for helping the 
+     *  game A.I. to make the best possible move. This function serves as the 
+     *  starting point of the chain.
+     * 
+     * Max for black, min for red.
+     * 
+     * The process and results are basically the same as the standard minmax 
+     * function, but branches of the search may be skipped depending on best 
+     * results found in the immediate higher node of the search tree.
+     * 
+     * \param isMaximizing flag for indicating whether the minmax function is 
+     *  aiming to maximize or not. If not, then it aims to minimize.
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * \return The computed minmax score.
+     * 
+     * \note This function does not determine the best move, but helps in 
+     *  attributing numerical values to each possible move up to a specified 
+     *  depth/turn into the future.
+     */
     int minmaxAB( bool isMaximizing, int depth );
-    /*
-    The actual recursive portion of the minmax AB-pruning algorithm.
-    */
+
+    /**
+     * \brief The intermediate recursive step function of the minmax AB-pruning 
+     *  algorithm.
+     * 
+     * \param isMaximizing flag for indicating whether the minmax function is 
+     *  aiming to maximize or not. If not, then it aims to minimize.
+     * \param alpha The best max score reference for the next turn score calculation.
+     * \param beta The best min score reference for the next turn score calculation.
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * \return The computed minmax score.
+     */
     int minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth );
 
-    /*
-    Minmax with AP-pruning, with additional specified set of moves to perform the 
-    minmax process on.
-    This function is meant to be used with its own thread.
-    */
+
+    /**
+     * \brief The minmax function with AB-pruning capability for helping the 
+     *  game A.I. to make the best possible move. Function has multi-threaded 
+     *  design to be able to be run with multiple instances at the same time.
+     * 
+     * Max for black, min for red.
+     * 
+     * The process and results are basically the same as the standard minmax 
+     * function, but branches of the search may be skipped depending on best 
+     * results found in the immediate higher node of the search tree.
+     * 
+     * \warning This function is not to be run by itself as a standalone function.
+     *  Please use the designated multi-thread minmaxAB run starting function 
+     *  minmaxAB_split_init.
+     * 
+     * \param isMaximizing flag for indicating whether the minmax function is 
+     *  aiming to maximize or not. If not, then it aims to minimize.
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * \return The computed minmax score.
+     * 
+     * \note This function does not determine the best move, but helps in 
+     *  attributing numerical values to each possible move up to a specified 
+     *  depth/turn into the future.
+     */
     static int minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth );
 
-    /*
-    The starting point of the split.
-    */
+
+    /**
+     * \brief The starting point of the multi-threaded minmaxAB_split run.
+     * 
+     * \param isMaximizing flag for indicating whether the minmax function is 
+     *  aiming to maximize or not. If not, then it aims to minimize.
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * \return The computed minmax score.
+     * 
+     * \note This function does not determine the best move, but helps in 
+     *  attributing numerical values to each possible move up to a specified 
+     *  depth/turn into the future.
+     */
     static int minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth );
 
     /*
