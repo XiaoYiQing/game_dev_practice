@@ -686,6 +686,8 @@ Update the state of the game:
      *  Please use the designated multi-thread minmaxAB run starting function 
      *  minmaxAB_split_init.
      * 
+     * \param tarGame The game for which the minmax value is to be calucalted at 
+     *  its current state.
      * \param isMaximizing flag for indicating whether the minmax function is 
      *  aiming to maximize or not. If not, then it aims to minimize.
      * \param depth The number of moves (including opponent's) into the future to scan.
@@ -701,6 +703,8 @@ Update the state of the game:
     /**
      * \brief The starting point of the multi-threaded minmaxAB_split run.
      * 
+     * \param tarGame The game for which the minmax value is to be calucalted at 
+     *  its current state.
      * \param isMaximizing flag for indicating whether the minmax function is 
      *  aiming to maximize or not. If not, then it aims to minimize.
      * \param depth The number of moves (including opponent's) into the future to scan.
@@ -712,57 +716,91 @@ Update the state of the game:
      */
     static int minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth );
 
-    /*
-    Determine the best move to make in the current turn at the current board state.
-    */
+    /**
+     * Determine the best move to make in the current turn at the current board state
+     * using the standard minmax computation.
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove();
-    /*
-    Determine the best move to make in the current turn at the current board state
-    using the minmax algorithm.
-    NOTE: depth directly specified.
-    */
+
+    /**
+     * Determine the best move to make in the current turn at the current board state 
+     * with a minmax score computed up to the specified number of moves in the future.
+     * 
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove( int depth );
 
-    /*
-    Determine the best move to make in the current turn at the current board state
-    using the minmax algorithm with multi-thread capability.
-    */
+    /**
+     * Determine the best move to make in the current turn at the current board state 
+     * using the minmax algorithm with multi-thread capability.
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove_split();
-    /*
-    Determine the best move to make in the current turn at the current board state
-    using the minmax algorithm with multi-thread capability.
-    NOTE: depth directly specified.
-    */
+    /**
+     * Determine the best move to make in the current turn at the current board state 
+     * using the minmax algorithm with multi-thread capability with a specified max depth.
+     * 
+     * \param depth The number of moves (including opponent's) into the future to scan.
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove_split( int depth );
 
-    /*
-    Determine the best move to make in the current turn at the current board state
-    using the minmax AB-pruning algorithm.
-    */
+
+    /**
+     * Determine the best move to make in the current turn at the current board state
+     * using the minmax with AB-pruning score.
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove_ABP();
-    /*
-    Determine the best move to make in the current turn at the current board state
-    using the minmax AB-pruning algorithm.
-    NOTE: depth directly specified.
-    */
+    /**
+     * Determine the best move to make in the current turn at the current board state
+     * using the minmax with AB-pruning score with set recursion depth limit.
+     * 
+     * \param depth The number of moves (including opponent's) into the future to scan. 
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove_ABP( int depth );
 
-    /*
-    Determine the best move to make in the current turn at the current board state
-    using the minmax AB-pruning algorithm with multi-thread capability.
-    */
+
+    /**
+     * Determine the best move to make in the current turn at the current board state 
+     * using the AB-pruning minmax algorithm with multi-thread capability.
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove_ABP_split();
-    /*
-    Determine the best move to make in the current turn at the current board state
-    using the minmax AB-pruning algorithm with multi-thread capability.
-    NOTE: depth directly specified.
-    */
+
+
+    /**
+     * Determine the best move to make in the current turn at the current board state 
+     * using the multi-threaded AB-pruning minmax algorithm with set recursion 
+     * depth limit.
+     * 
+     * \param depth The number of moves (including opponent's) into the future to scan. 
+     * 
+     * \return The best move to perform at the current board's state.
+     */
     CHK_move bestMove_ABP_split( int depth );
 
-    /*
-    Let the AI perform the next move.
-    If move fails, a move object with no direction (CHK_DIREC::NO_D) is returned.
-    */
+    /**
+     * Let the AI perform the next move in the target checkers game.
+     * 
+     * \param tarGame The target checkers game in which the next move is to be 
+     *  made by the AI.
+     * 
+     * \return The checkers move made (IMPOS_MOVE if no move is made).
+     * 
+     * \note The move is made in game automatically during function call. 
+     *  The return value is just additional info.
+     */
     static CHK_move AI_play( checkers& tarGame );
 
 // ====================================================================== <<<<<
@@ -772,37 +810,128 @@ Update the state of the game:
 //      Class Variables Access Functions
 // ====================================================================== >>>>>
 
+    /**
+     * Return the list of possible attacks by red pieces at the current board state.
+     * 
+     * \return The vector of possible red attack moves.
+     */
     vector<CHK_move> getR_atk_list() const;
+    /**
+     * Return the list of possible attacks by black pieces at the current board state.
+     * 
+     * \return The vector of possible black attack moves.
+     */
     vector<CHK_move> getB_atk_list() const;
 
+    /**
+     * Return the list of possible displacement by red pieces at the current board state.
+     * 
+     * \return The vector of possible red piece displacement.
+     */
     vector<CHK_move> getR_displ_list() const;
+    /**
+     * Return the list of possible displacement by black pieces at the current board state.
+     * 
+     * \return The vector of possible black piece displacement.
+     */
     vector<CHK_move> getB_displ_list() const;
 
+    /**
+     * \return Current game state turn count.
+     */
     unsigned int getTurn_cnt() const;
-    void setTurn_cnt( unsigned int );
+    /**
+     * \brief Forcibly set the game's current turn count.
+     * 
+     * \param turn_cnt The number of turns to set the game to 
+     *  (disregarding current state).
+     */
+    void setTurn_cnt( unsigned int turn_cnt );
 
-
+    /**
+     * \return The current game's AI options:
+     *  
+     * - [0 = standard minmax]
+     * 
+     * - [1 = multi-threaded standard minmax]
+     * 
+     * - [2 = minmax with AB-pruning]
+     * 
+     * - [3 = multi-threaded minmax with AB-pruning]
+     */
     int getAI_opt() const;
+
+    // TODO: this function should check the input.
+    /**
+     * Set the AI option
+     * 
+     * \param opt The new AI option to adopt.
+     *
+     * - [0 = standard minmax]
+     * 
+     * - [1 = multi-threaded standard minmax]
+     * 
+     * - [2 = minmax with AB-pruning]
+     * 
+     * - [3 = multi-threaded minmax with AB-pruning]
+     */
     void setAI_opt( int opt );
 
+    //TODO: Check argument.
+    /**
+     * \return The minmax depth currently adopted by this checkers game instance.
+     */
     int getMinmax_depth() const;
+    /**
+     * Assign a new minmax depth to this checkers game instance.
+     * 
+     * \param in_minmax_depth New minmax depth to adopt.
+     */
     void setMinmax_depth( int in_minmax_depth );
 
+    /**
+     * Set use AI flag to true.
+     */
     void enabledAI();
+    /**
+     * Set use AI flag to false.
+     */
     void disableAI();
+    /**
+     * Switch the AI use flag.
+     */
     void toggle_AI();
+    /**
+     * \return The AI use flag.
+     */
     bool is_AI_enabled() const;
 
-    // Turn off the AI process flag. This will turn off the thread running the AI
-    // at the earliest convenience.
+    /**
+     * \brief Turn off the AI process flag.
+     * 
+     * This will turn off the AI running threads at the earliest convenience.
+     */
     void disableAI_proc();
-    // Turn off the AI process flag. 
+    /**
+     * \brief Turn on the AI process flag.
+     */
     void enableAI_proc();
 
-
+    /**
+     * \return AI play first flag.
+     */
     bool is_AI_first() const;
+    /**
+     * \brief Turn on AI play first flag.
+     */
     void set_AI_first();
+    /**
+     * \brief Turn off AI play first flag.
+     */
     void set_AI_not_first();
+    /**
+     * \brief Switch AI play first flag.
+     */
     void toggle_AI_first();
 
 // ====================================================================== <<<<<
@@ -822,29 +951,38 @@ protected:
     [2 = minmax with AB-pruning]
     [3 = multi-threaded minmax with AB-pruning]
     */
+
+    /**
+     * Options with AI selection:
+     * - [0 = standard minmax]
+     * - [1 = multi-threaded standard minmax]
+     * - [2 = minmax with AB-pruning]
+     * - [3 = multi-threaded minmax with AB-pruning]
+     */
     int AI_opt;
 
-    /*
-    The depth of the minmax function used by this game instance.
-    */
+    /**
+     * The depth of the minmax function used by this game instance.
+     */
     int minmax_depth;
 
-    /*
-    Flag indicating if this game allows use of AI.
-    */
+    /**
+     * Flag indicating if this game enables AI to play as opponent.
+     */
     bool vsAI = true;
     
-    /*
-    Flag indicating if the AI plays first over a versus AI game.
-    */
+    /**
+     * Flag indicating if the AI plays first over a versus AI game.
+     */
     bool AI_first = false;
 
-    /*
-    Flag used for separate thread running the AI process.
-    This flag is normally turned on when the AI process starts to run.
-    If this flag is turned off during an AI process run, the AI process 
-    is to stop at the earliest convenience.
-    */
+    /**
+     * \brief Flag used for separate thread running the AI process.
+     * 
+     * This flag is normally turned on when the AI process starts to run.
+     * If this flag is turned off during an AI process run, the AI process 
+     * is to stop at the earliest convenience.
+     */
     bool AI_proc_flag;
 
     /*
