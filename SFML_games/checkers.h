@@ -534,7 +534,7 @@ Update the state of the game:
 // ====================================================================== >>>>>
 
     /**
-     * Provide a numerical score to the current state of the game.
+     * \brief Provide a numerical score to the current state of the game.
      * 
      * This function call automatically calls the upd_game_state() function.
      * 
@@ -985,25 +985,30 @@ protected:
      */
     bool AI_proc_flag;
 
-    /*
-    Mutex for the purpose of synchronizing use of the shared variables.
-    */
+    /**
+     * Class static mutex for the purpose of synchronizing use of shared variables.
+     */
     static std::mutex mtx_shared_move_list;
 
     /*
-    This is a shared list of moves.
-    This list serves as a shared pool of moves to be dipped by multiple threads
-    at the same time. To prevent the same move from being analysed by more than
-    one thread, you need to use mutex to ensure synchronization. 
+    
     */
+
+    /**
+     * Class static shared list of moves.
+     * 
+     * This list serves as a shared pool of moves to be dipped by multiple threads 
+     * at the same time. To prevent the same move from being analysed by more than 
+     * one thread, you need to use mutex to ensure synchronization. 
+     */
     static stack<checkers::CHK_move> shared_move_stk;
 
-    /*
-    This is a stack of shared minmax operation results.
-    This stack serves as the deposit point of results from running minmax over 
-    several threads at the same time.
-    As such you need to use mutex around access of this variable.
-    */
+    /**
+     * Class static shared stack of minmax operation results.
+     * 
+     * This stack serves as the deposit point of results from running minmax
+     * over several threads at the same time.
+     */
     static stack<int> shared_minmax_res;
 
 // ====================================================================== <<<<<
@@ -1014,24 +1019,27 @@ protected:
     // The number of consecutive turns where no piece has been taken or promoted.
     unsigned int no_change_turn_cnt;
 
-    /*
-    Integer vector holding the count of pieces currently on the board. The vector 
-    has 4 entries, in the following order:
-        0 - # of red pieces.
-        1 - # of black pieces.
-        2 - # of crowned red pieces.
-        3 - # of crowed black pieces.
-    NOTE: this counter vector only updates with the function "upd_game_state()".
-    */
+
+    /**
+     * Integer vector holding the count of pieces currently on the board. The vector 
+     * has 4 entries, in the following order:
+     * 
+     *  0- number of red pieces.
+     *  1- number of black pieces.
+     *  2- number of crowned red pieces.
+     *  3- number of crowed black pieces.
+     * 
+     * This counter vector only updates with the function "upd_game_state()".
+     */
     vector<unsigned int> pieceCounter;
 
     // TODO: Please find a way to allocate memory premptively for this array.
-    /*
-    Numerical table representing the checker board.
-    The board orientation works in the manner as follow:
-        CHK_board[0][0] => black piece
-        CHK_board[BOARD_SIZE-1][BOARD_SIZE-1] => red piece
-    */
+    /**
+     * Numerical table representing the checker board.
+     * The board orientation works in the manner as follow:
+     *  - CHK_board[0][0] => black piece
+     *  - CHK_board[BOARD_SIZE-1][BOARD_SIZE-1] => red piece
+     */
     CHK_PIECE CHK_board[BOARD_SIZE][BOARD_SIZE];
 
     // The list of red pieces that can attack.
@@ -1049,10 +1057,10 @@ protected:
     // The state of the game.
     CHK_STATE state;
 
-    /*
-    The coordinate variable which keeps track of the location of the piece which
-    is causing a lock through an attack sequence.
-    */
+    /**
+     * The coordinate variable which keeps track of the location of the piece which 
+     * is causing a lock through an attack sequence.
+     */
     vector<unsigned int> lock_tar;
 
 };
