@@ -35,7 +35,6 @@ public:
 
     // The size of the checker board.
     static const unsigned int BOARD_SIZE = 8;
-    // TODO: you might need to apply the board width and height variables instead of 
     // the unified size variable above.
     static const unsigned int BOARDWIDTH = 8;
     static const unsigned int BOARDHEIGHT = 8;
@@ -167,8 +166,6 @@ Update the state of the game:
 
         public:
         
-        // TODO: Please verify whether i is row or col.
-
         /**
          * Initialize a checkers' move with position (i,j) and direction k.
          * 
@@ -216,8 +213,9 @@ Update the state of the game:
 // ====================================================================== >>>>>
 
 
-    //TODO: The move validity check step where we check if any other piece of the same color
-    // can attack should be put in the move check function, not directly in the play function.
+    // TODO: The move validity check step where we check if any other piece of the 
+    // same color can attack should be put in the move check function, not directly 
+    // in the play function.
     /**
      * \brief Perform a play using the piece located at coordinate [i,j].
      * 
@@ -429,8 +427,11 @@ Update the state of the game:
      * Obtain the turn id of the target piece.
      * 
      * Possible outcomes:
+     * 
      * - [-1 = no piece]
+     * 
      * - [0 = black]
+     * 
      * - [1 = red]
      * 
      * \return The turn index associated to the target piece.

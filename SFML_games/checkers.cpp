@@ -152,8 +152,7 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
             return false;
             break;
         default:
-            cerr << playMsg << " resulted in an unrecognized game state. Abort." << endl;
-            return false;
+            throw runtime_error( "play: game at an unrecognized game state." );
     }
 
     /*
@@ -165,6 +164,7 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
         return false;
     }
 
+    // Obtain the turn ID of the target piece to play.
     int currPieceTurnID = getTurnID( currPiece );
 
     /*
@@ -221,41 +221,8 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
         }
     }
 
-
-    /* 
-    Make sure there are no other pieces of the same color that are capable of 
-    attacking before trying to move the current piece.
-    */
-    if( currPieceTurnID == 0 ){
-
-        /*
-        The black piece is not allowed to move if another black piece is in 
-        position to attack.
-        */
-        if( B_atk_list.size() > 0 ){
-            cout << playMsg << " failed: current black piece cannot move if an attack by a black piece is possible." << endl;
-            return false;
-        }
-
-    }else if( currPieceTurnID == 1 ){
-
-        /*
-        The red piece is not allowed to move if another red piece is in 
-        position to attack.
-        */
-        if( R_atk_list.size() > 0 ){
-            cout << playMsg << " failed: current red piece cannot move if an attack by a red piece is possible." << endl;
-            return false;
-        }
-
-    }else{
-        cerr << playMsg << " failed: unexpected turn ID detected. Abort." << endl;
-        return false;
-    }
-    
-
     /*
-    Attempts a move and obtain the coordinate of the piece the move.
+    Attempts a move and obtain the coordinate of the piece after the move.
     */
     vector<unsigned int> moveLandCoord = move( i, j, direction );
     if( !moveLandCoord.empty() ){
@@ -428,7 +395,7 @@ bool checkers::validBasicCheck( unsigned int i, unsigned int j, CHK_DIREC direct
 
     // Bad coordinate.
     if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
-        throw invalid_argument( "Coordinate exceeds board limits." );
+        return false;
     }
 
     // Obtain current piece type.
@@ -545,8 +512,36 @@ bool checkers::theoAtkCheck( unsigned int i, unsigned int j, CHK_PIECE piece, CH
 
 bool checkers::theoMoveCheck( unsigned int i, unsigned int j, CHK_PIECE piece, CHK_DIREC direction ) const{
 
-    if( piece == CHK_PIECE::NO_P ){
-        return false;
+    // Check whether 
+    switch( getTurnID( piece ) ){
+
+        // No piece (automatically move fails).
+        case -1:
+            return false;
+
+        // Black piece.
+        case 0:
+
+            if( this->B_atk_list.size() != 0 ){
+                // A black piece is not allowed to perform a displacement if any black
+                // piece on the board is currently in a position to attack.
+                return false;
+            }
+
+            break;
+
+        // Red piece.
+        case 1:
+
+            if( this->R_atk_list.size() != 0 ){
+                // A black piece is not allowed to perform a displacement if any black
+                // piece on the board is currently in a position to attack.
+                return false;
+            }
+            break;
+
+        default:
+            throw runtime_error( "theoMoveCheck: non-recognized turn ID." );
     }
 
     // Move direction vs piece's capability check.
