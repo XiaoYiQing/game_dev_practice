@@ -1549,7 +1549,7 @@ int checkers::minmax_split_init( checkers& tarGame, bool isMaximizing, int depth
 }
 
 
-int checkers::minmaxAB( bool isMaximizing, int depth ){
+int checkers::minmaxAB_init( bool isMaximizing, int depth ){
 
     // Initial alpha and beta.
     int alpha = std::numeric_limits<int>::min();
@@ -2106,9 +2106,9 @@ checkers::CHK_move checkers::bestMove_ABP( int depth ){
 
     // Obtain the current best score.
     if( is_BLK_init_turn ){
-        bestScore = this->minmaxAB( true, depth );
+        bestScore = this->minmaxAB_init( true, depth );
     }else{
-        bestScore = this->minmaxAB( false, depth );
+        bestScore = this->minmaxAB_init( false, depth );
     }
     // Thread exit point.
     if( !this->AI_proc_flag ){
@@ -2131,9 +2131,9 @@ checkers::CHK_move checkers::bestMove_ABP( int depth ){
 
         // Perform next layer minmax.
         if( newGame.isBlackTurn() ){
-            score_z = newGame.minmaxAB( true, depth - 1 );
+            score_z = newGame.minmaxAB_init( true, depth - 1 );
         }else{
-            score_z = newGame.minmaxAB( false, depth - 1 );
+            score_z = newGame.minmaxAB_init( false, depth - 1 );
         }
         // Thread exit point.
         if( !this->AI_proc_flag ){

@@ -555,7 +555,8 @@ Update the state of the game:
 
     /**
      * \brief The minmax function for helping the game A.I. to make the best 
-     *  possible move.
+     *  possible move. This function acts as both initialization and recursive 
+     *  portions.
      * 
      * Max for black, min for red.
      * 
@@ -643,9 +644,8 @@ Update the state of the game:
 
 
     /**
-     * \brief The minmax function with AB-pruning capability for helping the 
-     *  game A.I. to make the best possible move. This function serves as the 
-     *  starting point of the chain.
+     * \brief The initialization portion of the minmax function with AB-pruning 
+     *  capability for helping the game A.I. to make the best possible move. 
      * 
      * Max for black, min for red.
      * 
@@ -662,11 +662,11 @@ Update the state of the game:
      *  attributing numerical values to each possible move up to a specified 
      *  depth/turn into the future.
      */
-    int minmaxAB( bool isMaximizing, int depth );
+    int minmaxAB_init( bool isMaximizing, int depth );
 
     /**
-     * \brief The intermediate recursive step function of the minmax AB-pruning 
-     *  algorithm.
+     * \brief The recursive portion of the minmax function with AB-pruning 
+     *  capability for helping the game A.I. to make the best possible move. 
      * 
      * \param isMaximizing flag for indicating whether the minmax function is 
      *  aiming to maximize or not. If not, then it aims to minimize.
@@ -683,9 +683,8 @@ Update the state of the game:
 
 
     /**
-     * \brief The minmax function with AB-pruning capability for helping the 
-     *  game A.I. to make the best possible move. Function has multi-threaded 
-     *  design to be able to be run with multiple instances at the same time.
+     * \brief The multithreaded portion of the minmax function with AB-pruning 
+     *  capability with multi-threaded design.
      * 
      * Max for black, min for red.
      * 
@@ -714,7 +713,8 @@ Update the state of the game:
 
 
     /**
-     * \brief The starting point of the multi-threaded minmaxAB_split run.
+     * \brief The initialization portion of the minmax function with AB-pruning 
+     *  capability with multi-threaded design.
      * 
      * \param tarGame The game for which the minmax value is to be calucalted at 
      *  its current state.

@@ -841,7 +841,7 @@ void tests::checkers_test10( int tar_scenario_id ){
 
     myGame.enableAI_proc();
     // score_ref = myGame.minmax( isMaximizing, depth );
-    score_ref = myGame.minmaxAB( isMaximizing, depth );
+    score_ref = myGame.minmaxAB_init( isMaximizing, depth );
     score_test = checkers::minmaxAB_split_init( myGame, isMaximizing, depth );
     myGame.disableAI_proc();
 
