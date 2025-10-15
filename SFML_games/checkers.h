@@ -515,7 +515,7 @@ Update the state of the game:
      * 
      * \warning Does not update game state or turn count.
      */
-    void insertBoard( const CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] );
+    void insertBoard( const CHK_PIECE in_CHK_board[BOARDHEIGHT][BOARDWIDTH] );
 
     /**
      * Reset the board to the state of a fresh new game.
@@ -1038,9 +1038,9 @@ protected:
      * Numerical table representing the checker board.
      * The board orientation works in the manner as follow:
      *  - CHK_board[0][0] => black piece
-     *  - CHK_board[BOARD_SIZE-1][BOARD_SIZE-1] => red piece
+     *  - CHK_board[BOARDHEIGHT-1][BOARDWIDTH-1] => red piece
      */
-    CHK_PIECE CHK_board[BOARD_SIZE][BOARD_SIZE];
+    CHK_PIECE CHK_board[BOARDHEIGHT][BOARDWIDTH];
 
     // The list of red pieces that can attack.
     vector<CHK_move> R_atk_list;

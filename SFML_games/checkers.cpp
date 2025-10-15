@@ -99,16 +99,16 @@ checkers::checkers(){
     this->AI_proc_flag = false;
 
     // Initialize the checker board.
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
             CHK_board[i][j] = CHK_PIECE::NO_P;
         }
     }
 
-    for( unsigned int i = 0; i < BOARD_SIZE/2 - 1; i++ ){
-        for( unsigned int j = (unsigned int) remainder(i,2); j < BOARD_SIZE; j+=2 ){
+    for( unsigned int i = 0; i < BOARDHEIGHT/2 - 1; i++ ){
+        for( unsigned int j = (unsigned int) remainder(i,2); j < BOARDWIDTH; j+=2 ){
             CHK_board[i][j] = CHK_PIECE::BLK_P;
-            CHK_board[BOARD_SIZE - i - 1][BOARD_SIZE - j - 1] = CHK_PIECE::RED_P;
+            CHK_board[BOARDHEIGHT - i - 1][BOARDWIDTH - j - 1] = CHK_PIECE::RED_P;
         }
     }
 
@@ -371,10 +371,10 @@ vector<unsigned int> checkers::move( unsigned int i, unsigned int j, CHK_DIREC d
 
 
 bool checkers::crownBlkPiece( unsigned int j ){
-    if( CHK_board[ BOARD_SIZE - 1 ][j] != CHK_PIECE::BLK_P ){
+    if( CHK_board[ BOARDWIDTH - 1 ][j] != CHK_PIECE::BLK_P ){
         return false;
     }else{
-        CHK_board[ BOARD_SIZE - 1 ][j] = CHK_PIECE::CBLK_P;
+        CHK_board[ BOARDWIDTH - 1 ][j] = CHK_PIECE::CBLK_P;
     }
     return true;
 }
@@ -427,7 +427,7 @@ bool checkers::validMoveCheck( unsigned int i, unsigned int j, CHK_DIREC directi
 bool checkers::validBasicCheck( unsigned int i, unsigned int j, CHK_DIREC direction ) const{
 
     // Bad coordinate.
-    if( i >= BOARD_SIZE || j >= BOARD_SIZE ){
+    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
         throw invalid_argument( "Coordinate exceeds board limits." );
     }
 
@@ -510,8 +510,8 @@ bool checkers::theoAtkCheck( unsigned int i, unsigned int j, CHK_PIECE piece, CH
     int new_j = j_int + dj;
 
     // Board limits violation check.
-    if( new_i < 0 || new_i >= BOARD_SIZE ||
-        new_j < 0 || new_j >= BOARD_SIZE ){
+    if( new_i < 0 || new_i >= BOARDHEIGHT ||
+        new_j < 0 || new_j >= BOARDWIDTH ){
         return false;
     }
 
@@ -593,8 +593,8 @@ bool checkers::theoMoveCheck( unsigned int i, unsigned int j, CHK_PIECE piece, C
     int new_j = j_int + dj;
 
     // Board limits violation check.
-    if( new_i < 0 || new_i >= BOARD_SIZE ||
-        new_j < 0 || new_j >= BOARD_SIZE ){
+    if( new_i < 0 || new_i >= BOARDHEIGHT ||
+        new_j < 0 || new_j >= BOARDWIDTH ){
         return false;
     }
     // Movement impediment check.
@@ -688,8 +688,8 @@ void checkers::upd_game_state(){
     int turnID = -1;
 
     // Count the current number of each piece type.
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
 
             switch( CHK_board[i][j] ){
                 case CHK_PIECE::RED_P:
@@ -789,8 +789,8 @@ void checkers::upd_atk_posb(){
 
 
     // Parse through the entire board.
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
 
             // Obtain current piece.
             CHK_PIECE currPiece = CHK_board[i][j];
@@ -838,8 +838,8 @@ void checkers::upd_displ_posb(){
     vector<CHK_DIREC> direcVec;   
 
     // Parse through the entire board.
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
 
             // Obtain current piece.
             CHK_PIECE currPiece = CHK_board[i][j];
@@ -876,15 +876,15 @@ void checkers::upd_displ_posb(){
 void checkers::printBoard() const{
 
     cout << "  ";
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
         cout << i << " ";
     }
     cout << endl;
 
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
 
         cout << i << " ";
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
 
             switch( CHK_board[i][j] ){
                 case CHK_PIECE::NO_P:
@@ -924,8 +924,8 @@ void checkers::printBoard() const{
 
 void checkers::clearBoard(){
     // Clear the checker board.
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
             CHK_board[i][j] = CHK_PIECE::NO_P;
         }
     }
@@ -934,7 +934,7 @@ void checkers::clearBoard(){
 bool checkers::insertPiece( unsigned int i, unsigned int j, checkers::CHK_PIECE newPiece ){
 
     // Bad coordinate.
-    if( i >= BOARD_SIZE || j >= BOARD_SIZE ){
+    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
         cerr << "Coordinate exceeds board limits." << endl;
         return false;
     }
@@ -945,11 +945,11 @@ bool checkers::insertPiece( unsigned int i, unsigned int j, checkers::CHK_PIECE 
 
 }
 
-void checkers::insertBoard( const CHK_PIECE in_CHK_board[BOARD_SIZE][BOARD_SIZE] ){
+void checkers::insertBoard( const CHK_PIECE in_CHK_board[BOARDHEIGHT][BOARDWIDTH] ){
 
     // Make a copy of the board.
-    for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
-        for( unsigned int j = 0; j < BOARD_SIZE; j++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
             CHK_board[i][j] = in_CHK_board[i][j];
         }
     }
@@ -961,10 +961,10 @@ void checkers::resetBoard(){
     // Clear the board first.
     this->clearBoard();
     // Refill the board with the standard game configuration.
-    for( unsigned int i = 0; i < BOARD_SIZE/2 - 1; i++ ){
-        for( unsigned int j = (unsigned int) remainder(i,2); j < BOARD_SIZE; j+=2 ){
+    for( unsigned int i = 0; i < BOARDHEIGHT/2 - 1; i++ ){
+        for( unsigned int j = (unsigned int) remainder(i,2); j < BOARDWIDTH; j+=2 ){
             CHK_board[i][j] = CHK_PIECE::BLK_P;
-            CHK_board[BOARD_SIZE - i - 1][BOARD_SIZE - j - 1] = CHK_PIECE::RED_P;
+            CHK_board[BOARDHEIGHT - i - 1][BOARDWIDTH - j - 1] = CHK_PIECE::RED_P;
         }
     }
 
