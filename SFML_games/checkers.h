@@ -13,7 +13,6 @@
 
 using namespace std;
 
-//TODO: Switch simple error messages into exceptions.
 
 namespace gameEngine{
 
@@ -540,8 +539,9 @@ Update the state of the game:
      * 
      * \return The numerical value of the current state of the game.
      * 
-     * \note Negative value associated to red, positive value associated to black, so
-     *  a high positive value translates to a good board situation for red and vice versa.
+     * \note A negative value is associated to red, a positive value is associated 
+     *  to black, so a high positive value translates to a good board situation 
+     *  for red and vice versa.
      */
     int gameStateEval();
 

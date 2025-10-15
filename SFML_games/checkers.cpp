@@ -18,8 +18,7 @@ checkers::CHK_PIECE checkers::get_CHK_PIECE_AtIdx( int idx ){
     if( idx >= 0 && idx < checkers::CHK_PIECE_Count ){
         return static_cast<checkers::CHK_PIECE>(idx);
     }else{
-        cout << "Invalid int index for accessing enum \"CHK_PIECE\"." << endl;
-        return static_cast<checkers::CHK_PIECE>(-1);
+        throw invalid_argument( "Invalid int index for accessing enum \"CHK_PIECE\"." );
     }
 }
 
@@ -38,8 +37,7 @@ checkers::CHK_DIREC checkers::get_CHK_DIREC_AtIdx( int idx ){
     if( idx >= 0 && idx < checkers::CHK_DIREC_Count ){
         return static_cast<checkers::CHK_DIREC>(idx);
     }else{
-        cout << "Invalid int index for accessing enum \"CHK_DIREC\"." << endl;
-        return static_cast<checkers::CHK_DIREC>(-1);
+        throw invalid_argument( "Invalid int index for accessing enum \"CHK_DIREC\"." );
     }
 }
 
@@ -58,8 +56,7 @@ checkers::CHK_STATE checkers::get_CHK_STATE_AtIdx( int idx ){
     if( idx >= 0 && idx < checkers::CHK_STATE_Count ){
         return static_cast<checkers::CHK_STATE>(idx);
     }else{
-        cout << "Invalid int index for accessing enum \"CHK_STATE\"." << endl;
-        return static_cast<checkers::CHK_STATE>(-1);
+        throw invalid_argument( "Invalid int index for accessing enum \"CHK_STATE\"." );
     }
 }
 
@@ -431,8 +428,7 @@ bool checkers::validBasicCheck( unsigned int i, unsigned int j, CHK_DIREC direct
 
     // Bad coordinate.
     if( i >= BOARD_SIZE || j >= BOARD_SIZE ){
-        cerr << "Coordinate exceeds board limits." << endl;
-        return false;
+        throw invalid_argument( "Coordinate exceeds board limits." );
     }
 
     // Obtain current piece type.
@@ -784,17 +780,13 @@ void checkers::upd_atk_posb(){
                 R_atk_list.push_back( CHK_move( i, j, tmp_direct ) );
             }
         }else{
-            cerr << "A checker piece of unrecognized color somehow got a possible attack." << endl;
-            return;
+            throw std::runtime_error( "upd_atk_posb: A checker piece of unrecognized color somehow got a possible attack." );
         }
 
         return;
 
     }
 
-
-
-        
 
     // Parse through the entire board.
     for( unsigned int i = 0; i < BOARD_SIZE; i++ ){
@@ -823,8 +815,7 @@ void checkers::upd_atk_posb(){
                         R_atk_list.push_back( CHK_move( i, j, tmp_direct ) );
                     }
                 }else{
-                    cerr << "A checker piece of unrecognized color somehow got a possible attack." << endl;
-                    continue;
+                    throw std::runtime_error( "upd_atk_posb: A checker piece of unrecognized color somehow got a possible attack." );
                 }
             }
 
@@ -873,8 +864,7 @@ void checkers::upd_displ_posb(){
                         R_displ_list.push_back( CHK_move( i, j, tmp_direct ) );
                     }
                 }else{
-                    cerr << "A checker piece of unrecognized color somehow got a possible move." << endl;
-                    continue;
+                    throw std::runtime_error( "upd_displ_posb: A checker piece of unrecognized color somehow got a possible move." );
                 }
             }
 
@@ -1009,11 +999,6 @@ stack<checkers::CHK_move> checkers::shared_move_stk;
 
 stack<int> checkers::shared_minmax_res;
 
-
-
-/*
-Provide a numerical score to the current state of the game.
-*/
 int checkers::gameStateEval(){
 
     int stateValue = 0;
@@ -1055,7 +1040,7 @@ int checkers::gameStateEval(){
             break;
 
         default:
-            cerr << "Unrecognized game state error. Abort." << endl;
+            throw runtime_error( "gameStateEval: Unrecognized game state error. Abort." );
     }
 
     return stateValue;
@@ -1097,9 +1082,7 @@ vector<checkers::CHK_move> checkers::get_valid_moves(){
         break;
 
     default:
-        cerr << "Invalid turn ID." << endl;
-        return valid_move_vect;
-
+        throw runtime_error( "get_valid_moves: Invalid turn ID." );
     };
 
 
@@ -1118,8 +1101,7 @@ int checkers::minmax_debug_loop( bool isMaximizing, int depth, int max_depth ){
 
     if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
     this->getCurrTurn() == 1 && isMaximizing ){
-        cout << "Mismatch of minmax objective with the current turn order." << endl;
-        return 0;
+        throw invalid_argument( "minmax_debug_loop: Mismatch of minmax objective with the current turn order." );
     }
 
     switch( this->state ){
@@ -1146,8 +1128,7 @@ int checkers::minmax_debug_loop( bool isMaximizing, int depth, int max_depth ){
             }
             break;
         default:
-            cout << "Unrecognized game state. Abort." << endl;
-            return false;
+            throw runtime_error( "minmax_debug_loop: Unrecognized game state. Abort." );
 
     }
 
@@ -1252,8 +1233,7 @@ int checkers::minmax( bool isMaximizing, int depth ){
 
     if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
     this->getCurrTurn() == 1 && isMaximizing ){
-        cout << "Mismatch of minmax objective with the current turn order." << endl;
-        return 0;
+        throw invalid_argument( "minmax: Mismatch of minmax objective with the current turn order." );
     }
 
     switch( this->state ){
@@ -1272,8 +1252,7 @@ int checkers::minmax( bool isMaximizing, int depth ){
             }
             break;
         default:
-            cout << "Unrecognized game state. Abort." << endl;
-            return false;
+            throw runtime_error( "minmax: Unrecognized game state. Abort." );
 
     }
 
@@ -1363,8 +1342,7 @@ int checkers::minmax_split( checkers& tarGame, bool isMaximizing, int depth ){
 
     if( ( tarGame.getCurrTurn() == 0 && !isMaximizing ) ||
     tarGame.getCurrTurn() == 1 && isMaximizing ){
-        cout << "Mismatch of minmax objective with the current turn order." << endl;
-        return 0;
+        throw invalid_argument( "minmax_split: Mismatch of minmax objective with the current turn order." );
     }
     
     int finalRes = 0;
@@ -1400,8 +1378,7 @@ int checkers::minmax_split( checkers& tarGame, bool isMaximizing, int depth ){
             break;
 
         default:
-            cout << "Unrecognized game state. Abort." << endl;
-            return false;
+            throw runtime_error( "minmax: Unrecognized game state." );
 
     }
 
@@ -1587,8 +1564,7 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
 
     if( ( this->getCurrTurn() == 0 && !isMaximizing ) ||
     this->getCurrTurn() == 1 && isMaximizing ){
-        cout << "Mismatch of minmax objective with the current turn order." << endl;
-        return 0;
+        throw invalid_argument( "minmaxAB_loop: Mismatch of minmax objective with the current turn order." );
     }
 
     switch( this->state ){
@@ -1607,8 +1583,7 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
             }
             break;
         default:
-            cout << "Unrecognized game state. Abort." << endl;
-            return false;
+            throw runtime_error( "minmaxAB_loop: Unrecognized game state." );
 
     }
 
@@ -1765,8 +1740,7 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
     
     if( ( tarGame.getCurrTurn() == 0 && !isMaximizing ) ||
     tarGame.getCurrTurn() == 1 && isMaximizing ){
-        cout << "Mismatch of minmax objective with the current turn order." << endl;
-        return 0;
+        throw invalid_argument( "minmaxAB_split: Mismatch of minmax objective with the current turn order." );
     }
     
     int finalRes = 0;
@@ -1802,8 +1776,7 @@ int checkers::minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth ){
             break;
 
         default:
-            cout << "Unrecognized game state. Abort." << endl;
-            return false;
+            throw runtime_error( "minmaxAB_split: Unrecognized game state." );
 
     }
 
