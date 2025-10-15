@@ -212,10 +212,6 @@ Update the state of the game:
 //      Gameplay Functions
 // ====================================================================== >>>>>
 
-
-    // TODO: The move validity check step where we check if any other piece of the 
-    // same color can attack should be put in the move check function, not directly 
-    // in the play function.
     /**
      * \brief Perform a play using the piece located at coordinate [i,j].
      * 
@@ -558,7 +554,8 @@ Update the state of the game:
     vector<CHK_move> get_valid_moves();
 
     /**
-     * \brief The minmax function for helping the game A.I. to make the best possible move.
+     * \brief The minmax function for helping the game A.I. to make the best 
+     *  possible move.
      * 
      * Max for black, min for red.
      * 
@@ -570,20 +567,20 @@ Update the state of the game:
      * \note This function does not determine the best move, but helps in 
      *  attributing numerical values to each possible move up to a specified 
      *  depth/turn into the future.
+     * 
+     * \warning This function acts as both starting point and recursive portion of 
+     *  the minmax process.
      */
     int minmax( bool isMaximizing, int depth );
 
 
     /**
-     * \brief The minmax function for helping the game A.I. to make the best 
-     *  possible move with multi-threaded design to be able to be run with multiple
-     *  instances at the same time.
+     * \brief The multithread portion of the minmax function for helping the game 
+     *  A.I. to make the best possible move with multi-threaded design to be able 
+     *  to be run with multiple instances at the same time.
      * 
      * Max for black, min for red.
      * 
-     * \warning This function is not to be run by itself as a standalone function.
-     *  Please use the designated multi-thread minmax run starting function
-     *  minmax_split_init.
      *
      * \param tarGame The game for which the minmax value is to be calucalted at 
      *  its current state.
@@ -591,6 +588,11 @@ Update the state of the game:
      *  aiming to maximize or not. If not, then it aims to minimize.
      * \param depth The number of moves (including opponent's) into the future to scan.
      * \return The computed minmax score.
+     * 
+     * \warning This function is designed to be ran with multiple instances on 
+     *  different threads and should not be called out of a vacuum.
+     *  Please use the designated multi-thread minmax run starting function
+     *  minmax_split_init.
      * 
      * \note This function does not determine the best move, but helps in 
      *  attributing numerical values to each possible move up to a specified 
@@ -603,7 +605,11 @@ Update the state of the game:
     // be taken.
     
     /**
-     * \brief The starting point of the multi-threaded minmax_split run.
+     * \brief The initialization portion of the minmax function for helping the 
+     *  game A.I. to make the best possible move with multi-threaded design to 
+     *  be able to be run with multiple instances at the same time.
+     * 
+     * The starting point of the multi-threaded minmax_split run.
      * 
      * Like the normal minmax function version, this function generates a score for
      * helping the game A.I. to make the best possible move.
@@ -668,6 +674,10 @@ Update the state of the game:
      * \param beta The best min score reference for the next turn score calculation.
      * \param depth The number of moves (including opponent's) into the future to scan.
      * \return The computed minmax score.
+     * 
+     * \warning This is the recursive portion for the minmaxAB full function and 
+     *  should not be called out of a vacuum. Please use the intended starting 
+     *  point function minmaxAB.
      */
     int minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth );
 
@@ -683,10 +693,6 @@ Update the state of the game:
      * function, but branches of the search may be skipped depending on best 
      * results found in the immediate higher node of the search tree.
      * 
-     * \warning This function is not to be run by itself as a standalone function.
-     *  Please use the designated multi-thread minmaxAB run starting function 
-     *  minmaxAB_split_init.
-     * 
      * \param tarGame The game for which the minmax value is to be calucalted at 
      *  its current state.
      * \param isMaximizing flag for indicating whether the minmax function is 
@@ -697,6 +703,12 @@ Update the state of the game:
      * \note This function does not determine the best move, but helps in 
      *  attributing numerical values to each possible move up to a specified 
      *  depth/turn into the future.
+     * 
+     * \warning This function is designed to be ran with multiple instances on 
+     *  different threads and should not be called out of a vacuum.
+     *  Please use the designated multi-thread minmaxAB run starting function 
+     *  minmaxAB_split_init.
+     * 
      */
     static int minmaxAB_split( checkers& tarGame, bool isMaximizing, int depth );
 

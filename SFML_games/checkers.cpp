@@ -175,6 +175,7 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
     // Check attempt result.
     if( !atkLandCoord.empty() ){
         
+        // Check for possible crowning.
         if( currPieceTurnID == 0 ){
             crownBlkPiece( atkLandCoord.at(1) );
         }else if( currPieceTurnID == 1 ){
@@ -227,6 +228,7 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
     vector<unsigned int> moveLandCoord = move( i, j, direction );
     if( !moveLandCoord.empty() ){
         
+        // Check for possible crowning.
         if( currPieceTurnID == 0 ){
             crownBlkPiece( moveLandCoord.at(1) );
         }else if( currPieceTurnID == 1 ){
@@ -244,6 +246,7 @@ bool checkers::play( unsigned int i, unsigned int j, CHK_DIREC direction ){
 
     }
 
+    // Print message signaling failure for the play to be made.
     cout << playMsg << " failed: current piece's play is invalid." << endl;
     return false;
 
@@ -1492,8 +1495,10 @@ int checkers::minmax_split( checkers& tarGame, bool isMaximizing, int depth ){
 int checkers::minmax_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
     // Define number of threads.
-    unsigned int thread_cnt = 2;
+    // unsigned int thread_cnt = 2;
 
+    // Set the number of threads to utilize.
+    unsigned int thread_cnt = min( 2u, std::thread::hardware_concurrency() );
 
     // Empty the shared move stack.
     while ( !shared_move_stk.empty() ) {
@@ -1680,8 +1685,7 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
 int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
     // Define number of threads.
-    unsigned int thread_cnt = 3;
-
+    unsigned int thread_cnt = min( 3u, std::thread::hardware_concurrency() );
 
     // Empty the shared move stack.
     while ( !shared_move_stk.empty() ) {
@@ -2084,7 +2088,7 @@ checkers::CHK_move checkers::bestMove_ABP(){
 
 checkers::CHK_move checkers::bestMove_ABP( int depth ){
 
-    // Initialize the best move coordindate with an impossible move with no direction.
+    // Initialize the best move coordinate with an impossible move with no direction.
     CHK_move optimMove = IMPOS_MOVE;
 
     if( this->state == CHK_STATE::BWIN || this->state == CHK_STATE::RWIN || 
