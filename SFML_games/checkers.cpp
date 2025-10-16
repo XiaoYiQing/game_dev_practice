@@ -118,6 +118,12 @@ checkers::checkers(){
     this->AI_proc_flag = false;
     this->thread_to_use = 2;
 
+    // Define the map of minmax score related values.
+    this->minmax_vals["std_piece_val"] = 5;
+    this->minmax_vals["crown_piece_val"] = 20;
+    this->minmax_vals["win_val"] = 1000;
+    this->minmax_vals["draw_val"] = 0;
+
     // Initialize the checker board.
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
         for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
@@ -1026,17 +1032,15 @@ int checkers::gameStateEval(){
 
     /*
     Values of pieces.
-    TODO: eventually, you should put these values as constant static variables 
-    for this class.
     */
-    int RED_P_val = -5;
-    int CRED_P_val = -20;
-    int BLK_P_val = 5;
-    int CBLK_P_val = 20;
+    int RED_P_val = -this->minmax_vals["std_piece_val"];
+    int CRED_P_val = -this->minmax_vals["crown_piece_val"];
+    int BLK_P_val = this->minmax_vals["std_piece_val"];
+    int CBLK_P_val = this->minmax_vals["crown_piece_val"];
 
-    int RED_win_val = -1000;
-    int BLK_win_val = 1000;
-    int draw_val = 0;
+    int RED_win_val = -this->minmax_vals["win_val"];
+    int BLK_win_val = this->minmax_vals["win_val"];
+    int draw_val = this->minmax_vals["draw_val"];
 
 
     switch( this->state ){

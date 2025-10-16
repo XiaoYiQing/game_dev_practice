@@ -918,7 +918,6 @@ Update the state of the game:
      */
     void setAI_opt( CHK_AI_OPT opt );
 
-    //TODO: Check argument.
     /**
      * \return The minmax depth currently adopted by this checkers game instance.
      */
@@ -1015,6 +1014,19 @@ protected:
      * The depth of the minmax function used by this game instance.
      */
     unsigned int minmax_depth;
+
+    /**
+     * The map of values used to calculate the minmax score.
+     * 
+     * int RED_P_val = -5;
+     * int CRED_P_val = -20;
+     * int BLK_P_val = 5;
+     * int CBLK_P_val = 20;
+     * int RED_win_val = -1000;
+     * int BLK_win_val = 1000;
+     * int draw_val = 0;
+     */
+    std::map<string, int> minmax_vals;
 
     /**
      * Flag indicating if this game enables AI to play as opponent.
