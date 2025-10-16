@@ -111,7 +111,7 @@ checkers::checkers(){
     this->no_change_turn_cnt = 0;
     this->pieceCounter = { 0, 0, 0, 0 };
     this->state = CHK_STATE::ONGOING;
-    this->AI_opt = 3;
+    this->AI_opt = CHK_AI_OPT::MT_AB_MM;
     this->minmax_depth = 8;
     this->vsAI = true;
     this->AI_first = false;
@@ -2279,22 +2279,22 @@ checkers::CHK_move checkers::AI_play( checkers& tarGame ){
     switch( tarGame.AI_opt ){
 
 
-    case 0:
+    case CHK_AI_OPT::STD_MM :
 
         AI_move = tarGame.bestMove();
         break;
 
-    case 1:
+    case CHK_AI_OPT::MT_MM :
 
         AI_move = tarGame.bestMove_split();
         break;
 
-    case 2:
+    case CHK_AI_OPT::STD_AB_MM :
 
         AI_move = tarGame.bestMove_ABP();
         break;
 
-    case 3:
+    case CHK_AI_OPT::MT_AB_MM :
     default:
         AI_move = tarGame.bestMove_ABP_split();
         break;
@@ -2342,15 +2342,10 @@ unsigned int checkers::getTurn_cnt() const
 void checkers::setTurn_cnt( unsigned int turn_cnt )
     {this->turn_cnt = turn_cnt;}
 
-int checkers::getAI_opt() const
+checkers::CHK_AI_OPT checkers::getAI_opt() const
     {return this->AI_opt;}
-void checkers::setAI_opt( int in_AI_opt ){
-    if( in_AI_opt < 0 || in_AI_opt >=3 ){
-
-    }
-    this->AI_opt = in_AI_opt;
-
-}
+void checkers::setAI_opt( CHK_AI_OPT in_AI_opt )
+    {this->AI_opt = in_AI_opt;}
 
 int checkers::getMinmax_depth() const
     {return this->minmax_depth;}

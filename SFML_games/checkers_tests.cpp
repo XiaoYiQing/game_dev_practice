@@ -612,7 +612,7 @@ void tests::checkers_test9( int tar_scenario_id ){
 
         
         int maxTurnCnt = 20;
-        int AI_opt_ID = 0;
+        checkers::CHK_AI_OPT AI_opt_ID = checkers::CHK_AI_OPT::STD_MM;
 
         // Record the start time
         auto start_t = std::chrono::high_resolution_clock::now();
@@ -629,40 +629,43 @@ void tests::checkers_test9( int tar_scenario_id ){
         }
         end_t = std::chrono::high_resolution_clock::now();
         duration = end_t - start_t;
-        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
+        cout << "Option " << checkers::get_CHK_AI_OPT_Str( AI_opt_ID ) << " time: " << duration.count() << endl;
 
 
         myGame.resetBoard();
-        AI_opt_ID++; myGame.setAI_opt( AI_opt_ID );
+        AI_opt_ID = checkers::CHK_AI_OPT::MT_MM;
+        myGame.setAI_opt( AI_opt_ID );
         start_t = std::chrono::high_resolution_clock::now();
         for( int i = 0; i < maxTurnCnt; i++ ){
             checkers::AI_play( myGame );
         }
         end_t = std::chrono::high_resolution_clock::now();
         duration = end_t - start_t;
-        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
+        cout << "Option " << checkers::get_CHK_AI_OPT_Str( AI_opt_ID ) << " time: " << duration.count() << endl;
 
 
         myGame.resetBoard();
-        AI_opt_ID++; myGame.setAI_opt( AI_opt_ID );
+        AI_opt_ID = checkers::CHK_AI_OPT::STD_AB_MM;
+        myGame.setAI_opt( AI_opt_ID );
         start_t = std::chrono::high_resolution_clock::now();
         for( int i = 0; i < maxTurnCnt; i++ ){
             checkers::AI_play( myGame );
         }
         end_t = std::chrono::high_resolution_clock::now();
         duration = end_t - start_t;
-        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
+        cout << "Option " << checkers::get_CHK_AI_OPT_Str( AI_opt_ID ) << " time: " << duration.count() << endl;
 
 
         myGame.resetBoard();
-        AI_opt_ID++; myGame.setAI_opt( AI_opt_ID );
+        AI_opt_ID = checkers::CHK_AI_OPT::MT_AB_MM;
+        myGame.setAI_opt( AI_opt_ID );
         start_t = std::chrono::high_resolution_clock::now();
         for( int i = 0; i < maxTurnCnt; i++ ){
             checkers::AI_play( myGame );
         }
         end_t = std::chrono::high_resolution_clock::now();
         duration = end_t - start_t;
-        cout << "Option " << AI_opt_ID << " time: " << duration.count() << endl;
+        cout << "Option " << checkers::get_CHK_AI_OPT_Str( AI_opt_ID ) << " time: " << duration.count() << endl;
 
 
     }

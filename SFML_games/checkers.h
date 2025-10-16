@@ -901,9 +901,8 @@ Update the state of the game:
      * 
      * - [3 = multi-threaded minmax with AB-pruning]
      */
-    int getAI_opt() const;
+    CHK_AI_OPT getAI_opt() const;
 
-    // TODO: this function should check the input.
     /**
      * Set the AI option
      * 
@@ -917,7 +916,7 @@ Update the state of the game:
      * 
      * - [3 = multi-threaded minmax with AB-pruning]
      */
-    void setAI_opt( int opt );
+    void setAI_opt( CHK_AI_OPT opt );
 
     //TODO: Check argument.
     /**
@@ -1010,7 +1009,7 @@ protected:
      * - [2 = minmax with AB-pruning]
      * - [3 = multi-threaded minmax with AB-pruning]
      */
-    int AI_opt;
+    CHK_AI_OPT AI_opt;
 
     /**
      * The depth of the minmax function used by this game instance.
