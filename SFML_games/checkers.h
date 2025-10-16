@@ -930,6 +930,44 @@ Update the state of the game:
     void setMinmax_depth( unsigned int in_minmax_depth );
 
     /**
+     * \brief Obtain the minmax specific values mapping used to compute the total 
+     * minmax score.
+     * 
+     * The map keys are as follow: 
+     * 
+     * - "std_piece_val": The value of a standard piece.
+     * 
+     * - "crown_piece_val": The value of a crowned piece.
+     * 
+     * - "win_val": The value of a win.
+     * 
+     * - "draw_val": The value of a draw.
+     * 
+     * \return The map containing the detail list of individual minmax computation
+     *  values.
+     */
+    map<string,int> get_minmax_vals() const;
+    /**
+     * \brief Set a specific entry of the minmax values map to the specified value.
+     * 
+     * The map keys are as follow: 
+     * 
+     * - "std_piece_val": The value of a standard piece.
+     * 
+     * - "crown_piece_val": The value of a crowned piece.
+     * 
+     * - "win_val": The value of a win.
+     * 
+     * - "draw_val": The value of a draw.
+     * 
+     * \param tar_key The key of the target value's.
+     * \param tar_val The value to be applied to the target value.
+     * 
+     * \note An incorrect name triggers an exception.
+     */
+    void set_minmax_vals( const string tar_key, const int tar_val );
+
+    /**
      * Set use AI flag to true.
      */
     void enabledAI();
@@ -1018,13 +1056,10 @@ protected:
     /**
      * The map of values used to calculate the minmax score.
      * 
-     * int RED_P_val = -5;
-     * int CRED_P_val = -20;
-     * int BLK_P_val = 5;
-     * int CBLK_P_val = 20;
-     * int RED_win_val = -1000;
-     * int BLK_win_val = 1000;
-     * int draw_val = 0;
+     * - "std_piece_val": The value of a standard piece.
+     * - "crown_piece_val": The value of a crowned piece.
+     * - "win_val": The value of a win.
+     * - "draw_val": The value of a draw.
      */
     std::map<string, int> minmax_vals;
 

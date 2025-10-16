@@ -2356,6 +2356,21 @@ unsigned int checkers::getMinmax_depth() const
 void checkers::setMinmax_depth( unsigned int in_minmax_depth )
     {this->minmax_depth = in_minmax_depth;}
 
+map<string,int> checkers::get_minmax_vals() const
+    {return this->minmax_vals;}
+void checkers::set_minmax_vals( const string tar_key, const int tar_val ){
+
+    // Determine if the target key is correct.
+    auto it = minmax_vals.find( tar_key );
+    if ( it != minmax_vals.end() ) {
+        // Assigne new value to target key.
+        minmax_vals[ tar_key ] = tar_val;
+    } else {
+        throw invalid_argument( "set_minmax_vals: specified key does not exist in the minmax val map." );
+    }
+
+}
+
 void checkers::enabledAI()
     { this->vsAI = true; }
 void checkers::disableAI()
