@@ -944,6 +944,23 @@ Update the state of the game:
      */
     void toggle_AI_first();
 
+    /**
+     * Get the number of threads this game engine attempts to use if AI is enabled.
+     * 
+     * \return the number of threads used by this game's AI, if available.
+     */
+    unsigned int get_thread_to_use() const;
+
+    /**
+     * Set the number of threads this checkers instance use by its AI.
+     * 
+     * \param new_thr_cnt New number of threads to use for the game AI.
+     *
+     * \note If value exceeds current hardware thread count limit, the limit is 
+     *  adopted. If value is 0, it will turn to 1.
+     */
+    void set_thread_to_use( const unsigned int new_thr_cnt );
+
 // ====================================================================== <<<<<
     
 
@@ -988,13 +1005,18 @@ protected:
     bool AI_proc_flag;
 
     /**
+     * The number of threads that this game seek to use if multithread AI usage 
+     * is enabled.
+     * 
+     * \note Won't try to use more than available number of threads given local
+     *  hardware limits.
+     */
+    unsigned int thread_to_use;
+
+    /**
      * Class static mutex for the purpose of synchronizing use of shared variables.
      */
     static std::mutex mtx_shared_move_list;
-
-    /*
-    
-    */
 
     /**
      * Class static shared list of moves.

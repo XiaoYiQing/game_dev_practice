@@ -97,6 +97,7 @@ checkers::checkers(){
     this->vsAI = true;
     this->AI_first = false;
     this->AI_proc_flag = false;
+    this->thread_to_use = 2;
 
     // Initialize the checker board.
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
@@ -1494,11 +1495,9 @@ int checkers::minmax_split( checkers& tarGame, bool isMaximizing, int depth ){
 
 int checkers::minmax_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
-    // Define number of threads.
-    // unsigned int thread_cnt = 2;
-
     // Set the number of threads to utilize.
-    unsigned int thread_cnt = min( 2u, std::thread::hardware_concurrency() );
+    unsigned int thread_cnt = min( tarGame.thread_to_use, 
+        std::thread::hardware_concurrency() );
 
     // Empty the shared move stack.
     while ( !shared_move_stk.empty() ) {
@@ -1550,7 +1549,7 @@ int checkers::minmax_split_init( checkers& tarGame, bool isMaximizing, int depth
 
 
 int checkers::minmaxAB_init( bool isMaximizing, int depth ){
-
+    
     // Initial alpha and beta.
     int alpha = std::numeric_limits<int>::min();
     int beta = std::numeric_limits<int>::max();
@@ -1684,8 +1683,10 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
 
 int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
+
     // Define number of threads.
-    unsigned int thread_cnt = min( 2u, std::thread::hardware_concurrency() );
+    unsigned int thread_cnt = min( tarGame.thread_to_use, 
+        std::thread::hardware_concurrency() );
 
     // Empty the shared move stack.
     while ( !shared_move_stk.empty() ) {
@@ -2354,6 +2355,16 @@ void checkers::set_AI_not_first()
     { this->AI_first = false; }
 void checkers::toggle_AI_first()
     { this->AI_first = !( this->AI_first ); }
+
+unsigned int checkers::get_thread_to_use() const
+    { return this->thread_to_use; }
+void checkers::set_thread_to_use( const unsigned int new_thr_cnt ){
+    // Number of threads cannot exceed limit.
+    unsigned int thr_cnt = min( new_thr_cnt, std::thread::hardware_concurrency() );
+    // Number of threads cannot be 0.
+    thr_cnt = max( thr_cnt, 1u );
+    this->thread_to_use = thr_cnt;
+}
 
 // ====================================================================== <<<<<
 
