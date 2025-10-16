@@ -64,6 +64,25 @@ checkers::CHK_STATE checkers::get_CHK_STATE_AtIdx( int idx ){
 
 
 // ====================================================================== >>>>>
+//      Class Enum "CHK_AI_OPT" Help Functions
+// ====================================================================== >>>>>
+
+string checkers::get_CHK_AI_OPT_Str( CHK_AI_OPT tar_CHK_AI_OPT ){
+    return string( magic_enum::enum_name( tar_CHK_AI_OPT ) );
+}
+
+checkers::CHK_AI_OPT checkers::get_CHK_AI_OPT_AtIdx( int idx ){
+    if( idx >= 0 && idx < checkers::CHK_AI_OPT_Count ){
+        return static_cast<checkers::CHK_AI_OPT>(idx);
+    }else{
+        throw invalid_argument( "Invalid int index for accessing enum \"CHK_AI_OPT\"." );
+    }
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Specialized Nested Class for Moves
 // ====================================================================== >>>>>
 
@@ -2325,8 +2344,13 @@ void checkers::setTurn_cnt( unsigned int turn_cnt )
 
 int checkers::getAI_opt() const
     {return this->AI_opt;}
-void checkers::setAI_opt( int in_AI_opt )
-    {this->AI_opt = in_AI_opt;}
+void checkers::setAI_opt( int in_AI_opt ){
+    if( in_AI_opt < 0 || in_AI_opt >=3 ){
+
+    }
+    this->AI_opt = in_AI_opt;
+
+}
 
 int checkers::getMinmax_depth() const
     {return this->minmax_depth;}

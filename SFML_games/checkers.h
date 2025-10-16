@@ -105,6 +105,10 @@ public:
 // ====================================================================== <<<<<
 
     
+
+// ====================================================================== >>>>>
+//      Class Enum "CHK_STATE" Help Functions
+// ====================================================================== >>>>>
 /*
 Update the state of the game:
     > 0 = unfinished ---> game is still in progress.
@@ -113,9 +117,6 @@ Update the state of the game:
     > 3 = Red won: -----> game has ended with red being victorious.
     > 4 = Draw: --------> game has ended with no one victorious (20 turns with no capture or crowning).
 */
-// ====================================================================== >>>>>
-//      Class Enum "CHK_STATE" Help Functions
-// ====================================================================== >>>>>
 
     /**
      * Enum representing the states the game can be in.
@@ -138,6 +139,41 @@ Update the state of the game:
      * @return The matching CHK_STATE enum to the target index, if it exists.
      */
     static CHK_STATE get_CHK_STATE_AtIdx( int idx );
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Class Enum "CHK_AI_OPT" Help Functions
+// ====================================================================== >>>>>
+/**
+ * Options with AI selection:
+ * - [0 = standard minmax]
+ * - [1 = multi-threaded standard minmax]
+ * - [2 = minmax with AB-pruning]
+ * - [3 = multi-threaded minmax with AB-pruning]
+ */
+
+    /**
+     * Enum representing the AI options being used.
+     */
+    enum class CHK_AI_OPT{ STD_MM, MT_MM, STD_AB_MM, MT_AB_MM };
+    // The number of enum entries in the enum "CHK_AI_OPT" (Uses magic enum).
+    const static int CHK_AI_OPT_Count = (int) magic_enum::enum_count<CHK_AI_OPT>();
+    /**
+     * Obtain the string of the target enum case (Uses magic enum).
+     * 
+     * @param tar_CHK_AI_OPT The target CHK_AI_OPT enum.
+     * @return The string representation of the target CHK_AI_OPT enum.
+     */
+    static string get_CHK_AI_OPT_Str( CHK_AI_OPT tar_CHK_AI_OPT );
+    /**
+     * Obtain the CHK_AI_OPT enum whose native index matches the target index.
+     * 
+     * @param idx The target index for which we seek a matching CHK_AI_OPT enum.
+     * @return The matching CHK_AI_OPT enum to the target index, if it exists.
+     */
+    static CHK_AI_OPT get_CHK_AI_OPT_AtIdx( int idx );
 
 // ====================================================================== <<<<<
 
@@ -597,10 +633,6 @@ Update the state of the game:
      *  depth/turn into the future.
      */
     static int minmax_split( checkers& tarGame, bool isMaximizing, int depth );
-
-    // TODO: make the number of threads possible something the user can control. First
-    // check how many cores there are, then allow to the user to decide how many can
-    // be taken.
     
     /**
      * \brief The initialization portion of the minmax function for helping the 
