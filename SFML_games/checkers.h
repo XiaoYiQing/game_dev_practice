@@ -922,13 +922,13 @@ Update the state of the game:
     /**
      * \return The minmax depth currently adopted by this checkers game instance.
      */
-    int getMinmax_depth() const;
+    unsigned int getMinmax_depth() const;
     /**
      * Assign a new minmax depth to this checkers game instance.
      * 
      * \param in_minmax_depth New minmax depth to adopt.
      */
-    void setMinmax_depth( int in_minmax_depth );
+    void setMinmax_depth( unsigned int in_minmax_depth );
 
     /**
      * Set use AI flag to true.
@@ -1014,7 +1014,7 @@ protected:
     /**
      * The depth of the minmax function used by this game instance.
      */
-    int minmax_depth;
+    unsigned int minmax_depth;
 
     /**
      * Flag indicating if this game enables AI to play as opponent.

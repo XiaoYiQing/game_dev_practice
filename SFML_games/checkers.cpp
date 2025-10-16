@@ -2347,9 +2347,9 @@ checkers::CHK_AI_OPT checkers::getAI_opt() const
 void checkers::setAI_opt( CHK_AI_OPT in_AI_opt )
     {this->AI_opt = in_AI_opt;}
 
-int checkers::getMinmax_depth() const
+unsigned int checkers::getMinmax_depth() const
     {return this->minmax_depth;}
-void checkers::setMinmax_depth( int in_minmax_depth )
+void checkers::setMinmax_depth( unsigned int in_minmax_depth )
     {this->minmax_depth = in_minmax_depth;}
 
 void checkers::enabledAI()
