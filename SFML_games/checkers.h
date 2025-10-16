@@ -568,9 +568,6 @@ Update the state of the game:
      * \note This function does not determine the best move, but helps in 
      *  attributing numerical values to each possible move up to a specified 
      *  depth/turn into the future.
-     * 
-     * \warning This function acts as both starting point and recursive portion of 
-     *  the minmax process.
      */
     int minmax( bool isMaximizing, int depth );
 
@@ -956,14 +953,6 @@ protected:
 // ====================================================================== >>>>>
 //      AI Related Functions (Protected)
 // ====================================================================== >>>>>
-
-    /*
-    Options with AI selection.
-    [0 = standard minmax]
-    [1 = multi-threaded standard minmax]
-    [2 = minmax with AB-pruning]
-    [3 = multi-threaded minmax with AB-pruning]
-    */
 
     /**
      * Options with AI selection:

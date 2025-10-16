@@ -1685,7 +1685,7 @@ int checkers::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth )
 int checkers::minmaxAB_split_init( checkers& tarGame, bool isMaximizing, int depth ){
 
     // Define number of threads.
-    unsigned int thread_cnt = min( 3u, std::thread::hardware_concurrency() );
+    unsigned int thread_cnt = min( 2u, std::thread::hardware_concurrency() );
 
     // Empty the shared move stack.
     while ( !shared_move_stk.empty() ) {
