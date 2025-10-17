@@ -32,36 +32,61 @@ public:
 
 
 // ====================================================================== >>>>>
-//      Class Enum "CHK_PIECE" Help Functions
+//      Class Enum "CHS_PIECE_TYPE" Help Functions
 // ====================================================================== >>>>>
 
     /**
-     * Enum representing the possible pieces placed on the board.
+     * Enum representing the possible chess pieces placed on the board.
      */
-    enum class CHK_PIECE{ NO_P, RED_P, BLK_P, CRED_P, CBLK_P };
+    enum class CHS_PIECE_TYPE{ NO_P, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING };
 
-    // The number of enum entries in the enum "CHK_PIECE" (Uses magic enum).
-    const static int CHK_PIECE_Count = (int) magic_enum::enum_count<CHK_PIECE>();
+    // The number of enum entries in the enum "CHS_PIECE_TYPE" (Uses magic enum).
+    const static int CHS_PIECE_TYPE_Count = (int) magic_enum::enum_count<CHS_PIECE_TYPE>();
 
     /**
      * Obtain the string of the target enum case (Uses magic enum).
      * 
-     * @param tar_CHK_PIECE The target CHK_PIECE enum.
-     * @return The string representation of the target CHK_PIECE enum.
+     * @param tar_CHS_PIECE_TYPE The target CHS_PIECE_TYPE enum.
+     * @return The string representation of the target CHS_PIECE_TYPE enum.
      */
-    static string get_CHK_PIECE_Str( CHK_PIECE tar_CHK_PIECE );
+    static string get_CHS_PIECE_TYPE_Str( CHS_PIECE_TYPE tar_CHS_PIECE_TYPE );
     /**
-     * Obtain the CHK_PIECE enum whose native index matches the target index.
+     * Obtain the CHS_PIECE_TYPE enum whose native index matches the target index.
      * 
-     * @param idx The target index for which we seek a matching CHK_PIECE enum.
-     * @return The matching CHK_PIECE enum to the target index, if it exists.
+     * @param idx The target index for which we seek a matching CHS_PIECE_TYPE enum.
+     * @return The matching CHS_PIECE_TYPE enum to the target index, if it exists.
      */
-    static CHK_PIECE get_CHK_PIECE_AtIdx( int idx );
+    static CHS_PIECE_TYPE get_CHS_PIECE_TYPE_AtIdx( int idx );
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Chess piece class.
+// ====================================================================== >>>>>
+
+    class chs_piece{
+
+    public:
+
+        /**
+         * The type of piece.
+         */
+        CHS_PIECE_TYPE type;
+
+        /**
+         * The color of the piece ( 0 = none, 1 = white, 2 = black ).
+         */
+        unsigned int color;
+
+    };
 
 // ====================================================================== <<<<<
 
 protected:
 
+
+    
 
 private:
 

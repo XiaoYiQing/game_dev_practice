@@ -6,6 +6,7 @@ set( tests_HEADERS
 	${CMAKE_CURRENT_SOURCE_DIR}/HPBar_test.h
 	${CMAKE_CURRENT_SOURCE_DIR}/infoBox_test.h
 	${CMAKE_CURRENT_SOURCE_DIR}/pageObj_test.h
+	${CMAKE_CURRENT_SOURCE_DIR}/chess_test.h
 )
 
 set( tests_SOURCES 
@@ -15,6 +16,7 @@ set( tests_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/HPBar_test.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/infoBox_test.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/pageObj_test.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/chess_test.cpp
 )
 
 

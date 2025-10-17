@@ -85,11 +85,13 @@ int main(int, char**){
 
     // game::play_TikTakTok();
 
-    game::play_Checkers();
+    // game::play_Checkers();
 
     // game::play_cardReact();
 
 // ====================================================================== <<<<<
+
+    cout << gameEngine::chess::get_CHS_PIECE_Str( gameEngine::chess::CHS_PIECE::KING ) << endl;
 
     return 0;
 
