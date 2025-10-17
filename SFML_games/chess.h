@@ -62,12 +62,48 @@ public:
 
 
 // ====================================================================== >>>>>
-//      Chess piece class.
+//      Class Enum "CHS_PIECE_COLOR" Help Functions
+// ====================================================================== >>>>>
+
+    /**
+     * Enum representing the possible chess pieces placed on the board.
+     */
+    enum class CHS_PIECE_COLOR{ NO_C, WHITE, BLACK };
+
+    // The number of enum entries in the enum "CHS_PIECE_COLOR" (Uses magic enum).
+    const static int CHS_PIECE_COLOR_Count = (int) magic_enum::enum_count<CHS_PIECE_COLOR>();
+
+    /**
+     * Obtain the string of the target enum case (Uses magic enum).
+     * 
+     * @param tar_CHS_PIECE_COLOR The target CHS_PIECE_COLOR enum.
+     * @return The string representation of the target CHS_PIECE_COLOR enum.
+     */
+    static string get_CHS_PIECE_COLOR_Str( CHS_PIECE_COLOR tar_CHS_PIECE_COLOR );
+    /**
+     * Obtain the CHS_PIECE_COLOR enum whose native index matches the target index.
+     * 
+     * @param idx The target index for which we seek a matching CHS_PIECE_COLOR enum.
+     * @return The matching CHS_PIECE_COLOR enum to the target index, if it exists.
+     */
+    static CHS_PIECE_COLOR get_CHS_PIECE_COLOR_AtIdx( int idx );
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Chess Piece Class
 // ====================================================================== >>>>>
 
     class chs_piece{
 
     public:
+
+        // Base constructor.
+        chs_piece();
+
+        // Set the piece into an empty space equivalent.
+        void set_as_empty();
 
         /**
          * The type of piece.
@@ -75,9 +111,9 @@ public:
         CHS_PIECE_TYPE type;
 
         /**
-         * The color of the piece ( 0 = none, 1 = white, 2 = black ).
+         * The color of the piece.
          */
-        unsigned int color;
+        CHS_PIECE_COLOR color;
 
     };
 
