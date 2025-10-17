@@ -57,3 +57,44 @@ void chess::chs_piece::set_as_empty(){
 
 
 // ====================================================================== <<<<<
+
+
+
+// ====================================================================== >>>>>
+//      Constructors
+// ====================================================================== >>>>>
+
+chess::chess(){
+
+    // Initialize the chessboard.
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+        this->CHS_board[i][j] = chess::chs_piece();
+    }
+    }
+
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Access Function
+// ====================================================================== >>>>>
+
+chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ){
+    if( i >= BOARDHEIGHT || j > BOARDWIDTH ){
+        throw out_of_range( "get_piece_at: the specified coordinate is out of bound." );
+    }
+    return this->CHS_board[i][j];
+}
+
+void chess::set_piece_at( unsigned int i, unsigned int j, chs_piece inPce ){
+    if( i >= BOARDHEIGHT || j > BOARDWIDTH ){
+        throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
+    }
+    this->CHS_board[i][j] = inPce;
+}
+
+// ====================================================================== <<<<<
+

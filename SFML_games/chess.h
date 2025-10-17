@@ -119,9 +119,40 @@ public:
 
 // ====================================================================== <<<<<
 
+
+// ====================================================================== >>>>>
+//      Constructors
+// ====================================================================== >>>>>
+
+    chess();
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Access Function
+// ====================================================================== >>>>>
+
+    
+    chs_piece get_piece_at( unsigned int i, unsigned int j );
+
+    void set_piece_at( unsigned int i, unsigned int j, chs_piece inPce );
+
+// ====================================================================== <<<<<
+
+
 protected:
 
-
+    /**
+     * \brief Array representing the chess board.
+     * 
+     * - First indexing represents the row indexing.
+     * 
+     * - Second indexing represents the column indexing.
+     * 
+     * \note Remember that the lower right corner is a white square in chess.
+     */
+    chs_piece CHS_board[BOARDHEIGHT][BOARDWIDTH];
     
 
 private:
@@ -133,4 +164,4 @@ private:
 };
 
 
-#endif CHESS_H
+#endif // CHESS_H

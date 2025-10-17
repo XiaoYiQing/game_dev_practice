@@ -24,12 +24,12 @@ add_library(tests ${tests_HEADERS} ${tests_SOURCES})
 
 target_link_libraries( tests PRIVATE sfml-graphics )
 
-target_link_libraries( tests PRIVATE SFML_utils )
+target_link_libraries( tests PUBLIC SFML_utils )
 target_include_directories(tests PUBLIC
     "${PROJECT_SOURCE_DIR}/SFML_utils"
 )
 
-target_link_libraries( tests PRIVATE SFML_games )
+target_link_libraries( tests PUBLIC SFML_games )
 target_include_directories(tests PUBLIC
     "${PROJECT_SOURCE_DIR}/SFML_games"
 )

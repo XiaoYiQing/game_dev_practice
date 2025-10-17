@@ -33,6 +33,7 @@
 #include "HPBar_test.h"
 #include "infoBox_test.h"
 #include "pageObj_test.h"
+#include "chess_test.h"
 
 #include "TTT_wt_but_XYQ.h"
 #include "CHK_SFML_eng.h"
@@ -85,13 +86,13 @@ int main(int, char**){
 
     // game::play_TikTakTok();
 
-    // game::play_Checkers();
+    game::play_Checkers();
 
     // game::play_cardReact();
 
 // ====================================================================== <<<<<
 
-    cout << gameEngine::chess::get_CHS_PIECE_Str( gameEngine::chess::CHS_PIECE::KING ) << endl;
+    // do_tests(0);
 
     return 0;
 
@@ -137,6 +138,8 @@ void do_tests( unsigned int test_id ){
     // tests::checkers_test10(10);
 
     // tests::CRG_test1();
+
+    tests::chess_base_tests();
 
 }
 

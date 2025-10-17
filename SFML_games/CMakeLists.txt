@@ -27,12 +27,12 @@ add_library(SFML_games ${SFML_games_HEADERS} ${SFML_games_SOURCES})
 
 target_link_libraries( SFML_games PRIVATE sfml-graphics )
 
-target_link_libraries( SFML_games PRIVATE SFML_utils )
+target_link_libraries( SFML_games PUBLIC SFML_utils )
 target_include_directories(SFML_games PUBLIC
     "${PROJECT_SOURCE_DIR}/SFML_utils"
 )
 
-target_link_libraries( SFML_games PRIVATE utils_XYQ )
+target_link_libraries( SFML_games PUBLIC utils_XYQ )
 target_include_directories(SFML_games PUBLIC
     "${PROJECT_SOURCE_DIR}/utils_XYQ"
 )

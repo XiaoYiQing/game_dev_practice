@@ -3,7 +3,11 @@
 
 
 
-using namespace tests;
 
 
 
+// void tests::chess_base_tests(){
+
+//     chess
+
+// }
