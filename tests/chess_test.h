@@ -7,12 +7,11 @@ using namespace std;
 
 namespace tests{
 
-
     void chess_base_tests(){
 
-        chess();
+        gameEngine::chess();
 
-    }
+    };
 
 
 }

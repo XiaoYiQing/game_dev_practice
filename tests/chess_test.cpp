@@ -2,12 +2,8 @@
 
 
 
-
-
-
-
 // void tests::chess_base_tests(){
-
-//     chess
+    
+//     chess();
 
 // }
