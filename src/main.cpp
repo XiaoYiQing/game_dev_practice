@@ -38,11 +38,15 @@
 #include "CHK_SFML_eng.h"
 #include "CRG_SFML_eng.h"
 
+#include "chess.h"
+
 #include "numUtils.h"
 
 using namespace std;
 using namespace gameEngine;
 
+// TODO: Organized your tests. For instance, the checkers_tests.cpp file should be
+//  in the tests directory.
 
 // TODO: Review your comments.
 
