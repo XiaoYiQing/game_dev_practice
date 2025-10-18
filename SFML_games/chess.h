@@ -110,9 +110,11 @@ public:
         /**
          * \brief Print the piece using the designated symbol.
          * 
+         * Prints only the symbol with no space or line breaks to delimit the symbol.
+         * 
          * \note This is a debug tool and has no impact on actual game functionalities.
          */
-        void printPiece();
+        void printPiece() const;
 
         /**
          * The type of piece.
@@ -123,6 +125,55 @@ public:
          * The color of the piece.
          */
         CHS_PIECE_COLOR color;
+
+    };
+
+// ====================================================================== <<<<<
+
+
+
+// ====================================================================== >>>>>
+//      Chess Move Class
+// ====================================================================== >>>>>
+
+    /**
+     * Specialized nested class for representing a chess move.
+     * 
+     * \warning This class does not check for validity of a move.
+     */
+    class chs_move{
+
+        public:
+
+        // Base constructor.
+        chs_move();
+        /**
+         * Direct coordinate (individual numeral format) input constructor.
+         * 
+         * \param i_a Starting coordinate row index.
+         * \param j_a Starting coordinate column index.
+         * \param i_b Ending coordinate row index.
+         * \param j_b Ending coordinate column index.
+         */
+        chs_move( int i_a, int j_a, int i_b, int j_b );
+        /**
+         * Direct coordinate (pair format) input constructor.
+         * \param pt_a Starting coordinate.
+         * \param pt_b Ending coordinate.
+         */
+        chs_move( pair<int,int> pt_a, pair<int,int> pt_b );
+
+        // Starting coordinates.
+        pair<int,int> pt_a;
+        // Ending coordinate.
+        pair<int,int> pt_b;
+
+        /**
+         * Obtain the vector representation of the move.
+         * 
+         * \return A pair of integers, representing a 2D vector.
+         */
+        std::pair<int,int> get_vec();
 
     };
 
@@ -156,9 +207,9 @@ public:
 //      Access Function
 // ====================================================================== >>>>>
 
-    chs_piece get_piece_at( unsigned int i, unsigned int j );
+    chs_piece get_piece_at( unsigned int i, unsigned int j ) const;
 
-    void set_piece_at( unsigned int i, unsigned int j, chs_piece inPce );
+    void set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce );
 
 // ====================================================================== <<<<<
 

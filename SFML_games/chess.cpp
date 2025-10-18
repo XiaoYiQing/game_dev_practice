@@ -60,7 +60,7 @@ void chess::chs_piece::set_as_empty(){
     this->color = chess::CHS_PIECE_COLOR::NO_C;
 }
 
-void chess::chs_piece::printPiece(){
+void chess::chs_piece::printPiece() const{
 
     char color_char = ' ';
     switch( this->color ){
@@ -93,12 +93,37 @@ void chess::chs_piece::printPiece(){
     }
 
     // Print the piece symbol.
-    cout << color_char << type_char << endl;
+    cout << color_char << type_char;
 
 }
 
 // ====================================================================== <<<<<
 
+
+// ====================================================================== >>>>>
+//      Chess Move Class
+// ====================================================================== >>>>>
+
+chess::chs_move::chs_move(){
+    this->pt_a = pair<int,int>( 0, 0 );
+    this->pt_b = pair<int,int>( 0, 0 );
+}
+
+chess::chs_move::chs_move( int i_a, int j_a, int i_b, int j_b ){
+    this->pt_a = pair<int,int>( i_a, j_a );
+    this->pt_b = pair<int,int>( i_b, j_b );
+}
+
+chess::chs_move::chs_move( pair<int,int> pt_a, pair<int,int> pt_b ){
+    this->pt_a = pt_a;
+    this->pt_b = pt_b;
+}
+
+std::pair<int,int> chess::chs_move::get_vec(){
+    return pair( pt_b.first - pt_a.first , pt_b.second - pt_a.second );
+}
+
+// ====================================================================== <<<<<
 
 
 // ====================================================================== >>>>>
@@ -120,17 +145,44 @@ chess::chess(){
 
 
 // ====================================================================== >>>>>
+//      Game State Functions
+// ====================================================================== >>>>>
+
+void chess::printBoard() const{
+
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+
+            this->CHS_board[i][j].printPiece();
+
+            if( j != BOARDWIDTH ){
+                cout << ' ';
+            }
+
+        }
+
+        if( i != BOARDHEIGHT ){
+            cout << endl;
+        }
+    }
+
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Access Function
 // ====================================================================== >>>>>
 
-chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ){
+chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ) const{
     if( i >= BOARDHEIGHT || j > BOARDWIDTH ){
         throw out_of_range( "get_piece_at: the specified coordinate is out of bound." );
     }
     return this->CHS_board[i][j];
 }
 
-void chess::set_piece_at( unsigned int i, unsigned int j, chs_piece inPce ){
+void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
     if( i >= BOARDHEIGHT || j > BOARDWIDTH ){
         throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
     }

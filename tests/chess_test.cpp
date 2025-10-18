@@ -29,7 +29,11 @@ void tests::chess_base_tests(){
     // Test set_piece_at and get_piece_at.
     chess::chs_piece pawnW = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
         chess::CHS_PIECE_COLOR::WHITE ); 
-    
+    cout << "Print white pawn symbol (Expected to be WP): ";
+    pawnW.printPiece();
+    cout << endl;
+
+    // Insert a white pawn and verify
     unsigned int tar_i = 3;
     unsigned int tar_j = 5;
     myGame.set_piece_at( tar_i, tar_j, pawnW );
@@ -43,7 +47,9 @@ void tests::chess_base_tests(){
         cout << "chess_base_tests access test: passed!" << endl;
     }
 
-    // myGame.set_piece_at(1,1);
-
+    // Add another piece and see the print result.
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.printBoard();
 
 }
