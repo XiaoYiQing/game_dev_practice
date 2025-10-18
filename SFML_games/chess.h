@@ -102,6 +102,8 @@ public:
         // Base constructor.
         chs_piece();
 
+        chs_piece( CHS_PIECE_TYPE type, CHS_PIECE_COLOR color );
+
         // Set the piece into an empty space equivalent.
         void set_as_empty();
 
@@ -133,7 +135,6 @@ public:
 //      Access Function
 // ====================================================================== >>>>>
 
-    
     chs_piece get_piece_at( unsigned int i, unsigned int j );
 
     void set_piece_at( unsigned int i, unsigned int j, chs_piece inPce );

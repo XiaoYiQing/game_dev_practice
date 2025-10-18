@@ -50,6 +50,11 @@ chess::chs_piece::chs_piece(){
     this->set_as_empty();
 }
 
+chess::chs_piece::chs_piece( CHS_PIECE_TYPE type, CHS_PIECE_COLOR color ){
+    this->type = type;
+    this->color = color;
+}
+
 void chess::chs_piece::set_as_empty(){
     this->type = chess::CHS_PIECE_TYPE::NO_P;
     this->color = chess::CHS_PIECE_COLOR::NO_C;
