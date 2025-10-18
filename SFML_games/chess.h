@@ -108,6 +108,13 @@ public:
         void set_as_empty();
 
         /**
+         * \brief Print the piece using the designated symbol.
+         * 
+         * \note This is a debug tool and has no impact on actual game functionalities.
+         */
+        void printPiece();
+
+        /**
          * The type of piece.
          */
         CHS_PIECE_TYPE type;
@@ -127,6 +134,20 @@ public:
 // ====================================================================== >>>>>
 
     chess();
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Game State Functions
+// ====================================================================== >>>>>
+
+    /**
+     * \brief Print the state of the board onto the console terminal.
+     * 
+     * \note This is a debug tool and has no impact on actual game functionalities.
+     */
+    void printBoard() const;
 
 // ====================================================================== <<<<<
 

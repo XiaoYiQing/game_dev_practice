@@ -501,10 +501,6 @@ Update the state of the game:
      */
     void upd_displ_posb();
 
-    /*
-    Print to terminal the state of the board.
-    This is a debug tool, and may be deleted.
-    */
 
     /**
      * \brief Print the state of the board onto the console terminal.

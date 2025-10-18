@@ -60,6 +60,42 @@ void chess::chs_piece::set_as_empty(){
     this->color = chess::CHS_PIECE_COLOR::NO_C;
 }
 
+void chess::chs_piece::printPiece(){
+
+    char color_char = ' ';
+    switch( this->color ){
+    case CHS_PIECE_COLOR::WHITE:
+        color_char = 'W';   break;
+    case CHS_PIECE_COLOR::BLACK:
+        color_char = 'B';   break;
+    case CHS_PIECE_COLOR::NO_C:
+        color_char = 'N';   break;
+    default:
+        throw runtime_error("Unrecognized chess piece color enum.");
+    }
+
+    char type_char = ' ';
+    switch( this->type ){
+    case CHS_PIECE_TYPE::NO_P:
+        type_char = 'N';   break;
+    case CHS_PIECE_TYPE::PAWN:
+        type_char = 'P';   break;
+    case CHS_PIECE_TYPE::KNIGHT:
+        type_char = 'K';   break;
+    case CHS_PIECE_TYPE::BISHOP:
+        type_char = 'B';   break;
+    case CHS_PIECE_TYPE::QUEEN:
+        type_char = 'Q';   break;
+    case CHS_PIECE_TYPE::KING:
+        type_char = 'K';   break;
+    default:
+        throw runtime_error("Unrecognized chess piece type enum.");
+    }
+
+    // Print the piece symbol.
+    cout << color_char << type_char << endl;
+
+}
 
 // ====================================================================== <<<<<
 
