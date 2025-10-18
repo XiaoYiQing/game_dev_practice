@@ -165,16 +165,35 @@ bool chess::chs_move::is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type,
         }
     
         break;
+
     case CHS_PIECE_TYPE::KNIGHT:
+
+        int tile_cnt = abs( myVec.first ) + abs( myVec.second );
+        return ( tile_cnt == 3 ) && ( abs( myVec.first ) == 1 || abs( myVec.second ) == 1 );
+
         break;
+
     case CHS_PIECE_TYPE::BISHOP:
+
+        return ( abs( myVec.first ) == abs( myVec.second ) );
         break;
+
     case CHS_PIECE_TYPE::ROOK:
+
+        return ( myVec.first == 0 || myVec.second == 0 );
         break;
+
     case CHS_PIECE_TYPE::QUEEN:
+
+        return ( abs( myVec.first ) == abs( myVec.second ) ) ||
+            ( myVec.first == 0 || myVec.second == 0 );
         break;
+
     case CHS_PIECE_TYPE::KING:
+
+        return ( abs( myVec.first ) <= 1 && abs( myVec.second ) <= 1 );
         break;
+
     }
 
 }
