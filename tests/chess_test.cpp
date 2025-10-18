@@ -53,3 +53,16 @@ void tests::chess_base_tests(){
     myGame.printBoard();
 
 }
+
+
+
+void chess_chs_move_tests(){
+
+    // Test boolean init.
+    bool test_bool = true;
+
+    chess myGame = chess();
+
+}
+
+

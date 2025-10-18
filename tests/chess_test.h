@@ -9,7 +9,7 @@ namespace tests{
 
     void chess_base_tests();
 
-
+    void chess_chs_move_tests();
 }
 
 

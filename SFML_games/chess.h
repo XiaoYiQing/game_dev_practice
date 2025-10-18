@@ -18,6 +18,12 @@ using namespace std;
 
 namespace gameEngine{
 
+/**
+ * My implementation of the chess game.
+ * 
+ * This basic implementation operates under the assumption that white starts at 
+ * the lower side and black starts at the top side of the board.
+ */
 class chess{
 
 public:
@@ -139,7 +145,8 @@ public:
     /**
      * Specialized nested class for representing a chess move.
      * 
-     * \warning This class does not check for validity of a move.
+     * \warning This class does not check for validity of a move inherently. 
+     *  However, it does define functions to do just so.
      */
     class chs_move{
 
@@ -174,6 +181,9 @@ public:
          * \return A pair of integers, representing a 2D vector.
          */
         std::pair<int,int> get_vec();
+
+        bool is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type, 
+            CHS_PIECE_COLOR tar_color );
 
     };
 

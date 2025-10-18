@@ -123,6 +123,62 @@ std::pair<int,int> chess::chs_move::get_vec(){
     return pair( pt_b.first - pt_a.first , pt_b.second - pt_a.second );
 }
 
+
+bool chess::chs_move::is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type, 
+    CHS_PIECE_COLOR tar_color ){
+
+    // A piece with the "none" equivalent value in type and/or color is automatically
+    // disqualified from having a valid move.
+    if( tar_type == CHS_PIECE_TYPE::NO_P ){
+        return false;
+    }
+
+    // A starting coordinate outside the bound of the chess board is automatically invalid.
+    if( this->pt_a.first < 0 || this->pt_a.first >= BOARDHEIGHT ||
+        this->pt_a.second < 0 || this->pt_a.second >= BOARDWIDTH ){
+        return false;
+    }
+
+    // An ending coordinate outside the bound of the chess board is automatically invalid.
+    if( this->pt_b.first < 0 || this->pt_b.first >= BOARDHEIGHT ||
+        this->pt_b.second < 0 || this->pt_b.second >= BOARDWIDTH ){
+        return false;
+    }
+
+    // Obtain the move vector.
+    pair<int,int> myVec = this->get_vec();
+    // A null move is invalid.
+    if( myVec.first == 0 && myVec.second == 0 ){
+        return false;
+    }
+
+    // Ruling under different piece types.
+    switch( tar_type ){
+    case CHS_PIECE_TYPE::PAWN:
+
+        if( tar_color == CHS_PIECE_COLOR::WHITE ){
+            return ( myVec.first == -1 && myVec.second == 0 );
+        }else if(tar_color == CHS_PIECE_COLOR::BLACK){
+            return ( myVec.first == 1 && myVec.second == 0 );
+        }else{
+            throw runtime_error( "is_move_valid: Unexpected chess piece color enum." );
+        }
+    
+        break;
+    case CHS_PIECE_TYPE::KNIGHT:
+        break;
+    case CHS_PIECE_TYPE::BISHOP:
+        break;
+    case CHS_PIECE_TYPE::ROOK:
+        break;
+    case CHS_PIECE_TYPE::QUEEN:
+        break;
+    case CHS_PIECE_TYPE::KING:
+        break;
+    }
+
+}
+
 // ====================================================================== <<<<<
 
 
