@@ -139,7 +139,8 @@ void do_tests( unsigned int test_id ){
 
     // tests::CRG_test1();
 
-    tests::chess_base_tests();
+    // tests::chess_base_tests();
+    tests::chess_chs_move_tests();
 
 }
 

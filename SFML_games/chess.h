@@ -182,8 +182,9 @@ public:
          */
         std::pair<int,int> get_vec();
 
-        bool is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type, 
-            CHS_PIECE_COLOR tar_color );
+        bool is_move_valid( chs_piece tar_piece );
+        bool is_move_valid( CHS_PIECE_TYPE tar_type, CHS_PIECE_COLOR tar_color );
+        
 
     };
 

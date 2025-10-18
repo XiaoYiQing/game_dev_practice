@@ -124,12 +124,16 @@ std::pair<int,int> chess::chs_move::get_vec(){
 }
 
 
-bool chess::chs_move::is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type, 
+bool chess::chs_move::is_move_valid( chs_piece tar_piece ){
+    return is_move_valid( tar_piece.type, tar_piece.color );
+}
+
+bool chess::chs_move::is_move_valid( CHS_PIECE_TYPE tar_type, 
     CHS_PIECE_COLOR tar_color ){
 
     // A piece with the "none" equivalent value in type and/or color is automatically
     // disqualified from having a valid move.
-    if( tar_type == CHS_PIECE_TYPE::NO_P ){
+    if( tar_type == CHS_PIECE_TYPE::NO_P || tar_color == CHS_PIECE_COLOR::NO_C ){
         return false;
     }
 
@@ -138,7 +142,6 @@ bool chess::chs_move::is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type,
         this->pt_a.second < 0 || this->pt_a.second >= BOARDWIDTH ){
         return false;
     }
-
     // An ending coordinate outside the bound of the chess board is automatically invalid.
     if( this->pt_b.first < 0 || this->pt_b.first >= BOARDHEIGHT ||
         this->pt_b.second < 0 || this->pt_b.second >= BOARDWIDTH ){
@@ -152,6 +155,8 @@ bool chess::chs_move::is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type,
         return false;
     }
 
+    
+    int tile_cnt = abs( myVec.first ) + abs( myVec.second );
     // Ruling under different piece types.
     switch( tar_type ){
     case CHS_PIECE_TYPE::PAWN:
@@ -168,9 +173,7 @@ bool chess::chs_move::is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type,
 
     case CHS_PIECE_TYPE::KNIGHT:
 
-        int tile_cnt = abs( myVec.first ) + abs( myVec.second );
         return ( tile_cnt == 3 ) && ( abs( myVec.first ) == 1 || abs( myVec.second ) == 1 );
-
         break;
 
     case CHS_PIECE_TYPE::BISHOP:
@@ -196,6 +199,7 @@ bool chess::chs_move::is_move_valid( chs_move tar_move, CHS_PIECE_TYPE tar_type,
 
     }
 
+    return true;
 }
 
 // ====================================================================== <<<<<
