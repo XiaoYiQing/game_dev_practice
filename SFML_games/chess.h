@@ -98,6 +98,42 @@ public:
 
 
 // ====================================================================== >>>>>
+//      Class Enum "CHS_STATE" Help Functions
+// ====================================================================== >>>>>
+/*
+Update the state of the game:
+    > 0 = unfinished ---> game is still in progress.
+    > 1 = White won: ---> game has ended with white being victorious.
+    > 2 = Black won: -----> game has ended with black being victorious.
+    > 3 = Draw: --------> game has ended with no one victorious.
+*/
+
+/**
+ * Enum representing the states the game can be in.
+ */
+enum class CHS_STATE{ ONGOING, WWIN, RBIN, DRAW };
+
+// The number of enum entries in the enum "CHS_STATE" (Uses magic enum).
+const static int CHS_STATE_Count = (int) magic_enum::enum_count<CHS_STATE>();
+/**
+ * Obtain the string of the target enum case (Uses magic enum).
+ * 
+ * @param tar_CHS_STATE The target CHS_STATE enum.
+ * @return The string representation of the target CHS_STATE enum.
+ */
+static string get_CHS_STATE_Str( CHS_STATE tar_CHS_STATE );
+/**
+ * Obtain the CHS_STATE enum whose native index matches the target index.
+ * 
+ * @param idx The target index for which we seek a matching CHS_STATE enum.
+ * @return The matching CHS_STATE enum to the target index, if it exists.
+ */
+static CHS_STATE get_CHS_STATE_AtIdx( int idx );
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Chess Piece Class
 // ====================================================================== >>>>>
 
@@ -196,6 +232,13 @@ public:
 // ====================================================================== >>>>>
 
     chess();
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Gameplay Functions
+// ====================================================================== >>>>>
 
 // ====================================================================== <<<<<
 

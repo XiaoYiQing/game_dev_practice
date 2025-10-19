@@ -43,6 +43,25 @@ chess::CHS_PIECE_COLOR chess::get_CHS_PIECE_COLOR_AtIdx( int idx ){
 
 
 // ====================================================================== >>>>>
+//      Class Enum "CHS_STATE" Help Functions
+// ====================================================================== >>>>>
+
+string checkers::get_CHS_STATE_Str( CHS_STATE tar_CHS_STATE ){
+    return string( magic_enum::enum_name( tar_CHS_STATE ) );
+}
+
+checkers::CHS_STATE checkers::get_CHS_STATE_AtIdx( int idx ){
+    if( idx >= 0 && idx < checkers::CHS_STATE_Count ){
+        return static_cast<checkers::CHS_STATE>(idx);
+    }else{
+        throw invalid_argument( "Invalid int index for accessing enum \"CHS_STATE\"." );
+    }
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Chess Piece Class
 // ====================================================================== >>>>>
 
