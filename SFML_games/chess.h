@@ -237,8 +237,18 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
 
 // ====================================================================== >>>>>
+//      Game Direct Manipulation Functions
+// ====================================================================== >>>>>
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Gameplay Functions
 // ====================================================================== >>>>>
+
+    vector<unsigned int> attack( unsigned int i_a, unsigned int j_a, 
+        unsigned int i_b, unsigned int j_b );
 
 // ====================================================================== <<<<<
 
@@ -261,9 +271,44 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      Access Function
 // ====================================================================== >>>>>
 
+    /**
+     * Obtain the chess piece at the target coordinate.
+     * 
+     * \param i The row index of the target piece.
+     * \param j The column index of the target piece.
+     * \return The target piece at the coordinate.
+     */
     chs_piece get_piece_at( unsigned int i, unsigned int j ) const;
 
     void set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce );
+    
+    /**
+     * \return Current game state turn count.
+     */
+    unsigned int getTurn_cnt() const;
+    /**
+     * \brief Forcibly set the game's current turn count.
+     * 
+     * \param turn_cnt The number of turns to set the game to 
+     *  (disregarding current state).
+     */
+    void setTurn_cnt( const unsigned int turn_cnt );
+    
+    /**
+     * \brief Get the current game state.
+     * 
+     * \return The current game state.
+     */
+    CHS_STATE get_state() const;
+
+    /**
+     * \brief Set the current game state.
+     * 
+     * \param state The new state to be applied to the game instance.
+     * 
+     * \warning This function can completely break the game's logic flow.
+     */
+    void set_state( const CHS_STATE state );
 
 // ====================================================================== <<<<<
 
@@ -280,6 +325,15 @@ protected:
      * \note Remember that the lower right corner is a white square in chess.
      */
     chs_piece CHS_board[BOARDHEIGHT][BOARDWIDTH];
+
+    // The number of times a play has been made. White start at turn 0.
+    unsigned int turn_cnt;
+
+    // The number of consecutive turns where the draw by lack of progress conditions applies.
+    unsigned int no_change_turn_cnt;
+
+    // The state of the game.
+    CHS_STATE state;
     
 
 private:

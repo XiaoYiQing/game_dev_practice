@@ -237,6 +237,10 @@ chess::chess(){
     }
     }
 
+    this->turn_cnt = 0;
+    this->no_change_turn_cnt = 0;
+    this->state = CHS_STATE::ONGOING;
+
 }
 
 // ====================================================================== <<<<<
@@ -286,6 +290,16 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
     }
     this->CHS_board[i][j] = inPce;
 }
+
+unsigned int chess::getTurn_cnt() const
+    { return this->turn_cnt; }
+void chess::setTurn_cnt( const unsigned int turn_cnt )
+    { this->turn_cnt = turn_cnt; }
+
+chess::CHS_STATE chess::get_state() const
+    { return this->state; }
+void chess::set_state( const CHS_STATE state )
+    { this->state = state; }
 
 // ====================================================================== <<<<<
 
