@@ -230,16 +230,42 @@ bool chess::chs_move::is_move_valid( CHS_PIECE_TYPE tar_type,
 
 chess::chess(){
 
+    // Empty piece.
+    chess::chs_piece curr_piece;
+    curr_piece.set_as_empty();
+
     // Initialize the chessboard.
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
     for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
-        this->CHS_board[i][j] = chess::chs_piece();
+        this->CHS_board[i][j] = curr_piece;
     }
     }
 
     this->turn_cnt = 0;
     this->no_change_turn_cnt = 0;
     this->state = CHS_STATE::ONGOING;
+
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Game Direct Manipulation Functions
+// ====================================================================== >>>>>
+
+void chess::clearBoard(){
+
+    // Empty piece.
+    chess::chs_piece curr_piece;
+    curr_piece.set_as_empty();
+
+    // Initialize the chessboard.
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+        this->CHS_board[i][j] = curr_piece;
+    }
+    }
 
 }
 

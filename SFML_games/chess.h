@@ -240,6 +240,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      Game Direct Manipulation Functions
 // ====================================================================== >>>>>
 
+    /**
+     * \brief Set the board as completely blank.
+     * 
+     * All pieces of the board adopt the "no piece" state.
+     */
+    void clearBoard();
+
+    
+
 // ====================================================================== <<<<<
 
 

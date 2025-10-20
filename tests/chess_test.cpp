@@ -208,3 +208,37 @@ void tests::chess_chs_move_tests(){
 }
 
 
+void tests::chess_game_manip_tests(){
+
+    // Test boolean init.
+    bool test_bool = true;
+
+    chess myGame = chess();
+
+    chess::chs_piece myPiece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    myGame.set_piece_at( 1, 2, myPiece );
+    test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::PAWN && 
+        myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::WHITE );
+
+    myPiece = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    myGame.set_piece_at( 5, 4, myPiece );
+    test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::KNIGHT && 
+        myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::BLACK );
+
+
+    myGame.clearBoard();
+    cout << endl;
+    test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::NO_P && 
+        myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::NO_C );
+    test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::NO_P && 
+        myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::NO_C );
+    
+    if( test_bool ){
+        cout << "chess clearBoard test: passed." << endl;
+    }else{
+        cout << "chess clearBoard test: failed." << endl;
+    }
+
+
+}
+
