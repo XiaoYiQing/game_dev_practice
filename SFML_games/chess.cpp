@@ -65,6 +65,13 @@ chess::CHS_STATE chess::get_CHS_STATE_AtIdx( int idx ){
 //      Chess Piece Class
 // ====================================================================== >>>>>
 
+bool chess::chs_piece::operator==(const chs_piece& tar) const{
+    bool comp_res = true;
+    comp_res = comp_res && ( this->type == tar.type );
+    comp_res = comp_res && ( this->color == tar.color );
+    return comp_res;
+}
+
 chess::chs_piece::chs_piece(){
     this->set_as_empty();
 }
@@ -380,10 +387,15 @@ unsigned int chess::getTurn_cnt() const
 void chess::setTurn_cnt( const unsigned int turn_cnt )
     { this->turn_cnt = turn_cnt; }
 
-chess::CHS_STATE chess::get_state() const
+chess::CHS_STATE chess::getState() const
     { return this->state; }
-void chess::set_state( const CHS_STATE state )
+void chess::setState( const CHS_STATE state )
     { this->state = state; }
+
+unsigned int chess::getNo_change_turn_cnt() const
+    { return this->no_change_turn_cnt; }
+void chess::setNo_change_turn_cnt( const unsigned int no_change_turn_cnt )
+    { this->no_change_turn_cnt = no_change_turn_cnt; }
 
 // ====================================================================== <<<<<
 

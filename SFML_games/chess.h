@@ -141,6 +141,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     public:
 
+        /**
+         * Comparison operator overload.
+         * 
+         * \param other Target chs_piece to compare with.
+         * \return Result of the comparison.
+         */
+        bool operator==(const chs_piece& other) const;
+
         // Base constructor.
         chs_piece();
 
@@ -267,7 +275,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  variables may not be affected.
      */
     void resetBoard();
-    
+
 // ====================================================================== <<<<<
 
 
@@ -325,7 +333,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \return The current game state.
      */
-    CHS_STATE get_state() const;
+    CHS_STATE getState() const;
 
     /**
      * \brief Set the current game state.
@@ -334,7 +342,17 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \warning This function can completely break the game's logic flow.
      */
-    void set_state( const CHS_STATE state );
+    void setState( const CHS_STATE state );
+
+    /**
+     * \return The number of consecutive turns where no significant changes has occurred.
+     */
+    unsigned int getNo_change_turn_cnt() const;
+    /**
+     * \param no_change_turn_cnt The number of consecutive turns where no significant
+     *  changes has occurred to be directly applied to the current game instance.
+     */
+    void setNo_change_turn_cnt( const unsigned int no_change_turn_cnt );
 
 // ====================================================================== <<<<<
 

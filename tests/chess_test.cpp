@@ -215,6 +215,11 @@ void tests::chess_game_manip_tests(){
 
     chess myGame = chess();
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Test clearBoard
+// ---------------------------------------------------------------------- >>>>>
+
     // Put two test pieces on the empty board.
     chess::chs_piece myPiece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
     myGame.set_piece_at( 1, 2, myPiece );
@@ -234,13 +239,85 @@ void tests::chess_game_manip_tests(){
         myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::NO_C );
     
     if( test_bool ){
-        cout << "chess clearBoard test: passed." << endl;
+        cout << "chess clearBoard test: passed!" << endl;
     }else{
-        cout << "chess clearBoard test: failed." << endl;
+        cout << "chess clearBoard test: failed!" << endl;
     }
 
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Test resetBoard
+// ---------------------------------------------------------------------- >>>>>
+    
+    test_bool = true;
     myGame.resetBoard();
-    myGame.printBoard();
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    test_bool = test_bool && ( myGame.getTurn_cnt() == 0 );
+    test_bool = test_bool && ( myGame.getNo_change_turn_cnt() == 0 );
+
+    unsigned int col_idx = 0;
+    unsigned int row_idx = 0;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    col_idx = 1;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    col_idx = 2;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    col_idx = 3;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Compare the pawns.
+    row_idx = 1;
+    for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
+        test_bool = test_bool && ( myGame.get_piece_at( row_idx, j ) ==
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+        test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, j ) ==
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    }
+
+    // Compare empty spaces.
+    chess::chs_piece NONE_PIECE( chess::CHS_PIECE_TYPE::NO_P, chess::CHS_PIECE_COLOR::NO_C );
+    for( unsigned int i = 2; i < chess::BOARDHEIGHT - 2; i++ ){
+        for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
+            test_bool = test_bool && ( myGame.get_piece_at( i, j ) == NONE_PIECE );
+        }
+    }
+
+    if( test_bool ){
+        cout << "chess resetBoard test: passed!" << endl;
+    }else{
+        cout << "chess resetBoard test: failed!" << endl;
+    }
+// ---------------------------------------------------------------------- <<<<<
 
 
 }
