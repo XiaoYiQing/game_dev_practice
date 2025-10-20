@@ -215,17 +215,17 @@ void tests::chess_game_manip_tests(){
 
     chess myGame = chess();
 
+    // Put two test pieces on the empty board.
     chess::chs_piece myPiece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
     myGame.set_piece_at( 1, 2, myPiece );
     test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::PAWN && 
         myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::WHITE );
-
     myPiece = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
     myGame.set_piece_at( 5, 4, myPiece );
     test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::KNIGHT && 
         myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::BLACK );
 
-
+    // Clear the board and check the two pieces location for empty case.
     myGame.clearBoard();
     cout << endl;
     test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::NO_P && 
@@ -238,6 +238,9 @@ void tests::chess_game_manip_tests(){
     }else{
         cout << "chess clearBoard test: failed." << endl;
     }
+
+    myGame.resetBoard();
+    myGame.printBoard();
 
 
 }

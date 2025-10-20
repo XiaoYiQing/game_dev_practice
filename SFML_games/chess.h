@@ -247,8 +247,27 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void clearBoard();
 
-    
+    /**
+     * \brief Set the piece at the target coordinate as the target piece.
+     * 
+     * \note Overwrites existing piece by default.
+     * 
+     * \param i The row index of the insertion point.
+     * \param j The row index of the insertion point.
+     * \param inPce The new piece to be inserted.
+     * 
+     * \warning Does not update the game state or turn count.
+     */
+    void set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce );
 
+    /**
+     * Reset the board to the state of a fresh new game.
+     * 
+     * \note This function serves as a game instance reset, though some class
+     *  variables may not be affected.
+     */
+    void resetBoard();
+    
 // ====================================================================== <<<<<
 
 
@@ -288,8 +307,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return The target piece at the coordinate.
      */
     chs_piece get_piece_at( unsigned int i, unsigned int j ) const;
-
-    void set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce );
     
     /**
      * \return Current game state turn count.

@@ -103,6 +103,8 @@ void chess::chs_piece::printPiece() const{
         type_char = 'K';   break;
     case CHS_PIECE_TYPE::BISHOP:
         type_char = 'B';   break;
+    case CHS_PIECE_TYPE::ROOK:
+        type_char = 'R';   break;
     case CHS_PIECE_TYPE::QUEEN:
         type_char = 'Q';   break;
     case CHS_PIECE_TYPE::KING:
@@ -230,20 +232,7 @@ bool chess::chs_move::is_move_valid( CHS_PIECE_TYPE tar_type,
 
 chess::chess(){
 
-    // Empty piece.
-    chess::chs_piece curr_piece;
-    curr_piece.set_as_empty();
-
-    // Initialize the chessboard.
-    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
-    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
-        this->CHS_board[i][j] = curr_piece;
-    }
-    }
-
-    this->turn_cnt = 0;
-    this->no_change_turn_cnt = 0;
-    this->state = CHS_STATE::ONGOING;
+    this->resetBoard();
 
 }
 
@@ -266,6 +255,82 @@ void chess::clearBoard(){
         this->CHS_board[i][j] = curr_piece;
     }
     }
+
+}
+
+void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
+    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
+        throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
+    }
+    this->CHS_board[i][j] = inPce;
+}
+
+void chess::resetBoard(){
+
+    if( BOARDHEIGHT != 8 || BOARDWIDTH != 8 ){
+        throw runtime_error( "Chess board reset cannot be done with a non-standard chess board dimensions." );
+    }
+
+    // Insert the last row pieces on both sides.
+    unsigned int col_idx = 0;
+    unsigned int row_idx = 0;
+    this->set_piece_at( row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    col_idx = 1;
+    this->set_piece_at( row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    col_idx = 2;
+    this->set_piece_at( row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    col_idx = 3;
+    this->set_piece_at( row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Insert the pawns.
+    row_idx = 1;
+    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+        this->set_piece_at( row_idx, j, 
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+        this->set_piece_at( BOARDHEIGHT - 1 - row_idx, j, 
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    }
+
+    // Set all remaining space as empty.
+    chess::chs_piece NONE_PIECE( chess::CHS_PIECE_TYPE::NO_P, chess::CHS_PIECE_COLOR::NO_C );
+    for( unsigned int i = 2; i < BOARDHEIGHT - 2; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+            this->set_piece_at( i, j, NONE_PIECE );
+        }
+    }
+
+    // Reset all support variables descripbing the state of the game.
+    this->turn_cnt = 0;
+    this->no_change_turn_cnt = 0;
+    this->state = CHS_STATE::ONGOING;
 
 }
 
@@ -308,13 +373,6 @@ chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ) const{
         throw out_of_range( "get_piece_at: the specified coordinate is out of bound." );
     }
     return this->CHS_board[i][j];
-}
-
-void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
-    if( i >= BOARDHEIGHT || j > BOARDWIDTH ){
-        throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
-    }
-    this->CHS_board[i][j] = inPce;
 }
 
 unsigned int chess::getTurn_cnt() const
