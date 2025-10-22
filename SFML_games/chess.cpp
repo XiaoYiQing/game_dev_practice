@@ -309,7 +309,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 {
 
     // Out of bound check.
-    if( max( i_bef, i_aft ) >= BOARDHEIGHT && max( j_bef, j_aft ) >= BOARDHEIGHT ){
+    if( max( i_bef, i_aft ) >= BOARDHEIGHT || max( j_bef, j_aft ) >= BOARDHEIGHT ){
         return false;
     }
 
@@ -323,7 +323,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     // Empty starting square check.
     if( tarPce.type == CHS_PIECE_TYPE::NO_P || tarPce.color == CHS_PIECE_COLOR::NO_C ){
         return false;
-    }    
+    }
 
     // Obtain piece at destination.
     chs_piece endPce = this->get_piece_at( i_aft, j_aft );
@@ -336,7 +336,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     CHS_PIECE_COLOR tarColor = tarPce.color;
     // Turn check.
     if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ){
-        throw runtime_error( "Game is currently not at the target piece's turn to play." );
+        return false;
     }
 
 
@@ -377,7 +377,8 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     case CHS_PIECE_TYPE::KNIGHT:
 
         // The knight can only jump in the smallest L shapes.
-        if( abs( moveVec.first ) + abs( moveVec.second ) != 3 ){
+        if( ( abs( moveVec.first ) + abs( moveVec.second ) != 3 ) || 
+            ( moveVec.first == 0 || moveVec.second == 0 ) ){
             return false;
         }
 

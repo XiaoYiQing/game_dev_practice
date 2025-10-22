@@ -338,9 +338,30 @@ void tests::chess_move_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Pawn Move Test
+//      Invalid Move Tests
 // ---------------------------------------------------------------------- >>>>>
+
+    // Out of bound move.
+    test_bool = test_bool && !( myGame.is_move_valid( 0, 0, 8, 0 ) );
+    // Trivial move.
+    test_bool = test_bool && !( myGame.is_move_valid( 0, 0, 0, 0 ) );
+    // No piece at start square move.
+    test_bool = test_bool && !( myGame.is_move_valid( 2, 0, 0, 0 ) );
+    // Obstruction at end square move.
+    test_bool = test_bool && !( myGame.is_move_valid( 0, 0, 1, 0 ) );
+    // Wrong turn move.
+    test_bool = test_bool && !( myGame.is_move_valid( 6, 0, 5, 0 ) );
+
+    if( test_bool ){
+        cout << "chess::is_move_valid invalid moves test: passed!" << endl;
+    }else{
+        cout << "chess::is_move_valid invalid moves test: failed!" << endl;
+    }
+
+    // Reset test boolean.
+    test_bool = true;
 // ---------------------------------------------------------------------- <<<<<
+
 
 // ---------------------------------------------------------------------- >>>>>
 //      Pawn Move Test
@@ -350,9 +371,23 @@ void tests::chess_move_tests(){
     test_bool = test_bool && ( myGame.is_move_valid( 1, 2, 2, 2 ) );
     // Unstarted white pawn up 2.
     test_bool = test_bool && ( myGame.is_move_valid( 1, 2, 3, 2 ) );
+    // Unstarted white pawn up 3.
+    test_bool = test_bool && !( myGame.is_move_valid( 1, 2, 4, 2 ) );
     // White pawn down 1.
     test_bool = test_bool && !( myGame.is_move_valid( 1, 2, 0, 2 ) );
+    // White pawn diagonal.
+    test_bool = test_bool && !( myGame.is_move_valid( 1, 2, 2, 3 ) );
 
+    // Set the turn to black's turn
+    myGame.setTurn_cnt(1u);
+    // Unstarted black pawn up 1.
+    test_bool = test_bool && ( myGame.is_move_valid( 6, 2, 5, 2 ) );
+    // Unstarted black pawn up 2.
+    test_bool = test_bool && ( myGame.is_move_valid( 6, 2, 4, 2 ) );
+    // Unstarted black pawn up 3.
+    test_bool = test_bool && !( myGame.is_move_valid( 6, 2, 3, 2 ) );
+    // Black pawn down 1.
+    test_bool = test_bool && !( myGame.is_move_valid( 6, 2, 7, 2 ) );
 
 
     if( test_bool ){
@@ -360,6 +395,85 @@ void tests::chess_move_tests(){
     }else{
         cout << "chess::is_move_valid pawn move test: failed!" << endl;
     }
+
+    // Reset to white's move.
+    myGame.setTurn_cnt(0);
+    // Reset test boolean.
+    test_bool = true;
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Knight Move Test
+// ---------------------------------------------------------------------- >>>>>
+
+    // Basic knight moves.
+    test_bool = test_bool && ( myGame.is_move_valid( 0, 1, 2, 0 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 0, 1, 2, 2 ) );
+    // Wrong knight move.
+    test_bool = test_bool && !( myGame.is_move_valid( 0, 1, 3, 1 ) );
+
+    // Set the turn to black's turn
+    myGame.setTurn_cnt(1u);
+    test_bool = test_bool && ( myGame.is_move_valid( 7, 1, 5, 0 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 7, 1, 5, 2 ) );
+    // Wrong knight move.
+    test_bool = test_bool && !( myGame.is_move_valid( 7, 1, 4, 1 ) );
+
+    if( test_bool ){
+        cout << "chess::is_move_valid knight move test: passed!" << endl;
+    }else{
+        cout << "chess::is_move_valid knight move test: failed!" << endl;
+    }
+
+    // Reset to white's move.
+    myGame.setTurn_cnt(0);
+    // Reset test boolean.
+    test_bool = true;
+    
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Bishop Move Test
+// ---------------------------------------------------------------------- >>>>>
+
+    chess::chs_piece newWB = chess::chs_piece(
+        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE
+    );
+    myGame.set_piece_at( 3, 3, newWB );
+
+    // Basic bishop moves.
+    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 2, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 2, 4 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 4 ) );
+
+    chess::chs_piece newBB = chess::chs_piece(
+        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE
+    );
+    myGame.set_piece_at( 4, 4, newBB );
+
+    // Set the turn to black's turn
+    myGame.setTurn_cnt(1u);
+    test_bool = test_bool && !( myGame.is_move_valid( 4, 4, 3, 3 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 4, 4, 3, 5 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 4, 4, 5, 3 ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 4, 4, 5, 5 ) );
+    // Obstacle case.
+    test_bool = test_bool && !( myGame.is_move_valid( 4, 4, 2, 2 ) );
+
+    if( test_bool ){
+        cout << "chess::is_move_valid bishop move test: passed!" << endl;
+    }else{
+        cout << "chess::is_move_valid bishop move test: failed!" << endl;
+    }
+
+    // Reset to white's move.
+    myGame.setTurn_cnt(0);
+    // Reset test boolean.
+    test_bool = true;
 
 // ---------------------------------------------------------------------- <<<<<
 
