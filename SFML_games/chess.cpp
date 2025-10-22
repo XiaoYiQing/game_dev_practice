@@ -345,15 +345,8 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     // Obtain the type of the current piece.
     CHS_PIECE_TYPE tarType = tarPce.type;
-   
-
     // Computed the movement vector.
     pair<int,int> moveVec( (int)i_aft - (int)i_bef, (int)j_aft - (int)j_bef );
-
-
-
-    bool valid_move = true;
-
     // Piece's capability match.
     switch( tarType ){
     case CHS_PIECE_TYPE::PAWN:
@@ -403,25 +396,31 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     case CHS_PIECE_TYPE::ROOK:
 
-        // Bishops can only move in diagonals.
-        if( abs( moveVec.first ) != abs( moveVec.second ) ){
+        // Rooks can only move in horizontals and verticals.
+        if( moveVec.first != 0 && moveVec.second != 0 ){
             return false;
         }
         break;
 
     case CHS_PIECE_TYPE::QUEEN:
-
+        if( abs( moveVec.first ) != abs( moveVec.second ) &&
+            ( moveVec.first != 0 && moveVec.second != 0 ) ){
+            return false;
+        }
         break;
 
     case CHS_PIECE_TYPE::KING:
-
+        if( abs( moveVec.first ) > 1 || abs( moveVec.second ) > 1 ){
+            return false;
+        }
         break;
 
     default:
-
+        throw runtime_error( "Unexpected chess piece type." );
         break;
     };
 
+    return true;
 }
 
 // ====================================================================== <<<<<
