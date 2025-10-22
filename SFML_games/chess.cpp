@@ -345,6 +345,54 @@ void chess::resetBoard(){
 
 
 // ====================================================================== >>>>>
+//      Gameplay Functions
+// ====================================================================== >>>>>
+
+/*
+- Check if the coordinates are within board limits.
+- Check if there is a piece at the starting coordinate.
+- Check if there is free space at the ending coordinate.
+- Check if the piece is white or black and if is its turn.
+- Check if the specified movement matches the capability of the piece.
+    To extend the above point, also deal with special moves such as 
+    > Castling of king and rook
+    > Pawn double square forward as first move.
+- Check if there is any obstable between the starting and ending point (Except knight).
+*/
+
+bool chess::move( unsigned int i_bef, unsigned int j_bef, 
+    unsigned int i_aft, unsigned int j_aft )
+{
+
+    // Out of bound check.
+    if( max( i_bef, i_aft ) >= BOARDHEIGHT && max( j_bef, j_aft ) >= BOARDHEIGHT ){
+        throw invalid_argument( "A piece displacement must start and end within board limits." );
+    }
+
+    // Obtain the target piece to play.
+    chs_piece tarPce = this->get_piece_at( i_bef, j_bef );
+    // Empty starting square check.
+    if( tarPce.type == CHS_PIECE_TYPE::NO_P || tarPce.color == CHS_PIECE_COLOR::NO_C ){
+        throw runtime_error( "The target starting square is empty or contains an invalid piece." );
+    }
+
+    // Obtain piece at destination.
+    chs_piece endPce = this->get_piece_at( i_aft, j_aft );
+    // Check empty space at destination.
+    if( tarPce.type != CHS_PIECE_TYPE::NO_P || tarPce.color != CHS_PIECE_COLOR::NO_C ){
+        throw runtime_error( "The destination square must contain the empty square equivalent piece." );
+    }
+
+    // Obtain the color of the current piece.
+    CHS_PIECE_COLOR tarColor = tarPce.color;
+    
+
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Game State Functions
 // ====================================================================== >>>>>
 

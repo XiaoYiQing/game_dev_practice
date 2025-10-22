@@ -283,8 +283,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      Gameplay Functions
 // ====================================================================== >>>>>
 
-    vector<unsigned int> attack( unsigned int i_a, unsigned int j_a, 
-        unsigned int i_b, unsigned int j_b );
+    /**
+     * Perform a chess piece displacement with the piece at the target square 
+     * towards the specificed destination square.
+     */
+    bool move( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft );
 
 // ====================================================================== <<<<<
 
