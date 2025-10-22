@@ -290,9 +290,6 @@ bool chess::move( unsigned int i_bef, unsigned int j_bef,
 
     return false;
 
-
-
-
 }
 
 /*
@@ -331,7 +328,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     // Obtain piece at destination.
     chs_piece endPce = this->get_piece_at( i_aft, j_aft );
     // Check empty space at destination.
-    if( tarPce.type != CHS_PIECE_TYPE::NO_P || tarPce.color != CHS_PIECE_COLOR::NO_C ){
+    if( endPce.type != CHS_PIECE_TYPE::NO_P || endPce.color != CHS_PIECE_COLOR::NO_C ){
         return false;
     }
 

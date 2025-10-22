@@ -325,3 +325,42 @@ void tests::chess_game_manip_tests(){
 
 
 
+
+void tests::chess_move_tests(){
+
+    chess myGame = chess();
+
+    myGame.resetBoard();
+
+
+
+    bool test_bool = true;
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Move Test
+// ---------------------------------------------------------------------- >>>>>
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Move Test
+// ---------------------------------------------------------------------- >>>>>
+
+    // Unstarted white pawn up 1.
+    test_bool = test_bool && ( myGame.is_move_valid( 1, 2, 2, 2 ) );
+    // Unstarted white pawn up 2.
+    test_bool = test_bool && ( myGame.is_move_valid( 1, 2, 3, 2 ) );
+    // White pawn down 1.
+    test_bool = test_bool && !( myGame.is_move_valid( 1, 2, 0, 2 ) );
+
+
+
+    if( test_bool ){
+        cout << "chess::is_move_valid pawn move test: passed!" << endl;
+    }else{
+        cout << "chess::is_move_valid pawn move test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+}

@@ -13,6 +13,8 @@ namespace tests{
 
     void chess_game_manip_tests();
 
+    void chess_move_tests();
+
 }
 
 
