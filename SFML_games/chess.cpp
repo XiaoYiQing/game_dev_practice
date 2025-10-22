@@ -351,8 +351,8 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     switch( tarType ){
     case CHS_PIECE_TYPE::PAWN:
 
-        // Pawn move must be a non-trivial move along a column.
-        if( moveVec.first == 0 || moveVec.second != 0 ){
+        // Pawn move must be restricted along a column.
+        if( moveVec.second != 0 ){
             return false;
         }
 
@@ -362,13 +362,13 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
             return false;
         }
 
-        // The pawn had never moved before.
+        // The pawn had never moved before and can move up 1 or 2 squares.
         if( ( i_bef == 1 && tarColor == CHS_PIECE_COLOR::WHITE ) || 
             ( i_bef == BOARDHEIGHT - 2 && tarColor == CHS_PIECE_COLOR::BLACK ) ){
             if( abs( moveVec.first ) > 2 ){
                 return false;
             }
-        // The pawn has moved before.
+        // The pawn has moved before and can move up only 1 square.
         }else{
             if( abs( moveVec.first ) > 1 ){
                 return false;
@@ -420,7 +420,35 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         break;
     };
 
+    // Obstruction check (Only the knight pieces do not need).
+    if( tarType != CHS_PIECE_TYPE::KNIGHT ){
+
+        // The segment lengths.
+        pair<int,int>moveVecSeg(0,0);
+        // The number of squares between start and end points.
+        int sqr_cnt = 0;
+        if( moveVec.first != 0 ){
+            moveVecSeg.first = moveVec.first > 0 ? 1 : -1;
+            sqr_cnt = abs( moveVec.first ) - 1;
+        }
+        if( moveVec.second != 0 ){
+            moveVecSeg.second = moveVec.second > 0 ? 1 : -1;
+            sqr_cnt = abs( moveVec.second ) - 1;
+        }
+        
+        // Make sure every square between the start and end squares are empty.
+        chs_piece pce_z;
+        for( int z = 1; z <= sqr_cnt; z++ ){
+            pce_z = this->get_piece_at( i_bef + z*moveVecSeg.first, j_bef + z*moveVecSeg.second );
+            if( pce_z.type != CHS_PIECE_TYPE::NO_P || pce_z.color != CHS_PIECE_COLOR::NO_C ){
+                return false;
+            }
+        }
+
+    }
+
     return true;
+
 }
 
 // ====================================================================== <<<<<
