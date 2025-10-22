@@ -225,9 +225,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
          * \return A pair of integers, representing a 2D vector.
          */
         std::pair<int,int> get_vec();
-
-        bool is_move_valid( chs_piece tar_piece );
-        bool is_move_valid( CHS_PIECE_TYPE tar_type, CHS_PIECE_COLOR tar_color );
         
 
     };
@@ -289,7 +286,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool move( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
-
+    
+    
+    // bool is_move_valid( chs_piece tar_piece );
+    // bool is_move_valid( CHS_PIECE_TYPE tar_type, CHS_PIECE_COLOR tar_color );
+    bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft );
 // ====================================================================== <<<<<
 
 

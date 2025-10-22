@@ -152,83 +152,6 @@ std::pair<int,int> chess::chs_move::get_vec(){
 }
 
 
-bool chess::chs_move::is_move_valid( chs_piece tar_piece ){
-    return is_move_valid( tar_piece.type, tar_piece.color );
-}
-
-bool chess::chs_move::is_move_valid( CHS_PIECE_TYPE tar_type, 
-    CHS_PIECE_COLOR tar_color ){
-
-    // A piece with the "none" equivalent value in type and/or color is automatically
-    // disqualified from having a valid move.
-    if( tar_type == CHS_PIECE_TYPE::NO_P || tar_color == CHS_PIECE_COLOR::NO_C ){
-        return false;
-    }
-
-    // A starting coordinate outside the bound of the chess board is automatically invalid.
-    if( this->pt_a.first < 0 || this->pt_a.first >= BOARDHEIGHT ||
-        this->pt_a.second < 0 || this->pt_a.second >= BOARDWIDTH ){
-        return false;
-    }
-    // An ending coordinate outside the bound of the chess board is automatically invalid.
-    if( this->pt_b.first < 0 || this->pt_b.first >= BOARDHEIGHT ||
-        this->pt_b.second < 0 || this->pt_b.second >= BOARDWIDTH ){
-        return false;
-    }
-
-    // Obtain the move vector.
-    pair<int,int> myVec = this->get_vec();
-    // A null move is invalid.
-    if( myVec.first == 0 && myVec.second == 0 ){
-        return false;
-    }
-
-    
-    int tile_cnt = abs( myVec.first ) + abs( myVec.second );
-    // Ruling under different piece types.
-    switch( tar_type ){
-    case CHS_PIECE_TYPE::PAWN:
-
-        if( tar_color == CHS_PIECE_COLOR::WHITE ){
-            return ( myVec.first == -1 && myVec.second == 0 );
-        }else if(tar_color == CHS_PIECE_COLOR::BLACK){
-            return ( myVec.first == 1 && myVec.second == 0 );
-        }else{
-            throw runtime_error( "is_move_valid: Unexpected chess piece color enum." );
-        }
-    
-        break;
-
-    case CHS_PIECE_TYPE::KNIGHT:
-
-        return ( tile_cnt == 3 ) && ( abs( myVec.first ) == 1 || abs( myVec.second ) == 1 );
-        break;
-
-    case CHS_PIECE_TYPE::BISHOP:
-
-        return ( abs( myVec.first ) == abs( myVec.second ) );
-        break;
-
-    case CHS_PIECE_TYPE::ROOK:
-
-        return ( myVec.first == 0 || myVec.second == 0 );
-        break;
-
-    case CHS_PIECE_TYPE::QUEEN:
-
-        return ( abs( myVec.first ) == abs( myVec.second ) ) ||
-            ( myVec.first == 0 || myVec.second == 0 );
-        break;
-
-    case CHS_PIECE_TYPE::KING:
-
-        return ( abs( myVec.first ) <= 1 && abs( myVec.second ) <= 1 );
-        break;
-
-    }
-
-    return true;
-}
 
 // ====================================================================== <<<<<
 
@@ -350,6 +273,7 @@ void chess::resetBoard(){
 
 /*
 - Check if the coordinates are within board limits.
+- Check if the move is trivial (0 move).
 - Check if there is a piece at the starting coordinate.
 - Check if there is free space at the ending coordinate.
 - Check if the piece is white or black and if is its turn.
@@ -364,23 +288,51 @@ bool chess::move( unsigned int i_bef, unsigned int j_bef,
     unsigned int i_aft, unsigned int j_aft )
 {
 
+    return false;
+
+
+
+
+}
+
+/*
+- Check if the coordinates are within board limits.
+- Check if the move is trivial (0 move).
+- Check if there is a piece at the starting coordinate.
+- Check if there is free space at the ending coordinate.
+- Check if the piece is white or black and if is its turn.
+- Check if the specified movement matches the capability of the piece.
+    To extend the above point, also deal with special moves such as 
+    > Castling of king and rook
+    > Pawn double square forward as first move.
+- Check if there is any obstable between the starting and ending point (Except knight).
+*/
+bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft )
+{
+
     // Out of bound check.
     if( max( i_bef, i_aft ) >= BOARDHEIGHT && max( j_bef, j_aft ) >= BOARDHEIGHT ){
-        throw invalid_argument( "A piece displacement must start and end within board limits." );
+        return false;
+    }
+
+    // Trivial move check.
+    if( i_bef == i_aft && j_bef == j_aft ){
+        return false;
     }
 
     // Obtain the target piece to play.
     chs_piece tarPce = this->get_piece_at( i_bef, j_bef );
     // Empty starting square check.
     if( tarPce.type == CHS_PIECE_TYPE::NO_P || tarPce.color == CHS_PIECE_COLOR::NO_C ){
-        throw runtime_error( "The target starting square is empty or contains an invalid piece." );
-    }
+        return false;
+    }    
 
     // Obtain piece at destination.
     chs_piece endPce = this->get_piece_at( i_aft, j_aft );
     // Check empty space at destination.
     if( tarPce.type != CHS_PIECE_TYPE::NO_P || tarPce.color != CHS_PIECE_COLOR::NO_C ){
-        throw runtime_error( "The destination square must contain the empty square equivalent piece." );
+        return false;
     }
 
     // Obtain the color of the current piece.
@@ -393,44 +345,68 @@ bool chess::move( unsigned int i_bef, unsigned int j_bef,
 
     // Obtain the type of the current piece.
     CHS_PIECE_TYPE tarType = tarPce.type;
+   
 
     // Computed the movement vector.
     pair<int,int> moveVec( (int)i_aft - (int)i_bef, (int)j_aft - (int)j_bef );
 
+
+
     bool valid_move = true;
 
+    // Piece's capability match.
     switch( tarType ){
     case CHS_PIECE_TYPE::PAWN:
 
+        // Pawn move must be a non-trivial move along a column.
+        if( moveVec.first == 0 || moveVec.second != 0 ){
+            return false;
+        }
+
         // A pawn can only move forward (white goes up, black goes down).
-        if( ! ( moveVec.first >= 0 && tarColor == CHS_PIECE_COLOR::WHITE ) ){
+        if( ( moveVec.first < 0 && tarColor == CHS_PIECE_COLOR::WHITE ) || 
+            ( moveVec.first > 0 && tarColor == CHS_PIECE_COLOR::BLACK ) ){
             return false;
         }
 
-        // Pawn move must be along a column.
-        valid_move = valid_move && ( moveVec.second == 0 );
-        if( !valid_move ){
-            return false;
-        }
-        // Pawn can only move forward by one
-        if( abs( moveVec.first ) == 0 ){
-
+        // The pawn had never moved before.
+        if( ( i_bef == 1 && tarColor == CHS_PIECE_COLOR::WHITE ) || 
+            ( i_bef == BOARDHEIGHT - 2 && tarColor == CHS_PIECE_COLOR::BLACK ) ){
+            if( abs( moveVec.first ) > 2 ){
+                return false;
+            }
+        // The pawn has moved before.
+        }else{
+            if( abs( moveVec.first ) > 1 ){
+                return false;
+            }
         }
         
         break;
 
     case CHS_PIECE_TYPE::KNIGHT:
 
-        valid_move = valid_move && ( abs( moveVec.first ) == 1 );
+        // The knight can only jump in the smallest L shapes.
+        if( abs( moveVec.first ) + abs( moveVec.second ) != 3 ){
+            return false;
+        }
 
         break;
 
     case CHS_PIECE_TYPE::BISHOP:
 
+        // Bishops can only move in diagonals.
+        if( abs( moveVec.first ) != abs( moveVec.second ) ){
+            return false;
+        }
         break;
 
     case CHS_PIECE_TYPE::ROOK:
 
+        // Bishops can only move in diagonals.
+        if( abs( moveVec.first ) != abs( moveVec.second ) ){
+            return false;
+        }
         break;
 
     case CHS_PIECE_TYPE::QUEEN:
@@ -445,9 +421,6 @@ bool chess::move( unsigned int i_bef, unsigned int j_bef,
 
         break;
     };
-
-
-
 
 }
 
