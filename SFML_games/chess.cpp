@@ -385,7 +385,69 @@ bool chess::move( unsigned int i_bef, unsigned int j_bef,
 
     // Obtain the color of the current piece.
     CHS_PIECE_COLOR tarColor = tarPce.color;
-    
+    // Turn check.
+    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ){
+        throw runtime_error( "Game is currently not at the target piece's turn to play." );
+    }
+
+
+    // Obtain the type of the current piece.
+    CHS_PIECE_TYPE tarType = tarPce.type;
+
+    // Computed the movement vector.
+    pair<int,int> moveVec( (int)i_aft - (int)i_bef, (int)j_aft - (int)j_bef );
+
+    bool valid_move = true;
+
+    switch( tarType ){
+    case CHS_PIECE_TYPE::PAWN:
+
+        // A pawn can only move forward (white goes up, black goes down).
+        if( ! ( moveVec.first >= 0 && tarColor == CHS_PIECE_COLOR::WHITE ) ){
+            return false;
+        }
+
+        // Pawn move must be along a column.
+        valid_move = valid_move && ( moveVec.second == 0 );
+        if( !valid_move ){
+            return false;
+        }
+        // Pawn can only move forward by one
+        if( abs( moveVec.first ) == 0 ){
+
+        }
+        
+        break;
+
+    case CHS_PIECE_TYPE::KNIGHT:
+
+        valid_move = valid_move && ( abs( moveVec.first ) == 1 );
+
+        break;
+
+    case CHS_PIECE_TYPE::BISHOP:
+
+        break;
+
+    case CHS_PIECE_TYPE::ROOK:
+
+        break;
+
+    case CHS_PIECE_TYPE::QUEEN:
+
+        break;
+
+    case CHS_PIECE_TYPE::KING:
+
+        break;
+
+    default:
+
+        break;
+    };
+
+
+
 
 }
 
