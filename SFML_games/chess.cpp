@@ -282,48 +282,48 @@ void chess::resetBoard(){
     unsigned int col_idx = 0;
     unsigned int row_idx = 0;
     this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
     this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
     this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     col_idx = 1;
     this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
     this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
     this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
     this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
     col_idx = 2;
     this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
     this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
     this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
     this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
     col_idx = 3;
     this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
-    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
+    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
 
     // Insert the pawns.
     row_idx = 1;
     for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
         this->set_piece_at( row_idx, j, 
-            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-        this->set_piece_at( BOARDHEIGHT - 1 - row_idx, j, 
             chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+        this->set_piece_at( BOARDHEIGHT - 1 - row_idx, j, 
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
     }
 
     // Set all remaining space as empty.
@@ -463,7 +463,7 @@ void chess::printBoard() const{
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
         for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
 
-            this->CHS_board[i][j].printPiece();
+            this->CHS_board[ BOARDHEIGHT - 1 - i ][j].printPiece();
 
             if( j != BOARDWIDTH ){
                 cout << ' ';
