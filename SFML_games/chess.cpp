@@ -349,6 +349,9 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
             return false;
         }
 
+        // TODO: consider whether you should use the pawn position or the built-in
+        //  boolean variable to decide whether the pawn has not moved before.
+
         // The pawn had never moved before and can move up 1 or 2 squares.
         if( ( i_bef == 1 && tarColor == CHS_PIECE_COLOR::WHITE ) || 
             ( i_bef == BOARDHEIGHT - 2 && tarColor == CHS_PIECE_COLOR::BLACK ) ){
@@ -397,10 +400,86 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         }
         break;
 
+    // TODO: The permission to move needs to consider threatened squares for the King.
     case CHS_PIECE_TYPE::KING:
-        if( abs( moveVec.first ) > 1 || abs( moveVec.second ) > 1 ){
+
+        // Standard king move.
+        if( abs( moveVec.first ) <= 1 && abs( moveVec.second ) <= 1 ){
+            break;
+
+        // Check for castling possibility.
+        }else if( tarPce.not_moved && ( i_bef == 0 && j_bef == 4 ) ){
+
+            if( tarColor == CHS_PIECE_COLOR::WHITE ){
+
+                // Rightside castling.
+                if( i_aft == 0 && j_aft == 6 ){
+
+                    // The rightside rook must have not moved yet.
+                    bool cast_poss = this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[0][7].not_moved );
+                    if( !cast_poss ){
+                        return false;
+                    }
+
+                // Leftside castling.
+                }else if( i_aft == 0 && j_aft == 2 ){
+
+                    // The leftside rook must have not moved yet.
+                    bool cast_poss = this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[0][0].not_moved );
+                    // The leftside knight initial square must be cleared.
+                    cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P &&
+                        this->CHS_board[0][1].color == CHS_PIECE_COLOR::NO_C );
+                    if( !cast_poss ){
+                        return false;
+                    }
+
+                // Not castling, and thus illegal
+                }else{
+                    return false;
+                }
+
+
+            }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
+
+                // Rightside castling.
+                if( i_aft == 7 && j_aft == 6 ){
+
+                    // The rightside rook must have not moved yet.
+                    bool cast_poss = this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
+                    if( !cast_poss ){
+                        return false;
+                    }
+
+                // Leftside castling.
+                }else if( i_aft == 7 && j_aft == 2 ){
+
+                    // The leftside rook must have not moved yet.
+                    bool cast_poss = this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[7][0].not_moved );
+                    // The leftside knight initial square must be cleared.
+                    cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P &&
+                        this->CHS_board[7][1].color == CHS_PIECE_COLOR::NO_C );
+                    if( !cast_poss ){
+                        return false;
+                    }
+
+                // Not castling, and thus illegal
+                }else{
+                    return false;
+                }
+
+            }else{
+                throw runtime_error( "Unrecognized chess piece color." );
+            }
+
+        // The king's move is against the rule.
+        }else{
             return false;
         }
+
         break;
 
     default:
