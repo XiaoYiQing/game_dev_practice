@@ -14,7 +14,9 @@
 
 using namespace std;
 
-
+// TODO: Implement a tracking variable indicating whether a piece has moved.
+//      This is to deal with the fact that certains pieces can perform special
+//      moves if its their first move.
 
 namespace gameEngine{
 
@@ -175,6 +177,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
          * The color of the piece.
          */
         CHS_PIECE_COLOR color;
+
+        /**
+         * The boolean indicating whether this piece has not yet performed its forst 
+         * move yet.
+         */
+        bool not_moved;
 
     };
 

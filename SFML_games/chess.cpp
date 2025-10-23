@@ -79,11 +79,13 @@ chess::chs_piece::chs_piece(){
 chess::chs_piece::chs_piece( CHS_PIECE_TYPE type, CHS_PIECE_COLOR color ){
     this->type = type;
     this->color = color;
+    this->not_moved = true;
 }
 
 void chess::chs_piece::set_as_empty(){
     this->type = chess::CHS_PIECE_TYPE::NO_P;
     this->color = chess::CHS_PIECE_COLOR::NO_C;
+    this->not_moved = true;
 }
 
 void chess::chs_piece::printPiece() const{
@@ -271,18 +273,6 @@ void chess::resetBoard(){
 //      Gameplay Functions
 // ====================================================================== >>>>>
 
-/*
-- Check if the coordinates are within board limits.
-- Check if the move is trivial (0 move).
-- Check if there is a piece at the starting coordinate.
-- Check if there is free space at the ending coordinate.
-- Check if the piece is white or black and if is its turn.
-- Check if the specified movement matches the capability of the piece.
-    To extend the above point, also deal with special moves such as 
-    > Castling of king and rook
-    > Pawn double square forward as first move.
-- Check if there is any obstable between the starting and ending point (Except knight).
-*/
 
 bool chess::move( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
@@ -304,6 +294,7 @@ bool chess::move( unsigned int i_bef, unsigned int j_bef,
     > Pawn double square forward as first move.
 - Check if there is any obstable between the starting and ending point (Except knight).
 */
+
 bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft )
 {
@@ -338,7 +329,6 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ){
         return false;
     }
-
 
     // Obtain the type of the current piece.
     CHS_PIECE_TYPE tarType = tarPce.type;
