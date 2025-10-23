@@ -408,27 +408,27 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
             break;
 
         // Check for castling possibility.
-        }else if( tarPce.not_moved && ( i_bef == 0 && j_bef == 4 ) ){
+        }else if( tarPce.not_moved ){
 
             if( tarColor == CHS_PIECE_COLOR::WHITE ){
 
-                // Rightside castling.
-                if( i_aft == 0 && j_aft == 6 ){
+                // Right-side castling.
+                if( i_bef == 0 && j_bef == 4 && i_aft == 0 && j_aft == 6 ){
 
-                    // The rightside rook must have not moved yet.
+                    // The right-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK;
                     cast_poss = cast_poss && ( this->CHS_board[0][7].not_moved );
                     if( !cast_poss ){
                         return false;
                     }
 
-                // Leftside castling.
+                // Left-side castling.
                 }else if( i_aft == 0 && j_aft == 2 ){
 
-                    // The leftside rook must have not moved yet.
+                    // The left-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK;
                     cast_poss = cast_poss && ( this->CHS_board[0][0].not_moved );
-                    // The leftside knight initial square must be cleared.
+                    // The left-side knight initial square must be cleared.
                     cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P &&
                         this->CHS_board[0][1].color == CHS_PIECE_COLOR::NO_C );
                     if( !cast_poss ){
@@ -443,23 +443,23 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
             }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
 
-                // Rightside castling.
-                if( i_aft == 7 && j_aft == 6 ){
+                // Right-side castling.
+                if( i_bef == 7 && j_bef == 4 && i_aft == 7 && j_aft == 6 ){
 
-                    // The rightside rook must have not moved yet.
+                    // The right-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK;
                     cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
                     if( !cast_poss ){
                         return false;
                     }
 
-                // Leftside castling.
+                // Left-side castling.
                 }else if( i_aft == 7 && j_aft == 2 ){
 
-                    // The leftside rook must have not moved yet.
+                    // The left-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK;
                     cast_poss = cast_poss && ( this->CHS_board[7][0].not_moved );
-                    // The leftside knight initial square must be cleared.
+                    // The left-side knight initial square must be cleared.
                     cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P &&
                         this->CHS_board[7][1].color == CHS_PIECE_COLOR::NO_C );
                     if( !cast_poss ){
