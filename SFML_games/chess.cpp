@@ -552,6 +552,18 @@ void chess::printBoard() const{
 //      Access Function
 // ====================================================================== >>>>>
 
+int chess::sub2ind( int i, int j ){
+    return ( i*BOARDWIDTH + j );
+}
+int chess::sub2ind( pair<int,int> subIdx ){
+    return sub2ind( subIdx.first, subIdx.second );
+}
+
+pair<int,int> chess::ind2sub( int linIdx ){
+    int rem_val = linIdx % BOARDWIDTH;
+    return pair<int,int>( (linIdx - rem_val)/BOARDWIDTH, rem_val );
+}
+
 chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ) const{
     if( i >= BOARDHEIGHT || j > BOARDWIDTH ){
         throw out_of_range( "get_piece_at: the specified coordinate is out of bound." );

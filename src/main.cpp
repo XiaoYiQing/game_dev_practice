@@ -144,6 +144,7 @@ void do_tests( unsigned int test_id ){
     // tests::chess_game_manip_tests();
     tests::chess_move_tests();
 
+
 }
 
 

@@ -14,9 +14,6 @@
 
 using namespace std;
 
-// TODO: Implement a tracking variable indicating whether a piece has moved.
-//      This is to deal with the fact that certains pieces can perform special
-//      moves if its their first move.
 
 namespace gameEngine{
 
@@ -296,10 +293,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
         unsigned int i_aft, unsigned int j_aft );
     
     
-    // bool is_move_valid( chs_piece tar_piece );
-    // bool is_move_valid( CHS_PIECE_TYPE tar_type, CHS_PIECE_COLOR tar_color );
     bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
+
+    
+    
 // ====================================================================== <<<<<
 
 
@@ -320,6 +318,35 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 // ====================================================================== >>>>>
 //      Access Function
 // ====================================================================== >>>>>
+    
+    /**
+     * \brief Convert 2D indexing to 1D.
+     * 
+     * Linear indexing uses column index as lower order term. 
+     * 
+     * For example:
+     *  (0,0)=>0, (0,1)=>1, ... (0,7)=>7, (1,0)=>8, and so on.
+     * 
+     * \param i Row index.
+     * \param j Column index.
+     * \return The linear index equivalent.
+     */
+    static int sub2ind( int i, int j );
+    /**
+     * \brief Convert 2D indexing to 1D.
+     * 
+     * Linear indexing uses column index as lower order term. 
+     * 
+     * For example:
+     *  (0,0)=>0, (0,1)=>1, ... (0,7)=>7, (1,0)=>8, and so on.
+     * 
+     * \param subIdx The 2D coordinate pair (first = row index, second = column index).
+     * \return The linear index equivalent.
+     */
+    static int sub2ind( pair<int,int> subIdx );
+
+
+    static pair<int,int> ind2sub( int linIdx );
 
     /**
      * Obtain the chess piece at the target coordinate.
