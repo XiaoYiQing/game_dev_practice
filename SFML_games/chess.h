@@ -305,6 +305,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      Game State Functions
 // ====================================================================== >>>>>
 
+    bool is_sq_empty( int i, int j );
+
+    /**
+     * \brief Obtain all squares attacked by the piece at the target coordinate.
+     * 
+     * This function does not differentiate between black and white pieces.
+     */
+    vector< pair<int,int> > get_all_atk_sq( int i, int j );
+
     /**
      * \brief Print the state of the board onto the console terminal.
      * 
