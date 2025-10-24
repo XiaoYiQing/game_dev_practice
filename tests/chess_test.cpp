@@ -330,9 +330,6 @@ void tests::chess_move_tests(){
 
     chess myGame = chess();
 
-    myGame.resetBoard();
-
-
 
     bool test_bool = true;
 

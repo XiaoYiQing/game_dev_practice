@@ -164,6 +164,12 @@ std::pair<int,int> chess::chs_move::get_vec(){
 
 chess::chess(){
 
+
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+        this->atk_list_by_B[z].reserve( BOARDHEIGHT*BOARDWIDTH );
+        this->atk_list_by_W[z].reserve( BOARDHEIGHT*BOARDWIDTH );
+    }
+
     this->resetBoard();
 
 }
@@ -186,6 +192,12 @@ void chess::clearBoard(){
     for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
         this->CHS_board[i][j] = curr_piece;
     }
+    }
+
+    // Empty the attack lists.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+        this->atk_list_by_B[z].clear();
+        this->atk_list_by_W[z].clear();
     }
 
 }

@@ -345,7 +345,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     static int sub2ind( pair<int,int> subIdx );
 
-
+    /**
+     * \brief Convert linear indexing to 2D indexing.
+     * 
+     * Linear indexing uses column index as lower order term. 
+     * 
+     * \param linIdx The linear index.
+     * \return The 2D coordinate pair equivalent (first = row index, second = column index).
+     */
     static pair<int,int> ind2sub( int linIdx );
 
     /**
@@ -410,6 +417,17 @@ protected:
      * \note Remember that the lower right corner is a white square in chess.
      */
     chs_piece CHS_board[BOARDHEIGHT][BOARDWIDTH];
+    
+    /**
+     * Array of lists of white pieces attacking the square associated to the index
+     * in the array.
+     */
+    std::vector<int> atk_list_by_W[BOARDHEIGHT*BOARDWIDTH];
+    /**
+     * Array of lists of black pieces attacking the square associated to the index
+     * in the array.
+     */
+    std::vector<int> atk_list_by_B[BOARDHEIGHT*BOARDWIDTH];
 
     // The number of times a play has been made. White start at turn 0.
     unsigned int turn_cnt;
