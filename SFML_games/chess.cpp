@@ -728,6 +728,60 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
 }
 
 
+void chess::upd_atk_lists(){
+
+    // Emtpy the existing attack list vectors.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+        this->atk_list_by_W[z].clear();
+        this->atk_list_by_B[z].clear();
+    }
+    
+
+    // Current sub index.
+    pair<int,int> coord_z;
+    // Current piece being scanned for attacked squares.
+    chs_piece pce_z;
+    // List of sub coordinates of squares being attacked by the current piece.
+    vector< pair<int,int> > atk_list_z;
+    // List of linear coordinates of squares being attacked by the current piece.
+    vector<int> atk_sub_list_z;
+
+    for( unsigned int z = 0; z < BOARDWIDTH*BOARDHEIGHT; z++ ){
+
+        coord_z = ind2sub(z);
+        // Skip if empty.
+        if( this->is_sq_empty( coord_z.first, coord_z.second ) ){
+            continue;
+        }
+        // Obtain the target piece.
+        pce_z = get_piece_at( coord_z.first, coord_z.second );
+
+        // Obtain the list of all squares attacked by the current piece.
+        atk_list_z = get_all_atk_sq( coord_z.first, coord_z.second );
+        // Translate into linear indexing.
+        atk_sub_list_z = sub2ind( atk_list_z );
+
+        if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+            for( int sq_lin_idx : atk_sub_list_z ){
+                this->atk_list_by_W[sq_lin_idx].push_back(z);
+            }
+
+        }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+
+            for( int sq_lin_idx : atk_sub_list_z ){
+                this->atk_list_by_B[sq_lin_idx].push_back(z);
+            }
+
+        }else{
+            throw runtime_error( "Unrecognized chess piece color." );
+        }
+
+    }
+
+}
+
+
 void chess::printBoard() const{
 
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
@@ -773,6 +827,14 @@ pair<int,int> chess::ind2sub( int linIdx ){
     int rem_val = linIdx % BOARDWIDTH;
     return pair<int,int>( (linIdx - rem_val)/BOARDWIDTH, rem_val );
 }
+vector< pair<int,int> > chess::ind2sub( vector<int> linIdxVec ){
+    vector< pair<int,int> > subIdxVec;
+    subIdxVec.reserve( linIdxVec.size() );
+    for( int idx_z : linIdxVec ){
+        subIdxVec.push_back( chess::ind2sub( idx_z ) );
+    }
+}
+
 
 chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ) const{
     if( i >= BOARDHEIGHT || j > BOARDWIDTH ){
@@ -795,6 +857,9 @@ unsigned int chess::getNo_change_turn_cnt() const
     { return this->no_change_turn_cnt; }
 void chess::setNo_change_turn_cnt( const unsigned int no_change_turn_cnt )
     { this->no_change_turn_cnt = no_change_turn_cnt; }
+
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W()
+    {return this->atk_list_by_W;}
 
 // ====================================================================== <<<<<
 

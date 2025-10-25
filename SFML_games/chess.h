@@ -313,6 +313,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * This function does not differentiate between black and white pieces.
      */
     vector< pair<int,int> > get_all_atk_sq( int i, int j );
+    
+    /**
+     * Update the game's attack list.
+     */
+    void upd_atk_lists();
 
     /**
      * \brief Print the state of the board onto the console terminal.
@@ -376,6 +381,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return The 2D coordinate pair equivalent (first = row index, second = column index).
      */
     static pair<int,int> ind2sub( int linIdx );
+    /**
+     * \brief Convert linear indexing to 2D indexing.
+     * 
+     * Linear indexing uses column index as lower order term. 
+     * 
+     * \param linIdxVec The linear index array.
+     * \return The 2D coordinate pair array equivalent (first = row index, second = column index).
+     */
+    static vector< pair<int,int> > ind2sub( vector<int> linIdxVec );
 
     /**
      * Obtain the chess piece at the target coordinate.
@@ -424,6 +438,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void setNo_change_turn_cnt( const unsigned int no_change_turn_cnt );
 
+
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W();
+
 // ====================================================================== <<<<<
 
 
@@ -444,12 +461,12 @@ protected:
      * Array of lists of white pieces attacking the square associated to the index
      * in the array.
      */
-    std::vector<int> atk_list_by_W[BOARDHEIGHT*BOARDWIDTH];
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_W;
     /**
      * Array of lists of black pieces attacking the square associated to the index
      * in the array.
      */
-    std::vector<int> atk_list_by_B[BOARDHEIGHT*BOARDWIDTH];
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_B;
 
     // The number of times a play has been made. White start at turn 0.
     unsigned int turn_cnt;
