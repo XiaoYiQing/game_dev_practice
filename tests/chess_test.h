@@ -15,6 +15,8 @@ namespace tests{
 
     void chess_move_tests();
 
+    void chess_atk_check_tests();
+
 }
 
 

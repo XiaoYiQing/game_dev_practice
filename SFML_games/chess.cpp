@@ -694,6 +694,8 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
             if( !this->is_sq_empty( i, j + E_z ) ){break;}
         }
 
+        break;
+
     case CHS_PIECE_TYPE::KING:
 
         pos_atk_coords.push_back( pair<int,int>( i + 1, j + 1 ) );
@@ -705,6 +707,8 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
         pos_atk_coords.push_back( pair<int,int>( i - 1, j + 1 ) );
         pos_atk_coords.push_back( pair<int,int>( i + 0, j + 1 ) );
 
+        break; 
+
     default:
         throw runtime_error( "Unrecognized chess piece type." );
     }
@@ -712,12 +716,14 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
     for( pair<int,int> coord_z : pos_atk_coords ){
 
         // Add to the main attack list if attack is possible.
-        if( coord_z.first > 0 && coord_z.first < BOARDHEIGHT - 1 &&
-            coord_z.second > 0 && coord_z.second < BOARDWIDTH - 1 ){
+        if( coord_z.first >= 0 && coord_z.first <= BOARDHEIGHT - 1 &&
+            coord_z.second >= 0 && coord_z.second <= BOARDWIDTH - 1 ){
             retVal.push_back( coord_z );
         }
 
     }
+
+    return retVal;
 
 }
 
@@ -754,6 +760,13 @@ int chess::sub2ind( int i, int j ){
 }
 int chess::sub2ind( pair<int,int> subIdx ){
     return sub2ind( subIdx.first, subIdx.second );
+}
+vector<int> chess::sub2ind( vector<pair<int,int>> sub_arr ){
+    vector<int> ind_arr = vector<int>( sub_arr.size() );
+    for( unsigned int z = 0; z < sub_arr.size(); z++ ){
+        ind_arr.at(z) = sub_arr[z].first*BOARDWIDTH + sub_arr[z].second;
+    }
+    return ind_arr;
 }
 
 pair<int,int> chess::ind2sub( int linIdx ){

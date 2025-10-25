@@ -330,7 +330,6 @@ void tests::chess_move_tests(){
 
     chess myGame = chess();
 
-
     bool test_bool = true;
 
 
@@ -675,5 +674,51 @@ void tests::chess_move_tests(){
     }
 
 // ---------------------------------------------------------------------- <<<<<
+
+}
+
+
+
+void tests::chess_atk_check_tests(){
+
+
+    chess myGame;
+
+    myGame.resetBoard();
+
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,0);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,1);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,2);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,3);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,4);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,5);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,6);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,7);
+
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,0);
+    vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,1);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,2);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,3);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,4);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,5);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,6);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(1,7);
+
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,0);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,1);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,2);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,3);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,4);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,5);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,6);
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,7);
+
+    vector<int> atk_sq_ind_arr = chess::sub2ind( atk_sq_arr );
+    for( unsigned int z = 0; z < atk_sq_arr.size(); z++ ){
+        cout << "(" <<atk_sq_arr[z].first << ", " << atk_sq_arr[z].second << ") -> ";
+        cout << atk_sq_ind_arr[z] << endl;
+    }
+
+
 
 }

@@ -355,6 +355,19 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     static int sub2ind( pair<int,int> subIdx );
 
     /**
+     * \brief Convert 2D indexing to 1D.
+     * 
+     * Linear indexing uses column index as lower order term. 
+     * 
+     * For example:
+     *  (0,0)=>0, (0,1)=>1, ... (0,7)=>7, (1,0)=>8, and so on.
+     * 
+     * \param sub_arr vector of 
+     * \return The linear index equivalent vector.
+     */
+    static vector<int> sub2ind( vector<pair<int,int>> sub_arr );
+
+    /**
      * \brief Convert linear indexing to 2D indexing.
      * 
      * Linear indexing uses column index as lower order term. 
