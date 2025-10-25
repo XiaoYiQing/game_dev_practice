@@ -833,6 +833,7 @@ vector< pair<int,int> > chess::ind2sub( vector<int> linIdxVec ){
     for( int idx_z : linIdxVec ){
         subIdxVec.push_back( chess::ind2sub( idx_z ) );
     }
+    return subIdxVec;
 }
 
 
@@ -860,6 +861,8 @@ void chess::setNo_change_turn_cnt( const unsigned int no_change_turn_cnt )
 
 array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W()
     {return this->atk_list_by_W;}
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B()
+    {return this->atk_list_by_B;}
 
 // ====================================================================== <<<<<
 

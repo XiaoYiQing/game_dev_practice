@@ -440,6 +440,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
 
     std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W();
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B();
 
 // ====================================================================== <<<<<
 

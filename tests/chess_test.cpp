@@ -688,6 +688,11 @@ void tests::chess_atk_check_tests(){
 
     myGame.upd_atk_lists();
 
+    auto tmp_W = myGame.getAtk_list_by_W();
+    auto tmp_B = myGame.getAtk_list_by_B();
+
+    int loooool = 0;
+
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,0);
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,1);
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,2);
