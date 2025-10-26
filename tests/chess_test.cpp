@@ -667,6 +667,43 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
     test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 2 ) );
 
+    // White king right-side castling with threat.
+    myGame.clearBoard();
+    myGame.set_piece_at( 0, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    myGame.set_piece_at( 2, 5, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    
+    // White king left-side castling with threat.
+    myGame.set_piece_at( 0, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 0, 4, 0, 2 ) );
+    myGame.set_piece_at( 2, 2, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    
+    // Black king right-side castling with threat.
+    myGame.set_piece_at( 7, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 7, 4, 7, 6 ) );
+    myGame.set_piece_at( 5, 6, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 6 ) );
+
+    // Black king left-side castling with threat.
+    myGame.set_piece_at( 7, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.is_move_valid( 7, 4, 7, 2 ) );
+    myGame.set_piece_at( 5, 2, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 2 ) );
+
     if( test_bool ){
         cout << "chess::is_move_valid king castling test: passed!" << endl;
     }else{
@@ -674,6 +711,8 @@ void tests::chess_move_tests(){
     }
 
 // ---------------------------------------------------------------------- <<<<<
+
+
 
 }
 

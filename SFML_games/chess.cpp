@@ -204,6 +204,7 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
         throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
     }
     this->CHS_board[i][j] = inPce;
+    this->upd_all();
 }
 
 void chess::resetBoard(){
