@@ -640,7 +640,8 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     myGame.set_piece_at( 7, 0, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-
+    
+    myGame.setTurn_cnt(0);
     // Right-side white king castling.
     test_bool = test_bool && ( myGame.is_move_valid( 0, 4, 0, 6 ) );
     // Left-side white king castling.
@@ -654,6 +655,7 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
     test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 2 ) );
 
+    myGame.setTurn_cnt(1u);
     // Right-side black king castling.
     test_bool = test_bool && ( myGame.is_move_valid( 7, 4, 7, 6 ) );
     // Left-side black king castling.
@@ -667,6 +669,7 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
     test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 2 ) );
 
+    myGame.setTurn_cnt(0);
     // White king right-side castling with threat.
     myGame.clearBoard();
     myGame.set_piece_at( 0, 4, chess::chs_piece(
@@ -686,6 +689,7 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
     test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 6 ) );
     
+    myGame.setTurn_cnt(1u);
     // Black king right-side castling with threat.
     myGame.set_piece_at( 7, 4, chess::chs_piece(
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );

@@ -339,7 +339,8 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     // Obtain the color of the current piece.
     CHS_PIECE_COLOR tarColor = tarPce.color;
     // Turn check.
-    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ){
+    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
+        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
         return false;
     }
 
@@ -410,23 +411,31 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         }
         break;
 
-    // TODO: The permission to move needs to consider threatened squares for the King.
     case CHS_PIECE_TYPE::KING:
 
         // Standard king move.
         if( abs( moveVec.first ) <= 1 && abs( moveVec.second ) <= 1 ){
+            
+            // Check for threat at destination square.
+            if( tarColor == CHS_PIECE_COLOR::WHITE && !atk_list_by_B[ sub2ind( i_aft, j_aft ) ].empty() ||
+                tarColor == CHS_PIECE_COLOR::BLACK && !atk_list_by_W[ sub2ind( i_aft, j_aft ) ].empty() )
+            {
+                return false;
+            }
             break;
 
         // Check for castling possibility.
         }else if( tarPce.not_moved && BOARDHEIGHT == 8 && BOARDWIDTH == 8 ){
 
             if( tarColor == CHS_PIECE_COLOR::WHITE ){
+                
+                bool cast_poss = true;
 
                 // Right-side castling.
                 if( i_bef == 0 && j_bef == 4 && i_aft == 0 && j_aft == 6 ){
 
                     // The right-side rook must have not moved yet.
-                    bool cast_poss = this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK );
                     cast_poss = cast_poss && ( this->CHS_board[0][7].color == CHS_PIECE_COLOR::WHITE );
                     cast_poss = cast_poss && ( this->CHS_board[0][7].not_moved );
                     if( !cast_poss ){ return false; }
@@ -441,15 +450,13 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                 }else if( i_bef == 0 && j_bef == 4 && i_aft == 0 && j_aft == 2 ){
 
                     // The left-side rook must have not moved yet.
-                    bool cast_poss = this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK );
                     cast_poss = cast_poss && ( this->CHS_board[0][0].color == CHS_PIECE_COLOR::WHITE );
                     cast_poss = cast_poss && ( this->CHS_board[0][0].not_moved );
                     // The left-side knight initial square must be cleared.
                     cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P &&
                         this->CHS_board[0][1].color == CHS_PIECE_COLOR::NO_C );
-                    if( !cast_poss ){
-                        return false;
-                    }
+                    if( !cast_poss ){ return false; }
 
                     // Make sure the entire path is clear from black threats.
                     cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,4)].empty() );
@@ -462,19 +469,18 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                     return false;
                 }
 
-
             }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
+
+                bool cast_poss = true;
 
                 // Right-side castling.
                 if( i_bef == 7 && j_bef == 4 && i_aft == 7 && j_aft == 6 ){
 
                     // The right-side rook must have not moved yet.
-                    bool cast_poss = this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK );
                     cast_poss = cast_poss && ( this->CHS_board[7][7].color == CHS_PIECE_COLOR::BLACK );
                     cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
-                    if( !cast_poss ){
-                        return false;
-                    }
+                    if( !cast_poss ){ return false; }
 
                     // Make sure the entire path is clear from white threats.
                     cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,4)].empty() );
@@ -492,9 +498,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                     // The left-side knight initial square must be cleared.
                     cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P &&
                         this->CHS_board[7][1].color == CHS_PIECE_COLOR::NO_C );
-                    if( !cast_poss ){
-                        return false;
-                    }
+                    if( !cast_poss ){ return false; }
 
                     // Make sure the entire path is clear from white threats.
                     cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,4)].empty() );
@@ -554,6 +558,158 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     return true;
 
+}
+
+
+bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
+    unsigned int i_aft, unsigned int j_aft  )
+{
+    
+    // Out of bound check.
+    if( max( i_bef, i_aft ) >= BOARDHEIGHT || max( j_bef, j_aft ) >= BOARDHEIGHT ){
+        return false;
+    }
+
+    // Trivial attack check.
+    if( i_bef == i_aft && j_bef == j_aft ){
+        return false;
+    }
+
+    // Obtain the target piece to play.
+    chs_piece tarPce = this->get_piece_at( i_bef, j_bef );
+    // Empty starting square check.
+    if( tarPce.type == CHS_PIECE_TYPE::NO_P || tarPce.color == CHS_PIECE_COLOR::NO_C ){
+        return false;
+    }
+
+    // Obtain piece at destination.
+    chs_piece endPce = this->get_piece_at( i_aft, j_aft );
+    // Check empty space at destination.
+    if( endPce.type == CHS_PIECE_TYPE::NO_P || endPce.color == CHS_PIECE_COLOR::NO_C ){
+        return false;
+    }
+
+    // Make sure the attacker and the defender are of different colors.
+    if( tarPce.color == endPce.color ){
+        return false;
+    }
+
+    // Obtain the color of the current piece.
+    CHS_PIECE_COLOR tarColor = tarPce.color;
+    // Turn check.
+    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
+        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
+        return false;
+    }
+
+    // Obtain the type of the current piece.
+    CHS_PIECE_TYPE tarType = tarPce.type;
+    // Computed the movement vector.
+    pair<int,int> moveVec( (int)i_aft - (int)i_bef, (int)j_aft - (int)j_bef );
+    
+    // Piece's capability match.
+    switch( tarType ){
+    
+    case CHS_PIECE_TYPE::PAWN:
+        
+        // A pawn can only move forward (white goes up, black goes down).
+        if( ( moveVec.first < 0 && tarColor == CHS_PIECE_COLOR::WHITE ) || 
+            ( moveVec.first > 0 && tarColor == CHS_PIECE_COLOR::BLACK ) ){
+            return false;
+        }
+
+        // A pawn can only attack on its two immediate foward diagonal squares.
+        if( abs( moveVec.first ) != 1 || abs( moveVec.second ) != 1 ){
+            return false;
+        }
+
+        break;
+
+    case CHS_PIECE_TYPE::KNIGHT:
+
+        // The knight can only jump in the smallest L shapes.
+        if( ( abs( moveVec.first ) + abs( moveVec.second ) != 3 ) || 
+            ( moveVec.first == 0 || moveVec.second == 0 ) ){
+            return false;
+        }
+
+        break;
+    
+    case CHS_PIECE_TYPE::BISHOP:
+
+        // Bishops can only move in diagonals.
+        if( abs( moveVec.first ) != abs( moveVec.second ) ){
+            return false;
+        }
+        break;
+
+    case CHS_PIECE_TYPE::ROOK:
+
+        // Rooks can only move in horizontals and verticals.
+        if( moveVec.first != 0 && moveVec.second != 0 ){
+            return false;
+        }
+        break;
+    
+    case CHS_PIECE_TYPE::QUEEN:
+
+        if( abs( moveVec.first ) != abs( moveVec.second ) &&
+            ( moveVec.first != 0 && moveVec.second != 0 ) ){
+            return false;
+        }
+        break;
+
+    case CHS_PIECE_TYPE::KING:
+
+        // Standard king move.
+        if( abs( moveVec.first ) <= 1 && abs( moveVec.second ) <= 1 ){
+
+            // Check for threat at destination square.
+            if( tarColor == CHS_PIECE_COLOR::WHITE && !atk_list_by_B[ sub2ind( i_aft, j_aft ) ].empty() ||
+                tarColor == CHS_PIECE_COLOR::BLACK && !atk_list_by_W[ sub2ind( i_aft, j_aft ) ].empty() )
+            {
+                return false;
+            }
+
+        }
+        
+        break;
+
+    default:
+        throw runtime_error( "Unexpected chess piece type." );
+        break;
+
+    };
+
+    // Obstruction check (Only the knight pieces do not need).
+    if( tarType != CHS_PIECE_TYPE::KNIGHT ){
+
+        // The segment lengths.
+        pair<int,int>moveVecSeg(0,0);
+        // The number of squares between start and end points.
+        int sqr_cnt = 0;
+        if( moveVec.first != 0 ){
+            moveVecSeg.first = moveVec.first > 0 ? 1 : -1;
+            sqr_cnt = abs( moveVec.first ) - 1;
+        }
+        if( moveVec.second != 0 ){
+            moveVecSeg.second = moveVec.second > 0 ? 1 : -1;
+            sqr_cnt = abs( moveVec.second ) - 1;
+        }
+        
+        // Make sure every square between the start and end squares are empty.
+        chs_piece pce_z;
+        for( int z = 1; z <= sqr_cnt; z++ ){
+            pce_z = this->get_piece_at( i_bef + z*moveVecSeg.first, j_bef + z*moveVecSeg.second );
+            if( pce_z.type != CHS_PIECE_TYPE::NO_P || pce_z.color != CHS_PIECE_COLOR::NO_C ){
+                return false;
+            }
+        }
+
+    }
+
+    return true;
+    
 }
 
 // ====================================================================== <<<<<
