@@ -438,8 +438,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void setNo_change_turn_cnt( const unsigned int no_change_turn_cnt );
 
-
+    /**
+     * Obtain the list of all white pieces attacking each and every square on the board.
+     */
     std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W();
+    /**
+     * Obtain the list of all black pieces attacking each and every square on the board.
+     */
     std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B();
 
 // ====================================================================== <<<<<

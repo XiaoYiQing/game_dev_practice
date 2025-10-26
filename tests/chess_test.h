@@ -15,6 +15,8 @@ namespace tests{
 
     void chess_move_tests();
 
+    // TODO: Current test is rudimentary, and does not check thoroughly for edge cases.
+    //      If time allows, try to do those.
     void chess_atk_check_tests();
 
 }

@@ -684,15 +684,46 @@ void tests::chess_atk_check_tests(){
 
     chess myGame;
 
+    bool test_bool = true;
+
+    // Obtain the attack lists from a fresh game start.
     myGame.resetBoard();
-
     myGame.upd_atk_lists();
-
     auto tmp_W = myGame.getAtk_list_by_W();
     auto tmp_B = myGame.getAtk_list_by_B();
 
-    int loooool = 0;
+    // Create vector of expected white attack square count on each square.
+    vector<int> expected_W_atk_sq = { 
+        0, 1, 1, 1, 1, 1, 1, 0, 
+        1, 1, 1, 4, 4, 1, 1, 1,
+        2, 2, 3, 2, 2, 3, 2, 2 };
+    expected_W_atk_sq.reserve(64);
+    for( unsigned int z = 0; z < 40; z++ ){
+        expected_W_atk_sq.push_back(0);
+    }
 
+    // Create vector of expected black attack square count on each square.
+    vector<int> expected_B_atk_sq;
+    expected_B_atk_sq.reserve( 64 );
+    for( unsigned int z = 0; z < 40; z++ ){
+        expected_B_atk_sq.push_back(0);
+    }
+    for( unsigned int z = 0; z < 24; z++ ){
+        expected_B_atk_sq.push_back( expected_W_atk_sq.at( 23 - z ) );
+    }
+
+    // Compare expected results with found results.
+    for( unsigned int z = 0; z < tmp_W.size(); z++ ){
+        test_bool = test_bool && ( tmp_W[z].size() == expected_W_atk_sq[z] );
+        test_bool = test_bool && ( tmp_B[z].size() == expected_B_atk_sq[z] );
+    }
+
+    if( test_bool ){
+        cout << "upd_atk_lists test passed!" << endl;
+    }else{
+        cout << "upd_atk_lists test failed!" << endl;
+    }
+    
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,0);
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,1);
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(0,2);
@@ -720,15 +751,15 @@ void tests::chess_atk_check_tests(){
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,6);
     // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(7,7);
 
-    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(3,3);
+    // myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
+    //     chess::CHS_PIECE_COLOR::WHITE ) );
+    // vector<pair<int,int>> atk_sq_arr = myGame.get_all_atk_sq(3,3);
 
-    vector<int> atk_sq_ind_arr = chess::sub2ind( atk_sq_arr );
-    for( unsigned int z = 0; z < atk_sq_arr.size(); z++ ){
-        cout << "(" <<atk_sq_arr[z].first << ", " << atk_sq_arr[z].second << ") -> ";
-        cout << atk_sq_ind_arr[z] << endl;
-    }
+    // vector<int> atk_sq_ind_arr = chess::sub2ind( atk_sq_arr );
+    // for( unsigned int z = 0; z < atk_sq_arr.size(); z++ ){
+    //     cout << "(" <<atk_sq_arr[z].first << ", " << atk_sq_arr[z].second << ") -> ";
+    //     cout << atk_sq_ind_arr[z] << endl;
+    // }
 
 
 
