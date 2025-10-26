@@ -187,18 +187,15 @@ void chess::clearBoard(){
     chess::chs_piece curr_piece;
     curr_piece.set_as_empty();
 
-    // Initialize the chessboard.
+    // Set all squares as empty.
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
     for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
         this->CHS_board[i][j] = curr_piece;
     }
     }
 
-    // Empty the attack lists.
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-        this->atk_list_by_B[z].clear();
-        this->atk_list_by_W[z].clear();
-    }
+    // Update all state related variables.
+    this->upd_all();
 
 }
 
@@ -275,6 +272,9 @@ void chess::resetBoard(){
     this->turn_cnt = 0;
     this->no_change_turn_cnt = 0;
     this->state = CHS_STATE::ONGOING;
+
+    // Update all remaining state related variables.
+    upd_all();
 
 }
 
@@ -361,9 +361,6 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
             return false;
         }
 
-        // TODO: consider whether you should use the pawn position or the built-in
-        //  boolean variable to decide whether the pawn has not moved before.
-
         // The pawn had never moved before and can move up 1 or 2 squares.
         if( ( i_bef == 1 && tarColor == CHS_PIECE_COLOR::WHITE ) || 
             ( i_bef == BOARDHEIGHT - 2 && tarColor == CHS_PIECE_COLOR::BLACK ) ){
@@ -420,7 +417,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
             break;
 
         // Check for castling possibility.
-        }else if( tarPce.not_moved ){
+        }else if( tarPce.not_moved && BOARDHEIGHT == 8 && BOARDWIDTH == 8 ){
 
             if( tarColor == CHS_PIECE_COLOR::WHITE ){
 
@@ -429,16 +426,22 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
                     // The right-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[0][7].color == CHS_PIECE_COLOR::WHITE );
                     cast_poss = cast_poss && ( this->CHS_board[0][7].not_moved );
-                    if( !cast_poss ){
-                        return false;
-                    }
+                    if( !cast_poss ){ return false; }
+
+                    // Make sure the entire path is clear from black threats.
+                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,4)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,5)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,6)].empty() );
+                    if( !cast_poss ){ return false; }
 
                 // Left-side castling.
-                }else if( i_aft == 0 && j_aft == 2 ){
+                }else if( i_bef == 0 && j_bef == 4 && i_aft == 0 && j_aft == 2 ){
 
                     // The left-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[0][0].color == CHS_PIECE_COLOR::WHITE );
                     cast_poss = cast_poss && ( this->CHS_board[0][0].not_moved );
                     // The left-side knight initial square must be cleared.
                     cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P &&
@@ -446,6 +449,12 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                     if( !cast_poss ){
                         return false;
                     }
+
+                    // Make sure the entire path is clear from black threats.
+                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,4)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,3)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,2)].empty() );
+                    if( !cast_poss ){ return false; }
 
                 // Not castling, and thus illegal
                 }else{
@@ -460,16 +469,24 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
                     // The right-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[7][7].color == CHS_PIECE_COLOR::BLACK );
                     cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
                     if( !cast_poss ){
                         return false;
                     }
 
+                    // Make sure the entire path is clear from white threats.
+                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,4)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,5)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,6)].empty() );
+                    if( !cast_poss ){ return false; }
+
                 // Left-side castling.
-                }else if( i_aft == 7 && j_aft == 2 ){
+                }else if( i_bef == 7 && j_bef == 4 && i_aft == 7 && j_aft == 2 ){
 
                     // The left-side rook must have not moved yet.
                     bool cast_poss = this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[7][0].color == CHS_PIECE_COLOR::BLACK );
                     cast_poss = cast_poss && ( this->CHS_board[7][0].not_moved );
                     // The left-side knight initial square must be cleared.
                     cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P &&
@@ -477,6 +494,12 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                     if( !cast_poss ){
                         return false;
                     }
+
+                    // Make sure the entire path is clear from white threats.
+                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,4)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,3)].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,2)].empty() );
+                    if( !cast_poss ){ return false; }
 
                 // Not castling, and thus illegal
                 }else{
@@ -495,8 +518,10 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         break;
 
     default:
+
         throw runtime_error( "Unexpected chess piece type." );
         break;
+
     };
 
     // Obstruction check (Only the knight pieces do not need).
@@ -736,7 +761,6 @@ void chess::upd_atk_lists(){
         this->atk_list_by_B[z].clear();
     }
     
-
     // Current sub index.
     pair<int,int> coord_z;
     // Current piece being scanned for attacked squares.
@@ -779,6 +803,11 @@ void chess::upd_atk_lists(){
 
     }
 
+}
+
+
+void chess::upd_all(){
+    this->upd_atk_lists();
 }
 
 

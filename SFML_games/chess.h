@@ -273,6 +273,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     /**
      * Reset the board to the state of a fresh new game.
      * 
+     * This function triggers a complete chess board state update.
+     * 
      * \note This function serves as a game instance reset, though some class
      *  variables may not be affected.
      */
@@ -305,6 +307,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      Game State Functions
 // ====================================================================== >>>>>
 
+    /**
+     * \brief Check if the target coordinate square is empty.
+     * 
+     * An empty square is one which has the 'null' color and 'null' type chess piece.
+     * 
+     * \return Boolean indicating whether the square is empty.
+     */
     bool is_sq_empty( int i, int j );
 
     /**
@@ -318,6 +327,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * Update the game's attack list.
      */
     void upd_atk_lists();
+    
+    /**
+     * Update all state related variables.
+     */
+    void upd_all();
 
     /**
      * \brief Print the state of the board onto the console terminal.
