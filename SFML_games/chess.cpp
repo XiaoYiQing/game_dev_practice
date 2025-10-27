@@ -664,6 +664,8 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
         // Standard king move.
         if( abs( moveVec.first ) <= 1 && abs( moveVec.second ) <= 1 ){
 
+            auto tmp = atk_list_by_B[ sub2ind( i_aft, j_aft ) ];
+
             // Check for threat at destination square.
             if( tarColor == CHS_PIECE_COLOR::WHITE && !atk_list_by_B[ sub2ind( i_aft, j_aft ) ].empty() ||
                 tarColor == CHS_PIECE_COLOR::BLACK && !atk_list_by_W[ sub2ind( i_aft, j_aft ) ].empty() )
@@ -709,7 +711,7 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
     }
 
     return true;
-    
+
 }
 
 // ====================================================================== <<<<<

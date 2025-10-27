@@ -263,7 +263,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \note Overwrites existing piece by default.
      * 
      * \param i The row index of the insertion point.
-     * \param j The row index of the insertion point.
+     * \param j The column index of the insertion point.
      * \param inPce The new piece to be inserted.
      * 
      * \warning Does not update the game state or turn count.
@@ -297,7 +297,10 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     
     bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
-
+    
+    /**
+     * 
+     */
     bool is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft  );
     

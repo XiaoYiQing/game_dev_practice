@@ -767,4 +767,98 @@ void tests::chess_atk_check_tests(){
         cout << "upd_atk_lists test failed!" << endl;
     }
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      is_atk_valid tests
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool =true;
+
+    // Pawn test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 2, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 3, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 2, 3, 3, 2 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 2, 3, 3, 4 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 3, 2, 2, 3 ) );
+    myGame.setTurn_cnt(1u);
+    test_bool = test_bool && ( myGame.is_atk_valid( 3, 2, 2, 3 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 3, 2, 2, 4 ) );
+
+    // Knight test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 2, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 2, 3, 4, 2 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 2, 3, 1, 5 ) );
+    myGame.setTurn_cnt(1u);
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 2, 2, 3 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 4, 2, 6, 1 ) );
+
+    // Bishop test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 2, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 2, 3, 4, 5 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 2, 3, 1, 2 ) );
+    myGame.setTurn_cnt(1u);
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 5, 2, 3 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 4, 5, 6, 3 ) );
+
+    // Rook test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 4, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 1, 1, 1 ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 1, 4, 5 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 4, 1, 4, 4 ) );
+    myGame.setTurn_cnt(1u);
+    test_bool = test_bool && ( myGame.is_atk_valid( 1, 1, 4, 1 ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 5, 4, 1 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 1, 1, 3, 1 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 4, 5, 7, 5 ) );
+
+    // Queen test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 3, 4, 7 ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 4, 3, 2, 4 ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 3, 0, 7 ) );
+
+
+    // White King test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 5, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 4, 3, 3, 3 ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 3, 5, 4 ) );
+    // Black King test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(1u);
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 5, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && !( myGame.is_atk_valid( 4, 3, 3, 3 ) );
+    test_bool = test_bool && ( myGame.is_atk_valid( 4, 3, 5, 4 ) );
+
+
+    if( test_bool ){
+        cout << "is_atk_valid test passed!" << endl;
+    }else{
+        cout << "is_atk_valid test failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
