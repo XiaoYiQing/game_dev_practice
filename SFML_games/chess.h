@@ -291,15 +291,41 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * Perform a chess piece displacement with the piece at the target square 
      * towards the specificed destination square.
      */
-    bool move( unsigned int i_bef, unsigned int j_bef, 
+    bool play( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
     
-    
+    /**
+     * \brief Determine if the specified move (displacement) is valid.
+     * 
+     * Does not perform the move.
+     * 
+     * \note This function strictly checks whether the piece can perform a 
+     *  displacement, not an attack. If the ending square has an opponent piece,
+     *  this function returns false because such an action would be an attack, not 
+     *  a move.
+     * 
+     * \param i_bef Row index of the starting position.
+     * \param j_bef Column index of the starting position.
+     * \param i_aft Row index of the landing position.
+     * \param j_aft Column index of the landing position.
+     * \return Boolean indicating whether this move is valid.
+     */
     bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
     
     /**
+     * \brief Determine if the specified attack is valid.
      * 
+     * Does not perform the attack.
+     * 
+     * \note If you attack an empty square, the function returns false because
+     *  such an act is a move, not an attack.
+     * 
+     * \param i_bef Row index of the starting position.
+     * \param j_bef Column index of the starting position.
+     * \param i_aft Row index of the attack target's position.
+     * \param j_aft Column index of the attack target's position.
+     * \return Boolean indicating whether this attack is valid.
      */
     bool is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft  );
