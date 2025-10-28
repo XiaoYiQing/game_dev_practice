@@ -411,8 +411,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         }
 
         // The pawn had never moved before and can move up 1 or 2 squares.
-        if( ( i_bef == 1 && tarColor == CHS_PIECE_COLOR::WHITE ) || 
-            ( i_bef == BOARDHEIGHT - 2 && tarColor == CHS_PIECE_COLOR::BLACK ) ){
+        if( tarPce.not_moved ){
             if( abs( moveVec.first ) > 2 ){
                 return false;
             }

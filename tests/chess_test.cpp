@@ -870,6 +870,10 @@ void tests::chess_play_tests(){
     chess myGame;
     myGame.clearBoard();
 
-    
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 2, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
 
+
+    
 }
