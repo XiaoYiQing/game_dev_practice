@@ -447,7 +447,7 @@ void tests::chess_move_tests(){
     test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 4 ) );
 
     chess::chs_piece newBB = chess::chs_piece(
-        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE
+        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK
     );
     myGame.set_piece_at( 4, 4, newBB );
 
@@ -876,4 +876,5 @@ void tests::chess_play_tests(){
 
 
     
+
 }
