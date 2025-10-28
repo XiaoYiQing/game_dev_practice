@@ -19,6 +19,9 @@ namespace tests{
     //      If time allows, try to do those.
     void chess_atk_check_tests();
 
+    
+    void chess_play_tests();
+
 }
 
 

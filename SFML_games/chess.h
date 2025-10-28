@@ -254,11 +254,16 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \brief Set the board as completely blank.
      * 
      * All pieces of the board adopt the "no piece" state.
+     * 
+     * This function triggers a complete chess board state update.
+     * 
      */
     void clearBoard();
 
     /**
      * \brief Set the piece at the target coordinate as the target piece.
+     * 
+     * This function triggers a complete chess board state update.
      * 
      * \note Overwrites existing piece by default.
      * 

@@ -862,3 +862,14 @@ void tests::chess_atk_check_tests(){
 // ---------------------------------------------------------------------- <<<<<
 
 }
+
+
+
+void tests::chess_play_tests(){
+
+    chess myGame;
+    myGame.clearBoard();
+
+    
+
+}

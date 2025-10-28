@@ -287,11 +287,58 @@ void chess::resetBoard(){
 // ====================================================================== >>>>>
 
 
-bool chess::move( unsigned int i_bef, unsigned int j_bef, 
+bool chess::play( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
 
-    return false;
+    chs_piece currPiece = get_piece_at( i_bef, j_bef );
+
+    if( this->is_move_valid( i_bef, j_bef, i_aft, j_aft ) ){
+
+        // Perform the displacement.
+        this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_bef][j_bef].set_as_empty(); 
+
+        // Only the castling move involves moving more than 1 piece at a time, and must
+        // be treated as a special stand-alone case.
+        if( currPiece.type == CHS_PIECE_TYPE::KING ){
+
+            int j_displ = (int) j_aft - (int) j_bef;
+            
+            // Right-side castling.
+            if( j_displ == 2 ){
+                this->CHS_board[i_aft][j_aft-1] = this->CHS_board[i_aft][BOARDWIDTH-1];
+                this->CHS_board[i_aft][BOARDWIDTH-1].set_as_empty();
+
+            // Left-side castling.
+            }else if( j_displ == -2 ){
+                this->CHS_board[i_aft][j_aft+1] = this->CHS_board[i_aft][0];
+                this->CHS_board[i_aft][0].set_as_empty();
+            }
+
+        }
+
+    }else if( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) ){
+        
+        // TODO: En-passant unique attack scenario.
+        if( currPiece.type == CHS_PIECE_TYPE::PAWN ){
+
+        }
+
+        // Perform the attack.
+        this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_bef][j_bef].set_as_empty(); 
+
+    }else{
+        return false;
+    }
+
+    // TODO: Pawn Promotion scenario check.
+    if( currPiece.type == CHS_PIECE_TYPE::PAWN && ( i_aft == 0 || i_aft == BOARDHEIGHT ) ){
+
+    }
+
+    return true;
 
 }
 
