@@ -199,6 +199,14 @@ void chess::clearBoard(){
 
 }
 
+void chess::clearSquare( unsigned int i, unsigned int j ){
+    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
+        throw out_of_range( "clearSquare: the specified coordinate is out of bound." );
+    }
+    this->CHS_board[i][j].set_as_empty();
+    this->upd_all();
+}
+
 void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
     if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
         throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );

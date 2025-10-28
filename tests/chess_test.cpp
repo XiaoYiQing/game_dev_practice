@@ -876,6 +876,7 @@ void tests::chess_play_tests(){
 //      Pawn Test
 // ---------------------------------------------------------------------- >>>>>
     
+    test_bool = true;
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
@@ -917,6 +918,7 @@ void tests::chess_play_tests(){
 //      Knight Test
 // ---------------------------------------------------------------------- >>>>>
 
+    test_bool = true;
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
@@ -953,7 +955,8 @@ void tests::chess_play_tests(){
 // ---------------------------------------------------------------------- >>>>>
 //      King Castling Test
 // ---------------------------------------------------------------------- >>>>>
-
+    
+    test_bool = true;
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
@@ -961,11 +964,37 @@ void tests::chess_play_tests(){
         chess::CHS_PIECE_COLOR::WHITE );
     chess::chs_piece WR = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
         chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece BR = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK );
+    
 
-    myGame.set_piece_at( 3, 3, WK );
-    myGame.set_piece_at( 4, 4, BK );
+    myGame.set_piece_at( 0, 4, WKG );
+    myGame.set_piece_at( 0, 7, WR );
+    // Put knight that only threatens the rook.
+    myGame.set_piece_at( 1, 5, BK );
+    // Put rook that threatens the castling path.
+    myGame.set_piece_at( 1, 6, BR );
+    
+    // Attempt castling when path is threatened.
+    test_bool = test_bool && !myGame.play( 0, 4, 0, 6 );
+    // Attemp castling without the black rook.
+    
 
     myGame.printBoard();
+
+    test_bool = test_bool && myGame.play( 0, 4, 0, 6 );
+    test_bool = test_bool && myGame.is_sq_empty( 0, 4 );
+    test_bool = test_bool && myGame.is_sq_empty( 0, 7 );
+    test_bool = test_bool && ( myGame.get_piece_at( 0, 5 ) == WR );
+    test_bool = test_bool && ( myGame.get_piece_at( 0, 6 ) == WKG );
+    
+    myGame.printBoard();
+
+    if( test_bool ){
+        cout << "King castling play test passed!" << endl;
+    }else{
+        cout << "King castling play test failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 

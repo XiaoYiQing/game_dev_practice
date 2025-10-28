@@ -261,6 +261,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void clearBoard();
 
     /**
+     * \brief Set target square as empty.
+     * 
+     * This function triggers a complete chess board state update.
+     */
+    void clearSquare( unsigned int i, unsigned int j );
+
+    /**
      * \brief Set the piece at the target coordinate as the target piece.
      * 
      * This function triggers a complete chess board state update.
