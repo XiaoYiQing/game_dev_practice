@@ -884,7 +884,6 @@ void tests::chess_play_tests(){
     chess::chs_piece BP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
         chess::CHS_PIECE_COLOR::BLACK );
 
-    myGame.setTurn_cnt(0);
     myGame.set_piece_at( 2, 3, WP );
     myGame.set_piece_at( 6, 4, BP );
 
@@ -900,7 +899,7 @@ void tests::chess_play_tests(){
     // Attempt to push white pawn forward by 2 despite having moved already.
     test_bool = test_bool && !myGame.play( 3, 3, 5, 3 );
     
-    // White pawn take black pawn.
+    // White pawn takes black pawn.
     test_bool = test_bool && myGame.play( 3, 3, 4, 4 );
     test_bool = test_bool && myGame.is_sq_empty( 3, 3 );
     test_bool = test_bool && ( myGame.get_piece_at( 4, 4 ) == WP );
@@ -909,6 +908,42 @@ void tests::chess_play_tests(){
         cout << "Pawn play test passed!" << endl;
     }else{
         cout << "Pawn play test failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Knight Test
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    chess::chs_piece WK = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
+        chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece BK = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
+        chess::CHS_PIECE_COLOR::BLACK );
+    
+    myGame.set_piece_at( 3, 3, WK );
+    myGame.set_piece_at( 4, 4, BK );
+    
+    // White knight moves south east.
+    test_bool = test_bool && myGame.play( 3, 3, 2, 5 );
+    test_bool = test_bool && myGame.is_sq_empty( 3, 3 );
+    test_bool = test_bool && ( myGame.get_piece_at( 2, 5 ) == WK );
+    
+    
+    // Black knight takes white knight.
+    test_bool = test_bool && myGame.play( 4, 4, 2, 5 );
+    test_bool = test_bool && myGame.is_sq_empty( 4, 4 );
+    test_bool = test_bool && ( myGame.get_piece_at( 2, 5 ) == BK );
+    
+
+    if( test_bool ){
+        cout << "Knight play test passed!" << endl;
+    }else{
+        cout << "Knight play test failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
