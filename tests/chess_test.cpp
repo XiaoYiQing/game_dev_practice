@@ -948,4 +948,25 @@ void tests::chess_play_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      King Castling Test
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    chess::chs_piece WKG = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece WR = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE );
+
+    myGame.set_piece_at( 3, 3, WK );
+    myGame.set_piece_at( 4, 4, BK );
+
+    myGame.printBoard();
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
