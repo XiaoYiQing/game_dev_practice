@@ -297,6 +297,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
         // Perform the displacement.
         this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_aft][j_aft].not_moved = false;
         this->CHS_board[i_bef][j_bef].set_as_empty(); 
 
         // Only the castling move involves moving more than 1 piece at a time, and must
@@ -308,11 +309,13 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
             // Right-side castling.
             if( j_displ == 2 ){
                 this->CHS_board[i_aft][j_aft-1] = this->CHS_board[i_aft][BOARDWIDTH-1];
+                this->CHS_board[i_aft][j_aft-1].not_moved = false;
                 this->CHS_board[i_aft][BOARDWIDTH-1].set_as_empty();
 
             // Left-side castling.
             }else if( j_displ == -2 ){
                 this->CHS_board[i_aft][j_aft+1] = this->CHS_board[i_aft][0];
+                this->CHS_board[i_aft][j_aft+1].not_moved = false;
                 this->CHS_board[i_aft][0].set_as_empty();
             }
 
@@ -327,6 +330,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
         // Perform the attack.
         this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_aft][j_aft].not_moved = false;
         this->CHS_board[i_bef][j_bef].set_as_empty(); 
 
     }else{
@@ -337,6 +341,9 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     if( currPiece.type == CHS_PIECE_TYPE::PAWN && ( i_aft == 0 || i_aft == BOARDHEIGHT ) ){
 
     }
+
+    // Increment the turn count.
+    this->turn_cnt++;
 
     return true;
 

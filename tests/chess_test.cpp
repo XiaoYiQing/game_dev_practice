@@ -867,14 +867,56 @@ void tests::chess_atk_check_tests(){
 
 void tests::chess_play_tests(){
 
+
+    bool test_bool = true;
+
     chess myGame;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Test
+// ---------------------------------------------------------------------- >>>>>
+    
     myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    chess::chs_piece WP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece BP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK );
 
     myGame.setTurn_cnt(0);
-    myGame.set_piece_at( 2, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
-        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 3, WP );
+    myGame.set_piece_at( 6, 4, BP );
 
-
+    // White move fwd by 1.
+    test_bool = test_bool && myGame.play( 2, 3, 3, 3 );
+    test_bool = test_bool && myGame.is_sq_empty( 2, 3 );
+    test_bool = test_bool && ( myGame.get_piece_at( 3, 3 ) == WP );
     
+    myGame.printBoard();
+
+    // Black move fwd by 2.
+    test_bool = test_bool && myGame.play( 6, 4, 4, 4 );
+    test_bool = test_bool && myGame.is_sq_empty( 6, 4 );
+    test_bool = test_bool && ( myGame.get_piece_at( 4, 4 ) == BP );
+    // Attempt to push white pawn forward by 2 despite having moved already.
+    test_bool = test_bool && !myGame.play( 3, 3, 5, 3 );
+    
+    myGame.printBoard();
+    
+    // White pawn take black pawn.
+    test_bool = test_bool && myGame.play( 3, 3, 4, 4 );
+    test_bool = test_bool && myGame.is_sq_empty( 3, 3 );
+    test_bool = test_bool && ( myGame.get_piece_at( 4, 4 ) == WP );
+
+    myGame.printBoard();
+
+    if( test_bool ){
+        cout << "Pawn play test passed!" << endl;
+    }else{
+        cout << "Pawn play test failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
