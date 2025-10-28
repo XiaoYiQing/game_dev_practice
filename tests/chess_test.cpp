@@ -977,18 +977,15 @@ void tests::chess_play_tests(){
     
     // Attempt castling when path is threatened.
     test_bool = test_bool && !myGame.play( 0, 4, 0, 6 );
-    // Attemp castling without the black rook.
     
-
-    myGame.printBoard();
-
+    // Attemp castling without the black rook.
+    myGame.clearSquare( 1, 6 );
     test_bool = test_bool && myGame.play( 0, 4, 0, 6 );
     test_bool = test_bool && myGame.is_sq_empty( 0, 4 );
     test_bool = test_bool && myGame.is_sq_empty( 0, 7 );
     test_bool = test_bool && ( myGame.get_piece_at( 0, 5 ) == WR );
     test_bool = test_bool && ( myGame.get_piece_at( 0, 6 ) == WKG );
     
-    myGame.printBoard();
 
     if( test_bool ){
         cout << "King castling play test passed!" << endl;
