@@ -893,8 +893,6 @@ void tests::chess_play_tests(){
     test_bool = test_bool && myGame.is_sq_empty( 2, 3 );
     test_bool = test_bool && ( myGame.get_piece_at( 3, 3 ) == WP );
     
-    myGame.printBoard();
-
     // Black move fwd by 2.
     test_bool = test_bool && myGame.play( 6, 4, 4, 4 );
     test_bool = test_bool && myGame.is_sq_empty( 6, 4 );
@@ -902,14 +900,10 @@ void tests::chess_play_tests(){
     // Attempt to push white pawn forward by 2 despite having moved already.
     test_bool = test_bool && !myGame.play( 3, 3, 5, 3 );
     
-    myGame.printBoard();
-    
     // White pawn take black pawn.
     test_bool = test_bool && myGame.play( 3, 3, 4, 4 );
     test_bool = test_bool && myGame.is_sq_empty( 3, 3 );
     test_bool = test_bool && ( myGame.get_piece_at( 4, 4 ) == WP );
-
-    myGame.printBoard();
 
     if( test_bool ){
         cout << "Pawn play test passed!" << endl;

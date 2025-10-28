@@ -1026,6 +1026,9 @@ void chess::upd_all(){
 void chess::printBoard() const{
 
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+
+        cout << BOARDHEIGHT - 1 - i << ' ';
+
         for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
 
             this->CHS_board[ BOARDHEIGHT - 1 - i ][j].printPiece();
@@ -1039,7 +1042,17 @@ void chess::printBoard() const{
         if( i != BOARDHEIGHT ){
             cout << endl;
         }
+
     }
+
+    cout << "  ";
+    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+        cout << j;
+        if( j != BOARDWIDTH ){
+            cout << "  ";
+        }
+    }
+    cout << endl;
 
 }
 
