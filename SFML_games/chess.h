@@ -497,11 +497,39 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     /**
      * Obtain the list of all white pieces attacking each and every square on the board.
      */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W();
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W() const;
     /**
      * Obtain the list of all black pieces attacking each and every square on the board.
      */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B();
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B() const;
+    
+    /**
+     * \return The flag indicating the game is awaiting for a pawn promotion.
+     */
+    bool getPromo_lock() const;
+    /**
+     * \brief Set the flag indicating the game is awaiting for a pawn promotion.
+     * 
+     * \warning Forcibly setting the promotion lock can disrupt the logic flow of the
+     *  game.
+     */
+    void setPromo_lock( const bool promo_lock );
+    
+    /**
+     * \brief Obtain the coordinate of the pawn currently awaiting promotion.
+     * 
+     * \return The coordinate of the pawn awaiting promotion.
+     * 
+     * \warning This coordinate is invalid if promo_lock is false.
+     */
+    pair<int,int> getPromo_point() const;
+    /**
+     * \brief Set the coordinate of the pawn currently awaiting promotion.
+     * 
+     * \warning Forcibly setting the promotion coordinate can disrupt the logic 
+     *  flow of the game.
+     */
+    void setPromo_point( const pair<int,int> promo_point_in );
 
 // ====================================================================== <<<<<
 
@@ -540,7 +568,7 @@ protected:
     // the last row.
     bool promo_lock;
     // The promotion target.
-    chs_move promo_move;
+    pair<int,int> promo_point;
 
     // The state of the game.
     CHS_STATE state;

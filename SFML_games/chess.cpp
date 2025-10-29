@@ -300,6 +300,9 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     unsigned int i_aft, unsigned int j_aft )
 {
 
+
+
+    // Obtain the target piece.
     chs_piece currPiece = get_piece_at( i_bef, j_bef );
 
     if( this->is_move_valid( i_bef, j_bef, i_aft, j_aft ) ){
@@ -346,9 +349,11 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    // TODO: Pawn Promotion scenario check.
+    // If the piece played is a pawn and it has reached the end of its column.
     if( currPiece.type == CHS_PIECE_TYPE::PAWN && ( i_aft == 0 || i_aft == BOARDHEIGHT ) ){
-
+        promo_lock = true;
+        promo_point.first = i_aft;
+        promo_point.second = j_aft;
     }
 
     // Increment the turn count.
@@ -1122,10 +1127,29 @@ unsigned int chess::getNo_change_turn_cnt() const
 void chess::setNo_change_turn_cnt( const unsigned int no_change_turn_cnt )
     { this->no_change_turn_cnt = no_change_turn_cnt; }
 
-array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W()
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W() const
     {return this->atk_list_by_W;}
-array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B()
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B() const
     {return this->atk_list_by_B;}
+
+
+bool chess::getPromo_lock() const
+    {return this->promo_lock;}
+void chess::setPromo_lock( const bool promo_lock )
+    {this->promo_lock = promo_lock;}
+
+pair<int,int> chess::getPromo_point() const
+    {return this->promo_point;}
+void chess::setPromo_point( const pair<int,int> promo_point_in ){
+    if( promo_point_in.first != 0 && promo_point_in.first != BOARDHEIGHT - 1 ){
+        throw invalid_argument( "Specified chess board promotion coordinate must be on the first or last row." );
+    }
+    if( promo_point_in.second < 0 && promo_point_in.second >= BOARDHEIGHT ){
+        throw out_of_range( "Specified chess board promotion coordinate is invalid." );
+    }
+    this->promo_point = promo_point_in;
+}
+
 
 // ====================================================================== <<<<<
 
