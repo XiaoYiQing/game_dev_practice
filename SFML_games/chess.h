@@ -300,6 +300,16 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 // ====================================================================== >>>>>
 
     /**
+     * Promote the pawn expected to be on the last row of the target column.
+     * 
+     * \param col_idx Index of the column where the promoting pawn is (assumed to 
+     *  be) located.
+     * \param promo_type The chess piece type the pawn is to promote into.
+     * \return Boolean indicating whether the promotion is successful.
+     */
+    bool promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type );
+
+    /**
      * Perform a chess piece displacement with the piece at the target square 
      * towards the specificed destination square.
      */

@@ -296,6 +296,51 @@ void chess::resetBoard(){
 // ====================================================================== >>>>>
 
 
+bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
+
+    if( !this->promo_lock ){
+        cout << "Pawn promotion is prohibited if the promotion lock is not set." << endl;
+        return false;
+    }
+
+    chs_piece top_pce = this->get_piece_at( BOARDHEIGHT - 1, col_idx );
+    chs_piece bot_pce = this->get_piece_at( 0, col_idx );
+    
+    // Missing pawn at end row of target column.
+    if( top_pce.type != CHS_PIECE_TYPE::PAWN && bot_pce.type != CHS_PIECE_TYPE::PAWN ){
+        return false;
+    }
+
+    // Both top and bottom of the same column have a pawn (impossible scenario).
+    if( top_pce.type == bot_pce.type ){
+        throw runtime_error( "Impossible scenario encountered while attempting to promote pawn: two pawns have reached the end row without promoting." );
+    }
+
+    // Illegal promotion.
+    if( promo_type == CHS_PIECE_TYPE::NO_P || promo_type == CHS_PIECE_TYPE::PAWN || 
+        promo_type == CHS_PIECE_TYPE::KING ){
+        cout << "Illegal pawn promotion attempted." << endl;
+        return false;
+    }
+
+    // Promote the pawn.
+    if( top_pce.type == CHS_PIECE_TYPE::PAWN && top_pce.color == CHS_PIECE_COLOR::WHITE ){
+        top_pce.type == promo_type;
+        this->set_piece_at( BOARDHEIGHT - 1, col_idx, top_pce );
+    }else if( bot_pce.type == CHS_PIECE_TYPE::PAWN && bot_pce.color == CHS_PIECE_COLOR::BLACK ){
+        bot_pce.type == promo_type;
+        this->set_piece_at( 0, col_idx, bot_pce );
+    }else{
+        cout << "Something wrong about the pawn colors when promoting." << endl;
+        return false;
+    }
+
+    this->promo_lock = false;
+    return true;
+
+}
+
+
 bool chess::play( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
