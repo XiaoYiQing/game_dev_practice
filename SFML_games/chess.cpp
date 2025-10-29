@@ -280,6 +280,7 @@ void chess::resetBoard(){
     // Reset all support variables descripbing the state of the game.
     this->turn_cnt = 0;
     this->no_change_turn_cnt = 0;
+    this->promo_lock = false;
     this->state = CHS_STATE::ONGOING;
 
     // Update all remaining state related variables.

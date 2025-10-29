@@ -535,6 +535,12 @@ protected:
 
     // The number of consecutive turns where the draw by lack of progress conditions applies.
     unsigned int no_change_turn_cnt;
+    
+    // Game lock boolean for when a promotion is necessary for a pawn that reached
+    // the last row.
+    bool promo_lock;
+    // The promotion target.
+    chs_move promo_move;
 
     // The state of the game.
     CHS_STATE state;

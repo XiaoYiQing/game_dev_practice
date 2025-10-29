@@ -19,7 +19,7 @@ namespace tests{
     //      If time allows, try to do those.
     void chess_atk_check_tests();
 
-    
+    // TODO: Current test is rudimentary, and does not cover all possible plays.
     void chess_play_tests();
 
 }
