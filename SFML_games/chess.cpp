@@ -325,10 +325,10 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
 
     // Promote the pawn.
     if( top_pce.type == CHS_PIECE_TYPE::PAWN && top_pce.color == CHS_PIECE_COLOR::WHITE ){
-        top_pce.type == promo_type;
+        top_pce.type = promo_type;
         this->set_piece_at( BOARDHEIGHT - 1, col_idx, top_pce );
     }else if( bot_pce.type == CHS_PIECE_TYPE::PAWN && bot_pce.color == CHS_PIECE_COLOR::BLACK ){
-        bot_pce.type == promo_type;
+        bot_pce.type = promo_type;
         this->set_piece_at( 0, col_idx, bot_pce );
     }else{
         cout << "Something wrong about the pawn colors when promoting." << endl;
@@ -344,8 +344,12 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
 bool chess::play( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
-
-
+    
+    // Promotion lock check.
+    if( promo_lock ){
+        cout << "Play prevented by promotion lock." << endl;
+        return false;
+    }
 
     // Obtain the target piece.
     chs_piece currPiece = get_piece_at( i_bef, j_bef );
@@ -395,7 +399,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     }
 
     // If the piece played is a pawn and it has reached the end of its column.
-    if( currPiece.type == CHS_PIECE_TYPE::PAWN && ( i_aft == 0 || i_aft == BOARDHEIGHT ) ){
+    if( currPiece.type == CHS_PIECE_TYPE::PAWN && ( i_aft == 0 || i_aft == BOARDHEIGHT - 1 ) ){
         promo_lock = true;
         promo_point.first = i_aft;
         promo_point.second = j_aft;

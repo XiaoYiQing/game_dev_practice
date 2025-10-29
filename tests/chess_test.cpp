@@ -996,3 +996,58 @@ void tests::chess_play_tests(){
 // ---------------------------------------------------------------------- <<<<<
 
 }
+
+
+
+void tests::chess_promo_tests(){
+
+    chess myGame;
+    bool test_bool = true;
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Standard Promotion Scenario
+// ---------------------------------------------------------------------- >>>>>
+    
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    chess::chs_piece WP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece BK = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+
+    myGame.set_piece_at( 6, 2, WP );
+    myGame.set_piece_at( 3, 3, BK );
+
+    // Check promo lock is false before going for the promotion move.
+    test_bool = test_bool && !myGame.getPromo_lock();
+    // Push the white pawn to the last row.
+    test_bool = test_bool && myGame.play( 6, 2, 7, 2 );
+    // Check promo lock is true after pawn reached promotion state.
+    test_bool = test_bool && myGame.getPromo_lock();
+    // Attempt to play the black knight before the promotion is completed.
+    test_bool = test_bool && !myGame.play( 3, 3, 2, 5 );
+
+    // Promote the pawn to a knight.
+    myGame.promote( 2, chess::CHS_PIECE_TYPE::KNIGHT );
+    // Check if the pawn is correctly promoted.
+    test_bool = test_bool && ( myGame.get_piece_at( 7, 2 ).type == chess::CHS_PIECE_TYPE::KNIGHT &&
+        myGame.get_piece_at( 7, 2 ).color == chess::CHS_PIECE_COLOR::WHITE );
+    // Attempt to play the black knight after the promotion is completed.
+    test_bool = test_bool && myGame.play( 3, 3, 2, 5 );
+    // Attempt to play the pawn turned knight using a knight jump.
+    test_bool = test_bool && myGame.play( 7, 2, 5, 3 );
+
+    myGame.printBoard();
+
+    if( test_bool ){
+        cout << "Pawn standard promotion test: passed!" << endl;
+    }else{
+        cout << "Pawn standard promotion test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
+
