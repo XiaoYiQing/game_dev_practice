@@ -683,7 +683,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft  )
 {
-    
+
     // Out of bound check.
     if( max( i_bef, i_aft ) >= BOARDHEIGHT || max( j_bef, j_aft ) >= BOARDHEIGHT ){
         return false;
@@ -699,6 +699,25 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
     // Empty starting square check.
     if( tarPce.type == CHS_PIECE_TYPE::NO_P || tarPce.color == CHS_PIECE_COLOR::NO_C ){
         return false;
+    }    
+
+    // Obtain the color of the current piece.
+    CHS_PIECE_COLOR tarColor = tarPce.color;
+    // Turn check.
+    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
+        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
+        return false;
+    }
+
+    // The unique scenario of en-passant pawn attack superseeds all remaining checks.
+    if( this->en_pass_flag ){
+        if( this->en_pass_move.pt_a.first == i_bef && 
+            this->en_pass_move.pt_a.second == j_bef &&
+            this->en_pass_move.pt_b.first == i_aft && 
+            this->en_pass_move.pt_b.second == j_aft )
+        {
+            return true;
+        }
     }
 
     // Obtain piece at destination.
@@ -710,14 +729,6 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     // Make sure the attacker and the defender are of different colors.
     if( tarPce.color == endPce.color ){
-        return false;
-    }
-
-    // Obtain the color of the current piece.
-    CHS_PIECE_COLOR tarColor = tarPce.color;
-    // Turn check.
-    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
-        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
         return false;
     }
 
