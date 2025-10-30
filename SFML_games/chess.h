@@ -513,6 +513,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B() const;
     
+    bool getEn_pass_flag() const;
+    void setEn_pass_flag( bool en_pass_flag );
+    
+    chs_move getEn_pass_move() const;
+    void setEn_pass_move( chs_move en_pass_move_in );
+        
     /**
      * \return The flag indicating the game is awaiting for a pawn promotion.
      */
@@ -574,6 +580,11 @@ protected:
     // The number of consecutive turns where the draw by lack of progress conditions applies.
     unsigned int no_change_turn_cnt;
     
+    // Boolean indicating that 
+    bool en_pass_flag;
+    // The specific en-passant move.
+    chs_move en_pass_move;
+
     // Game lock boolean for when a promotion is necessary for a pawn that reached
     // the last row.
     bool promo_lock;

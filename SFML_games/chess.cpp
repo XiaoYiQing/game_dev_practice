@@ -280,6 +280,9 @@ void chess::resetBoard(){
     // Reset all support variables descripbing the state of the game.
     this->turn_cnt = 0;
     this->no_change_turn_cnt = 0;
+    this->en_pass_flag = false;
+    this->en_pass_move.pt_a = pair<int,int>(0,0);
+    this->en_pass_move.pt_b = pair<int,int>(0,0);
     this->promo_lock = false;
     this->state = CHS_STATE::ONGOING;
 
@@ -1181,6 +1184,16 @@ array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W(
 array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B() const
     {return this->atk_list_by_B;}
 
+
+bool chess::getEn_pass_flag() const
+    {return this->en_pass_flag;}
+void chess::setEn_pass_flag( bool en_pass_flag )
+    {this->en_pass_flag = en_pass_flag;}
+
+chess::chs_move chess::getEn_pass_move() const
+    {return this->en_pass_move;}
+void chess::setEn_pass_move( chs_move en_pass_move_in )
+    {this->en_pass_move = en_pass_move_in;}
 
 bool chess::getPromo_lock() const
     {return this->promo_lock;}
