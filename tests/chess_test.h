@@ -22,8 +22,9 @@ namespace tests{
     // TODO: Current test is rudimentary, and does not cover all possible plays.
     void chess_play_tests();
 
-    
     void chess_promo_tests();
+
+    void chess_en_pass_tests();
 
 }
 

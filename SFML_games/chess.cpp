@@ -281,8 +281,8 @@ void chess::resetBoard(){
     this->turn_cnt = 0;
     this->no_change_turn_cnt = 0;
     this->en_pass_flag = false;
-    this->en_pass_move.pt_a = pair<int,int>(0,0);
-    this->en_pass_move.pt_b = pair<int,int>(0,0);
+    this->en_pass_moves.clear();
+    this->en_pass_moves.reserve(2);
     this->promo_lock = false;
     this->state = CHS_STATE::ONGOING;
 
@@ -354,6 +354,9 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
+    // Special boolean checking whether en-passant possibility has been triggered by a move.
+    bool en_pass_posb = false;
+
     // Obtain the target piece.
     chs_piece currPiece = get_piece_at( i_bef, j_bef );
 
@@ -385,17 +388,90 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
         }
 
-    }else if( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) ){
-        
-        // TODO: En-passant unique attack scenario.
-        if( currPiece.type == CHS_PIECE_TYPE::PAWN ){
+        // The en-passant special trigger case.
+        if( currPiece.type == CHS_PIECE_TYPE::PAWN ){            
+
+            // First condition of possiblity of en-passant: pawn moved.
+            en_pass_posb = true;
+            this->en_pass_moves.clear();
+
+            if( currPiece.color == CHS_PIECE_COLOR::WHITE ){
+
+                // The white pawn jumped two squares from its starting position.
+                en_pass_posb = en_pass_posb && i_bef == 1 && i_aft == 3;
+                // If the white pawn is not on the first column.
+                if( j_bef > 0 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef - 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                        get_piece_at( i_aft, j_bef - 1 ).color == CHS_PIECE_COLOR::BLACK ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef - 1, i_aft - 1, j_bef )
+                        );
+                    }
+                }
+                // If the white pawn is not on the last column.
+                if( j_bef < BOARDWIDTH - 1 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef + 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                        get_piece_at( i_aft, j_bef + 1 ).color == CHS_PIECE_COLOR::BLACK ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef + 1, i_aft - 1, j_bef )
+                        );
+                    }
+                }
+                // There is at least one valid en-passant move.
+                en_pass_posb = en_pass_posb && this->en_pass_moves.size() > 0;
+
+            }else if( currPiece.color == CHS_PIECE_COLOR::BLACK ){
+
+                // The black pawn jumped two squares from its starting position.
+                en_pass_posb = en_pass_posb && i_bef == BOARDHEIGHT - 2 && 
+                    i_aft == BOARDHEIGHT - 4;
+                // If the black pawn is not on the first column.
+                if( j_bef > 0 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef - 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                        get_piece_at( i_aft, j_bef - 1 ).color == CHS_PIECE_COLOR::WHITE ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef - 1, i_aft + 1, j_bef )
+                        );
+                    }
+                }
+                // If the black pawn is not on the last column.
+                if( j_bef < BOARDWIDTH - 1 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef + 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                    get_piece_at( i_aft, j_bef + 1 ).color == CHS_PIECE_COLOR::WHITE ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef + 1, i_aft + 1, j_bef )
+                        );
+                    }
+                }
+                // There is at least one valid en-passant move.
+                en_pass_posb = en_pass_posb && this->en_pass_moves.size() > 0;
+
+            }else{
+                throw runtime_error( "Unrecognized chess color." );
+            }  
 
         }
+
+    }else if( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) ){
+
+        // The en-passant attack is a unique attack where the end square is empty.
+        bool is_en_pass = this->is_sq_empty( i_aft, j_aft );
 
         // Perform the attack.
         this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
         this->CHS_board[i_aft][j_aft].not_moved = false;
         this->CHS_board[i_bef][j_bef].set_as_empty(); 
+
+        // En-passant unique attack scenario additional step.
+        if( is_en_pass ){
+            if( currPiece.color == CHS_PIECE_COLOR::WHITE ){
+                this->CHS_board[ i_aft - 1 ][j_aft].set_as_empty(); 
+            }else if( currPiece.color == CHS_PIECE_COLOR::BLACK ){
+                this->CHS_board[ i_aft + 1 ][j_aft].set_as_empty(); 
+            }else{
+                throw runtime_error( "Unrecognized chess color." );
+            }
+        }
 
     }else{
         return false;
@@ -406,6 +482,14 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         promo_lock = true;
         promo_point.first = i_aft;
         promo_point.second = j_aft;
+    }
+
+    // Turn the en-passant flag to false when conditions are not met.
+    if( en_pass_posb ){
+        this->en_pass_flag = true;
+    }else{
+        this->en_pass_flag = false;
+        this->en_pass_moves.clear();
     }
 
     // Increment the turn count.
@@ -710,14 +794,26 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
     }
 
     // The unique scenario of en-passant pawn attack superseeds all remaining checks.
-    if( this->en_pass_flag ){
-        if( this->en_pass_move.pt_a.first == i_bef && 
-            this->en_pass_move.pt_a.second == j_bef &&
-            this->en_pass_move.pt_b.first == i_aft && 
-            this->en_pass_move.pt_b.second == j_aft )
-        {
+    if( tarPce.type == CHS_PIECE_TYPE::PAWN && this->en_pass_flag ){
+
+        bool is_en_pass = false;
+
+        // Determine if the current attack matches any of the currently active
+        // en-passant possiblities.
+        for( unsigned int z = 0; z < this->en_pass_moves.size(); z++ ){
+
+            is_en_pass = is_en_pass ||
+            ( en_pass_moves[z].pt_a.first == i_bef &&
+            en_pass_moves[z].pt_a.second == j_bef &&
+            en_pass_moves[z].pt_b.first == i_aft &&
+            en_pass_moves[z].pt_b.second == j_aft );
+
+        }
+
+        if( is_en_pass ){
             return true;
         }
+
     }
 
     // Obtain piece at destination.
@@ -1201,10 +1297,10 @@ bool chess::getEn_pass_flag() const
 void chess::setEn_pass_flag( bool en_pass_flag )
     {this->en_pass_flag = en_pass_flag;}
 
-chess::chs_move chess::getEn_pass_move() const
-    {return this->en_pass_move;}
-void chess::setEn_pass_move( chs_move en_pass_move_in )
-    {this->en_pass_move = en_pass_move_in;}
+vector<chess::chs_move> chess::getEn_pass_moves() const
+    {return this->en_pass_moves;}
+void chess::setEn_pass_moves( vector<chs_move> en_pass_move_in )
+    {this->en_pass_moves = en_pass_move_in;}
 
 bool chess::getPromo_lock() const
     {return this->promo_lock;}

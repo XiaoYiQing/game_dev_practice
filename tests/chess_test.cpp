@@ -1051,3 +1051,73 @@ void tests::chess_promo_tests(){
 
 }
 
+
+
+void tests::chess_en_pass_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Standard En-Passant Scenario
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    chess::chs_piece WP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece BP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+
+    myGame.set_piece_at( 1, 1, WP );
+    myGame.set_piece_at( 3, 2, BP );
+
+    test_bool = test_bool && myGame.play( 1, 1, 3, 1 );
+    test_bool = test_bool && myGame.getEn_pass_flag();
+    test_bool = test_bool && myGame.play( 3, 2, 2, 1 );
+
+    test_bool = test_bool && ( myGame.get_piece_at( 2, 1 ) == BP );
+    test_bool = test_bool && ( myGame.is_sq_empty( 3, 1 ) );
+    test_bool = test_bool && ( myGame.is_sq_empty( 3, 2 ) );
+
+    if( test_bool ){
+        cout << "En-passant standard test: passed!" << endl;
+    }else{
+        cout << "En-passant standard test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      En-Passant Expiration Scenario
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    myGame.set_piece_at( 1, 1, WP );
+    myGame.set_piece_at( 3, 2, BP );
+    myGame.set_piece_at( 1, 6, WP );
+    myGame.set_piece_at( 6, 6, BP );
+
+    // Purposely give black en-passant opportunity.
+    test_bool = test_bool && myGame.play( 1, 1, 3, 1 );
+    test_bool = test_bool && myGame.getEn_pass_flag();
+    // Black purposely miss en-passant opportunity.
+    test_bool = test_bool && myGame.play( 6, 6, 5, 6 );
+    test_bool = test_bool && !myGame.getEn_pass_flag();
+    test_bool = test_bool && myGame.play( 1, 6, 2, 6 );
+    // Attempt the en-passant late.
+    test_bool = test_bool && !myGame.play( 3, 2, 2, 1 );
+
+    myGame.printBoard();
+
+    if( test_bool ){
+        cout << "En-passant expiration test: passed!" << endl;
+    }else{
+        cout << "En-passant expiration test: failed!" << endl;
+    }
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
