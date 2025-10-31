@@ -1073,6 +1073,9 @@ void tests::chess_en_pass_tests(){
 
     test_bool = test_bool && myGame.play( 1, 1, 3, 1 );
     test_bool = test_bool && myGame.getEn_pass_flag();
+    array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> atk_list_by_B = 
+        myGame.getAtk_list_by_B();
+    test_bool = test_bool && (atk_list_by_B[25].at(0) == 26 );
     test_bool = test_bool && myGame.play( 3, 2, 2, 1 );
 
     test_bool = test_bool && ( myGame.get_piece_at( 2, 1 ) == BP );
@@ -1127,6 +1130,11 @@ void tests::chess_full_game_tests(){
 
     bool test_bool = true;
     chess myGame;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Full Play Scenario of "The Evergreen Game"
+// ---------------------------------------------------------------------- >>>>>
+
     myGame.resetBoard();
 
     test_bool = test_bool && myGame.play_ag_coord( 'e',2,'e',4 );    
@@ -1172,7 +1180,6 @@ void tests::chess_full_game_tests(){
     test_bool = test_bool && myGame.play_ag_coord( 'a',4,'d',7 );
     test_bool = test_bool && myGame.play_ag_coord( 'e',8,'f',8 );
     test_bool = test_bool && myGame.play_ag_coord( 'a',3,'e',7 );
-    myGame.printBoard_ag_coord();
     
     chess::chs_piece empty_piece;
     // Define the end game piece list.
@@ -1221,7 +1228,6 @@ void tests::chess_full_game_tests(){
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
     endGame.set_piece_at_ag_coord( 'g', 8, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    endGame.printBoard_ag_coord();
     
     pair<int,int> curr_coord;
     for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
@@ -1233,10 +1239,12 @@ void tests::chess_full_game_tests(){
     }
 
     if( test_bool ){
-        cout << "Full 30 turn game test: passed!" << endl;
+        cout << "The Evergreen game playout test: passed!" << endl;
     }else{
-        cout << "Full 30 turn game test: failed!" << endl;
+        cout << "The Evergreen game playout test: failed!" << endl;
     }
+
+// ---------------------------------------------------------------------- <<<<<
 
     
 } 

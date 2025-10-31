@@ -224,62 +224,6 @@ void chess::resetBoard(){
         throw runtime_error( "Chess board reset cannot be done with a non-standard chess board dimensions." );
     }
 
-    // Insert the last row pieces on both sides.
-    unsigned int col_idx = 0;
-    unsigned int row_idx = 0;
-    this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    col_idx = 1;
-    this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
-    col_idx = 2;
-    this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    col_idx = 3;
-    this->set_piece_at( row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
-    this->set_piece_at( BOARDHEIGHT - 1 - row_idx, BOARDWIDTH - 1 - col_idx, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
-
-    // Insert the pawns.
-    row_idx = 1;
-    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
-        this->set_piece_at( row_idx, j, 
-            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-        this->set_piece_at( BOARDHEIGHT - 1 - row_idx, j, 
-            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    }
-
-    // Set all remaining space as empty.
-    chess::chs_piece NONE_PIECE( chess::CHS_PIECE_TYPE::NO_P, chess::CHS_PIECE_COLOR::NO_C );
-    for( unsigned int i = 2; i < BOARDHEIGHT - 2; i++ ){
-        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
-            this->set_piece_at( i, j, NONE_PIECE );
-        }
-    }
-
     // Reset all support variables descripbing the state of the game.
     this->turn_cnt = 0;
     this->no_change_turn_cnt = 0;
@@ -287,7 +231,71 @@ void chess::resetBoard(){
     this->en_pass_moves.clear();
     this->en_pass_moves.reserve(2);
     this->promo_lock = false;
+
+    this->W_check_lock = false;
+    this->B_check_lock = false;
+
     this->state = CHS_STATE::ONGOING;
+
+
+    // Insert the last row pieces on both sides.
+    unsigned int col_idx = 0;
+    unsigned int row_idx = 0;
+    this->CHS_board[ row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK );    
+
+    col_idx = 1;
+    this->CHS_board[ row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ); 
+
+    col_idx = 2;
+    this->CHS_board[ row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ); 
+
+    col_idx = 3;
+    this->CHS_board[ row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK );
+    this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ BOARDWIDTH - 1 - col_idx ] = 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
+
+    // Insert the pawns.
+    row_idx = 1;
+    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+        this->CHS_board[ row_idx ][ j ] = 
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+        this->CHS_board[ BOARDHEIGHT - 1 - row_idx ][ j ] = 
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+    }
+
+    // Set all remaining space as empty.
+    chess::chs_piece NONE_PIECE( chess::CHS_PIECE_TYPE::NO_P, chess::CHS_PIECE_COLOR::NO_C );
+    for( unsigned int i = 2; i < BOARDHEIGHT - 2; i++ ){
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+            this->CHS_board[ i ][ j ] = NONE_PIECE;
+        }
+    }
 
     // Update all remaining state related variables.
     upd_all();
@@ -497,6 +505,8 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
     // Increment the turn count.
     this->turn_cnt++;
+    // Update all states of the game.
+    this->upd_all();
 
     return true;
 
@@ -1145,7 +1155,8 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
 
 }
 
-
+// TODO: include the en-passant possibility. (It should be the square where the 
+//      pawn is threatened by the en-passant move)
 void chess::upd_atk_lists(){
 
     // Emtpy the existing attack list vectors.
@@ -1196,11 +1207,35 @@ void chess::upd_atk_lists(){
 
     }
 
+    if( this->en_pass_flag ){
+
+        for( chs_move en_pass_move : this->en_pass_moves ){
+            
+            int def_ind_z = sub2ind( en_pass_move.pt_a.first, en_pass_move.pt_b.second );
+            int atk_ind_z = sub2ind( en_pass_move.pt_a.first, en_pass_move.pt_a.second );
+
+            // Attacker is black.
+            if( en_pass_move.pt_a.first == 3 ){
+                atk_list_by_B[ def_ind_z ].push_back( atk_ind_z );
+
+            // Attacker is white.
+            }else if( en_pass_move.pt_a.first == BOARDHEIGHT - 4 ){
+                atk_list_by_W[ def_ind_z ].push_back( atk_ind_z );
+            }
+
+        }
+
+    }
+
 }
 
 
 void chess::upd_all(){
+    
     this->upd_atk_lists();
+
+
+
 }
 
 

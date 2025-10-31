@@ -278,9 +278,22 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \param j The column index of the insertion point.
      * \param inPce The new piece to be inserted.
      * 
-     * \warning Does not update the game state or turn count.
+     * \warning Does not update the turn count.
      */
     void set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce );
+    /**
+     * \brief Set the piece at the target algebraic coordinate as the target piece.
+     * 
+     * This function triggers a complete chess board state update.
+     * 
+     * \note Overwrites existing piece by default.
+     * 
+     * \param c The alphabet letter representing the target column (a to h).
+     * \param n The row index (starting from 1 and up to 8 for standard chess board).
+     * \param inPce The new piece to be inserted.
+     * 
+     * \warning Does not update the turn count.
+     */
     void set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce );
 
     /**
@@ -606,6 +619,11 @@ protected:
     bool promo_lock;
     // The promotion target.
     pair<int,int> promo_point;
+
+    // White check lock (for signaling that the white king is in check).
+    bool W_check_lock;
+    // Black check lock (for signaling that the black king is in check).
+    bool B_check_lock;
 
     // The state of the game.
     CHS_STATE state;
