@@ -181,7 +181,24 @@ chess::chess(){
 //      Game Direct Manipulation Functions
 // ====================================================================== >>>>>
 
+
+void chess::resetStateVars(){
+
+    // Reset all support variables describing the state of the game.
+    this->turn_cnt = 0;
+    this->no_change_turn_cnt = 0;
+    this->en_pass_flag = false;
+    this->en_pass_moves.clear();
+    this->en_pass_moves.reserve(2);
+    this->promo_lock = false;
+
+    this->state = CHS_STATE::ONGOING;
+
+}
+
 void chess::clearBoard(){
+
+    this->resetStateVars();
 
     // Empty piece.
     chess::chs_piece curr_piece;
@@ -271,22 +288,6 @@ void chess::resetBoard(){
 }
 
 
-void chess::resetStateVars(){
-
-    // Reset all support variables describing the state of the game.
-    this->turn_cnt = 0;
-    this->no_change_turn_cnt = 0;
-    this->en_pass_flag = false;
-    this->en_pass_moves.clear();
-    this->en_pass_moves.reserve(2);
-    this->promo_lock = false;
-
-    this->W_check_lock = false;
-    this->B_check_lock = false;
-
-    this->state = CHS_STATE::ONGOING;
-
-}
 
 
 void chess::clearSquare( unsigned int i, unsigned int j ){
@@ -1161,8 +1162,7 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
 
 }
 
-// TODO: include the en-passant possibility. (It should be the square where the 
-//      pawn is threatened by the en-passant move)
+
 void chess::upd_atk_lists(){
 
     // Emtpy the existing attack list vectors.
@@ -1232,6 +1232,45 @@ void chess::upd_atk_lists(){
         }
 
     }
+
+}
+
+
+void chess::upd_game_state(){
+
+    this->state;
+
+    unsigned int W_cnt = 0;
+    unsigned int B_cnt = 0;
+
+    pair<int,int> sub_idx_z;
+    chs_piece pce_z;
+
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        sub_idx_z = ind2sub(z);
+        pce_z = this->get_piece_at( sub_idx_z.first, sub_idx_z.second );
+
+        if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+            W_cnt++;
+        }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+            B_cnt++;
+        }
+
+    }
+
+    // First pass of state check using piece counts.
+    if( W_cnt == 0 && B_cnt == 0 ){
+        this->state = CHS_STATE::DRAW;
+    }else if( W_cnt == 0 ){
+        this->state = CHS_STATE::BWIN;
+    }else if( B_cnt == 0 ){
+        this->state = CHS_STATE::WWIN;
+    }else{
+        this->state = CHS_STATE::ONGOING;
+    }
+
+    
 
 }
 

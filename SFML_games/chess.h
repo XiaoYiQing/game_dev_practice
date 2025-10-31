@@ -102,15 +102,17 @@ public:
 /*
 Update the state of the game:
     > 0 = unfinished ---> game is still in progress.
-    > 1 = White won: ---> game has ended with white being victorious.
-    > 2 = Black won: -----> game has ended with black being victorious.
-    > 3 = Draw: --------> game has ended with no one victorious.
+    > 1 = White check: game is ongoing but with the white king in check.
+    > 2 = Black check: game is ongoing but with the black king in check.
+    > 3 = White won: ---> game has ended with white being victorious.
+    > 4 = Black won: -----> game has ended with black being victorious.
+    > 5 = Draw: --------> game has ended with no one victorious.
 */
 
 /**
  * Enum representing the states the game can be in.
  */
-enum class CHS_STATE{ ONGOING, WWIN, RBIN, DRAW };
+enum class CHS_STATE{ ONGOING, WCHK, BCHK, WWIN, BWIN, DRAW };
 
 // The number of enum entries in the enum "CHS_STATE" (Uses magic enum).
 const static int CHS_STATE_Count = (int) magic_enum::enum_count<CHS_STATE>();
@@ -251,6 +253,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 // ====================================================================== >>>>>
 
     /**
+     * Reset the state variables.
+     */
+    void resetStateVars();
+
+    /**
      * \brief Set the board as completely blank.
      * 
      * All pieces of the board adopt the "no piece" state.
@@ -270,10 +277,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void resetBoard();
 
-    /**
-     * Reset the state variables.
-     */
-    void resetStateVars();
+    
 
     /**
      * \brief Set target square as empty.
@@ -408,7 +412,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * Update the game's attack list.
      */
     void upd_atk_lists();
-    
+
+    /**
+     * Update the game's state variable.
+     */
+    void upd_game_state();
+
     /**
      * Update all state related variables.
      */
@@ -626,11 +635,6 @@ protected:
     bool promo_lock;
     // The promotion target.
     pair<int,int> promo_point;
-
-    // White check lock (for signaling that the white king is in check).
-    bool W_check_lock;
-    // Black check lock (for signaling that the black king is in check).
-    bool B_check_lock;
 
     // The state of the game.
     CHS_STATE state;
