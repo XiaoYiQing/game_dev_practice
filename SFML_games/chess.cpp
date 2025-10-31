@@ -198,45 +198,13 @@ void chess::clearBoard(){
     this->upd_all();
 
 }
-
-void chess::clearSquare( unsigned int i, unsigned int j ){
-    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
-        throw out_of_range( "clearSquare: the specified coordinate is out of bound." );
-    }
-    this->CHS_board[i][j].set_as_empty();
-    this->upd_all();
-}
-
-void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
-    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
-        throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
-    }
-    this->CHS_board[i][j] = inPce;
-    this->upd_all();
-}
-void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
-    set_piece_at( n - 1, c - 'a', inPce );
-}
-
 void chess::resetBoard(){
 
     if( BOARDHEIGHT != 8 || BOARDWIDTH != 8 ){
         throw runtime_error( "Chess board reset cannot be done with a non-standard chess board dimensions." );
     }
 
-    // Reset all support variables descripbing the state of the game.
-    this->turn_cnt = 0;
-    this->no_change_turn_cnt = 0;
-    this->en_pass_flag = false;
-    this->en_pass_moves.clear();
-    this->en_pass_moves.reserve(2);
-    this->promo_lock = false;
-
-    this->W_check_lock = false;
-    this->B_check_lock = false;
-
-    this->state = CHS_STATE::ONGOING;
-
+    this->resetStateVars();
 
     // Insert the last row pieces on both sides.
     unsigned int col_idx = 0;
@@ -300,6 +268,44 @@ void chess::resetBoard(){
     // Update all remaining state related variables.
     upd_all();
 
+}
+
+
+void chess::resetStateVars(){
+
+    // Reset all support variables describing the state of the game.
+    this->turn_cnt = 0;
+    this->no_change_turn_cnt = 0;
+    this->en_pass_flag = false;
+    this->en_pass_moves.clear();
+    this->en_pass_moves.reserve(2);
+    this->promo_lock = false;
+
+    this->W_check_lock = false;
+    this->B_check_lock = false;
+
+    this->state = CHS_STATE::ONGOING;
+
+}
+
+
+void chess::clearSquare( unsigned int i, unsigned int j ){
+    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
+        throw out_of_range( "clearSquare: the specified coordinate is out of bound." );
+    }
+    this->CHS_board[i][j].set_as_empty();
+    this->upd_all();
+}
+
+void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
+    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
+        throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
+    }
+    this->CHS_board[i][j] = inPce;
+    this->upd_all();
+}
+void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
+    set_piece_at( n - 1, c - 'a', inPce );
 }
 
 // ====================================================================== <<<<<

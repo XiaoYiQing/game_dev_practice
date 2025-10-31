@@ -261,6 +261,21 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void clearBoard();
 
     /**
+     * Reset the board to the state of a fresh new game.
+     * 
+     * This function triggers a complete chess board state update.
+     * 
+     * \note This function serves as a game instance reset, though some class
+     *  variables may not be affected.
+     */
+    void resetBoard();
+
+    /**
+     * Reset the state variables.
+     */
+    void resetStateVars();
+
+    /**
      * \brief Set target square as empty.
      * 
      * This function triggers a complete chess board state update.
@@ -296,15 +311,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce );
 
-    /**
-     * Reset the board to the state of a fresh new game.
-     * 
-     * This function triggers a complete chess board state update.
-     * 
-     * \note This function serves as a game instance reset, though some class
-     *  variables may not be affected.
-     */
-    void resetBoard();
+    
 
 // ====================================================================== <<<<<
 
