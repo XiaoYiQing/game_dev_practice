@@ -310,12 +310,20 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type );
 
     /**
-     * Perform a chess piece displacement with the piece at the target square 
-     * towards the specificed destination square.
+     * Play a chess piece with the specified beginning and ending square coordinates.
      */
     bool play( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
     
+    /**
+     * Play a chess piece with the specified beginning and ending square coordinates.
+     * 
+     * The coordinates follow the algebraic coordinate system.
+     * 
+     * \note number indices are from 1 to 8.
+     */
+    bool play_ag_coord( char c1, int n1, char c2, int n2 );
+
     /**
      * \brief Determine if the specified move (displacement) is valid.
      * 

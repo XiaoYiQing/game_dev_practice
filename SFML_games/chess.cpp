@@ -499,6 +499,11 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
 }
 
+
+bool chess::play_ag_coord( char c1, int n1, char c2, int n2 ){
+    return play( n1 - 1, (int) ( c1 - 'a' ), n2 - 1, (int) ( c2 - 'a' ) );
+}
+
 /*
 - Check if the coordinates are within board limits.
 - Check if the move is trivial (0 move).

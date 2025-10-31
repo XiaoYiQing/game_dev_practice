@@ -26,6 +26,8 @@ namespace tests{
 
     void chess_en_pass_tests();
 
+    void chess_full_game_tests();
+
 }
 
 

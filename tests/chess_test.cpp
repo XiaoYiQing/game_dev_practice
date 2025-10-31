@@ -1110,14 +1110,37 @@ void tests::chess_en_pass_tests(){
     // Attempt the en-passant late.
     test_bool = test_bool && !myGame.play( 3, 2, 2, 1 );
 
-    myGame.printBoard();
-
     if( test_bool ){
         cout << "En-passant expiration test: passed!" << endl;
     }else{
         cout << "En-passant expiration test: failed!" << endl;
     }
+    
 // ---------------------------------------------------------------------- <<<<<
 
 
 }
+
+
+
+void tests::chess_full_game_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    myGame.resetBoard();
+
+    
+    test_bool = test_bool && myGame.play( 1,4,3,4 );    
+    
+    
+
+    if( test_bool ){
+        cout << "Full 30 turn game test: passed!" << endl;
+    }else{
+        cout << "Full 30 turn game test: failed!" << endl;
+    }
+
+    
+} 
+
+
