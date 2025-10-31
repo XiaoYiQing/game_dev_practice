@@ -501,7 +501,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
 
 bool chess::play_ag_coord( char c1, int n1, char c2, int n2 ){
-    return play( n1 - 1, (int) ( c1 - 'a' ), n2 - 1, (int) ( c2 - 'a' ) );
+    return play( n1 - 1, ( c1 - 'a' ), n2 - 1, ( c2 - 'a' ) );
 }
 
 /*
@@ -1226,6 +1226,39 @@ void chess::printBoard() const{
     cout << "  ";
     for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
         cout << j;
+        if( j != BOARDWIDTH ){
+            cout << "  ";
+        }
+    }
+    cout << endl;
+
+}
+
+void chess::printBoard_ag_coord() const{
+
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+
+        cout << BOARDHEIGHT - i << ' ';
+
+        for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+
+            this->CHS_board[ BOARDHEIGHT - 1 - i ][j].printPiece();
+
+            if( j != BOARDWIDTH ){
+                cout << ' ';
+            }
+
+        }
+
+        if( i != BOARDHEIGHT ){
+            cout << endl;
+        }
+
+    }
+
+    cout << "  ";
+    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
+        cout << static_cast<char>( 'a' + j );
         if( j != BOARDWIDTH ){
             cout << "  ";
         }

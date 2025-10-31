@@ -399,6 +399,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \note This is a debug tool and has no impact on actual game functionalities.
      */
     void printBoard() const;
+    /**
+     * \brief Print the state of the board onto the console terminal following
+     *  the albegraic coordinate format.
+     * 
+     * \note This is a debug tool and has no impact on actual game functionalities.
+     */
+    void printBoard_ag_coord() const;
 
 // ====================================================================== <<<<<
 
