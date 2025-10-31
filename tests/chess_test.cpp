@@ -1058,23 +1058,24 @@ void tests::chess_en_pass_tests(){
     bool test_bool = true;
     chess myGame;
 
+    
+    chess::chs_piece WP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece BP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+
+
 // ---------------------------------------------------------------------- >>>>>
-//      Standard En-Passant Scenario
+//      Standard En-Passant Scenario (BLACK take WHITE)
 // ---------------------------------------------------------------------- >>>>>
 
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
-
-    chess::chs_piece WP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
-    chess::chs_piece BP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
 
     myGame.set_piece_at( 1, 1, WP );
     myGame.set_piece_at( 3, 2, BP );
 
     test_bool = test_bool && myGame.play( 1, 1, 3, 1 );
     test_bool = test_bool && myGame.getEn_pass_flag();
-    array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> atk_list_by_B = 
-        myGame.getAtk_list_by_B();
+    auto atk_list_by_B = myGame.getAtk_list_by_B();
     test_bool = test_bool && (atk_list_by_B[25].at(0) == 26 );
     test_bool = test_bool && myGame.play( 3, 2, 2, 1 );
 
@@ -1083,16 +1084,16 @@ void tests::chess_en_pass_tests(){
     test_bool = test_bool && ( myGame.is_sq_empty( 3, 2 ) );
 
     if( test_bool ){
-        cout << "En-passant standard test: passed!" << endl;
+        cout << "En-passant standard test (BLACK take WHITE): passed!" << endl;
     }else{
-        cout << "En-passant standard test: failed!" << endl;
+        cout << "En-passant standard test (BLACK take WHITE): failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      En-Passant Expiration Scenario
+//      En-Passant Expiration Scenario 
 // ---------------------------------------------------------------------- >>>>>
 
     myGame.clearBoard();
@@ -1106,9 +1107,13 @@ void tests::chess_en_pass_tests(){
     // Purposely give black en-passant opportunity.
     test_bool = test_bool && myGame.play( 1, 1, 3, 1 );
     test_bool = test_bool && myGame.getEn_pass_flag();
+    atk_list_by_B = myGame.getAtk_list_by_B();
+    test_bool = test_bool && (atk_list_by_B[25].at(0) == 26 );
     // Black purposely miss en-passant opportunity.
     test_bool = test_bool && myGame.play( 6, 6, 5, 6 );
     test_bool = test_bool && !myGame.getEn_pass_flag();
+    atk_list_by_B = myGame.getAtk_list_by_B();
+    test_bool = test_bool && ( atk_list_by_B[25].empty() );
     test_bool = test_bool && myGame.play( 1, 6, 2, 6 );
     // Attempt the en-passant late.
     test_bool = test_bool && !myGame.play( 3, 2, 2, 1 );
@@ -1119,6 +1124,35 @@ void tests::chess_en_pass_tests(){
         cout << "En-passant expiration test: failed!" << endl;
     }
     
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Standard En-Passant Scenario (WHITE take BLACK)
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.clearBoard();
+    myGame.setTurn_cnt(1);
+
+    myGame.set_piece_at( 6, 1, BP );
+    myGame.set_piece_at( 4, 2, WP );
+    
+    test_bool = test_bool && myGame.play( 6, 1, 4, 1 );
+    test_bool = test_bool && myGame.getEn_pass_flag();
+    auto atk_list_by_W = myGame.getAtk_list_by_W();
+    test_bool = test_bool && (atk_list_by_W[33].at(0) == 34 );
+    test_bool = test_bool && myGame.play( 4, 2, 5, 1 );
+
+    test_bool = test_bool && ( myGame.get_piece_at( 5, 1 ) == WP );
+    test_bool = test_bool && ( myGame.is_sq_empty( 4, 1 ) );
+    test_bool = test_bool && ( myGame.is_sq_empty( 4, 2 ) );
+
+    if( test_bool ){
+        cout << "En-passant standard test (WHITE take BLACK): passed!" << endl;
+    }else{
+        cout << "En-passant standard test (WHITE take BLACK): failed!" << endl;
+    }
+
 // ---------------------------------------------------------------------- <<<<<
 
 
