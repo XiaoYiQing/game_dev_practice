@@ -1178,8 +1178,59 @@ void tests::chess_full_game_tests(){
     // Define the end game piece list.
     chess endGame;
     endGame.clearBoard();
+
+    endGame.set_piece_at_ag_coord( 'd', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'g', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'a', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'f', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'g', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'h', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'c', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'd', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'f', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'b', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'f', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'a', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'b', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'c', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'd', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'e', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'f', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'h', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'b', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'f', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'g', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.printBoard_ag_coord();
     
-    
+    pair<int,int> curr_coord;
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        curr_coord = chess::ind2sub( z );
+        test_bool = test_bool && ( 
+            myGame.get_piece_at( curr_coord.first, curr_coord.second ) ==
+            endGame.get_piece_at( curr_coord.first, curr_coord.second )
+        );
+    }
 
     if( test_bool ){
         cout << "Full 30 turn game test: passed!" << endl;

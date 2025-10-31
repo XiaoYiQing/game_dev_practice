@@ -214,6 +214,9 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
     this->CHS_board[i][j] = inPce;
     this->upd_all();
 }
+void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
+    set_piece_at( n - 1, c - 'a', inPce );
+}
 
 void chess::resetBoard(){
 

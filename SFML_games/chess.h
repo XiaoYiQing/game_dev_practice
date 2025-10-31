@@ -281,6 +281,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \warning Does not update the game state or turn count.
      */
     void set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce );
+    void set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce );
 
     /**
      * Reset the board to the state of a fresh new game.
