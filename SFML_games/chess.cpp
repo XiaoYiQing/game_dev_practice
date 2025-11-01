@@ -192,8 +192,6 @@ void chess::resetStateVars(){
     this->en_pass_moves.reserve(2);
     this->promo_lock = false;
 
-    this->hist.clear();
-
     this->state = CHS_STATE::ONGOING;
 
 }
@@ -1165,6 +1163,26 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
     return retVal;
 
 }
+
+
+vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ){
+
+    vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq(i,j);
+    vector<pair<int,int>> all_valid_atk_sq;
+    all_valid_atk_sq.reserve( all_atk_sq.size() );
+
+    for( pair<int,int> atk_sq_z : all_atk_sq ){
+
+        if( is_atk_valid( i, j, atk_sq_z.first, atk_sq_z.second ) ){
+            all_valid_atk_sq.push_back( atk_sq_z );
+        }
+
+    }
+
+    return all_valid_atk_sq;
+
+}
+
 
 
 void chess::upd_atk_lists(){

@@ -861,6 +861,67 @@ void tests::chess_atk_check_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      get_all_valid_atk_sq tests
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    // Pawn test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    vector<pair<int,int>> valid_atk_vec;
+
+    myGame.set_piece_at( 2, 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    valid_atk_vec = myGame.get_all_valid_atk_sq(2,3);
+    test_bool = test_bool && ( valid_atk_vec.size() == 1 );
+    test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
+    
+    myGame.set_piece_at( 4, 5, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
+    test_bool = test_bool && ( valid_atk_vec.size() == 1 );
+    test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
+
+    myGame.set_piece_at( 0, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    valid_atk_vec = myGame.get_all_valid_atk_sq(2,3);
+    test_bool = test_bool && ( valid_atk_vec.size() == 2 );
+    test_bool = test_bool && ( valid_atk_vec.at(1).first == 0 && valid_atk_vec.at(1).second == 4 );
+    
+    valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
+    test_bool = test_bool && ( valid_atk_vec.size() == 0 );
+
+
+    myGame.setTurn_cnt(1);
+    myGame.set_piece_at( 3, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    valid_atk_vec = myGame.get_all_valid_atk_sq(3,4);
+    test_bool = test_bool && ( valid_atk_vec.size() == 2 );
+    test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 5 );
+    test_bool = test_bool && ( valid_atk_vec.at(1).first == 2 && valid_atk_vec.at(1).second == 3 );
+    
+    myGame.setTurn_cnt(0);
+    valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
+    test_bool = test_bool && ( valid_atk_vec.size() == 1 );
+    test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
+
+    myGame.printBoard();
+    if( test_bool ){
+        cout << "get_all_valid_atk_sq test passed!" << endl;
+    }else{
+        cout << "get_all_valid_atk_sq test failed!" << endl;
+    }
+
+    int lol = 0;
+
+// ---------------------------------------------------------------------- <<<<<
+
+
 }
 
 

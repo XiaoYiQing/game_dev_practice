@@ -33,7 +33,14 @@ TODO:
     pass ~50 turns. It would then be reasonable to store the history of the game at the
     upper tier class using lower tier instances as pictures of each step of the game.
 
-    
+    The lower tier will have:
+    1- The chess board.
+    2- atk_list_by_W: list of threats by white pieces at all squares.
+    3- atk_list_by_B: list of threats by black pieces at all squares.
+    4- turn_cnt.
+    5- en_pass_flag and en_pass_moves
+    6- promo lock and promo_point
+    7- state
 */
 
 /**
