@@ -1278,6 +1278,8 @@ void tests::chess_full_game_tests(){
         cout << "The Evergreen game playout test: failed!" << endl;
     }
 
+    cout << sizeof(myGame) << endl;
+
 // ---------------------------------------------------------------------- <<<<<
 
     

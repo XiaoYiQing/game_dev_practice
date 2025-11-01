@@ -192,6 +192,8 @@ void chess::resetStateVars(){
     this->en_pass_moves.reserve(2);
     this->promo_lock = false;
 
+    this->hist.clear();
+
     this->state = CHS_STATE::ONGOING;
 
 }
@@ -471,6 +473,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         }
 
     }else if( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) ){
+
 
         // The en-passant attack is a unique attack where the end square is empty.
         bool is_en_pass = this->is_sq_empty( i_aft, j_aft );
@@ -980,6 +983,7 @@ bool chess::is_sq_empty( int i, int j ){
         this->CHS_board[i][j].color == CHS_PIECE_COLOR::NO_C );
 }
 
+
 vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
 
     // Initialize the vector of attackers' positions.
@@ -1235,15 +1239,25 @@ void chess::upd_atk_lists(){
 
 }
 
+/*
+TODO: To decide the game state, it is necessary to be able to discern whether the king
+    on either side is under attack. Furthermore, if the king is under attack, would it
+    be able to escape said attack?
+
+    You need a mechanism to list all possible plays (move and attacks).
+*/
 
 void chess::upd_game_state(){
 
     this->state;
 
+    // Initialize chess piece counts.
     unsigned int W_cnt = 0;
     unsigned int B_cnt = 0;
 
+    // Initialize current 2D coordinate variable.
     pair<int,int> sub_idx_z;
+    // Initialize current chess piece.
     chs_piece pce_z;
 
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
@@ -1270,7 +1284,7 @@ void chess::upd_game_state(){
         this->state = CHS_STATE::ONGOING;
     }
 
-    
+
 
 }
 

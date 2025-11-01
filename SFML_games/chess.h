@@ -17,6 +17,25 @@ using namespace std;
 
 namespace gameEngine{
 
+/*
+TODO:
+    Implement the check state detection mechanism.
+*/
+
+/*
+TODO:
+    It might be a good idea to implement the chess game as a 2 tiers class system.
+    - The lower tier serves the purpose of representing the chess board state.
+    - The upper tier class holds instance(s) of the lower tier class and manage
+    the flow of the game from a higher level.
+
+    Reasoning: Chess game features such as draw by lack of progress requires knowledge of 
+    pass ~50 turns. It would then be reasonable to store the history of the game at the
+    upper tier class using lower tier instances as pictures of each step of the game.
+
+    
+*/
+
 /**
  * My implementation of the chess game.
  * 
@@ -405,9 +424,23 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \brief Obtain all squares attacked by the piece at the target coordinate.
      * 
      * This function does not differentiate between black and white pieces.
+     * 
+     * This function does not care if the attack is actually valid. For
+     * example, a black knight is currently blocking a white rook from checking the 
+     * black king, but the squares where the black knight can otherwise have attacked
+     * will still be put on this attack list.
      */
     vector< pair<int,int> > get_all_atk_sq( int i, int j );
+
+    vector< pair<int,int> > get_all_valid_atk_sq( int i, int j );
     
+    /**
+     * \brief Obtain all squares that the piece at the target coordinate can move to.
+     * 
+     * This function does not differentiate between black and white pieces.
+     */
+    vector< pair<int,int> > get_all_move_sq( int i, int j );
+
     /**
      * Update the game's attack list.
      */
@@ -591,6 +624,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  flow of the game.
      */
     void setPromo_point( const pair<int,int> promo_point_in );
+   
 
 // ====================================================================== <<<<<
 
@@ -610,12 +644,12 @@ protected:
     
     /**
      * Array of lists of white pieces attacking the square associated to the index
-     * in the array.
+     * in the array. The attacks are not necessarily valid.
      */
     std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_W;
     /**
      * Array of lists of black pieces attacking the square associated to the index
-     * in the array.
+     * in the array. The attacks are not necessarily valid.
      */
     std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_B;
 
