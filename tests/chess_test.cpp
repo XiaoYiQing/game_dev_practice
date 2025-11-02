@@ -1307,6 +1307,46 @@ void tests::chess_en_pass_tests(){
 
 
 
+void tests::chess_game_state_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+
+    // upd_game_state
+
+// ---------------------------------------------------------------------- >>>>>
+//      Case 1
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::DRAW );
+    myGame.set_piece_at( 0, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::WWIN );
+    myGame.set_piece_at( 7, 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    myGame.play( 0, 4, 1, 4 );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    myGame.play( 7, 7, 7, 4 );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::WCHK );
+    
+    if( test_bool ){
+        cout << "Chess state test: passed!" << endl;
+    }else{
+        cout << "Chess state test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
+
+
+
 void tests::chess_full_game_tests(){
 
     bool test_bool = true;

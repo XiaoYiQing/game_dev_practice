@@ -653,7 +653,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  flow of the game.
      */
     void setPromo_point( const pair<int,int> promo_point_in );
-   
+    
 
 // ====================================================================== <<<<<
 

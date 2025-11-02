@@ -142,11 +142,13 @@ void do_tests( unsigned int test_id ){
     // tests::chess_base_tests();
     // tests::chess_chs_move_tests();
     // tests::chess_game_manip_tests();
-    tests::chess_move_tests();
+    // tests::chess_move_tests();
     // tests::chess_atk_check_tests();
     // tests::chess_play_tests();
     // tests::chess_promo_tests();
     // tests::chess_en_pass_tests();
+
+    tests::chess_game_state_tests();
 
     // tests::chess_full_game_tests();
 
