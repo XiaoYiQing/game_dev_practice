@@ -446,7 +446,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * This function does not differentiate between black and white pieces.
      */
-    vector< pair<int,int> > get_all_move_sq( int i, int j );
+    vector< pair<int,int> > get_all_valid_move_sq( int i, int j );
 
     /**
      * Update the game's attack list.

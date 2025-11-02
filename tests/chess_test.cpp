@@ -717,6 +717,94 @@ void tests::chess_move_tests(){
 // ---------------------------------------------------------------------- <<<<<
 
 
+// ---------------------------------------------------------------------- >>>>>
+//      get_all_valid_atk_sq Tests
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;   
+    bool tmp_bool = false;
+    myGame.resetBoard();
+
+    vector< pair<int,int> > valid_mov_vec = myGame.get_all_valid_move_sq( 0, 1 );
+    tmp_bool = false;
+    for( pair<int,int> mov_z : valid_mov_vec )
+        {tmp_bool = tmp_bool || mov_z == pair<int,int>(2,0);}
+    test_bool = test_bool && tmp_bool;
+    tmp_bool = false;
+    for( pair<int,int> mov_z : valid_mov_vec )
+        {tmp_bool = tmp_bool || mov_z == pair<int,int>(2,2);}
+    test_bool = test_bool && tmp_bool;
+
+    // Pawn possible moves before and after first move.
+    valid_mov_vec = myGame.get_all_valid_move_sq( 1, 2 );
+    test_bool = valid_mov_vec.size() == 2;
+    myGame.play( 1, 2, 2, 2 );
+    myGame.play( 6, 6, 5, 6 );
+    valid_mov_vec = myGame.get_all_valid_move_sq( 2, 2 );
+    test_bool = valid_mov_vec.size() == 1;
+
+
+    if( test_bool ){
+        cout << "chess::get_all_valid_move_sq test: passed!" << endl;
+    }else{
+        cout << "chess::get_all_valid_move_sq test: failed!" << endl;
+    }
+    
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      get_all_valid_atk_sq Tests Part 2
+// ---------------------------------------------------------------------- >>>>>
+
+    // Castle possible moves with castling.
+    test_bool = true;   
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 0, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( chess::BOARDHEIGHT - 1, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( chess::BOARDHEIGHT - 1, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( chess::BOARDHEIGHT - 1, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    // White castling move possibility check.
+    valid_mov_vec = myGame.get_all_valid_move_sq( 0, 4 );
+    test_bool = test_bool && ( valid_mov_vec.size() == 7 );
+    tmp_bool = false;
+    for( pair<int,int> mov_z : valid_mov_vec )
+        {tmp_bool = tmp_bool || mov_z == pair<int,int>(0,6);}
+    test_bool = test_bool && tmp_bool;
+    tmp_bool = false;
+    for( pair<int,int> mov_z : valid_mov_vec )
+        {tmp_bool = tmp_bool || mov_z == pair<int,int>(0,2);}
+    test_bool = test_bool && tmp_bool;
+
+    // Black castling move possibility check.
+    myGame.setTurn_cnt(1);
+    valid_mov_vec = myGame.get_all_valid_move_sq( chess::BOARDHEIGHT - 1, 4 );
+    test_bool = test_bool && ( valid_mov_vec.size() == 7 );
+    tmp_bool = false;
+    for( pair<int,int> mov_z : valid_mov_vec )
+        {tmp_bool = tmp_bool || mov_z == pair<int,int>( chess::BOARDHEIGHT - 1, 6 );}
+    test_bool = test_bool && tmp_bool;
+    tmp_bool = false;
+    for( pair<int,int> mov_z : valid_mov_vec )
+        {tmp_bool = tmp_bool || mov_z == pair<int,int>( chess::BOARDHEIGHT - 1, 2 );}
+    test_bool = test_bool && tmp_bool;
+
+    if( test_bool ){
+        cout << "chess::get_all_valid_move_sq castling case test: passed!" << endl;
+    }else{
+        cout << "chess::get_all_valid_move_sq castling case test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
 
@@ -910,14 +998,12 @@ void tests::chess_atk_check_tests(){
     test_bool = test_bool && ( valid_atk_vec.size() == 1 );
     test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
 
-    myGame.printBoard();
     if( test_bool ){
         cout << "get_all_valid_atk_sq test passed!" << endl;
     }else{
         cout << "get_all_valid_atk_sq test failed!" << endl;
     }
 
-    int lol = 0;
 
 // ---------------------------------------------------------------------- <<<<<
 
