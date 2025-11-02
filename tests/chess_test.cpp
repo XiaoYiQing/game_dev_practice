@@ -1315,13 +1315,14 @@ void tests::chess_game_state_tests(){
     // upd_game_state
 
 // ---------------------------------------------------------------------- >>>>>
-//      Case 1
+//      Standard Case
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
+    // Simple scenario where white king enters the checked state.
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::DRAW );
     myGame.set_piece_at( 0, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
@@ -1329,19 +1330,74 @@ void tests::chess_game_state_tests(){
     myGame.set_piece_at( 7, 7, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
-    myGame.play( 0, 4, 1, 4 );
+    test_bool = test_bool && myGame.play( 0, 4, 1, 4 );
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
-    myGame.play( 7, 7, 7, 4 );
+    test_bool = test_bool && myGame.play( 7, 7, 7, 4 );
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::WCHK );
     
     if( test_bool ){
-        cout << "Chess state test: passed!" << endl;
+        cout << "Chess state -> simple check case test: passed!" << endl;
     }else{
-        cout << "Chess state test: failed!" << endl;
+        cout << "Chess state -> simple check case test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//     Voluntary Enduced Check State Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // Set a rook at the next column the king is to move to.
+    myGame.set_piece_at( 7, 5, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    // Try to play the king towards the threatened column.
+    test_bool = test_bool && !myGame.play( 1, 4, 1, 5 );
+    // Place a white knight to block the black rook that is checking the white king.
+    myGame.set_piece_at( 2, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    // Game state now expected to switch back to ongoing.
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    // Attempt to play the white knight, which would leave the white king exposed to check.
+    test_bool = test_bool && !myGame.play( 2, 4, 1, 2 );
+
+    if( test_bool ){
+        cout << "Chess state -> voluntary check state test: passed!" << endl;
+    }else{
+        cout << "Chess state -> voluntary check state test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//     Simultaneous Black and White Check
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    myGame.set_piece_at( 0, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    // Play the knight such that it attacks the black king while leaving the white
+    // king open to be checked by the black rook.
+    test_bool = test_bool && !myGame.play( 1, 4, 2, 2 );
+
+    if( test_bool ){
+        cout << "Chess state -> Simultaneous check test: passed!" << endl;
+    }else{
+        cout << "Chess state -> Simultaneous check test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
 
@@ -1464,8 +1520,6 @@ void tests::chess_full_game_tests(){
     }else{
         cout << "The Evergreen game playout test: failed!" << endl;
     }
-
-    cout << sizeof(myGame) << endl;
 
 // ---------------------------------------------------------------------- <<<<<
 

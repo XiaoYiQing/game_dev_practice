@@ -365,7 +365,10 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
 bool chess::play( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
-    
+    // Record the state before.
+    CHS_STATE state_bef = this->state;
+    chess game_bef = *this;
+
     // Promotion lock check.
     if( promo_lock ){
         cout << "Play prevented by promotion lock." << endl;
@@ -514,7 +517,37 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     // Increment the turn count.
     this->turn_cnt++;
     // Update all states of the game.
-    this->upd_all();
+    try{
+        this->upd_all();
+    }catch( runtime_error e ){
+        string tmp = e.what();
+        string expect_msg = "Black and white kings both in check.";
+        if( tmp == expect_msg ){
+            *this = game_bef;
+            return false;
+        }else{
+            // Rethrow the error if it is an unexpected runtime error.
+            throw e;
+        }
+    }catch(...){
+        throw;
+    }
+
+    // Record the game state after.
+    CHS_STATE state_aft = this->state;
+
+    // If white is still in check whilst going into black's turn, revert move.
+    if( state_aft == CHS_STATE::WCHK && this->is_black_turn() ){
+        cout << "White still in check in black's turn." << endl;
+        *this = game_bef;
+        return false;
+    }
+    // If black is still in check whilst going into white's turn, revert move.
+    if( state_aft == CHS_STATE::BCHK && this->is_white_turn() ){
+        cout << "Black still in check in white's turn." << endl;
+        *this = game_bef;
+        return false;
+    }
 
     return true;
 
@@ -973,6 +1006,14 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 //      Game State Functions
 // ====================================================================== >>>>>
 
+
+bool chess::is_white_turn(){
+    return ( this->turn_cnt % 2 == 0 );
+}
+bool chess::is_black_turn(){
+    return ( this->turn_cnt % 2 != 0 );
+}
+
 bool chess::is_sq_empty( int i, int j ){
     if( i < 0 || i >= BOARDHEIGHT || j < 0 || j >= BOARDWIDTH ){
         throw invalid_argument( "Invalid chess board coordinates." );
@@ -1382,16 +1423,27 @@ void chess::upd_game_state(){
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
 
                 if( this->atk_list_by_B[z].size() != 0 ){
-                    state = CHS_STATE::WCHK;
-                }
-
-            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
-
-                if( this->atk_list_by_W[z].size() != 0 ){
-                    state = CHS_STATE::BCHK;
+                    if( state == CHS_STATE::BCHK ){
+                        throw runtime_error( "Black and white kings both in check." );
+                    }else{
+                        state = CHS_STATE::WCHK;
+                    }
                 }
                 
-            }else{
+
+            }
+            if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+
+                if( this->atk_list_by_W[z].size() != 0 ){
+                    if( state == CHS_STATE::WCHK ){
+                        throw runtime_error( "Black and white kings both in check." );
+                    }else{
+                        state = CHS_STATE::BCHK;
+                    }
+                }
+                
+            }
+            if( pce_z.color == CHS_PIECE_COLOR::NO_C ){
                 throw runtime_error( "Unrecognized chess piece color." );
             }
         }

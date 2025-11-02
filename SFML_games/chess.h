@@ -417,6 +417,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 // ====================================================================== >>>>>
 //      Game State Functions
 // ====================================================================== >>>>>
+    /**
+     * \return True if the game is at white's turn to play.
+     */
+    bool is_white_turn();
+    /**
+     * \return True if the game is at black's turn to play.
+     */
+    bool is_black_turn();
 
     /**
      * \brief Check if the target coordinate square is empty.
