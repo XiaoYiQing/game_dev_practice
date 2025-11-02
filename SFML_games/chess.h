@@ -138,7 +138,7 @@ Update the state of the game:
 /**
  * Enum representing the states the game can be in.
  */
-enum class CHS_STATE{ ONGOING, WCHK, BCHK, WWIN, BWIN, DRAW };
+enum class CHS_STATE{ NO_S, ONGOING, WCHK, BCHK, WWIN, BWIN, DRAW };
 
 // The number of enum entries in the enum "CHS_STATE" (Uses magic enum).
 const static int CHS_STATE_Count = (int) magic_enum::enum_count<CHS_STATE>();
@@ -432,19 +432,41 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * This function does not differentiate between black and white pieces.
      * 
-     * This function does not care if the attack is actually valid. For
-     * example, a black knight is currently blocking a white rook from checking the 
+     * \note This function does not care if the attack is actually valid. 
+     * For example, a black knight is currently blocking a white rook from checking the 
      * black king, but the squares where the black knight can otherwise have attacked
      * will still be put on this attack list.
+     * 
+     * \param i Target piece row index.
+     * \param j Target piece column index.
+     * \return All squares that are attacked by the target piece.
      */
     vector< pair<int,int> > get_all_atk_sq( int i, int j );
-
+    /**
+     * \brief Obtain all valid attack coordinates by the piece at the target coordinate.
+     * 
+     * This function does not differentiate between black and white pieces.
+     * 
+     * \note If target is a white piece on a black turn or vice versa, this function
+     *  will return an empty vector because a play on the wrong turn is invalid.
+     * 
+     * \param i Target piece row index.
+     * \param j Target piece column index.
+     * \return All squares that are valid attack point by the target piece.
+     */
     vector< pair<int,int> > get_all_valid_atk_sq( int i, int j );
     
     /**
-     * \brief Obtain all squares that the piece at the target coordinate can move to.
+     * \brief Obtain all valid move coordinates from the piece at the target coordinate.
      * 
      * This function does not differentiate between black and white pieces.
+     * 
+     * \note If target is a white piece on a black turn or vice versa, this function
+     *  will return an empty vector because a play on the wrong turn is invalid.
+     * 
+     * \param i Target piece row index.
+     * \param j Target piece column index.
+     * \return All squares that are valid move point from the target piece.
      */
     vector< pair<int,int> > get_all_valid_move_sq( int i, int j );
 

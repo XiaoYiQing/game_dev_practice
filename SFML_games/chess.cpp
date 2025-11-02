@@ -1353,7 +1353,8 @@ TODO: To decide the game state, it is necessary to be able to discern whether th
 
 void chess::upd_game_state(){
 
-    this->state;
+    // Set the state to the none case.
+    this->state = CHS_STATE::NO_S;
 
     // Initialize chess piece counts.
     unsigned int W_cnt = 0;
@@ -1364,31 +1365,53 @@ void chess::upd_game_state(){
     // Initialize current chess piece.
     chs_piece pce_z;
 
+    // Perform a full board scan to count pieces and determine checks.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
 
         sub_idx_z = ind2sub(z);
         pce_z = this->get_piece_at( sub_idx_z.first, sub_idx_z.second );
 
+        // Count the white and black pieces.
         if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
             W_cnt++;
         }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
             B_cnt++;
         }
 
+        if( pce_z.type == CHS_PIECE_TYPE::KING ){
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+                if( this->atk_list_by_B[z].size() != 0 ){
+                    state = CHS_STATE::WCHK;
+                }
+
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+
+                if( this->atk_list_by_W[z].size() != 0 ){
+                    state = CHS_STATE::BCHK;
+                }
+                
+            }else{
+                throw runtime_error( "Unrecognized chess piece color." );
+            }
+        }
+
     }
 
-    // First pass of state check using piece counts.
-    if( W_cnt == 0 && B_cnt == 0 ){
-        this->state = CHS_STATE::DRAW;
-    }else if( W_cnt == 0 ){
-        this->state = CHS_STATE::BWIN;
-    }else if( B_cnt == 0 ){
-        this->state = CHS_STATE::WWIN;
-    }else{
-        this->state = CHS_STATE::ONGOING;
+    // If no state has been determined to this point, use the number of remaining pieces
+    // to dictate the current game state.
+    if( this->state == CHS_STATE::NO_S ){
+        // First pass of state check using piece counts.
+        if( W_cnt == 0 && B_cnt == 0 ){
+            this->state = CHS_STATE::DRAW;
+        }else if( W_cnt == 0 ){
+            this->state = CHS_STATE::BWIN;
+        }else if( B_cnt == 0 ){
+            this->state = CHS_STATE::WWIN;
+        }else{
+            this->state = CHS_STATE::ONGOING;
+        }
     }
-
-
 
 }
 
@@ -1397,7 +1420,7 @@ void chess::upd_all(){
     
     this->upd_atk_lists();
 
-
+    this->upd_game_state();
 
 }
 
