@@ -1403,6 +1403,72 @@ void tests::chess_game_state_tests(){
 
 
 
+void tests::chess_psbl_plays_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board Possible Plays Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+
+    auto all_valid_moves = myGame.get_all_valid_moves();
+    test_bool = test_bool && ( all_valid_moves.size() == 20 );
+    // auto all_valid_atks = myGame.get_all_valid_atks();
+    // test_bool = test_bool && ( all_valid_atks.size() == 0 );
+    myGame.setTurn_cnt(1);
+    all_valid_moves = myGame.get_all_valid_moves();
+    test_bool = test_bool && ( all_valid_moves.size() == 20 );
+
+    
+
+    if( test_bool ){
+        cout << "Chess all plays -> initial board case tests: passed!" << endl;
+    }else{
+        cout << "Chess all plays -> initial board case tests: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Zero Pawn Initial Board Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
+    pair<int,int> sub_idx_z;
+
+    for( unsigned int z = 0; z < chess::BOARDWIDTH; z++ ){
+        myGame.set_piece_at( 1, z, emp_pce );
+        myGame.set_piece_at( chess::BOARDHEIGHT - 2, z, emp_pce );
+    }
+
+    all_valid_moves = myGame.get_all_valid_moves();
+    test_bool = test_bool && ( all_valid_moves.size() == 47 );
+    myGame.setTurn_cnt(1);
+    all_valid_moves = myGame.get_all_valid_moves();
+    test_bool = test_bool && ( all_valid_moves.size() == 47 );
+    
+    if( test_bool ){
+        cout << "Chess all plays -> initial board without pawns case tests: passed!" << endl;
+    }else{
+        cout << "Chess all plays -> initial board without pawns case tests: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
+
+
+
 void tests::chess_full_game_tests(){
 
     bool test_bool = true;

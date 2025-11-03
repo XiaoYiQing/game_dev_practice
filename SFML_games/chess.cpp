@@ -1264,7 +1264,8 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ){
         }
         
     }else{
-        throw runtime_error( "Unrecognized chess piece color." );
+        // throw runtime_error( "Unrecognized chess piece color." );
+        return val_mov_vec;
     }
 
     
@@ -1308,6 +1309,36 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ){
     }
 
     return val_mov_vec;
+
+}
+
+
+vector<chess::chs_move> chess::get_all_valid_moves(){
+
+    vector<chess::chs_move> retVec;
+    retVec.reserve( 200 );
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > move_sq_list_z;
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Add all current piece's possible moves to the batch.
+        for( pair<int,int> move_v : move_sq_list_z ){
+            retVec.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+                move_v.first, move_v.second ) );
+        }
+
+    }
+
+    retVec.shrink_to_fit();
+
+    return retVec;
 
 }
 

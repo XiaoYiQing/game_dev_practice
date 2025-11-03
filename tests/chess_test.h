@@ -28,6 +28,8 @@ namespace tests{
     
     void chess_game_state_tests();
     
+    void chess_psbl_plays_tests();
+
     void chess_full_game_tests();
 
     

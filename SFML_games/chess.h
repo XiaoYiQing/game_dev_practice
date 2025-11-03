@@ -17,10 +17,6 @@ using namespace std;
 
 namespace gameEngine{
 
-/*
-TODO:
-    Implement the check state detection mechanism.
-*/
 
 /*
 TODO:
@@ -477,6 +473,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return All squares that are valid move point from the target piece.
      */
     vector< pair<int,int> > get_all_valid_move_sq( int i, int j );
+    
+    // TODO
+
+    vector<chs_move> get_all_valid_moves();
+    vector<chs_move> get_all_valid_atks();
 
     /**
      * Update the game's attack list.
