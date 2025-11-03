@@ -388,7 +388,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return Boolean indicating whether this move is valid.
      */
     bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
-        unsigned int i_aft, unsigned int j_aft );
+        unsigned int i_aft, unsigned int j_aft ) const;
     
     /**
      * \brief Determine if the specified attack is valid.
@@ -405,7 +405,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return Boolean indicating whether this attack is valid.
      */
     bool is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
-        unsigned int i_aft, unsigned int j_aft  );
+        unsigned int i_aft, unsigned int j_aft  ) const;
     
 // ====================================================================== <<<<<
 
@@ -429,7 +429,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \return Boolean indicating whether the square is empty.
      */
-    bool is_sq_empty( int i, int j );
+    bool is_sq_empty( int i, int j ) const;
 
     /**
      * \brief Obtain all squares attacked by the piece at the target coordinate.
@@ -445,7 +445,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \param j Target piece column index.
      * \return All squares that are attacked by the target piece.
      */
-    vector< pair<int,int> > get_all_atk_sq( int i, int j );
+    vector< pair<int,int> > get_all_atk_sq( int i, int j ) const;
     /**
      * \brief Obtain all valid attack coordinates by the piece at the target coordinate.
      * 
@@ -458,7 +458,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \param j Target piece column index.
      * \return All squares that are valid attack point by the target piece.
      */
-    vector< pair<int,int> > get_all_valid_atk_sq( int i, int j );
+    vector< pair<int,int> > get_all_valid_atk_sq( int i, int j ) const;
     
     /**
      * \brief Obtain all valid move coordinates from the piece at the target coordinate.
@@ -472,12 +472,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \param j Target piece column index.
      * \return All squares that are valid move point from the target piece.
      */
-    vector< pair<int,int> > get_all_valid_move_sq( int i, int j );
+    vector< pair<int,int> > get_all_valid_move_sq( int i, int j ) const;
     
     // TODO
 
-    vector<chs_move> get_all_valid_moves();
-    vector<chs_move> get_all_valid_atks();
+    vector<chs_move> get_all_valid_moves() const;
+    vector<chs_move> get_all_valid_atks() const;
 
     /**
      * Update the game's attack list.

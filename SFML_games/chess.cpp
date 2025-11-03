@@ -572,7 +572,7 @@ bool chess::play_ag_coord( char c1, int n1, char c2, int n2 ){
 */
 
 bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef, 
-        unsigned int i_aft, unsigned int j_aft )
+        unsigned int i_aft, unsigned int j_aft ) const
 {
 
     // Out of bound check.
@@ -824,7 +824,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
 
 bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
-    unsigned int i_aft, unsigned int j_aft  )
+    unsigned int i_aft, unsigned int j_aft  ) const
 {
 
     // Out of bound check.
@@ -1014,7 +1014,7 @@ bool chess::is_black_turn(){
     return ( this->turn_cnt % 2 != 0 );
 }
 
-bool chess::is_sq_empty( int i, int j ){
+bool chess::is_sq_empty( int i, int j ) const{
     if( i < 0 || i >= BOARDHEIGHT || j < 0 || j >= BOARDWIDTH ){
         throw invalid_argument( "Invalid chess board coordinates." );
     }
@@ -1023,7 +1023,7 @@ bool chess::is_sq_empty( int i, int j ){
 }
 
 
-vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
+vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ) const{
 
     // Initialize the vector of attackers' positions.
     vector< pair<int,int> > retVal;
@@ -1206,7 +1206,7 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ){
 }
 
 
-vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ){
+vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
 
     vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq(i,j);
     vector<pair<int,int>> all_valid_atk_sq;
@@ -1225,7 +1225,7 @@ vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ){
 }
 
 
-vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ){
+vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 
     // Obtain the target piece.
     chs_piece tarPce = this->get_piece_at( i, j );
@@ -1313,7 +1313,7 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ){
 }
 
 
-vector<chess::chs_move> chess::get_all_valid_moves(){
+vector<chess::chs_move> chess::get_all_valid_moves() const{
 
     vector<chess::chs_move> retVec;
     retVec.reserve( 200 );
@@ -1330,6 +1330,37 @@ vector<chess::chs_move> chess::get_all_valid_moves(){
 
         // Add all current piece's possible moves to the batch.
         for( pair<int,int> move_v : move_sq_list_z ){
+            retVec.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+                move_v.first, move_v.second ) );
+        }
+
+    }
+
+    retVec.shrink_to_fit();
+
+    return retVec;
+
+}
+
+
+vector<chess::chs_move> chess::get_all_valid_atks() const{
+
+    vector<chess::chs_move> retVec;
+    retVec.reserve( 200 );
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > atk_sq_list_z;
+
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Add all current piece's possible moves to the batch.
+        for( pair<int,int> move_v : atk_sq_list_z ){
             retVec.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
                 move_v.first, move_v.second ) );
         }
