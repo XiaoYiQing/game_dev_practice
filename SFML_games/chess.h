@@ -356,11 +356,31 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type );
 
+
+    bool play( chs_move tarMove );
+
+    /* TODO: play is currently the true full function which determines if a move 
+        or attack is valid. The other all possible move and attack functions are not 
+        able to determine a very specific gap in their logic. If a king blocks 
+        the path of attack of an enemy piece, the blocked squares would be deemed
+        as safe for the king to move to with the current play validity logic. Of
+        course, this isn't true since if the king moves then he would still be
+        in check.
+        
+        This is not a fatal problem per see, as the play function specifically checks
+        the final play validity condition where a king in check must be no longer in
+        check after the play.
+        However, if you deem this rather vulnerable safeguard to be insufficient, find
+        a way to improve the move and attack validity functions to close this gap in 
+        logic.
+    */
     /**
      * Play a chess piece with the specified beginning and ending square coordinates.
      */
     bool play( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
+    
+    
     
     /**
      * Play a chess piece with the specified beginning and ending square coordinates.
@@ -371,6 +391,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool play_ag_coord( char c1, int n1, char c2, int n2 );
 
+    /**
+     * \brief perform a ply (half-turn).
+     * 
+     * This is basically performing a play on the chess board, but with additional 
+     * subroutines ran in order to check and preserve the logic state of the game.
+     */
+    bool ply( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft );
+        
     /**
      * \brief Determine if the specified move (displacement) is valid.
      * 
@@ -474,10 +503,24 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     vector< pair<int,int> > get_all_valid_move_sq( int i, int j ) const;
     
-    // TODO
-
+    /**
+     * \brief Obtain all current valid moves.
+     * 
+     * \note Current turn must match the piece's color for its move to be considered valid.
+     * 
+     * \return All currently possible moves.
+     */
     vector<chs_move> get_all_valid_moves() const;
+    /**
+     * \brief Obtain all current valid attacks.
+     * 
+     * \note Current turn must match the piece's color for its attacks to be considered valid.
+     * 
+     * \return All currently possible attacks.
+     */
     vector<chs_move> get_all_valid_atks() const;
+
+    bool is_check_mate();
 
     /**
      * Update the game's attack list.
