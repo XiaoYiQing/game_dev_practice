@@ -1252,6 +1252,237 @@ vector< pair<int,int> > chess::get_all_atk_sq( int i, int j ) const{
 }
 
 
+vector< pair<int,int> > chess::get_all_atk_sq_spec( int i, int j ) const{
+
+    // Initialize the vector of attackers' positions.
+    vector< pair<int,int> > retVal;
+    // Return an empty vector if no piece.
+    if( is_sq_empty( i, j ) ){
+        return retVal;
+    }
+
+    // Obtain the attacking piece.
+    chs_piece atk_piece = this->get_piece_at( i, j );
+    // Initialize vector of all standard attack possilities completely disregarding
+    // whether the attacked position is even on the board.
+    vector<pair<int,int>> pos_atk_coords;
+
+
+    /*
+    Compute the distance (number of squares away) of the piece to each of the 
+    board borders.
+    */
+    int top_dist = BOARDHEIGHT - 1 - i;
+    int right_dist = BOARDWIDTH - 1 - j;
+    int bottom_dist = i;
+    int left_dist = j;
+
+    switch( atk_piece.type ){
+    case CHS_PIECE_TYPE::PAWN:
+
+        if( atk_piece.color == CHS_PIECE_COLOR::WHITE ){
+
+            pos_atk_coords.push_back( pair<int,int>( i + 1, j + 1 ) );
+            pos_atk_coords.push_back( pair<int,int>( i + 1, j - 1 ) );
+
+        }else if( atk_piece.color == CHS_PIECE_COLOR::BLACK ){
+
+            pos_atk_coords.push_back( pair<int,int>( i - 1, j + 1 ) );
+            pos_atk_coords.push_back( pair<int,int>( i - 1, j - 1 ) );
+
+        }
+
+        break;
+
+    case CHS_PIECE_TYPE::KNIGHT:
+
+        pos_atk_coords.push_back( pair<int,int>( i + 2, j + 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i + 2, j - 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 2, j + 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 2, j - 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i + 1, j + 2 ) );
+        pos_atk_coords.push_back( pair<int,int>( i + 1, j - 2 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 1, j + 2 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 1, j - 2 ) );
+
+        break;
+
+    case CHS_PIECE_TYPE::BISHOP:
+
+        // North-East diagonal sweep.
+        for( int NE_z = 1; NE_z <= min( top_dist, right_dist ) ; NE_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i + NE_z, j + NE_z ) );
+            if( !this->is_sq_empty( i + NE_z, j + NE_z ) && 
+                !( CHS_board[i + NE_z][j + NE_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i + NE_z][j + NE_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // North-West diagonal sweep.
+        for( int NW_z = 1; NW_z <= min( top_dist, left_dist ) ; NW_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i + NW_z, j - NW_z ) );
+            if( !this->is_sq_empty( i + NW_z, j - NW_z ) && 
+                !( CHS_board[i + NW_z][j - NW_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i + NW_z][j - NW_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // South-West diagonal sweep.
+        for( int SW_z = 1; SW_z <= min( bottom_dist, left_dist ) ; SW_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i - SW_z, j - SW_z ) );
+            if( !this->is_sq_empty( i - SW_z, j - SW_z ) && 
+                !( CHS_board[i - SW_z][j - SW_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i - SW_z][j - SW_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // South-East diagonal sweep.
+        for( int SE_z = 1; SE_z <= min( bottom_dist, right_dist ) ; SE_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i - SE_z, j + SE_z ) );
+            if( !this->is_sq_empty( i - SE_z, j + SE_z ) && 
+                !( CHS_board[i - SE_z][j + SE_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i - SE_z][j + SE_z].color != atk_piece.color ) )
+                {break;}
+        }
+
+        break;
+
+    case CHS_PIECE_TYPE::ROOK:
+
+        // North sweep.
+        for( int N_z = 1; N_z <= top_dist; N_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i + N_z, j ) );
+            if( !this->is_sq_empty( i + N_z, j ) && 
+                !( CHS_board[i + N_z][j].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i + N_z][j].color != atk_piece.color ) )
+                {break;}
+        }
+        // West sweep.
+        for( int W_z = 1; W_z <= left_dist; W_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i, j - W_z ) );
+            if( !this->is_sq_empty( i, j - W_z ) && 
+                !( CHS_board[i][j - W_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i][j - W_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // South sweep.
+        for( int S_z = 1; S_z <= bottom_dist; S_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i - S_z, j ) );
+            if( !this->is_sq_empty( i - S_z, j ) && 
+                !( CHS_board[i - S_z][j].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i - S_z][j].color != atk_piece.color ) )
+                {break;}
+        }
+        // East sweep.
+        for( int E_z = 1; E_z <= right_dist; E_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i, j + E_z ) );
+            if( !this->is_sq_empty( i, j + E_z ) && 
+                !( CHS_board[i][j + E_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i][j + E_z].color != atk_piece.color ) )
+                {break;}
+        }
+
+        break;
+
+    case CHS_PIECE_TYPE::QUEEN:
+
+        // North-East diagonal sweep.
+        for( int NE_z = 1; NE_z <= min( top_dist, right_dist ) ; NE_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i + NE_z, j + NE_z ) );
+            if( !this->is_sq_empty( i + NE_z, j + NE_z ) && 
+                !( CHS_board[i + NE_z][j + NE_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i + NE_z][j + NE_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // North-West diagonal sweep.
+        for( int NW_z = 1; NW_z <= min( top_dist, left_dist ) ; NW_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i + NW_z, j - NW_z ) );
+            if( !this->is_sq_empty( i + NW_z, j - NW_z ) && 
+                !( CHS_board[i + NW_z][j - NW_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i + NW_z][j - NW_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // South-West diagonal sweep.
+        for( int SW_z = 1; SW_z <= min( bottom_dist, left_dist ) ; SW_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i - SW_z, j - SW_z ) );
+            if( !this->is_sq_empty( i - SW_z, j - SW_z ) && 
+                !( CHS_board[i - SW_z][j - SW_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i - SW_z][j - SW_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // South-East diagonal sweep.
+        for( int SE_z = 1; SE_z <= min( bottom_dist, right_dist ) ; SE_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i - SE_z, j + SE_z ) );
+            if( !this->is_sq_empty( i - SE_z, j + SE_z ) && 
+                !( CHS_board[i - SE_z][j + SE_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i - SE_z][j + SE_z].color != atk_piece.color ) )
+                {break;}
+        }
+
+        // North sweep.
+        for( int N_z = 1; N_z <= top_dist; N_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i + N_z, j ) );
+            if( !this->is_sq_empty( i + N_z, j ) && 
+                !( CHS_board[i + N_z][j].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i + N_z][j].color != atk_piece.color ) )
+                {break;}
+        }
+        // West sweep.
+        for( int W_z = 1; W_z <= left_dist; W_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i, j - W_z ) );
+            if( !this->is_sq_empty( i, j - W_z ) && 
+                !( CHS_board[i][j - W_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i][j - W_z].color != atk_piece.color ) )
+                {break;}
+        }
+        // South sweep.
+        for( int S_z = 1; S_z <= bottom_dist; S_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i - S_z, j ) );
+            if( !this->is_sq_empty( i - S_z, j ) && 
+                !( CHS_board[i - S_z][j].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i - S_z][j].color != atk_piece.color ) )
+                {break;}
+        }
+        // East sweep.
+        for( int E_z = 1; E_z <= right_dist; E_z++ ){
+            pos_atk_coords.push_back( pair<int,int>( i, j + E_z ) );
+            if( !this->is_sq_empty( i, j + E_z ) && 
+                !( CHS_board[i][j + E_z].type == CHS_PIECE_TYPE::KING &&
+                CHS_board[i][j + E_z].color != atk_piece.color ) )
+                {break;}
+        }
+
+        break;
+
+    case CHS_PIECE_TYPE::KING:
+
+        pos_atk_coords.push_back( pair<int,int>( i + 1, j + 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i + 1, j + 0 ) );
+        pos_atk_coords.push_back( pair<int,int>( i + 1, j - 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 0, j - 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 1, j - 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 1, j - 0 ) );
+        pos_atk_coords.push_back( pair<int,int>( i - 1, j + 1 ) );
+        pos_atk_coords.push_back( pair<int,int>( i + 0, j + 1 ) );
+
+        break; 
+
+    default:
+        throw runtime_error( "Unrecognized chess piece type." );
+    }
+
+    for( pair<int,int> coord_z : pos_atk_coords ){
+
+        // Add to the main attack list if attack is possible.
+        if( coord_z.first >= 0 && coord_z.first <= BOARDHEIGHT - 1 &&
+            coord_z.second >= 0 && coord_z.second <= BOARDWIDTH - 1 ){
+            retVal.push_back( coord_z );
+        }
+
+    }
+
+    return retVal;
+
+}
+
+
 vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
 
     vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq(i,j);

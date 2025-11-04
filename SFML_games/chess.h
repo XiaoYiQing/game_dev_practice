@@ -494,6 +494,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return All squares that are attacked by the target piece.
      */
     vector< pair<int,int> > get_all_atk_sq( int i, int j ) const;
+    
+    /**
+     * \brief Obtain all squares attacked by the piece at the target coordinate 
+     *  with the special condition that the enemy king does NOT act as an obstruction.
+     */
+    vector< pair<int,int> > get_all_atk_sq_spec( int i, int j ) const;
+
     /**
      * \brief Obtain all valid attack coordinates by the piece at the target coordinate.
      * 
