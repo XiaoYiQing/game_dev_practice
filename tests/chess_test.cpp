@@ -1041,8 +1041,10 @@ void tests::chess_atk_check_tests(){
     test_bool = test_bool && ( all_atk_sq_vec.size() == 14 );
     test_bool = test_bool && ( all_atk_sq_sepc_vec.size() == 15 );
 
-    auto b_atk_list = myGame.getAtk_list_by_B();
+    
 
+    // Make sure the game's attack list consistent.
+    auto b_atk_list = myGame.getAtk_list_by_B();
     vector<int> tmp = b_atk_list[ chess::sub2ind( 3, 4 ) ];
     test_bool = test_bool && ( tmp.size() == 3 && tmp[0] == 19 && tmp[1] == 52 && tmp[2] == 55 );
     tmp = b_atk_list[ chess::sub2ind( 2, 4 ) ];
@@ -1051,6 +1053,12 @@ void tests::chess_atk_check_tests(){
     test_bool = test_bool && ( tmp.size() == 1 && tmp[0] == 55 );
     tmp = b_atk_list[ chess::sub2ind( 4, 5 ) ];
     test_bool = test_bool && ( tmp.size() == 2 && tmp[0] == 19, tmp[1] == 55 );
+
+
+    // See if the king can move towards a square hidden from attack by itself.
+    test_bool = test_bool && !( myGame.ply( 3, 4, 2, 4 ) );
+    // See if the king can attack towards a square hidden from attack by itself.
+    test_bool = test_bool && !( myGame.ply( 3, 4, 2, 3 ) );
 
     if( test_bool ){
         cout << "all_atk_sq_sepc_vec white check case test passed!" << endl;
@@ -1094,8 +1102,8 @@ void tests::chess_atk_check_tests(){
     test_bool = test_bool && ( all_atk_sq_vec.size() == 14 );
     test_bool = test_bool && ( all_atk_sq_sepc_vec.size() == 15 );
     
+    // Make sure the game's attack list consistent.
     auto w_atk_list = myGame.getAtk_list_by_W();
-
     tmp = w_atk_list[ chess::sub2ind( 3, 4 ) ];
     test_bool = test_bool && ( tmp.size() == 3 && tmp[0] == 19 && tmp[1] == 52 && tmp[2] == 55 );
     tmp = w_atk_list[ chess::sub2ind( 2, 4 ) ];
@@ -1104,6 +1112,11 @@ void tests::chess_atk_check_tests(){
     test_bool = test_bool && ( tmp.size() == 1 && tmp[0] == 55 );
     tmp = w_atk_list[ chess::sub2ind( 4, 5 ) ];
     test_bool = test_bool && ( tmp.size() == 2 && tmp[0] == 19, tmp[1] == 55 );
+    
+    // See if the king can move towards a square hidden from attack by itself.
+    test_bool = test_bool && !( myGame.ply( 3, 4, 2, 4 ) );
+    // See if the king can attack towards a square hidden from attack by itself.
+    test_bool = test_bool && !( myGame.ply( 3, 4, 2, 3 ) );
 
     if( test_bool ){
         cout << "all_atk_sq_sepc_vec black check case test passed!" << endl;
