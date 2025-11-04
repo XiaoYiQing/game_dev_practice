@@ -1518,6 +1518,7 @@ void tests::chess_full_game_tests(){
 
     bool test_bool = true;
     chess myGame;
+    chess::CHS_STATE tmp_state;
 
 // ---------------------------------------------------------------------- >>>>>
 //      Full Play Scenario of "The Evergreen Game"
@@ -1525,50 +1526,53 @@ void tests::chess_full_game_tests(){
 
     myGame.resetBoard();
 
-    test_bool = test_bool && myGame.play_ag_coord( 'e',2,'e',4 );    
-    test_bool = test_bool && myGame.play_ag_coord( 'e',7,'e',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'g',1,'f',3 );
-    test_bool = test_bool && myGame.play_ag_coord( 'b',8,'c',6 );
-    test_bool = test_bool && myGame.play_ag_coord( 'f',1,'c',4 );
-    test_bool = test_bool && myGame.play_ag_coord( 'f',8,'c',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'b',2,'b',4 );
-    test_bool = test_bool && myGame.play_ag_coord( 'c',5,'b',4 );
-    test_bool = test_bool && myGame.play_ag_coord( 'c',2,'c',3 );
-    test_bool = test_bool && myGame.play_ag_coord( 'b',4,'a',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'd',2,'d',4 );
-    test_bool = test_bool && myGame.play_ag_coord( 'e',5,'d',4 );
-    test_bool = test_bool && myGame.play_ag_coord( 'e',1,'g',1 );
-    test_bool = test_bool && myGame.play_ag_coord( 'd',4,'d',3 );
-    test_bool = test_bool && myGame.play_ag_coord( 'd',1,'b',3 );
-    test_bool = test_bool && myGame.play_ag_coord( 'd',8,'f',6 );
-    test_bool = test_bool && myGame.play_ag_coord( 'e',4,'e',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'f',6,'g',6 );
-    test_bool = test_bool && myGame.play_ag_coord( 'f',1,'e',1 );
-    test_bool = test_bool && myGame.play_ag_coord( 'g',8,'e',7 );
-    test_bool = test_bool && myGame.play_ag_coord( 'c',1,'a',3 );
-    test_bool = test_bool && myGame.play_ag_coord( 'b',7,'b',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'b',3,'b',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'a',8,'b',8 );
-    test_bool = test_bool && myGame.play_ag_coord( 'b',5,'a',4 );
-    test_bool = test_bool && myGame.play_ag_coord( 'a',5,'b',6 );
-    test_bool = test_bool && myGame.play_ag_coord( 'b',1,'d',2 );
-    test_bool = test_bool && myGame.play_ag_coord( 'c',8,'b',7 );
-    test_bool = test_bool && myGame.play_ag_coord( 'd',2,'e',4 );
-    test_bool = test_bool && myGame.play_ag_coord( 'g',6,'f',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'c',4,'d',3 );
-    test_bool = test_bool && myGame.play_ag_coord( 'f',5,'h',5 );
-    test_bool = test_bool && myGame.play_ag_coord( 'e',4,'f',6 );
-    test_bool = test_bool && myGame.play_ag_coord( 'g',7,'f',6 );
-    test_bool = test_bool && myGame.play_ag_coord( 'e',5,'f',6 );
-    test_bool = test_bool && myGame.play_ag_coord( 'h',8,'g',8 );
-    test_bool = test_bool && myGame.play_ag_coord( 'a',1,'d',1 );
-    test_bool = test_bool && myGame.play_ag_coord( 'h',5,'f',3 );
-    test_bool = test_bool && myGame.play_ag_coord( 'e',1,'e',7 );
-    test_bool = test_bool && myGame.play_ag_coord( 'c',6,'e',7 );
-    test_bool = test_bool && myGame.play_ag_coord( 'a',4,'d',7 );
-    test_bool = test_bool && myGame.play_ag_coord( 'e',8,'f',8 );
-    test_bool = test_bool && myGame.play_ag_coord( 'a',3,'e',7 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',2,'e',4 );    
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',7,'e',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'g',1,'f',3 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'b',8,'c',6 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'f',1,'c',4 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'f',8,'c',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'b',2,'b',4 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'c',5,'b',4 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'c',2,'c',3 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'b',4,'a',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'd',2,'d',4 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',5,'d',4 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',1,'g',1 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'd',4,'d',3 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'd',1,'b',3 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'd',8,'f',6 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',4,'e',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'f',6,'g',6 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'f',1,'e',1 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'g',8,'e',7 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'c',1,'a',3 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'b',7,'b',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'b',3,'b',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'a',8,'b',8 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'b',5,'a',4 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'a',5,'b',6 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'b',1,'d',2 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'c',8,'b',7 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'd',2,'e',4 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'g',6,'f',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'c',4,'d',3 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'f',5,'h',5 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',4,'f',6 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'g',7,'f',6 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',5,'f',6 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'h',8,'g',8 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'a',1,'d',1 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'h',5,'f',3 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',1,'e',7 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'c',6,'e',7 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'a',4,'d',7 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'e',8,'f',8 );
+    test_bool = test_bool && myGame.ply_ag_coord( 'a',3,'e',7 );
+    tmp_state = myGame.getState();
     
+    myGame.printBoard_ag_coord();
+
     chess::chs_piece empty_piece;
     // Define the end game piece list.
     chess endGame;

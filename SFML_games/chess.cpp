@@ -361,6 +361,11 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
 
 }
 
+
+bool chess::play_ag_coord( char c1, int n1, char c2, int n2 ){
+    return play( n1 - 1, ( c1 - 'a' ), n2 - 1, ( c2 - 'a' ) );
+}
+
 bool chess::play( chs_move tarMove ){
     return this->play( tarMove.pt_a.first, tarMove.pt_a.second, 
         tarMove.pt_b.first, tarMove.pt_b.second );
@@ -558,16 +563,32 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 }
 
 
-bool chess::play_ag_coord( char c1, int n1, char c2, int n2 ){
-    return play( n1 - 1, ( c1 - 'a' ), n2 - 1, ( c2 - 'a' ) );
+
+bool chess::ply_ag_coord( char c1, int n1, char c2, int n2 ){
+    return ply( n1 - 1, ( c1 - 'a' ), n2 - 1, ( c2 - 'a' ) );
+}
+
+bool chess::ply( chs_move tarMove ){
+    return this->ply( tarMove.pt_a.first, tarMove.pt_a.second, 
+        tarMove.pt_b.first, tarMove.pt_b.second );
 }
 
 bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
-    this->play( i_bef, j_bef, i_aft, j_aft );
+    bool play_sucess = false;
+    play_sucess = this->play( i_bef, j_bef, i_aft, j_aft );
 
-    this->is_check_mate();
+    // Check if the play induces the checkmate state.
+    if( play_sucess && this->is_check_mate() ){
+        if( this->is_black_turn() ){
+            this->state = CHS_STATE::WWIN;
+        }else{
+            this->state = CHS_STATE::BWIN;
+        }
+    }
+
+    return play_sucess;
 }
 
 /*

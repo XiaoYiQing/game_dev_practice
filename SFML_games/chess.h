@@ -380,8 +380,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool play( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
     
-    
-    
     /**
      * Play a chess piece with the specified beginning and ending square coordinates.
      * 
@@ -391,6 +389,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool play_ag_coord( char c1, int n1, char c2, int n2 );
 
+    
+    bool ply_ag_coord( char c1, int n1, char c2, int n2 );
+
+    bool ply( chs_move tarMove );
+
     /**
      * \brief perform a ply (half-turn).
      * 
@@ -399,7 +402,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool ply( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
-        
+
     /**
      * \brief Determine if the specified move (displacement) is valid.
      * 
