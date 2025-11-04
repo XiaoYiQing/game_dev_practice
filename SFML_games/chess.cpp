@@ -385,8 +385,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    // Record the state before.
-    CHS_STATE state_bef = this->state;
+    // Record the game before.
     chess game_bef = *this;
 
     // Promotion lock check.
@@ -1493,13 +1492,6 @@ void chess::upd_atk_lists(){
 
 }
 
-/*
-TODO: To decide the game state, it is necessary to be able to discern whether the king
-    on either side is under attack. Furthermore, if the king is under attack, would it
-    be able to escape said attack?
-
-    You need a mechanism to list all possible plays (move and attacks).
-*/
 
 void chess::upd_game_state(){
 

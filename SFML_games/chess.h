@@ -359,6 +359,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     bool play( chs_move tarMove );
 
+    
+
     /* TODO: play is currently the true full function which determines if a move 
         or attack is valid. The other all possible move and attack functions are not 
         able to determine a very specific gap in their logic. If a king blocks 
@@ -374,6 +376,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
         a way to improve the move and attack validity functions to close this gap in 
         logic.
     */
+    /*
+    TODO: play is doing more than it should. This function should concentrate on 
+    performing the actual play, and let the "ply" function handle the state management.
+
+    To be clear to do so, you need to make sure the move and attack validity functions 
+    handle the above said gap in logic.
+    */
+
     /**
      * Play a chess piece with the specified beginning and ending square coordinates.
      */
@@ -462,6 +472,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return Boolean indicating whether the square is empty.
      */
     bool is_sq_empty( int i, int j ) const;
+
+    /**
+     * TODO: This function should be modified so that an enemy king does not 
+     * obstruct the attack trajectory of a bishop, rook, or queen. This is
+     * to provide a more accurate picture of where a king can move without being threatened.
+     */
 
     /**
      * \brief Obtain all squares attacked by the piece at the target coordinate.

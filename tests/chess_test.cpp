@@ -1500,17 +1500,50 @@ void tests::chess_checkmate_tests(){
     myGame.set_piece_at( 7, 3, chess::chs_piece( 
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     test_bool = test_bool && ( myGame.is_check_mate() );
-
-    int lol = 0;
+    
+    // Attempt to play the king when there is no way out of check.
+    test_bool = test_bool && !( myGame.ply( 3, 4, 3, 5 ) );
+        
 
     if( test_bool ){
-        cout << "Chess checkmate standard tests: passed!" << endl;
+        cout << "Chess white checkmate standard tests: passed!" << endl;
     }else{
-        cout << "Chess checkmate standard tests: failed!" << endl;
+        cout << "Chess white checkmate standard tests: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
-    
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Black Check Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 4, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    tmp = myGame.getState();
+    // Simple rook check king.
+    test_bool = test_bool && !( myGame.is_check_mate() );
+    myGame.set_piece_at( 7, 5, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && !( myGame.is_check_mate() );
+    myGame.set_piece_at( 7, 3, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.is_check_mate() );
+
+    if( test_bool ){
+        cout << "Chess black checkmate standard tests: passed!" << endl;
+    }else{
+        cout << "Chess black checkmate standard tests: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 

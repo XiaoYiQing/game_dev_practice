@@ -150,9 +150,9 @@ void do_tests( unsigned int test_id ){
 
     // tests::chess_game_state_tests();
     // tests::chess_psbl_plays_tests();
-    // tests::chess_checkmate_tests();
+    tests::chess_checkmate_tests();
     
-    tests::chess_full_game_tests();
+    // tests::chess_full_game_tests();
 
 }
 
