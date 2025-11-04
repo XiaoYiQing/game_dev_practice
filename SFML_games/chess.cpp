@@ -1679,7 +1679,8 @@ void chess::upd_atk_lists(){
         pce_z = get_piece_at( coord_z.first, coord_z.second );
 
         // Obtain the list of all squares attacked by the current piece.
-        atk_list_z = get_all_atk_sq( coord_z.first, coord_z.second );
+        // atk_list_z = get_all_atk_sq( coord_z.first, coord_z.second );
+        atk_list_z = get_all_atk_sq_spec( coord_z.first, coord_z.second );
         // Translate into linear indexing.
         atk_sub_list_z = sub2ind( atk_list_z );
 

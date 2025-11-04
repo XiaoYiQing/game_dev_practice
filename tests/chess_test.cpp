@@ -1009,7 +1009,7 @@ void tests::chess_atk_check_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      get_all_atk_sq_spec tests
+//      get_all_atk_sq_spec white check tests
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -1041,10 +1041,74 @@ void tests::chess_atk_check_tests(){
     test_bool = test_bool && ( all_atk_sq_vec.size() == 14 );
     test_bool = test_bool && ( all_atk_sq_sepc_vec.size() == 15 );
 
+    auto b_atk_list = myGame.getAtk_list_by_B();
+
+    vector<int> tmp = b_atk_list[ chess::sub2ind( 3, 4 ) ];
+    test_bool = test_bool && ( tmp.size() == 3 && tmp[0] == 19 && tmp[1] == 52 && tmp[2] == 55 );
+    tmp = b_atk_list[ chess::sub2ind( 2, 4 ) ];
+    test_bool = test_bool && ( tmp.size() == 1 && tmp[0] == 52 );
+    tmp = b_atk_list[ chess::sub2ind( 2, 3 ) ];
+    test_bool = test_bool && ( tmp.size() == 1 && tmp[0] == 55 );
+    tmp = b_atk_list[ chess::sub2ind( 4, 5 ) ];
+    test_bool = test_bool && ( tmp.size() == 2 && tmp[0] == 19, tmp[1] == 55 );
+
     if( test_bool ){
-        cout << "all_atk_sq_sepc_vec test passed!" << endl;
+        cout << "all_atk_sq_sepc_vec white check case test passed!" << endl;
     }else{
-        cout << "all_atk_sq_sepc_vec test failed!" << endl;
+        cout << "all_atk_sq_sepc_vec white check case test failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      get_all_atk_sq_spec black check tests
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(1);
+
+    myGame.set_piece_at( 3, 4, chess::chs_piece(
+         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 4, chess::chs_piece(
+         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 3, chess::chs_piece(
+         chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 7, chess::chs_piece(
+         chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Check attacked square by the rook.
+    all_atk_sq_vec = myGame.get_all_atk_sq( 6, 4 );
+    all_atk_sq_sepc_vec = myGame.get_all_atk_sq_spec( 6, 4 );
+    test_bool = test_bool && ( all_atk_sq_vec.size() == 11 );
+    test_bool = test_bool && ( all_atk_sq_sepc_vec.size() == 14 );
+    // Check attacked square by the bishop.
+    all_atk_sq_vec = myGame.get_all_atk_sq( 2, 3 );
+    all_atk_sq_sepc_vec = myGame.get_all_atk_sq_spec( 2, 3 );
+    test_bool = test_bool && ( all_atk_sq_vec.size() == 8 );
+    test_bool = test_bool && ( all_atk_sq_sepc_vec.size() == 11 );
+    // Check attacked square by the queen.
+    all_atk_sq_vec = myGame.get_all_atk_sq( 6, 7 );
+    all_atk_sq_sepc_vec = myGame.get_all_atk_sq_spec( 6, 7 );
+    test_bool = test_bool && ( all_atk_sq_vec.size() == 14 );
+    test_bool = test_bool && ( all_atk_sq_sepc_vec.size() == 15 );
+    
+    auto w_atk_list = myGame.getAtk_list_by_W();
+
+    tmp = w_atk_list[ chess::sub2ind( 3, 4 ) ];
+    test_bool = test_bool && ( tmp.size() == 3 && tmp[0] == 19 && tmp[1] == 52 && tmp[2] == 55 );
+    tmp = w_atk_list[ chess::sub2ind( 2, 4 ) ];
+    test_bool = test_bool && ( tmp.size() == 1 && tmp[0] == 52 );
+    tmp = w_atk_list[ chess::sub2ind( 2, 3 ) ];
+    test_bool = test_bool && ( tmp.size() == 1 && tmp[0] == 55 );
+    tmp = w_atk_list[ chess::sub2ind( 4, 5 ) ];
+    test_bool = test_bool && ( tmp.size() == 2 && tmp[0] == 19, tmp[1] == 55 );
+
+    if( test_bool ){
+        cout << "all_atk_sq_sepc_vec black check case test passed!" << endl;
+    }else{
+        cout << "all_atk_sq_sepc_vec black check case test failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
