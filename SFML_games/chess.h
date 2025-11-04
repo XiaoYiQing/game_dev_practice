@@ -756,6 +756,9 @@ protected:
 
     // The state of the game.
     CHS_STATE state;
+
+    // Flag indicating whether the game should write messages to the console.
+    bool verbose;
     
 
 private:

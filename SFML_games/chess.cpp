@@ -170,6 +170,8 @@ chess::chess(){
         this->atk_list_by_W[z].reserve( BOARDHEIGHT*BOARDWIDTH );
     }
 
+    this->verbose = false;
+
     this->resetBoard();
 
 }
@@ -320,7 +322,8 @@ void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs
 bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
 
     if( !this->promo_lock ){
-        cout << "Pawn promotion is prohibited if the promotion lock is not set." << endl;
+        if( this->verbose )
+            cout << "Pawn promotion is prohibited if the promotion lock is not set." << endl;
         return false;
     }
 
@@ -340,7 +343,8 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
     // Illegal promotion.
     if( promo_type == CHS_PIECE_TYPE::NO_P || promo_type == CHS_PIECE_TYPE::PAWN || 
         promo_type == CHS_PIECE_TYPE::KING ){
-        cout << "Illegal pawn promotion attempted." << endl;
+        if( verbose )
+            cout << "Illegal pawn promotion attempted." << endl;
         return false;
     }
 
@@ -352,7 +356,8 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
         bot_pce.type = promo_type;
         this->set_piece_at( 0, col_idx, bot_pce );
     }else{
-        cout << "Something wrong about the pawn colors when promoting." << endl;
+        if( verbose )
+            cout << "Something wrong about the pawn colors when promoting." << endl;
         return false;
     }
 
@@ -374,13 +379,20 @@ bool chess::play( chs_move tarMove ){
 bool chess::play( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
+
+    // Prevent play if the game is already in a win state.
+    if( this->state == CHS_STATE::BWIN || this->state == CHS_STATE::WWIN ){
+        return false;
+    }
+
     // Record the state before.
     CHS_STATE state_bef = this->state;
     chess game_bef = *this;
 
     // Promotion lock check.
     if( promo_lock ){
-        cout << "Play prevented by promotion lock." << endl;
+        if( verbose )
+            cout << "Play prevented by promotion lock." << endl;
         return false;
     }
 
@@ -547,13 +559,15 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
     // If white is still in check whilst going into black's turn, revert move.
     if( state_aft == CHS_STATE::WCHK && this->is_black_turn() ){
-        cout << "White still in check in black's turn." << endl;
+        if( verbose )
+            cout << "White still in check in black's turn." << endl;
         *this = game_bef;
         return false;
     }
     // If black is still in check whilst going into white's turn, revert move.
     if( state_aft == CHS_STATE::BCHK && this->is_white_turn() ){
-        cout << "Black still in check in white's turn." << endl;
+        if( verbose )
+            cout << "Black still in check in white's turn." << endl;
         *this = game_bef;
         return false;
     }
