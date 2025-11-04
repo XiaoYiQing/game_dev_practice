@@ -1586,6 +1586,8 @@ bool chess::is_check_mate(){
         chess game_copy = *this;
         // Force white to play.
         game_copy.setTurn_cnt(0);
+        // Turn verbose to false.
+        game_copy.setVerbose(false);
 
         // Obtain all possible white plays.
         vector<chs_move> all_plays = game_copy.get_all_valid_moves();
@@ -1602,6 +1604,7 @@ bool chess::is_check_mate(){
                     // by resetting the copy to the starting check state.
                     game_copy = *this;
                     game_copy.setTurn_cnt(0);
+                    game_copy.setVerbose(false);
                 }else{
                     // Any move that successfully pulls white out of the check state is proof
                     // that the check is not a mate.
@@ -1820,6 +1823,12 @@ void chess::setPromo_point( const pair<int,int> promo_point_in ){
     this->promo_point = promo_point_in;
 }
 
+
+void chess::setVerbose( bool verbose )
+    {this->verbose = verbose;}
+
+bool chess::getVerbose() const
+    {return this->verbose;}
 
 // ====================================================================== <<<<<
 

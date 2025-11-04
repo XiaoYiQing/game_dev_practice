@@ -709,6 +709,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void setPromo_point( const pair<int,int> promo_point_in );
     
+    void setVerbose( bool verbose );
+    bool getVerbose() const;
 
 // ====================================================================== <<<<<
 
