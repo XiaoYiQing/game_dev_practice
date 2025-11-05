@@ -1868,6 +1868,16 @@ void chess::upd_post_play(){
 
 }
 
+void chess::upd_all(){
+
+    this->upd_atk_lists();
+
+    this->upd_mid_game_state();
+
+    this->upd_end_game_state();
+
+}
+
 
 void chess::upd_end_game_state(){
 

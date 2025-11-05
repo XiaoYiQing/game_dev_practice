@@ -572,15 +572,23 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     vector<chs_move> get_all_valid_atks() const;
 
+    /**
+     * \brief Check whether the game is in checkmate state.
+     * 
+     * \return Boolean indicating whether the game has reached a checkmate.
+     */
     bool is_check_mate();
 
     /**
      * Update the game's attack list.
+     * 
+     * \note The class' attack lists are lists of squares that are threatened, and 
+     *  not valid attack options.
      */
     void upd_atk_lists();
 
     /**
-     * \brief Update the game's state variable.
+     * \brief Update the game's state variable while the game is on going.
      * 
      * This update function cannot determine end game states (draw, win, lost).
      * Its main purpose is to determine if there is any check or not.
@@ -599,6 +607,10 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void upd_post_play();
     
+    /**
+     * Update everything.
+     */
+    void upd_all();
     
 
     /**
