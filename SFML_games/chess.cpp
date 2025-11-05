@@ -385,7 +385,7 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
     play_sucess = this->play( i_bef, j_bef, i_aft, j_aft );
 
     // Check if the play induces an endgame state.
-    this->upd_eng_game();
+    this->upd_end_game_state();
 
     return play_sucess;
 }
@@ -1727,27 +1727,16 @@ void chess::upd_game_state(){
     // Set the state to the none case.
     this->state = CHS_STATE::NO_S;
 
-    // Initialize chess piece counts.
-    unsigned int W_cnt = 0;
-    unsigned int B_cnt = 0;
-
     // Initialize current 2D coordinate variable.
     pair<int,int> sub_idx_z;
     // Initialize current chess piece.
     chs_piece pce_z;
 
-    // Perform a full board scan to count pieces and determine checks.
+    // Perform a full board scan to determine checks.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
 
         sub_idx_z = ind2sub(z);
         pce_z = this->get_piece_at( sub_idx_z.first, sub_idx_z.second );
-
-        // Count the white and black pieces.
-        if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
-            W_cnt++;
-        }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
-            B_cnt++;
-        }
 
         if( pce_z.type == CHS_PIECE_TYPE::KING ){
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
@@ -1780,19 +1769,9 @@ void chess::upd_game_state(){
 
     }
 
-    // If no state has been determined to this point, use the number of remaining pieces
-    // to dictate the current game state.
+    // If no state has been determined to this point, set as on going by default.
     if( this->state == CHS_STATE::NO_S ){
-        // First pass of state check using piece counts.
-        if( W_cnt == 0 && B_cnt == 0 ){
-            this->state = CHS_STATE::DRAW;
-        }else if( W_cnt == 0 ){
-            this->state = CHS_STATE::BWIN;
-        }else if( B_cnt == 0 ){
-            this->state = CHS_STATE::WWIN;
-        }else{
-            this->state = CHS_STATE::ONGOING;
-        }
+        this->state = CHS_STATE::ONGOING;
     }
 
 }
@@ -1889,7 +1868,7 @@ void chess::upd_all(){
 }
 
 
-void chess::upd_eng_game(){
+void chess::upd_end_game_state(){
 
     if( this->is_check_mate() ){
         if( this->is_black_turn() ){

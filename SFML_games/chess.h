@@ -580,19 +580,24 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_atk_lists();
 
     /**
-     * Update the game's state variable.
+     * \brief Update the game's state variable.
+     * 
+     * This update function cannot determine end game states (draw, win, lost).
+     * Its main purpose is to determine if there is any check or not.
      */
     void upd_game_state();
+    
+    /**
+     * Check if any end game states have been reached.
+     */
+    void upd_end_game_state();
 
     /**
      * Update all state related variables.
      */
     void upd_all();
     
-    /**
-     * Check for if any end game states have been reached.
-     */
-    void upd_eng_game();
+    
 
     /**
      * \brief Print the state of the board onto the console terminal.
