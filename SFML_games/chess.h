@@ -585,15 +585,17 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * This update function cannot determine end game states (draw, win, lost).
      * Its main purpose is to determine if there is any check or not.
      */
-    void upd_game_state();
+    void upd_mid_game_state();
     
     /**
      * Check if any end game states have been reached.
+     * 
+     * If so, the corresponding eng game state is set for this game instance.
      */
     void upd_end_game_state();
 
     /**
-     * Update all state related variables.
+     * Update all necessary state related variables after a play is made.
      */
     void upd_post_play();
     

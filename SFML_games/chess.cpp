@@ -1723,7 +1723,7 @@ void chess::upd_atk_lists(){
 }
 
 
-void chess::upd_game_state(){
+void chess::upd_mid_game_state(){
 
     // Set the state to the none case.
     this->state = CHS_STATE::NO_S;
@@ -1864,7 +1864,7 @@ void chess::upd_post_play(){
     
     this->upd_atk_lists();
 
-    this->upd_game_state();
+    this->upd_mid_game_state();
 
 }
 
