@@ -385,7 +385,38 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     */
 
     /**
-     * Play a chess piece with the specified beginning and ending square coordinates.
+     * \brief Play a chess piece with the specified beginning and ending square coordinates.
+     * 
+     * This function is essentially the follow up combination of the methods 
+     * "is_move_valid" and "is_atk_valid" and takes the next step in actually
+     * executing the play, whether it be a move or an attack.
+     * This function furthermore verifies and updates the game state before and after
+     * the play:
+     * 
+     * - Does the play happen when your own king is in check? Does the play resolve 
+     *      the check state?
+     * 
+     * - Is the play made on a pawn and did it trigger an en-passant opportunity for
+     *      the opponent?
+     * 
+     * - Is the play made on a pawn and has it reached the final row and is awaiting
+     *      promotion?
+     * 
+     * Basically, if a play is successfully made by this function, it is a perfectly 
+     * acceptable play, so this function also serves as the final verification on
+     * whether a play is possible.
+     * 
+     * \note This functions updates all game states except for the end game states. 
+     *  This is because this function is used to determine if there is any valid plays
+     *  before a checkmate or draw is declared, so the checkmate and draw updates cannot 
+     *  be included in the function (Endless loop). Please use the designated function 
+     *  for an endgame check following use the play function.
+     * 
+     * \param i_bef Row index of the starting position.
+     * \param j_bef Column index of the starting position.
+     * \param i_aft Row index of the landing position.
+     * \param j_aft Column index of the landing position.
+     * \return Boolean indicating whether this play is successful.
      */
     bool play( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
@@ -473,11 +504,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool is_sq_empty( int i, int j ) const;
 
-    /**
-     * TODO: This function should be modified so that an enemy king does not 
-     * obstruct the attack trajectory of a bishop, rook, or queen. This is
-     * to provide a more accurate picture of where a king can move without being threatened.
-     */
 
     /**
      * \brief Obtain all squares attacked by the piece at the target coordinate.
@@ -562,6 +588,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * Update all state related variables.
      */
     void upd_all();
+    
+    /**
+     * Check for if any end game states have been reached.
+     */
+    void upd_eng_game();
 
     /**
      * \brief Print the state of the board onto the console terminal.
