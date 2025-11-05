@@ -214,7 +214,7 @@ void chess::clearBoard(){
     }
 
     // Update all state related variables.
-    this->upd_all();
+    this->upd_post_play();
 
 }
 void chess::resetBoard(){
@@ -285,7 +285,7 @@ void chess::resetBoard(){
     }
 
     // Update all remaining state related variables.
-    upd_all();
+    upd_post_play();
 
 }
 
@@ -297,7 +297,7 @@ void chess::clearSquare( unsigned int i, unsigned int j ){
         throw out_of_range( "clearSquare: the specified coordinate is out of bound." );
     }
     this->CHS_board[i][j].set_as_empty();
-    this->upd_all();
+    this->upd_post_play();
 }
 
 void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
@@ -305,7 +305,7 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
         throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
     }
     this->CHS_board[i][j] = inPce;
-    this->upd_all();
+    this->upd_post_play();
 }
 void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
     set_piece_at( n - 1, c - 'a', inPce );
@@ -375,19 +375,6 @@ bool chess::play_ag_coord( char c1, int n1, char c2, int n2 ){
 bool chess::play( chs_move tarMove ){
     return this->play( tarMove.pt_a.first, tarMove.pt_a.second, 
         tarMove.pt_b.first, tarMove.pt_b.second );
-}
-
-
-bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
-    unsigned int i_aft, unsigned int j_aft )
-{
-    bool play_sucess = false;
-    play_sucess = this->play( i_bef, j_bef, i_aft, j_aft );
-
-    // Check if the play induces an endgame state.
-    this->upd_end_game_state();
-
-    return play_sucess;
 }
 
 bool chess::play( unsigned int i_bef, unsigned int j_bef, 
@@ -552,7 +539,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     this->turn_cnt++;
     // Update all states of the game.
     try{
-        this->upd_all();
+        this->upd_post_play();
     }catch( runtime_error e ){
         string tmp = e.what();
         string expect_msg = "Black and white kings both in check.";
@@ -600,6 +587,20 @@ bool chess::ply( chs_move tarMove ){
         tarMove.pt_b.first, tarMove.pt_b.second );
 }
 
+
+bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
+    unsigned int i_aft, unsigned int j_aft )
+{
+    bool play_success = false;
+    play_success = this->play( i_bef, j_bef, i_aft, j_aft );
+
+    // Check if the play induces an endgame state.
+    if( play_success ){
+        this->upd_end_game_state();
+    }
+
+    return play_success;
+}
 
 /*
 - Check if the coordinates are within board limits.
@@ -1859,7 +1860,7 @@ bool chess::is_check_mate(){
 }
 
 
-void chess::upd_all(){
+void chess::upd_post_play(){
     
     this->upd_atk_lists();
 
@@ -1876,6 +1877,7 @@ void chess::upd_end_game_state(){
         }else{
             this->state = CHS_STATE::BWIN;
         }
+        return;
     }
 
 }

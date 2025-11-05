@@ -1722,6 +1722,8 @@ void tests::chess_full_game_tests(){
     test_bool = test_bool && myGame.ply_ag_coord( 'a',3,'e',7 );
     tmp_state = myGame.getState();
     
+    test_bool = test_bool && ( tmp_state == chess::CHS_STATE::WWIN );
+
     chess::chs_piece empty_piece;
     // Define the end game piece list.
     chess endGame;

@@ -595,7 +595,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     /**
      * Update all state related variables.
      */
-    void upd_all();
+    void upd_post_play();
     
     
 
