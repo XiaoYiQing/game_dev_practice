@@ -359,30 +359,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     bool play( chs_move tarMove );
 
-    
-
-    /* TODO: play is currently the true full function which determines if a move 
-        or attack is valid. The other all possible move and attack functions are not 
-        able to determine a very specific gap in their logic. If a king blocks 
-        the path of attack of an enemy piece, the blocked squares would be deemed
-        as safe for the king to move to with the current play validity logic. Of
-        course, this isn't true since if the king moves then he would still be
-        in check.
-        
-        This is not a fatal problem per see, as the play function specifically checks
-        the final play validity condition where a king in check must be no longer in
-        check after the play.
-        However, if you deem this rather vulnerable safeguard to be insufficient, find
-        a way to improve the move and attack validity functions to close this gap in 
-        logic.
-    */
-    /*
-    TODO: play is doing more than it should. This function should concentrate on 
-    performing the actual play, and let the "ply" function handle the state management.
-
-    To be clear to do so, you need to make sure the move and attack validity functions 
-    handle the above said gap in logic.
-    */
 
     /**
      * \brief Play a chess piece with the specified beginning and ending square coordinates.
@@ -410,7 +386,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  This is because this function is used to determine if there is any valid plays
      *  before a checkmate or draw is declared, so the checkmate and draw updates cannot 
      *  be included in the function (Endless loop). Please use the designated function 
-     *  for an endgame check following use the play function.
+     *  for an endgame check following the use of this function.
      * 
      * \param i_bef Row index of the starting position.
      * \param j_bef Column index of the starting position.
@@ -578,6 +554,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return Boolean indicating whether the game has reached a checkmate.
      */
     bool is_check_mate();
+    
+    /**
+     * \brief Check whether the game is in the draw state.
+     * 
+     */
+    bool is_draw();
 
     /**
      * Update the game's attack list.
@@ -701,6 +683,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return The target piece at the coordinate.
      */
     chs_piece get_piece_at( unsigned int i, unsigned int j ) const;
+    /**
+     * Obtain the chess piece at the target coordinate.
+     * 
+     * \param ij The 2D coordinate pair (<row idx, col idx>).
+     * \return The target piece at the coordinate.
+     */
+    chs_piece get_piece_at( pair<int,int> ij ) const;
     
     /**
      * \return Current game state turn count.

@@ -1721,8 +1721,6 @@ void tests::chess_checkmate_tests(){
     myGame.set_piece_at( 7, 4, chess::chs_piece( 
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
 
-    myGame.printBoard();
-
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
     test_bool = test_bool && myGame.ply( 1, 0, 0, 0 );
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );

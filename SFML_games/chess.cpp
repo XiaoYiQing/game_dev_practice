@@ -1862,6 +1862,169 @@ bool chess::is_check_mate(){
 }
 
 
+bool chess::is_draw(){
+
+    // [0] King, [1] Queen, [2] rook, [3] bishop, [4] knight, [5] pawn.
+
+    // Create vector of numerical count.
+    vector<unsigned int> B_pce_cnt = vector<unsigned int>(6,0);
+    vector<unsigned int> W_pce_cnt = vector<unsigned int>(6,0);
+    vector<unsigned int> total_pce_cnt = vector<unsigned int>(6,0);
+
+    // Initialize piece variable.
+    chs_piece pce_z;
+
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current piece.
+        pce_z = this->get_piece_at( chess::ind2sub(z) );
+        switch( pce_z.type ){
+        
+        case CHS_PIECE_TYPE::KING:
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+                W_pce_cnt[0]++;
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+                B_pce_cnt[0]++;
+            }
+            break;
+        
+        case CHS_PIECE_TYPE::QUEEN:
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+                W_pce_cnt[1]++;
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+                B_pce_cnt[1]++;
+            }
+            break;
+
+        case CHS_PIECE_TYPE::ROOK:
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+                W_pce_cnt[2]++;
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+                B_pce_cnt[2]++;
+            }
+            break;
+
+        case CHS_PIECE_TYPE::BISHOP:
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+                W_pce_cnt[3]++;
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+                B_pce_cnt[3]++;
+            }
+            break;
+
+        case CHS_PIECE_TYPE::KNIGHT:
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+                W_pce_cnt[4]++;
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+                B_pce_cnt[4]++;
+            }
+            break;
+
+        case CHS_PIECE_TYPE::PAWN:
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+                W_pce_cnt[5]++;
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+                B_pce_cnt[5]++;
+            }
+            break;
+
+        default:
+        
+            break;
+
+        };
+
+    }
+
+    // [0] King, [1] Queen, [2] rook, [3] bishop, [4] knight, [5] pawn.
+    for( unsigned int z = 0; z < W_pce_cnt.size(); z++ ){
+        total_pce_cnt[z] = B_pce_cnt[z] + W_pce_cnt[z];
+    }
+    
+    // Initialize return variable.
+    bool is_draw = true;
+
+    is_draw = is_draw && ( total_pce_cnt[1] == 0 );
+    is_draw = is_draw && ( total_pce_cnt[2] == 0 );
+    is_draw = is_draw && ( total_pce_cnt[5] == 0 );
+    // If any pawn, rook or queen, no draw.
+    if( !is_draw ){
+        return is_draw;
+    }
+
+    is_draw = is_draw && ( B_pce_cnt[3] <= 1 );
+    is_draw = is_draw && ( B_pce_cnt[4] <= 1 );
+
+    bool B_insuf = true;
+    bool W_insuf = true;
+
+    // No knight.
+    if( B_pce_cnt[4] == 0 ){
+        
+        // 1 bishop only.
+        if( B_pce_cnt[3] <= 1 ){
+            B_insuf = true;
+        // 2 or more bishop only.
+        }else{
+            /*
+            TODO: In actuality, there is ONE edge case. If all bishops are on 
+            the same color spot, we still have insufficient material no matter 
+            the number of bishops.
+            */
+            B_insuf = false;
+        }
+
+    // One knight and at least one bishop is sufficient.
+    }else if( B_pce_cnt[4] == 1 ){
+
+        if( B_pce_cnt[3] == 0 ){
+            B_insuf = true;
+        }else{
+            B_insuf = false;
+        }
+    
+    // At least two knight is sufficient.
+    }else{
+        B_insuf = false;
+    }
+
+    // No knight.
+    if( W_pce_cnt[4] == 0 ){
+        
+        // 1 bishop only.
+        if( W_pce_cnt[3] <= 1 ){
+            W_insuf = true;
+        // 2 or more bishop only.
+        }else{
+            /*
+            TODO: In actuality, there is ONE edge case. If all bishops are on 
+            the same color spot, we still have insufficient material no matter 
+            the number of bishops.
+            */
+            W_insuf = false;
+        }
+
+    // One knight and at least one bishop is sufficient.
+    }else if( W_pce_cnt[4] == 1 ){
+
+        if( W_pce_cnt[3] == 0 ){
+            W_insuf = true;
+        }else{
+            W_insuf = false;
+        }
+    
+    // At least two knight is sufficient.
+    }else{
+        W_insuf = false;
+    }
+
+    // Tally the bishop + knight material insufficiency.
+    is_draw = B_insuf && W_insuf;
+    return is_draw;
+
+}
+
+
 void chess::upd_post_play(){
     
     this->upd_atk_lists();
@@ -1891,6 +2054,8 @@ void chess::upd_end_game_state(){
         }
         return;
     }
+
+
 
 }
 
@@ -2001,6 +2166,9 @@ chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ) const{
         throw out_of_range( "get_piece_at: the specified coordinate is out of bound." );
     }
     return this->CHS_board[i][j];
+}
+chess::chs_piece chess::get_piece_at( pair<int,int> ij ) const{
+    return this->get_piece_at( ij.first, ij.second );
 }
 
 unsigned int chess::getTurn_cnt() const
