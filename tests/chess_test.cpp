@@ -1738,6 +1738,159 @@ void tests::chess_checkmate_tests(){
 }
 
 
+void tests::chess_draw_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    myGame.setVerbose(true);
+
+// ---------------------------------------------------------------------- >>>>>
+//      King vs King
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 0, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    test_bool == test_bool && myGame.is_draw();
+
+    if( test_bool ){
+        cout << "Chess draw kings only case test: passed!" << endl;
+    }else{
+        cout << "Chess draw kings only case test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      King vs King + 1 Pawn
+// ---------------------------------------------------------------------- >>>>>
+    
+    test_bool = true;
+
+    myGame.set_piece_at( 1, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    test_bool == test_bool && !myGame.is_draw();
+    
+    if( test_bool ){
+        cout << "Chess draw kings + 1 pawn case test: passed!" << endl;
+    }else{
+        cout << "Chess draw kings + 1 pawn case test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      King vs King + 1 Queen
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 0, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    test_bool == test_bool && !myGame.is_draw();
+    
+    if( test_bool ){
+        cout << "Chess draw kings + 1 queen case test: passed!" << endl;
+    }else{
+        cout << "Chess draw kings + 1 queen case test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      King vs King + 1 Knight
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    
+    myGame.set_piece_at( 0, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 1, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    
+    test_bool == test_bool && myGame.is_draw();
+
+    if( test_bool ){
+        cout << "Chess draw kings + 1 knight case test: passed!" << endl;
+    }else{
+        cout << "Chess draw kings + 1 knight case test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      King vs King + 1 Bishop
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    
+    myGame.set_piece_at( 0, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 0, 1, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    test_bool == test_bool && myGame.is_draw();
+
+    if( test_bool ){
+        cout << "Chess draw kings + 1 bishop case test: passed!" << endl;
+    }else{
+        cout << "Chess draw kings + 1 bishop case test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Stalemate 
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 0, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 6, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.printBoard();
+
+    test_bool == test_bool && myGame.is_draw();
+    myGame.setTurn_cnt(1);
+    test_bool == test_bool && !myGame.is_draw();
+
+    if( test_bool ){
+        cout << "Chess draw stalemate case test: passed!" << endl;
+    }else{
+        cout << "Chess draw stalemate case test: failed!" << endl;
+    }
+
+
+// ---------------------------------------------------------------------- <<<<<
+
+}
+
+
 void tests::chess_full_game_tests(){
 
     bool test_bool = true;

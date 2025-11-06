@@ -1864,8 +1864,38 @@ bool chess::is_check_mate(){
 
 bool chess::is_draw(){
 
-    // [0] King, [1] Queen, [2] rook, [3] bishop, [4] knight, [5] pawn.
+    // State and/or lock check. A draw cannot be declared if the game
+    // is not in an ongoing state or if is locked under some special
+    // conditions such as awaiting a pawn promotion.
+    if( this->promo_lock || this->state != CHS_STATE::ONGOING ){
+        return false;
+    }
 
+    // Initialize return variable.
+    bool is_draw = true;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Stalemate Check
+// ---------------------------------------------------------------------- >>>>>
+
+    bool no_valid_moves = false;
+    // If there is no move possible at all, stalemate.
+    no_valid_moves = this->get_all_valid_atks().size() == 0 && 
+        this->get_all_valid_moves().size() == 0;
+    if( no_valid_moves ){
+        if( verbose )
+            cout << "Stalemate!!" << endl;
+        return true;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Material Insufficiency Check
+// ---------------------------------------------------------------------- >>>>>
+
+    // [0] King, [1] Queen, [2] rook, [3] bishop, [4] knight, [5] pawn.
     // Create vector of numerical count.
     vector<unsigned int> B_pce_cnt = vector<unsigned int>(6,0);
     vector<unsigned int> W_pce_cnt = vector<unsigned int>(6,0);
@@ -1940,9 +1970,7 @@ bool chess::is_draw(){
     for( unsigned int z = 0; z < W_pce_cnt.size(); z++ ){
         total_pce_cnt[z] = B_pce_cnt[z] + W_pce_cnt[z];
     }
-    
-    // Initialize return variable.
-    bool is_draw = true;
+
 
     is_draw = is_draw && ( total_pce_cnt[1] == 0 );
     is_draw = is_draw && ( total_pce_cnt[2] == 0 );
@@ -2020,6 +2048,12 @@ bool chess::is_draw(){
 
     // Tally the bishop + knight material insufficiency.
     is_draw = B_insuf && W_insuf;
+    if( !is_draw ){
+        return is_draw;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+    
     return is_draw;
 
 }

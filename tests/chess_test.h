@@ -32,6 +32,8 @@ namespace tests{
 
     void chess_checkmate_tests();
 
+    void chess_draw_tests();
+
     void chess_full_game_tests();
 
     
