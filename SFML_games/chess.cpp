@@ -362,6 +362,8 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
     }
 
     this->promo_lock = false;
+    // Update all states in the game.
+    this->upd_all();
 
     return true;
 

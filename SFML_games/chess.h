@@ -595,6 +595,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void upd_mid_game_state();
     
+    // TODO: write the draw state detection.
     /**
      * Check if any end game states have been reached.
      * 

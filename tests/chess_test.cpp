@@ -1662,6 +1662,81 @@ void tests::chess_checkmate_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Black Checkmate by Promotion
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 6, 5, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 6, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 7, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 6, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 6, 0, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 4, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    test_bool = test_bool && myGame.ply( 6, 0, 7, 0 );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    test_bool = test_bool && myGame.promote( 0, chess::CHS_PIECE_TYPE::QUEEN );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::WWIN );
+
+    if( test_bool ){
+        cout << "Chess black checkmate through promo tests: passed!" << endl;
+    }else{
+        cout << "Chess black checkmate through promo tests: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Black Checkmate by Promotion
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(1);
+
+    myGame.set_piece_at( 1, 5, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 6, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 7, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 6, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at( 1, 0, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.printBoard();
+
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    test_bool = test_bool && myGame.ply( 1, 0, 0, 0 );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    test_bool = test_bool && myGame.promote( 0, chess::CHS_PIECE_TYPE::QUEEN );
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::BWIN );
+
+    if( test_bool ){
+        cout << "Chess white checkmate through promo tests: passed!" << endl;
+    }else{
+        cout << "Chess white checkmate through promo tests: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 
