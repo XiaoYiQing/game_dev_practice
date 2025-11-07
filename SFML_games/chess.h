@@ -618,6 +618,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 // ====================================================================== >>>>>
     
     /**
+     * The algebraic command that is to be translated into class dedicated command.
+     */
+    chs_move alg_comm_to_move( string alg_comm );
+
+    /**
      * \brief Convert 2D indexing to 1D.
      * 
      * Linear indexing uses column index as lower order term. 

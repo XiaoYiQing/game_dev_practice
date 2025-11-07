@@ -109,7 +109,7 @@ void chess::chs_piece::printPiece() const{
     case CHS_PIECE_TYPE::PAWN:
         type_char = 'p';   break;
     case CHS_PIECE_TYPE::KNIGHT:
-        type_char = 'k';   break;
+        type_char = 'n';   break;
     case CHS_PIECE_TYPE::BISHOP:
         type_char = 'b';   break;
     case CHS_PIECE_TYPE::ROOK:
@@ -117,7 +117,7 @@ void chess::chs_piece::printPiece() const{
     case CHS_PIECE_TYPE::QUEEN:
         type_char = 'q';   break;
     case CHS_PIECE_TYPE::KING:
-        type_char = 'K';   break;
+        type_char = 'k';   break;
     default:
         throw runtime_error("Unrecognized chess piece type enum.");
     }
@@ -2166,6 +2166,16 @@ void chess::printBoard_ag_coord() const{
 // ====================================================================== >>>>>
 //      Access Function
 // ====================================================================== >>>>>
+
+chess::chs_move chess::alg_comm_to_move( string alg_comm ){
+    
+    if( (int)( alg_comm.at(0) - 'A' ) < 26 ){
+
+    }else{
+
+    }
+
+}
 
 int chess::sub2ind( int i, int j ){
     return ( i*BOARDWIDTH + j );
