@@ -208,6 +208,19 @@ void tests::chess_chs_move_tests(){
 }
 
 
+void tests::chess_alg_coord_trans_tests(){
+    
+    chess myGame;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    
+    myGame.alg_comm_to_move( "Qd4e5" );
+
+}
+
+
 void tests::chess_game_manip_tests(){
 
     // Test boolean init.

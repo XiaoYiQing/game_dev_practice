@@ -11,6 +11,8 @@ namespace tests{
 
     void chess_chs_move_tests();
 
+    void chess_alg_coord_trans_tests();
+
     void chess_game_manip_tests();
 
     void chess_move_tests();

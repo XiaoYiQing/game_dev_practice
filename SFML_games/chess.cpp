@@ -2167,14 +2167,81 @@ void chess::printBoard_ag_coord() const{
 //      Access Function
 // ====================================================================== >>>>>
 
+// n - 1, c - 'a'
+
+pair<int,int> chess::alg_to_cart( pair<char,int> alg_coord ){
+    return pair<int,int>( alg_coord.first - 1, alg_coord.second - 'a' );
+}
+
+pair<char,int> chess::cart_to_alg( pair<int,int> cart_coord ){
+    return pair<char,int>( (char)( 'a' + cart_coord.first ), cart_coord.second + 1 );
+}
+
 chess::chs_move chess::alg_comm_to_move( string alg_comm ){
     
-    if( (int)( alg_comm.at(0) - 'A' ) < 26 ){
+    chs_move ret_move;
 
-    }else{
+    CHS_PIECE_TYPE pce_type;
 
+    // A flag indicating whether the game is in check ('+') or checkmate state ('#').
+    char check_flag = ' ';
+
+    // Take out last character is it is the check status flag.
+    if( !std::isalnum( alg_comm[ alg_comm.size() - 1 ] ) ){
+        check_flag = alg_comm[ alg_comm.size() - 1 ];
+        alg_comm = alg_comm.substr( 0, alg_comm.size() - 1 );
     }
 
+    // If the first letter is uppercase, non-pawn.
+    if( (int)( alg_comm.at(0) - 'A' ) < 26 ){
+        
+        switch( alg_comm.at(0) ){
+        case( 'B' ):
+            pce_type = CHS_PIECE_TYPE::BISHOP;
+            break;
+        case( 'N' ):
+            pce_type = CHS_PIECE_TYPE::KNIGHT;
+            break;
+        case( 'Q' ):
+            pce_type = CHS_PIECE_TYPE::QUEEN;
+            break;
+        case( 'K' ):
+            pce_type = CHS_PIECE_TYPE::KING;
+            break;
+        default:
+            throw invalid_argument( "First char is an invalid uppercase letter." );
+            break;
+        };
+
+        // Take out the first char.
+        alg_comm = alg_comm.substr( 1, alg_comm.size() );
+
+    // If the first letter is not uppercase, pawn.
+    }else{
+        pce_type = CHS_PIECE_TYPE::PAWN;
+    }
+
+    // Flag indicating whether the play is an attack or no.
+    bool is_atk = false;
+    // Initialize the string algebraic coordinates.
+    string bef_coord = "";
+    string aft_coord = "";
+
+    for( unsigned int z = 0; z < alg_comm.size(); z++ ){
+        if( alg_comm[z] == 'x' ){
+            is_atk = true;
+            bef_coord = alg_comm.substr( 0, z );
+            aft_coord = alg_comm.substr( z + 1, alg_comm.size() - z - 1 );
+        }
+    }
+    if( !is_atk ){
+        aft_coord = alg_comm.substr( alg_comm.size() - 2, 2 );
+        bef_coord = alg_comm.substr( 0, alg_comm.size() - 2 );
+    }
+
+    
+
+    int lol = 0;
 }
 
 int chess::sub2ind( int i, int j ){

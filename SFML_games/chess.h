@@ -7,6 +7,7 @@
 #include <iostream>
 #include <magic_enum.hpp>
 #include <mutex>
+#include <regex>
 #include <stack>
 #include <string>
 #include <vector>
@@ -617,6 +618,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      Access Function
 // ====================================================================== >>>>>
     
+    pair<int,int> alg_to_cart( pair<char,int> );
+    pair<char,int> cart_to_alg( pair<int,int> );
+
     /**
      * The algebraic command that is to be translated into class dedicated command.
      */
