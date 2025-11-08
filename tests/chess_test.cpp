@@ -210,13 +210,60 @@ void tests::chess_chs_move_tests(){
 
 void tests::chess_alg_coord_trans_tests(){
     
+    bool test_bool = true;
     chess myGame;
     myGame.clearBoard();
 
+// ---------------------------------------------------------------------- >>>>>
+//      Standard Test 1
+// ---------------------------------------------------------------------- >>>>>
+
+    // Add first piece to play.
     myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
         chess::CHS_PIECE_COLOR::WHITE ) );
     
-    myGame.alg_comm_to_move( "Qd4e5" );
+    chess::chs_move play1; 
+    play1 = myGame.alg_comm_to_move( "Qd4f6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    play1 = myGame.alg_comm_to_move( "Q4f6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    play1 = myGame.alg_comm_to_move( "Qdf6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    play1 = myGame.alg_comm_to_move( "Qf6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+
+    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    play1 = myGame.alg_comm_to_move( "Qd4f6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    // Try abbreviate alg coord with only rank when two white queens on same rank.
+    try{
+        play1 = myGame.alg_comm_to_move( "Q4f6" );
+        test_bool = false;
+    }catch( runtime_error e ){
+        // Success!!
+    }catch(...){
+        test_bool = false;
+    }
+    play1 = myGame.alg_comm_to_move( "Qdf6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    // Try abbreviate alg coord with no starting coord when two white queens are on the board.
+    try{
+        play1 = myGame.alg_comm_to_move( "Qf6" );
+        test_bool = false;
+    }catch( runtime_error e ){
+        // Success!!
+    }catch(...){
+        test_bool = false;
+    }
+
+    if( test_bool ){
+        cout << "chess alg_comm_to_move standard test 1: passed!" << endl;
+    }else{
+        cout << "chess alg_comm_to_move standard test 1: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
 

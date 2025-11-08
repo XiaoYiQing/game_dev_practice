@@ -226,6 +226,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
         public:
 
+        bool operator==(const chs_move& other) const;
+
         // Base constructor.
         chs_move();
         /**
@@ -439,6 +441,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft ) const;
+
+    bool is_move_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const;
     
     /**
      * \brief Determine if the specified attack is valid.
@@ -456,6 +460,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft  ) const;
+
+    bool is_atk_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const;
     
 // ====================================================================== <<<<<
 
@@ -619,7 +625,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 // ====================================================================== >>>>>
     
     pair<int,int> alg_to_cart( pair<char,int> );
+    pair<int,int> alg_to_cart( char file, int rank );
     pair<char,int> cart_to_alg( pair<int,int> );
+    pair<char,int> cart_to_alg( int row_idx, int col_idx );
 
     /**
      * The algebraic command that is to be translated into class dedicated command.
