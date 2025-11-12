@@ -444,6 +444,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     bool is_move_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const;
     
+    bool is_move_valid( chs_move tarMov ) const;
+
     /**
      * \brief Determine if the specified attack is valid.
      * 

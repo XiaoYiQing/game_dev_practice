@@ -618,6 +618,10 @@ bool chess::is_move_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) co
         coord_aft.first, coord_aft.second );
 }
 
+bool chess::is_move_valid( chs_move tarMov ) const{
+    return this->is_move_valid( tarMov.pt_a, tarMov.pt_b );
+}
+
 /*
 - Check if the coordinates are within board limits.
 - Check if the move is trivial (0 move).
@@ -2213,6 +2217,53 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
     // A flag indicating whether the game is in check ('+') or checkmate state ('#').
     char check_flag = ' ';
 
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Special Command Parse
+// ---------------------------------------------------------------------- >>>>>
+
+    if( alg_comm == "O-O" ){
+
+        unsigned int row_idx = 0;
+        if( this->is_white_turn() ){
+            unsigned int row_idx = 0;
+        }else{
+            unsigned int row_idx = BOARDHEIGHT - 1;
+        }
+
+        if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
+            chs_move castle_mov( row_idx, 4, row_idx, 6 );
+            if( this->is_move_valid( castle_mov ) ){
+                return castle_mov;
+            }
+        }
+        throw runtime_error( "Caslting move currently not valid." );
+
+    }else if( alg_comm == "O-O-O" ){
+
+        unsigned int row_idx = 0;
+        if( this->is_white_turn() ){
+            unsigned int row_idx = 0;
+        }else{
+            unsigned int row_idx = BOARDHEIGHT - 1;
+        }
+
+        if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
+            chs_move castle_mov( row_idx, 4, row_idx, 2 );
+            if( this->is_move_valid( castle_mov ) ){
+                return castle_mov;
+            }
+        }
+        throw runtime_error( "Caslting move currently not valid." );
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Check Status Flag Parse (Last Char(s))
+// ---------------------------------------------------------------------- >>>>>
+
     // Take out last character is it is the check status flag.
     if( !std::isalnum( alg_comm[ alg_comm.size() - 1 ] ) ){
         if( alg_comm[ alg_comm.size() - 1 ] == '+' || alg_comm[ alg_comm.size() - 1 ] == '#' ){
@@ -2220,6 +2271,13 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
             alg_comm = alg_comm.substr( 0, alg_comm.size() - 1 );
         }
     }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Piece Type Flag Parse (First char)
+// ---------------------------------------------------------------------- >>>>>
 
     // If the first letter is uppercase, non-pawn.
     if( (int)( alg_comm.at(0) - 'A' ) < 26 ){
@@ -2250,6 +2308,13 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
         pce_type = CHS_PIECE_TYPE::PAWN;
     }
 
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Attack Flag Parse (Mid 'x' symbol)
+// ---------------------------------------------------------------------- >>>>>
+
     // Flag indicating whether the play is an attack or no.
     bool is_atk = false;
     // Initialize the string algebraic coordinates.
@@ -2268,6 +2333,13 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
         aft_coord_str = alg_comm.substr( alg_comm.size() - 2, 2 );
         bef_coord_str = alg_comm.substr( 0, alg_comm.size() - 2 );
     }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Start and End Coordinates Parse
+// ---------------------------------------------------------------------- >>>>>
 
     // Initialize the final coordinates.
     pair<int,int> aft_coord(-1,-1);
@@ -2365,7 +2437,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
 
     // Case when the before coordinate is omitted.
     }else if( bef_coord_str.size() == 0 ){
-        
+
         int fnd_cnt = 0;
         for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
             pair<int,int> coord_z = chess::ind2sub(z);
@@ -2398,6 +2470,9 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
     }else{
         throw invalid_argument( "Invalid algebraic play notation." );
     }
+
+// ---------------------------------------------------------------------- <<<<<
+
 
     ret_move.pt_a = bef_coord;
     ret_move.pt_b = aft_coord;
