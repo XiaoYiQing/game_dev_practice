@@ -2218,10 +2218,27 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
     char check_flag = ' ';
 
 // ---------------------------------------------------------------------- >>>>>
+//      Resign Special Command Parse
+// ---------------------------------------------------------------------- >>>>>
+
+    // White won by black resignation!
+    if( alg_comm == "1-0" ){
+        return ret_move;
+    // Black won by white resignation!
+    }else if( alg_comm == "0-1" ){
+        return ret_move;
+    // Draw by mutual agreement.
+    }else if( alg_comm == "½-½" ){
+        return ret_move;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
 //      Castling Special Command Parse
 // ---------------------------------------------------------------------- >>>>>
 
-    if( alg_comm == "O-O" ){
+    if( alg_comm == "O-O" || alg_comm == "0-0" ){
 
         unsigned int row_idx = 0;
         if( this->is_white_turn() ){
@@ -2238,7 +2255,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
         }
         throw runtime_error( "Caslting move currently not valid." );
 
-    }else if( alg_comm == "O-O-O" ){
+    }else if( alg_comm == "O-O-O" || alg_comm == "0-0-0" ){
 
         unsigned int row_idx = 0;
         if( this->is_white_turn() ){

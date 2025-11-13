@@ -337,70 +337,104 @@ void tests::chess_alg_coord_trans_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Full Game Test
+//      Full Game Test (Deep Blue V.S. Kasparov Game 1, 1996 )
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
     myGame.resetBoard();
+    // myGame.setVerbose(true);
 
     vector<string> mov_strs(0);
     // Turns 1 - 10
-    mov_strs.push_back( "e4" );     mov_strs.push_back( "c6" );
-    mov_strs.push_back( "d4" );     mov_strs.push_back( "d5" );
-    mov_strs.push_back( "Nc3" );    mov_strs.push_back( "dxe4" );
-    mov_strs.push_back( "Nxe4" );   mov_strs.push_back( "Nd7" );
-    mov_strs.push_back( "Ng5" );    mov_strs.push_back( "Ngf6" );
-    mov_strs.push_back( "Bd3" );    mov_strs.push_back( "e6" );
-    mov_strs.push_back( "N1f3" );   mov_strs.push_back( "h6" );
-    mov_strs.push_back( "Nxe6" );   mov_strs.push_back( "Qe7" );
-    mov_strs.push_back( "O-O" );    mov_strs.push_back( "fxe6" );
-    mov_strs.push_back( "Bg6+" );   mov_strs.push_back( "Kd8" );
-    // Turns 11 - 20
-    mov_strs.push_back( "Re1" );     mov_strs.push_back( "b5" );
-    mov_strs.push_back( "a4" );     mov_strs.push_back( "Bb7" );
-    mov_strs.push_back( "Bf4" );    mov_strs.push_back( "Kc8" );
-    mov_strs.push_back( "Rxe6" );   mov_strs.push_back( "Qxe6" );
-    mov_strs.push_back( "axb5" );    mov_strs.push_back( "cxb5" );
-    mov_strs.push_back( "Qd3" );    mov_strs.push_back( "Qc4" );
-    mov_strs.push_back( "Qe3" );   mov_strs.push_back( "Bb4" );
-    mov_strs.push_back( "Ne5" );   mov_strs.push_back( "Nxe5" );
-    mov_strs.push_back( "Bf5+" );    mov_strs.push_back( "Ned7" );
-    mov_strs.push_back( "Qe5" );   mov_strs.push_back( "Re8" );
-    // Turn 21 - 30
-    mov_strs.push_back( "Qxe8+" );     mov_strs.push_back( "Nxe8" );
-    mov_strs.push_back( "c3" );     mov_strs.push_back( "Qd5" );
-    mov_strs.push_back( "Bh3" );    mov_strs.push_back( "Bd6" );
-    mov_strs.push_back( "Re1" );   mov_strs.push_back( "Bxf4" );
-    mov_strs.push_back( "Rxe8+" );    mov_strs.push_back( "Kc7" );
-    mov_strs.push_back( "c4" );    mov_strs.push_back( "bxc4" );
-    mov_strs.push_back( "Re7" );   mov_strs.push_back( "Rd8" );
-    mov_strs.push_back( "Rxd7+" );   mov_strs.push_back( "Rxd7" );
-    mov_strs.push_back( "Bxd7" );    mov_strs.push_back( "Kxd7" );
-    mov_strs.push_back( "f3" );   mov_strs.push_back( "Qxd4+" );
-    // Turn 31 - 39
-    mov_strs.push_back( "Kf1" );     mov_strs.push_back( "Qd3+" );
-    mov_strs.push_back( "Kf2" );     mov_strs.push_back( "Qe3+" );
-    mov_strs.push_back( "Kf1" );    mov_strs.push_back( "Ba6" );
-    mov_strs.push_back( "g3" );   mov_strs.push_back( "c3+" );
-    mov_strs.push_back( "Kg2" );    mov_strs.push_back( "Qe2+" );
-    mov_strs.push_back( "Kh3" );    mov_strs.push_back( "cxb2" );
-    mov_strs.push_back( "gxf4" );   mov_strs.push_back( "b1Q" );
-    
-    // mov_strs.push_back( "Kg4" );   mov_strs.push_back( "Qe7" );
-    // mov_strs.push_back( "Kh4" );    mov_strs.push_back( "fxe6" );
+    mov_strs.push_back( "e4" );     mov_strs.push_back( "c5" );
+    mov_strs.push_back( "c3" );     mov_strs.push_back( "d5" );
+    mov_strs.push_back( "exd5" );    mov_strs.push_back( "Qxd5" );
+    mov_strs.push_back( "d4" );   mov_strs.push_back( "Nf6" );
+    mov_strs.push_back( "Nf3" );    mov_strs.push_back( "Bg4" );
+    mov_strs.push_back( "Be2" );    mov_strs.push_back( "e6" );
+    mov_strs.push_back( "h3" );   mov_strs.push_back( "Bh5" );
+    mov_strs.push_back( "O-O" );   mov_strs.push_back( "Nc6" );
+    mov_strs.push_back( "Be3" );    mov_strs.push_back( "cxd4" );
+    mov_strs.push_back( "cxd4" );   mov_strs.push_back( "Bb4" );
+    // // Turns 11 - 20
+    mov_strs.push_back( "a3" );     mov_strs.push_back( "Ba5" );
+    mov_strs.push_back( "Nc3" );     mov_strs.push_back( "Qd6" );
+    mov_strs.push_back( "Nb5" );    mov_strs.push_back( "Qe7" );
+    mov_strs.push_back( "Ne5" );   mov_strs.push_back( "Bxe2" );
+    mov_strs.push_back( "Qxe2" );    mov_strs.push_back( "O-O" );
+    mov_strs.push_back( "Rac1" );    mov_strs.push_back( "Rac8" );
+    mov_strs.push_back( "Bg5" );   mov_strs.push_back( "Bb6" );
+    mov_strs.push_back( "Bxf6" );   mov_strs.push_back( "gxf6" );
+    mov_strs.push_back( "Nc4" );    mov_strs.push_back( "Rfd8" );
+    mov_strs.push_back( "Nxb6" );   mov_strs.push_back( "axb6" );
+    // // Turn 21 - 30
+    mov_strs.push_back( "Rfd1" );     mov_strs.push_back( "f5" );
+    mov_strs.push_back( "Qe3" );     mov_strs.push_back( "Qf6" );
+    mov_strs.push_back( "d5" );    mov_strs.push_back( "Rxd5" );
+    mov_strs.push_back( "Rxd5" );   mov_strs.push_back( "exd5" );
+    mov_strs.push_back( "b3" );    mov_strs.push_back( "Kh8" );
+    mov_strs.push_back( "Qxb6" );    mov_strs.push_back( "Rg8" );
+    mov_strs.push_back( "Qc5" );   mov_strs.push_back( "d4" );
+    mov_strs.push_back( "Nd6" );   mov_strs.push_back( "f4" );
+    mov_strs.push_back( "Nxb7" );    mov_strs.push_back( "Ne5" );
+    mov_strs.push_back( "Qd5" );   mov_strs.push_back( "f3" );
+    // // Turn 31 - 39
+    mov_strs.push_back( "g3" );     mov_strs.push_back( "Nd3" );
+    mov_strs.push_back( "Rc7" );     mov_strs.push_back( "Re8" );
+    mov_strs.push_back( "Nd6" );     mov_strs.push_back( "Re1+" );
+    mov_strs.push_back( "Kh2" );     mov_strs.push_back( "Nxf2" );
+    mov_strs.push_back( "Nxf7+" );     mov_strs.push_back( "Kg7" );
+    mov_strs.push_back( "Ng5+" );     mov_strs.push_back( "Kh6" );
+    mov_strs.push_back( "Rxh7+" );     // mov_strs.push_back( "1-0" );
 
     for( string str_z : mov_strs ){
         play2 = myGame.alg_comm_to_move( str_z );
-        if( str_z == "b1Q" ){
-            test_bool = test_bool && myGame.getPromo_lock();
-        }
         myGame.ply( play2 );
     }
+
+    // Define the end game piece list.
+    chess endGame;
+    endGame.clearBoard();
+
+    endGame.set_piece_at_ag_coord( 'e', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'f', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'h', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'a', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'b', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'f', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'g', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'h', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'd', 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'd', 5, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'g', 5, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'f', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'h', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'h', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
     
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        test_bool = test_bool && ( myGame.get_piece_at( chess::ind2sub(z) ) == 
+            endGame.get_piece_at( chess::ind2sub(z) ) );
+    }
 
-    myGame.printBoard_ag_coord();
-
-    int loooool = 0;
+    if( test_bool ){
+        cout << "chess alg_comm_to_move full game playout test: passed!" << endl;
+    }else{
+        cout << "chess alg_comm_to_move full game playout test: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
