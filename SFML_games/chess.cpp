@@ -2225,9 +2225,9 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
 
         unsigned int row_idx = 0;
         if( this->is_white_turn() ){
-            unsigned int row_idx = 0;
+            row_idx = 0;
         }else{
-            unsigned int row_idx = BOARDHEIGHT - 1;
+            row_idx = BOARDHEIGHT - 1;
         }
 
         if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
@@ -2242,9 +2242,9 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
 
         unsigned int row_idx = 0;
         if( this->is_white_turn() ){
-            unsigned int row_idx = 0;
+            row_idx = 0;
         }else{
-            unsigned int row_idx = BOARDHEIGHT - 1;
+            row_idx = BOARDHEIGHT - 1;
         }
 
         if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
@@ -2253,7 +2253,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
                 return castle_mov;
             }
         }
-        throw runtime_error( "Caslting move currently not valid." );
+        throw runtime_error( "Castling move currently not valid." );
 
     }
 
@@ -2288,6 +2288,9 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
             break;
         case( 'N' ):
             pce_type = CHS_PIECE_TYPE::KNIGHT;
+            break;
+        case( 'R' ):
+            pce_type = CHS_PIECE_TYPE::ROOK;
             break;
         case( 'Q' ):
             pce_type = CHS_PIECE_TYPE::QUEEN;

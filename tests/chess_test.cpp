@@ -265,6 +265,140 @@ void tests::chess_alg_coord_trans_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // Add first piece to play.
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    chess::chs_move play2; 
+    // Attempt right castling.
+    play2 = myGame.alg_comm_to_move( "O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 0, 4, 0, 6 ) );
+
+    // Attempt left castling when there is no left rook.
+    try{
+        play2 = myGame.alg_comm_to_move( "O-O-O" );
+        test_bool = false;
+    }catch( const runtime_error e ){
+
+    }catch( ... ){
+        test_bool = false;
+    }
+
+    // Attempt left castling after left rook is inserted.
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    play2 = myGame.alg_comm_to_move( "O-O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 0, 4, 0, 2 ) );
+    
+    // Add black king and rook.
+    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    // Set turn to black.
+    myGame.setTurn_cnt( 1 );
+    // Attempt right castling.
+    play2 = myGame.alg_comm_to_move( "O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 7, 4, 7, 6 ) );
+
+    // Attempt left castling when there is no left rook.
+    try{
+        play2 = myGame.alg_comm_to_move( "O-O-O" );
+        test_bool = false;
+    }catch( const runtime_error e ){
+
+    }catch( ... ){
+        test_bool = false;
+    }
+    // Attempt left castling after left rook is inserted.
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    play2 = myGame.alg_comm_to_move( "O-O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 7, 4, 7, 2 ) );
+
+
+    if( test_bool ){
+        cout << "chess alg_comm_to_move castling: passed!" << endl;
+    }else{
+        cout << "chess alg_comm_to_move castling: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Full Game Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+
+    vector<string> mov_strs(0);
+    // Turns 1 - 10
+    mov_strs.push_back( "e4" );     mov_strs.push_back( "c6" );
+    mov_strs.push_back( "d4" );     mov_strs.push_back( "d5" );
+    mov_strs.push_back( "Nc3" );    mov_strs.push_back( "dxe4" );
+    mov_strs.push_back( "Nxe4" );   mov_strs.push_back( "Nd7" );
+    mov_strs.push_back( "Ng5" );    mov_strs.push_back( "Ngf6" );
+    mov_strs.push_back( "Bd3" );    mov_strs.push_back( "e6" );
+    mov_strs.push_back( "N1f3" );   mov_strs.push_back( "h6" );
+    mov_strs.push_back( "Nxe6" );   mov_strs.push_back( "Qe7" );
+    mov_strs.push_back( "O-O" );    mov_strs.push_back( "fxe6" );
+    mov_strs.push_back( "Bg6+" );   mov_strs.push_back( "Kd8" );
+    // Turns 11 - 20
+    mov_strs.push_back( "Re1" );     mov_strs.push_back( "b5" );
+    mov_strs.push_back( "a4" );     mov_strs.push_back( "Bb7" );
+    mov_strs.push_back( "Bf4" );    mov_strs.push_back( "Kc8" );
+    mov_strs.push_back( "Rxe6" );   mov_strs.push_back( "Qxe6" );
+    mov_strs.push_back( "axb5" );    mov_strs.push_back( "cxb5" );
+    mov_strs.push_back( "Qd3" );    mov_strs.push_back( "Qc4" );
+    mov_strs.push_back( "Qe3" );   mov_strs.push_back( "Bb4" );
+    mov_strs.push_back( "Ne5" );   mov_strs.push_back( "Nxe5" );
+    mov_strs.push_back( "Bf5+" );    mov_strs.push_back( "Ned7" );
+    mov_strs.push_back( "Qe5" );   mov_strs.push_back( "Re8" );
+    // Turn 21 - 30
+    mov_strs.push_back( "Qxe8+" );     mov_strs.push_back( "Nxe8" );
+    mov_strs.push_back( "c3" );     mov_strs.push_back( "Qd5" );
+    mov_strs.push_back( "Bh3" );    mov_strs.push_back( "Bd6" );
+    mov_strs.push_back( "Re1" );   mov_strs.push_back( "Bxf4" );
+    mov_strs.push_back( "Rxe8+" );    mov_strs.push_back( "Kc7" );
+    mov_strs.push_back( "c4" );    mov_strs.push_back( "bxc4" );
+    mov_strs.push_back( "Re7" );   mov_strs.push_back( "Rd8" );
+    mov_strs.push_back( "Rxd7+" );   mov_strs.push_back( "Rxd7" );
+    mov_strs.push_back( "Bxd7" );    mov_strs.push_back( "Kxd7" );
+    mov_strs.push_back( "f3" );   mov_strs.push_back( "Qxd4+" );
+    // Turn 31 - 39
+    mov_strs.push_back( "Kf1" );     mov_strs.push_back( "Qd3+" );
+    mov_strs.push_back( "Kf2" );     mov_strs.push_back( "Qe3+" );
+    mov_strs.push_back( "Kf1" );    mov_strs.push_back( "Ba6" );
+    mov_strs.push_back( "g3" );   mov_strs.push_back( "c3+" );
+    mov_strs.push_back( "Kg2" );    mov_strs.push_back( "Qe2+" );
+    mov_strs.push_back( "Kh3" );    mov_strs.push_back( "cxb2" );
+    mov_strs.push_back( "gxf4" );   mov_strs.push_back( "b1Q" );
+    // mov_strs.push_back( "Kg4" );   mov_strs.push_back( "Qe7" );
+    // mov_strs.push_back( "Kh4" );    mov_strs.push_back( "fxe6" );
+
+    for( string str_z : mov_strs ){
+        play2 = myGame.alg_comm_to_move( str_z );
+        myGame.ply( play2 );
+    }
+
+    myGame.printBoard_ag_coord();
+
+    int loooool = 0;
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 
