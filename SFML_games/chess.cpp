@@ -2280,7 +2280,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
 // ---------------------------------------------------------------------- >>>>>
 
     // If the first letter is uppercase, non-pawn.
-    if( (int)( alg_comm.at(0) - 'A' ) < 26 ){
+    if( (unsigned int)( alg_comm.at(0) - 'A' ) < 26 ){
         
         switch( alg_comm.at(0) ){
         case( 'B' ):
@@ -2308,7 +2308,27 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
 
     // If the first letter is not uppercase, pawn.
     }else{
+
         pce_type = CHS_PIECE_TYPE::PAWN;
+        /*
+        if( std::isalpha( alg_comm.at( alg_comm.size() - 1 ) ) &&
+            (unsigned int)( alg_comm.at( alg_comm.size() - 1 ) - 'A' ) < 26 )
+        */
+        if( (unsigned int)( alg_comm.at( alg_comm.size() - 1 ) - 'A' ) < 26 ){
+            switch( alg_comm.at( alg_comm.size() - 1 ) ){
+            case( 'B' ):
+            case( 'N' ):
+            case( 'R' ):
+            case( 'Q' ):
+            case( 'K' ):
+                alg_comm = alg_comm.substr( 0, alg_comm.size() - 1 );
+                break;
+            default:
+                throw invalid_argument( "Pawn promotion indicator is not a valid upper case letter." );
+                break;
+            }
+        }
+
     }
 
 // ---------------------------------------------------------------------- <<<<<

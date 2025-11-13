@@ -385,13 +385,18 @@ void tests::chess_alg_coord_trans_tests(){
     mov_strs.push_back( "Kg2" );    mov_strs.push_back( "Qe2+" );
     mov_strs.push_back( "Kh3" );    mov_strs.push_back( "cxb2" );
     mov_strs.push_back( "gxf4" );   mov_strs.push_back( "b1Q" );
+    
     // mov_strs.push_back( "Kg4" );   mov_strs.push_back( "Qe7" );
     // mov_strs.push_back( "Kh4" );    mov_strs.push_back( "fxe6" );
 
     for( string str_z : mov_strs ){
         play2 = myGame.alg_comm_to_move( str_z );
+        if( str_z == "b1Q" ){
+            test_bool = test_bool && myGame.getPromo_lock();
+        }
         myGame.ply( play2 );
     }
+    
 
     myGame.printBoard_ag_coord();
 
