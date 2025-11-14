@@ -595,15 +595,15 @@ bool chess::ply_ag_comm( string alg_comm ){
 
     // White won by black resignation!
     if( alg_comm == "1-0" ){
-        this->state == CHS_STATE::WWIN;
+        this->state = CHS_STATE::WWIN;
         return true;
     // Black won by white resignation!
     }else if( alg_comm == "0-1" ){
-        this->state == CHS_STATE::BWIN;
+        this->state = CHS_STATE::BWIN;
         return true;
     // Draw by mutual agreement.
     }else if( alg_comm == "½-½" ){
-        this->state == CHS_STATE::DRAW;
+        this->state = CHS_STATE::DRAW;
         return true;
     }
 
@@ -895,7 +895,18 @@ bool chess::ply_ag_comm( string alg_comm ){
         throw invalid_argument( "Invalid algebraic play notation." );
     }
 
-    return this->ply( chs_move( bef_coord, aft_coord ) );
+
+    bool res_bool = this->ply( chs_move( bef_coord, aft_coord ) );
+    // Perform pawn promotion, if specified correctly in the command.
+    if( promo_tar != CHS_PIECE_TYPE::NO_P && promo_tar != CHS_PIECE_TYPE::PAWN ){
+        if( pce_type == CHS_PIECE_TYPE::PAWN ){
+            this->promote( aft_coord.second, promo_tar );
+        }else{
+            throw runtime_error( "A pawn promotion is initialized even though the target of promotion isn't a pawn." );
+        }
+    }
+
+    return res_bool;
 // ---------------------------------------------------------------------- <<<<<
 
 }

@@ -342,7 +342,6 @@ void tests::chess_alg_coord_trans_tests(){
 
     test_bool = true;
     myGame.resetBoard();
-    // myGame.setVerbose(true);
 
     vector<string> mov_strs(0);
     // Turns 1 - 10
@@ -434,6 +433,73 @@ void tests::chess_alg_coord_trans_tests(){
         cout << "chess alg_comm_to_move full game playout test: passed!" << endl;
     }else{
         cout << "chess alg_comm_to_move full game playout test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Full Game Test with ply_ag_comm (Deep Blue V.S. Kasparov Game 1, 1996 )
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+
+    // Turns 1 - 10
+    myGame.ply_ag_comm( "e4" );     myGame.ply_ag_comm( "c5" );
+    myGame.ply_ag_comm( "c3" );     myGame.ply_ag_comm( "d5" );
+    myGame.ply_ag_comm( "exd5" );   myGame.ply_ag_comm( "Qxd5" );
+    myGame.ply_ag_comm( "d4" );     myGame.ply_ag_comm( "Nf6" );
+    myGame.ply_ag_comm( "Nf3" );    myGame.ply_ag_comm( "Bg4" );
+    myGame.ply_ag_comm( "Be2" );    myGame.ply_ag_comm( "e6" );
+    myGame.ply_ag_comm( "h3" );     myGame.ply_ag_comm( "Bh5" );
+    myGame.ply_ag_comm( "O-O" );    myGame.ply_ag_comm( "Nc6" );
+    myGame.ply_ag_comm( "Be3" );    myGame.ply_ag_comm( "cxd4" );
+    myGame.ply_ag_comm( "cxd4" );   myGame.ply_ag_comm( "Bb4" );
+    // Turns 11 - 20
+    myGame.ply_ag_comm( "a3" );     myGame.ply_ag_comm( "Ba5" );
+    myGame.ply_ag_comm( "Nc3" );    myGame.ply_ag_comm( "Qd6" );
+    myGame.ply_ag_comm( "Nb5" );    myGame.ply_ag_comm( "Qe7" );
+    myGame.ply_ag_comm( "Ne5" );    myGame.ply_ag_comm( "Bxe2" );
+    myGame.ply_ag_comm( "Qxe2" );   myGame.ply_ag_comm( "O-O" );
+    myGame.ply_ag_comm( "Rac1" );   myGame.ply_ag_comm( "Rac8" );
+    myGame.ply_ag_comm( "Bg5" );    myGame.ply_ag_comm( "Bb6" );
+    myGame.ply_ag_comm( "Bxf6" );   myGame.ply_ag_comm( "gxf6" );
+    myGame.ply_ag_comm( "Nc4" );    myGame.ply_ag_comm( "Rfd8" );
+    myGame.ply_ag_comm( "Nxb6" );   myGame.ply_ag_comm( "axb6" );
+    // Turn 21 - 30
+    myGame.ply_ag_comm( "Rfd1" );   myGame.ply_ag_comm( "f5" );
+    myGame.ply_ag_comm( "Qe3" );    myGame.ply_ag_comm( "Qf6" );
+    myGame.ply_ag_comm( "d5" );     myGame.ply_ag_comm( "Rxd5" );
+    myGame.ply_ag_comm( "Rxd5" );   myGame.ply_ag_comm( "exd5" );
+    myGame.ply_ag_comm( "b3" );     myGame.ply_ag_comm( "Kh8" );
+    myGame.ply_ag_comm( "Qxb6" );   myGame.ply_ag_comm( "Rg8" );
+    myGame.ply_ag_comm( "Qc5" );    myGame.ply_ag_comm( "d4" );
+    myGame.ply_ag_comm( "Nd6" );    myGame.ply_ag_comm( "f4" );
+    myGame.ply_ag_comm( "Nxb7" );   myGame.ply_ag_comm( "Ne5" );
+    myGame.ply_ag_comm( "Qd5" );    myGame.ply_ag_comm( "f3" );
+    // Turn 31 - 39
+    myGame.ply_ag_comm( "g3" );     myGame.ply_ag_comm( "Nd3" );
+    myGame.ply_ag_comm( "Rc7" );    myGame.ply_ag_comm( "Re8" );
+    myGame.ply_ag_comm( "Nd6" );    myGame.ply_ag_comm( "Re1+" );
+    test_bool = myGame.getState() == chess::CHS_STATE::WCHK;
+    myGame.ply_ag_comm( "Kh2" );    myGame.ply_ag_comm( "Nxf2" );
+    myGame.ply_ag_comm( "Nxf7+" );  
+    test_bool = myGame.getState() == chess::CHS_STATE::BCHK;
+    myGame.ply_ag_comm( "Kg7" );
+    myGame.ply_ag_comm( "Ng5+" );   myGame.ply_ag_comm( "Kh6" );
+    myGame.ply_ag_comm( "Rxh7+" );  myGame.ply_ag_comm( "1-0" );
+    test_bool = myGame.getState() == chess::CHS_STATE::WWIN;
+
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        test_bool = test_bool && ( myGame.get_piece_at( chess::ind2sub(z) ) == 
+            endGame.get_piece_at( chess::ind2sub(z) ) );
+    }
+
+    if( test_bool ){
+        cout << "chess ply_ag_comm full game playout test: passed!" << endl;
+    }else{
+        cout << "chess ply_ag_comm full game playout test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
