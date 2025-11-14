@@ -648,6 +648,256 @@ bool chess::ply_ag_comm( string alg_comm ){
 
 // ---------------------------------------------------------------------- <<<<<
 
+    chs_move ret_move;
+    // Obtain turn indicator.
+    CHS_PIECE_COLOR pce_color = this->is_white_turn() ? CHS_PIECE_COLOR::WHITE : CHS_PIECE_COLOR::BLACK;
+    // Variable indicating type of current piece.
+    CHS_PIECE_TYPE pce_type;
+
+    // A flag indicating whether the game is in check ('+') or checkmate state ('#').
+    char check_flag = ' ';
+
+// ---------------------------------------------------------------------- >>>>>
+//      Check Status Flag Parse (Last Char(s))
+// ---------------------------------------------------------------------- >>>>>
+
+    // Take out last character is it is the check status flag.
+    if( !std::isalnum( alg_comm[ alg_comm.size() - 1 ] ) ){
+        if( alg_comm[ alg_comm.size() - 1 ] == '+' || alg_comm[ alg_comm.size() - 1 ] == '#' ){
+            check_flag = alg_comm[ alg_comm.size() - 1 ];
+            alg_comm = alg_comm.substr( 0, alg_comm.size() - 1 );
+        }
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Piece Type Flag Parse (First char)
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialize the promotion target.
+    CHS_PIECE_TYPE promo_tar = CHS_PIECE_TYPE::NO_P;
+
+    // If the first letter is uppercase, non-pawn.
+    if( (unsigned int)( alg_comm.at(0) - 'A' ) < 26 ){
+        
+        switch( alg_comm.at(0) ){
+        case( 'B' ):
+            pce_type = CHS_PIECE_TYPE::BISHOP;  break;
+        case( 'N' ):
+            pce_type = CHS_PIECE_TYPE::KNIGHT;  break;
+        case( 'R' ):
+            pce_type = CHS_PIECE_TYPE::ROOK;    break;
+        case( 'Q' ):
+            pce_type = CHS_PIECE_TYPE::QUEEN;   break;
+        case( 'K' ):
+            pce_type = CHS_PIECE_TYPE::KING;    break;
+        default:
+            throw invalid_argument( "First char is an invalid uppercase letter." );
+            break;
+        };
+
+        // Take out the first char.
+        alg_comm = alg_comm.substr( 1, alg_comm.size() );
+
+    // If the first letter is not uppercase, pawn.
+    }else{
+
+        pce_type = CHS_PIECE_TYPE::PAWN;
+
+        if( (unsigned int)( alg_comm.at( alg_comm.size() - 1 ) - 'A' ) < 26 ){
+
+            switch( alg_comm.at( alg_comm.size() - 1 ) ){
+            case( 'B' ):
+                promo_tar = CHS_PIECE_TYPE::BISHOP; break;
+            case( 'N' ):
+                promo_tar = CHS_PIECE_TYPE::KNIGHT; break;
+            case( 'R' ):
+                promo_tar = CHS_PIECE_TYPE::ROOK;   break;
+            case( 'Q' ):
+                promo_tar = CHS_PIECE_TYPE::QUEEN;  break;
+            case( 'K' ):
+                promo_tar = CHS_PIECE_TYPE::KING;   break;
+            default:
+                throw invalid_argument( "Pawn promotion indicator is not a valid upper case letter." );
+                break;
+            }
+
+            // Take out the promotion tag.
+            alg_comm = alg_comm.substr( 0, alg_comm.size() - 1 );
+
+        }
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Attack Flag Parse (Mid 'x' symbol)
+// ---------------------------------------------------------------------- >>>>>
+
+    // Flag indicating whether the play is an attack or no.
+    bool is_atk = false;
+    // Initialize the string algebraic coordinates.
+    string bef_coord_str = "";
+    string aft_coord_str = "";
+
+    // Subdivide the current remaining string into the before and after algebraic coordinates.
+    for( unsigned int z = 0; z < alg_comm.size(); z++ ){
+        if( alg_comm[z] == 'x' ){
+            is_atk = true;
+            bef_coord_str = alg_comm.substr( 0, z );
+            aft_coord_str = alg_comm.substr( z + 1, alg_comm.size() - z - 1 );
+        }
+    }
+    if( !is_atk ){
+        aft_coord_str = alg_comm.substr( alg_comm.size() - 2, 2 );
+        bef_coord_str = alg_comm.substr( 0, alg_comm.size() - 2 );
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Start and End Coordinates Parse And Then Ply
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialize the final coordinates.
+    pair<int,int> aft_coord(-1,-1);
+    pair<int,int> bef_coord(-1,-1);
+
+    // Parse the after coordinate.
+    if( aft_coord_str.size() == 2 ){
+        if( std::isdigit( aft_coord_str[1] ) && std::isalpha( aft_coord_str[0] ) ){
+            aft_coord = alg_to_cart( aft_coord_str[0], (int) aft_coord_str[1] - '0' );
+        }else{
+            throw invalid_argument( "Algebraic ending coordinate must be a two char pair of an alphabet letter (file) and a digit (rank)." );
+        }
+        
+    }else{
+        throw invalid_argument( "Algebraic abbreviated play notation must at least have ending coordinate (If not a special move)." );
+    }
+
+    // Parse the before coordinate.
+    if( bef_coord_str.size() == 2 ){
+
+        if( std::isdigit( bef_coord_str[1] ) && std::isalpha( bef_coord_str[0] ) ){
+            bef_coord = alg_to_cart( bef_coord_str[0], (int) bef_coord_str[1] - '0' );
+        }else{
+            throw invalid_argument( "Algebraic starting coordinate of two char must consist of an alphabet letter (file) and a digit (rank)." );
+        }
+
+    // Case when the before coordinate is abbreviated to a single character.
+    }else if( bef_coord_str.size() == 1 ){
+
+        if( std::isdigit( bef_coord_str[0] ) ){
+
+            int row_idx = (int) ( bef_coord_str[0] - '0' ) - 1;
+            int fnd_cnt = 0;
+            // Scan through the specified row for target piece.
+            for( unsigned int z = 0; z < BOARDWIDTH; z++ ){
+                pair<int,int> coord_z( row_idx, z );
+                if( this->get_piece_at( coord_z ).type == pce_type && 
+                    this->get_piece_at( coord_z ).color == pce_color )
+                {
+                    if( is_atk ){
+                        if( this->is_atk_valid( coord_z, aft_coord ) ){
+                            bef_coord = coord_z;
+                            fnd_cnt++;
+                        }
+                    }else{
+                        if( this->is_move_valid( coord_z, aft_coord ) ){
+                            bef_coord = coord_z;
+                            fnd_cnt++;
+                        }
+                    }
+                }
+            }
+            // If more than one correct piece is identified on same row, algebraic 
+            // coord is invalid.
+            if( fnd_cnt > 1 ){
+                throw runtime_error( "Two identical pieces share the same rank and cannot be differentiated with the given algebraic coordinate." );
+            }else if( fnd_cnt == 0 ){
+                throw runtime_error( "No piece found on the board to play which fits the given algebraic coordinate." );
+            }
+
+        }else if( std::isalpha( bef_coord_str[0] ) ){
+
+            int col_idx = (int) ( bef_coord_str[0] - 'a' );
+            int fnd_cnt = 0;
+            // Scan through the specified column for target piece.
+            for( unsigned int z = 0; z < BOARDHEIGHT; z++ ){
+                pair<int,int> coord_z( z, col_idx );
+                if( this->get_piece_at( coord_z ).type == pce_type && 
+                    this->get_piece_at( coord_z ).color == pce_color )
+                {
+                    if( is_atk ){
+                        if( this->is_atk_valid( coord_z, aft_coord ) ){
+                            bef_coord = coord_z;
+                            fnd_cnt++;
+                        }
+                    }else{
+                        if( this->is_move_valid( coord_z, aft_coord ) ){
+                            bef_coord = coord_z;
+                            fnd_cnt++;
+                        }
+                    }
+                }
+            }
+            // If more than one correct piece is identified on same column, algebraic 
+            // coord is invalid.
+            if( fnd_cnt > 1 ){
+                throw runtime_error( "Two identical pieces share the same file and cannot be differentiated with the given algebraic coordinate." );
+            }else if( fnd_cnt == 0 ){
+                throw runtime_error( "No piece found on the board to play which fits the given algebraic coordinate." );
+            }
+
+        }else{
+            throw invalid_argument( "Algebraic starting coordinate of one char must be either an alphabet letter (file) or a digit (rank)." );
+        }
+
+    // Case when the before coordinate is omitted.
+    }else if( bef_coord_str.size() == 0 ){
+
+        int fnd_cnt = 0;
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+            pair<int,int> coord_z = chess::ind2sub(z);
+            if( this->get_piece_at( coord_z ).type == pce_type && 
+                this->get_piece_at( coord_z ).color == pce_color )
+            {
+                
+                if( is_atk ){
+                    if( this->is_atk_valid( coord_z, aft_coord ) ){
+                        bef_coord = coord_z;
+                        fnd_cnt++;
+                    }
+                }else{
+                    if( this->is_move_valid( coord_z, aft_coord ) ){
+                        bef_coord = coord_z;
+                        fnd_cnt++;
+                    }
+                }
+                
+            }
+        }
+        // If more than one correct piece is identified on same column, algebraic 
+        // coord is invalid.
+        if( fnd_cnt > 1 ){
+            throw runtime_error( "Two identical pieces share the same file and cannot be differentiated with the given algebraic coordinate." );
+        }else if( fnd_cnt == 0 ){
+            throw runtime_error( "No piece found on the board to play which fits the given algebraic coordinate." );
+        }
+
+    }else{
+        throw invalid_argument( "Invalid algebraic play notation." );
+    }
+
+    return this->ply( chs_move( bef_coord, aft_coord ) );
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 bool chess::ply_ag_coord( char c1, int n1, char c2, int n2 ){
