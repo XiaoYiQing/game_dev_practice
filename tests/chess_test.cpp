@@ -439,6 +439,31 @@ void tests::chess_alg_coord_trans_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
+//      ply_ag_comm Promotion Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 6, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.ply_ag_comm( "e8Q" );
+    myGame.ply_ag_comm( "b1R" );
+    test_bool = test_bool && ( myGame.get_piece_at( 7, 4 ).type == chess::CHS_PIECE_TYPE::QUEEN );
+    test_bool = test_bool && ( myGame.get_piece_at( 0, 1 ).type == chess::CHS_PIECE_TYPE::ROOK );
+
+    if( test_bool ){
+        cout << "chess ply_ag_comm promotion test: passed!" << endl;
+    }else{
+        cout << "chess ply_ag_comm promotion test: failed!" << endl;
+    }
+
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
 //      Full Game Test with ply_ag_comm (Deep Blue V.S. Kasparov Game 1, 1996 )
 // ---------------------------------------------------------------------- >>>>>
 
