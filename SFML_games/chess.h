@@ -409,7 +409,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool play_ag_coord( char c1, int n1, char c2, int n2 );
 
-    
+    /**
+     * Perform a ply according to the given ag command.
+     */
+    bool ply_ag_comm( string alg_comm );
+
     bool ply_ag_coord( char c1, int n1, char c2, int n2 );
 
     bool ply( chs_move tarMove );

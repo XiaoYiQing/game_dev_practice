@@ -587,7 +587,68 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
 }
 
+bool chess::ply_ag_comm( string alg_comm ){
 
+// ---------------------------------------------------------------------- >>>>>
+//      Resign Special Command Parse
+// ---------------------------------------------------------------------- >>>>>
+
+    // White won by black resignation!
+    if( alg_comm == "1-0" ){
+        this->state == CHS_STATE::WWIN;
+        return true;
+    // Black won by white resignation!
+    }else if( alg_comm == "0-1" ){
+        this->state == CHS_STATE::BWIN;
+        return true;
+    // Draw by mutual agreement.
+    }else if( alg_comm == "½-½" ){
+        this->state == CHS_STATE::DRAW;
+        return true;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Special Command Parse
+// ---------------------------------------------------------------------- >>>>>
+
+    if( alg_comm == "O-O" || alg_comm == "0-0" ){
+
+        unsigned int row_idx = 0;
+        if( this->is_white_turn() ){
+            row_idx = 0;
+        }else{
+            row_idx = BOARDHEIGHT - 1;
+        }
+
+        if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
+            chs_move castle_mov( row_idx, 4, row_idx, 6 );
+            return ply( castle_mov );
+        }
+        throw runtime_error( "Caslting move currently not valid." );
+
+    }else if( alg_comm == "O-O-O" || alg_comm == "0-0-0" ){
+
+        unsigned int row_idx = 0;
+        if( this->is_white_turn() ){
+            row_idx = 0;
+        }else{
+            row_idx = BOARDHEIGHT - 1;
+        }
+
+        if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
+            chs_move castle_mov( row_idx, 4, row_idx, 2 );
+            return ply( castle_mov );
+        }
+        throw runtime_error( "Castling move currently not valid." );
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+}
 
 bool chess::ply_ag_coord( char c1, int n1, char c2, int n2 ){
     return ply( n1 - 1, ( c1 - 'a' ), n2 - 1, ( c2 - 'a' ) );
