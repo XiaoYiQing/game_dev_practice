@@ -826,6 +826,10 @@ protected:
     // Flag indicating whether the game should write messages to the console.
     bool verbose;
     
+    /**
+     * Flag indicating if this game enables AI to play as opponent.
+     */
+    bool vsAI = false;
 
 private:
 

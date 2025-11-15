@@ -16,7 +16,6 @@ CHK_SFML_eng::CHK_SFML_eng() : checkers()
 
     act_set_lock = false;
 
-
     CHKText_red = shared_ptr<sf::Texture>( new sf::Texture() );
     CHKText_blk = shared_ptr<sf::Texture>( new sf::Texture() );
     CHKText_cred = shared_ptr<sf::Texture>( new sf::Texture() );

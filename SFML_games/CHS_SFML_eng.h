@@ -25,15 +25,17 @@ namespace gameEngine{
 class CHS_SFML_eng : public chess{
 
     // The color of light tiles.
-    static const sf::Color WHITECOLOR;
+    static const sf::Color LTILECOLOR;
     // The color of dark tiles.
-    static const sf::Color BLACKCOLOR;
+    static const sf::Color DTILECOLOR;
     // The color of pressed (by mouse) tiles.
     static const sf::Color PTILECOLOR;
     // The color of locked tile.
     static const sf::Color LOCKTILECOLOR;
 
     CHS_SFML_eng();
+
+    CHS_SFML_eng( vector< shared_ptr< SFML_button_XYQ > > CHS_buttons );
 
 // ====================================================================== >>>>>
 //      Gameplay Control Functions
