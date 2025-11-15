@@ -3,7 +3,7 @@
 using namespace gameEngine;
 
 const sf::Color CHS_SFML_eng::LTILECOLOR = sf::Color( 255, 255, 255, 255 );
-const sf::Color CHS_SFML_eng::DTILECOLOR = sf::Color( 155, 155, 155, 255 );
+const sf::Color CHS_SFML_eng::DTILECOLOR = sf::Color( 120, 120, 120, 255 );
 const sf::Color CHS_SFML_eng::PTILECOLOR = sf::Color( 0, 255, 255, 255 );
 const sf::Color CHS_SFML_eng::LOCKTILECOLOR = sf::Color( 255, 255, 0, 255 );
 
@@ -12,8 +12,12 @@ CHS_SFML_eng::CHS_SFML_eng() : chess(){
 
     act_set_lock = false;
 
-    CHS_PCE_W_tex_arr = vector< shared_ptr<sf::Texture> >(6);
-    CHS_PCE_B_tex_arr = vector< shared_ptr<sf::Texture> >(6);
+    // CHS_PCE_W_tex_arr = vector< shared_ptr<sf::Texture> >(6);
+    // CHS_PCE_B_tex_arr = vector< shared_ptr<sf::Texture> >(6);
+    for( unsigned int z = 0; z < CHS_PIECE_TYPE_Count; z++ ){
+        CHS_PCE_W_tex_arr[ get_CHS_PIECE_TYPE_AtIdx(z) ] = shared_ptr<sf::Texture>();
+        CHS_PCE_B_tex_arr[ get_CHS_PIECE_TYPE_AtIdx(z) ] = shared_ptr<sf::Texture>();
+    }
 
     // Define the default locations and sizes of the buttons.
     float x_start = 100;        float y_start = 100;
@@ -133,7 +137,7 @@ bool CHS_SFML_eng::releaseButton(){
                     */
 
                     // Update the visual components representing the game.
-                    // this->updateCHKBoard();
+                    this->updateCHSBoard();
 
                 }else{
 
@@ -193,7 +197,7 @@ bool CHS_SFML_eng::AI_play( CHS_SFML_eng& tarGame ){
     tarGame.unlock_buttons();
 
     // Update the visual components representing the game.
-    // tarGame.updateCHKBoard();
+    tarGame.updateCHSBoard();
 
     // Reaching this point means the AI play is successful.
     return true;
@@ -206,6 +210,91 @@ bool CHS_SFML_eng::AI_play( CHS_SFML_eng& tarGame ){
 // ====================================================================== >>>>>
 //      Game Direct Manipulation Functions
 // ====================================================================== >>>>>
+
+
+void CHS_SFML_eng::updateCHSBoard(){
+
+    sf::Color W_color( 190, 190, 190, 255 );
+    sf::Color B_color( 0, 0, 0, 255 );
+
+    for( unsigned int i = 0; i < BOARDWIDTH; i++ ){
+    for( unsigned int j = 0; j < BOARDHEIGHT; j++ ){
+
+        // Obtain the current piece.
+        shared_ptr<SFML_button_XYQ> but_ij = get_button_at_ij( i, j );
+        // Obtain the current piece color.
+        CHS_PIECE_COLOR color_ij = CHS_board[i][i].color;
+
+        // When no color -> empty square.
+        if( color_ij == CHS_PIECE_COLOR::NO_C ){
+            but_ij->disableSprite();
+            but_ij->setTxtStr( "" );
+            but_ij->disableText();
+        }else{
+
+            switch( CHS_board[i][j].type ){
+                // When no piece type -> empty square.
+                case CHS_PIECE_TYPE::NO_P:
+                    but_ij->disableSprite();
+                    but_ij->setTxtStr( "" );
+                    but_ij->disableText();
+                    break;
+
+                case CHS_PIECE_TYPE::PAWN:
+                    
+                    if( color_ij == CHS_PIECE_COLOR::WHITE ){
+                        if( !CHS_PCE_W_tex_arr[ CHS_PIECE_TYPE::PAWN ] ){
+                            but_ij->setTxtStr( "P" );
+                            but_ij->setTxtColor( W_color );
+                            but_ij->enableText();
+                            but_ij->disableSprite();
+                        }else{
+                            but_ij->setUPTexture( CHS_PCE_W_tex_arr[ CHS_PIECE_TYPE::PAWN ] );
+                            but_ij->setPTexture( CHS_PCE_W_tex_arr[ CHS_PIECE_TYPE::PAWN ] );
+                            but_ij->disableText();
+                            but_ij->enableSprite();
+                        }
+                    }else{
+
+                    }
+
+                    break;
+
+                case CHS_PIECE_TYPE::KNIGHT:
+                    
+                    break;
+
+                case CHS_PIECE_TYPE::BISHOP:
+                    
+                    break;
+
+                case CHS_PIECE_TYPE::ROOK:
+                    
+                    break;
+
+                case CHS_PIECE_TYPE::QUEEN:
+
+                    break;
+
+                case CHS_PIECE_TYPE::KING:
+
+                    break;
+                default:
+                    throw runtime_error( "Unrecognized CHS_PIECE_TYPE enum." );
+
+            }
+
+        }
+
+        but_ij->unlock();
+        but_ij->update();
+
+    }
+    }
+
+    return;
+
+}
 
 
 // ====================================================================== <<<<<

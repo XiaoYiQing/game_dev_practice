@@ -86,13 +86,13 @@ int main(int, char**){
 
     // game::play_TikTakTok();
 
-    // game::play_Checkers();
+    game::play_Checkers();
 
     // game::play_cardReact();
 
 // ====================================================================== <<<<<
 
-    do_tests(0);
+    // do_tests(0);
 
     return 0;
 
