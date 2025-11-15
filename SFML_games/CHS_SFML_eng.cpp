@@ -12,11 +12,9 @@ CHS_SFML_eng::CHS_SFML_eng() : chess(){
 
     act_set_lock = false;
 
-    // CHS_PCE_W_tex_arr = vector< shared_ptr<sf::Texture> >(6);
-    // CHS_PCE_B_tex_arr = vector< shared_ptr<sf::Texture> >(6);
     for( unsigned int z = 0; z < CHS_PIECE_TYPE_Count; z++ ){
-        CHS_PCE_W_tex_arr[ get_CHS_PIECE_TYPE_AtIdx(z) ] = shared_ptr<sf::Texture>();
-        CHS_PCE_B_tex_arr[ get_CHS_PIECE_TYPE_AtIdx(z) ] = shared_ptr<sf::Texture>();
+        CHS_PCE_W_tex_map[ get_CHS_PIECE_TYPE_AtIdx(z) ] = shared_ptr<sf::Texture>();
+        CHS_PCE_B_tex_map[ get_CHS_PIECE_TYPE_AtIdx(z) ] = shared_ptr<sf::Texture>();
     }
 
     // Define the default locations and sizes of the buttons.
@@ -224,63 +222,69 @@ void CHS_SFML_eng::updateCHSBoard(){
         shared_ptr<SFML_button_XYQ> but_ij = get_button_at_ij( i, j );
         // Obtain the current piece color.
         CHS_PIECE_COLOR color_ij = CHS_board[i][i].color;
+        // Obtain the current piece type.
+        CHS_PIECE_TYPE type_ij = CHS_board[i][i].type;
 
         // When no color -> empty square.
-        if( color_ij == CHS_PIECE_COLOR::NO_C ){
+        if( color_ij == CHS_PIECE_COLOR::NO_C || type_ij == CHS_PIECE_TYPE::NO_P ){
+
             but_ij->disableSprite();
             but_ij->setTxtStr( "" );
             but_ij->disableText();
+
         }else{
 
-            switch( CHS_board[i][j].type ){
-                // When no piece type -> empty square.
-                case CHS_PIECE_TYPE::NO_P:
+            // Define text representation of the piece.
+            string pce_str = "";
+            switch( type_ij ){
+            case CHS_PIECE_TYPE::PAWN:
+                pce_str = 'P'; break;
+            case CHS_PIECE_TYPE::KNIGHT:
+                pce_str = 'N'; break;
+            case CHS_PIECE_TYPE::BISHOP:
+                pce_str = 'B'; break;
+            case CHS_PIECE_TYPE::ROOK:
+                pce_str = 'R'; break;
+            case CHS_PIECE_TYPE::QUEEN:
+                pce_str = 'Q'; break;
+            case CHS_PIECE_TYPE::KING:
+                pce_str = 'K'; break;
+            default:
+                throw runtime_error( "Unrecognized CHS_PIECE_TYPE enum." );
+            }
+
+            // Use texture from white or black, depending on current piece color.
+            if( color_ij == CHS_PIECE_COLOR::WHITE ){
+
+                // Use text representation of the piece if missing texture.
+                if( !CHS_PCE_W_tex_map[ type_ij ] ){
+                    but_ij->setTxtStr( pce_str );
+                    but_ij->setTxtColor( W_color );
+                    but_ij->enableText();
                     but_ij->disableSprite();
-                    but_ij->setTxtStr( "" );
+                // Use texture when it is present.
+                }else{
+                    but_ij->setUPTexture( CHS_PCE_W_tex_map[ type_ij ] );
+                    but_ij->setPTexture( CHS_PCE_W_tex_map[ type_ij ] );
                     but_ij->disableText();
-                    break;
+                    but_ij->enableSprite();
+                }
 
-                case CHS_PIECE_TYPE::PAWN:
-                    
-                    if( color_ij == CHS_PIECE_COLOR::WHITE ){
-                        if( !CHS_PCE_W_tex_arr[ CHS_PIECE_TYPE::PAWN ] ){
-                            but_ij->setTxtStr( "P" );
-                            but_ij->setTxtColor( W_color );
-                            but_ij->enableText();
-                            but_ij->disableSprite();
-                        }else{
-                            but_ij->setUPTexture( CHS_PCE_W_tex_arr[ CHS_PIECE_TYPE::PAWN ] );
-                            but_ij->setPTexture( CHS_PCE_W_tex_arr[ CHS_PIECE_TYPE::PAWN ] );
-                            but_ij->disableText();
-                            but_ij->enableSprite();
-                        }
-                    }else{
+            }else{
 
-                    }
-
-                    break;
-
-                case CHS_PIECE_TYPE::KNIGHT:
-                    
-                    break;
-
-                case CHS_PIECE_TYPE::BISHOP:
-                    
-                    break;
-
-                case CHS_PIECE_TYPE::ROOK:
-                    
-                    break;
-
-                case CHS_PIECE_TYPE::QUEEN:
-
-                    break;
-
-                case CHS_PIECE_TYPE::KING:
-
-                    break;
-                default:
-                    throw runtime_error( "Unrecognized CHS_PIECE_TYPE enum." );
+                // Use text representation of the piece if missing texture.
+                if( !CHS_PCE_B_tex_map[ type_ij ] ){
+                    but_ij->setTxtStr( pce_str );
+                    but_ij->setTxtColor( B_color );
+                    but_ij->enableText();
+                    but_ij->disableSprite();
+                // Use texture when it is present.
+                }else{
+                    but_ij->setUPTexture( CHS_PCE_B_tex_map[ type_ij ] );
+                    but_ij->setPTexture( CHS_PCE_B_tex_map[ type_ij ] );
+                    but_ij->disableText();
+                    but_ij->enableSprite();
+                }
 
             }
 

@@ -130,12 +130,10 @@ protected:
     vector< shared_ptr< SFML_button_XYQ > > CHS_buttons;
 
     // Textures for the white pieces.
-    // vector< shared_ptr<sf::Texture> > CHS_PCE_W_tex_arr;
-    map< CHS_PIECE_TYPE, shared_ptr<sf::Texture> > CHS_PCE_W_tex_arr;
+    map< CHS_PIECE_TYPE, shared_ptr<sf::Texture> > CHS_PCE_W_tex_map;
     
     // Textures for the black pieces.
-    // vector< shared_ptr<sf::Texture> > CHS_PCE_B_tex_arr;
-    map< CHS_PIECE_TYPE, shared_ptr<sf::Texture> > CHS_PCE_B_tex_arr;
+    map< CHS_PIECE_TYPE, shared_ptr<sf::Texture> > CHS_PCE_B_tex_map;
 
     /*
     Boolean indicating the first click for an action is set.
