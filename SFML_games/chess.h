@@ -19,27 +19,6 @@ using namespace std;
 namespace gameEngine{
 
 
-/*
-TODO:
-    It might be a good idea to implement the chess game as a 2 tiers class system.
-    - The lower tier serves the purpose of representing the chess board state.
-    - The upper tier class holds instance(s) of the lower tier class and manage
-    the flow of the game from a higher level.
-
-    Reasoning: Chess game features such as draw by lack of progress requires knowledge of 
-    pass ~50 turns. It would then be reasonable to store the history of the game at the
-    upper tier class using lower tier instances as pictures of each step of the game.
-
-    The lower tier will have:
-    1- The chess board.
-    2- atk_list_by_W: list of threats by white pieces at all squares.
-    3- atk_list_by_B: list of threats by black pieces at all squares.
-    4- turn_cnt.
-    5- en_pass_flag and en_pass_moves
-    6- promo lock and promo_point
-    7- state
-*/
-
 /**
  * My implementation of the chess game.
  * 
@@ -590,7 +569,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void upd_mid_game_state();
     
-    // TODO: write the draw state detection.
     /**
      * Check if any end game states have been reached.
      * 
