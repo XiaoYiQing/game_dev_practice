@@ -17,6 +17,7 @@
 
 using namespace std;
 
+extern string RES_PATH_XYQ_str;
 
 
 namespace gameEngine{
