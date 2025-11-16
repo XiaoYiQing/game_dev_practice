@@ -94,7 +94,7 @@ class CHS_SFML_eng : public chess{
 Set the texture for the target piece. 
 TODO: There is no direct translation from checkers to chess.
 */
-bool setCHS_pieceText( chess::CHS_PIECE_TYPE tarPiece, shared_ptr<sf::Texture> inText );
+bool setCHS_pieceTex( chess::chs_piece tarPiece, shared_ptr<sf::Texture> inTex );
 
 // ====================================================================== <<<<<
 

@@ -22,15 +22,15 @@ CHS_SFML_eng::CHS_SFML_eng() : chess(){
     float butWidth = 50;       float butHeight = 50;
     float butSep = 5;
 
-    // Fill the 
-    for( unsigned int i = 0; i < BOARDWIDTH; i++ ){
-    for( unsigned int j = 0; j < BOARDHEIGHT; j++ ){
+    // Fill the board.
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
+    for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
 
         shared_ptr<SFML_button_XYQ> buttonX = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
-        buttonX->setPos( x_start + ( butWidth + butSep )*i, 
-            y_start + ( butHeight + butSep )*j );
+        buttonX->setPos( x_start + ( butHeight + butSep )*i, 
+            y_start + ( butWidth + butSep )*j );
         buttonX->setWidth( butWidth );      
         buttonX->setHeight( butHeight );    
         if( remainder(i+j,2) ){
@@ -301,4 +301,69 @@ void CHS_SFML_eng::updateCHSBoard(){
 }
 
 
+
+void CHS_SFML_eng::resetBoard(){
+
+    chess::resetBoard();
+
+    this->updateCHSBoard();
+
+    /*
+    TODO:
+    This is where AI plays first if it is designated white.
+    Write the process here so AI immediately plays after a reset.
+    */
+
+}
+
+
 // ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Access Functions
+// ====================================================================== >>>>>
+
+bool CHS_SFML_eng::setCHS_pieceTex( chess::chs_piece tarPiece, 
+    shared_ptr<sf::Texture> inTex )
+{
+
+    // Abort if the piece type is none.
+    if( tarPiece.type == CHS_PIECE_TYPE::NO_P ){
+        return false;
+    }
+
+    if( tarPiece.color == CHS_PIECE_COLOR::WHITE ){
+        // Assign the input texture to the correct map slot.
+        this->CHS_PCE_W_tex_map[ tarPiece.type ] = inTex;
+    }else if( tarPiece.color == CHS_PIECE_COLOR::BLACK ){
+        // Assign the input texture to the correct map slot.
+        this->CHS_PCE_B_tex_map[ tarPiece.type ] = inTex;
+
+    // Abort if the piece color is none.
+    }else{
+
+        return false;
+    }
+
+    this->updateCHSBoard();
+    return true;
+
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      Access Functions (Protected)
+// ====================================================================== >>>>>
+
+shared_ptr<SFML_button_XYQ> CHS_SFML_eng::get_button_at_ij(unsigned int i, unsigned int j) const
+    { return CHS_buttons.at( chess::sub2ind(i,j) ); }
+
+
+void CHS_SFML_eng::set_button_at_ij( unsigned int i, unsigned int j, shared_ptr<SFML_button_XYQ> inBut )
+    { CHS_buttons.at( chess::sub2ind(i,j) ) = inBut; }
+
+// ====================================================================== <<<<<
+
