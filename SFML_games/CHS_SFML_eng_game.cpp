@@ -304,7 +304,7 @@ void game::play_chess(){
                     if( but3A_mmenu->pressButton( window ) ){}
                     // if( but3B_reset->pressButton( window ) ){}
 
-                    // CHK_game_obj.pressButton( window );
+                    CHS_game_obj.pressButton( window );
 
                     // if( but4A_mmenu->pressButton( window ) ){}
                     // if( but4B_AI_enable->pressButton( window ) ){}
@@ -320,7 +320,7 @@ void game::play_chess(){
                     if( but1A_startGame->releaseButton() ){
                         page1_mmenu.disable();
                         page3_game.enable();
-                        // CHK_game_obj.resetBoard();
+                        // CHS_game_obj.resetBoard();
                     }
                     if( but1B_readMe->releaseButton() ){
                         page1_mmenu.disable();
@@ -343,7 +343,7 @@ void game::play_chess(){
                     // Leave page and return to main menu.
                     if( but3A_mmenu->releaseButton() ){
 
-                        // CHK_game_obj.resetBoard();
+                        CHS_game_obj.resetBoard();
                         
                         page3_game.disable();
                         page1_mmenu.enable();
@@ -353,16 +353,16 @@ void game::play_chess(){
                     // // Reset TTT game.
                     // if( but3B_reset->releaseButton() ){
 
-                    //     CHK_game_obj.resetBoard();
+                    //     CHS_game_obj.resetBoard();
 
                     // }
 
-                    // // bool gameButRel = CHK_game_obj.releaseButton();
-                    // bool playMade = CHK_game_obj.releaseButton();
+                    // // bool gameButRel = CHS_game_obj.releaseButton();
+                    bool playMade = CHS_game_obj.releaseButton();
                     // if( playMade ){
 
                     //     // Create a new thread that runs the runInThread function
-                    //     std::thread myThread( CHK_SFML_eng::AI_play, ref( CHK_game_obj ) );
+                    //     std::thread myThread( CHK_SFML_eng::AI_play, ref( CHS_game_obj ) );
                     //     myThread.detach();
 
                     // }
@@ -373,8 +373,8 @@ void game::play_chess(){
                     // }
 
                     // if( but4B_AI_enable->releaseButton() ){
-                    //     CHK_game_obj.toggle_AI();
-                    //     if( CHK_game_obj.is_AI_enabled() ){
+                    //     CHS_game_obj.toggle_AI();
+                    //     if( CHS_game_obj.is_AI_enabled() ){
                     //         but4B_AI_enable->setTxtStr( enabledAI_str );
                     //     }else{
                     //         but4B_AI_enable->setTxtStr( disabledAI_str );
@@ -383,13 +383,13 @@ void game::play_chess(){
                     // }
 
                     // if( but4C_AI_playOrd->releaseButton() ){
-                    //     CHK_game_obj.toggle_AI_first();
-                    //     if( CHK_game_obj.is_AI_first() ){
+                    //     CHS_game_obj.toggle_AI_first();
+                    //     if( CHS_game_obj.is_AI_first() ){
                     //         but4C_AI_playOrd->setTxtStr( AI_first_str );
-                    //         CHK_game_obj.set_AI_first();
+                    //         CHS_game_obj.set_AI_first();
                     //     }else{
                     //         but4C_AI_playOrd->setTxtStr( AI_not_first_str );
-                    //         CHK_game_obj.set_AI_not_first();
+                    //         CHS_game_obj.set_AI_not_first();
                     //     }
                     //     but4C_AI_playOrd->update();
                     // }

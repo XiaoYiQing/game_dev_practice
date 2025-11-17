@@ -102,7 +102,7 @@ bool CHS_SFML_eng::releaseButton(){
 
     bool played = false;
     bool released = false;
-    for( unsigned int i = 0; i < BOARDWIDTH; i++ ){
+    for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
         for( unsigned int j = 0; j < BOARDWIDTH; j++ ){
             shared_ptr<SFML_button_XYQ> buttonX = this->get_button_at_ij( i, j );
 
@@ -113,9 +113,9 @@ bool CHS_SFML_eng::releaseButton(){
                     
                     // Reset the tile color of the locked coordinate.
                     if( remainder( act_set_lock_coords.x + act_set_lock_coords.y, 2 ) ){
-                        act_set_lock_but->setUPColor( LTILECOLOR );
-                    }else{
                         act_set_lock_but->setUPColor( DTILECOLOR );
+                    }else{
+                        act_set_lock_but->setUPColor( LTILECOLOR );
                     }
                     act_set_lock_but->update();
 
