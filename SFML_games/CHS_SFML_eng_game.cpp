@@ -185,6 +185,96 @@ void game::play_chess(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+// ---------------------------------------------------------------------- >>>>>
+//      Page 3 Game
+// ---------------------------------------------------------------------- >>>>>
+
+    // Page initialization.
+    SFML_page_XYQ page3_game = SFML_page_XYQ();
+
+    // Object: button for returning to the main page.
+    shared_ptr<SFML_button_XYQ> but3A_mmenu = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3A_mmenu->setPos( 200, 500 );
+    but3A_mmenu->setWidth( 150 );      
+    but3A_mmenu->setHeight( 50 );      
+    but3A_mmenu->setTxtFont( font );
+    but3A_mmenu->setTxtStr( "Back" );
+    but3A_mmenu->setTxtColor( 50, 50, 50, 255 );
+    but3A_mmenu->setUPTexture( button_img_np_texture );
+    but3A_mmenu->setPTexture( button_img_p_texture );
+    // Add to page.
+    page3_game.addObj( but3A_mmenu );
+
+    // Object: button for resetting the game board.
+    shared_ptr<SFML_button_XYQ> but3B_reset = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3B_reset->setPos( 400, 500 );
+    but3B_reset->setWidth( 150 );      
+    but3B_reset->setHeight( 50 );      
+    but3B_reset->setTxtFont( font );
+    but3B_reset->setTxtStr( "Reset" );
+    but3B_reset->setTxtColor( 50, 50, 50, 255 );
+    but3B_reset->setUPTexture( button_img_np_texture );
+    but3B_reset->setPTexture( button_img_p_texture );
+    // Add to page.
+    page3_game.addObj( but3B_reset );
+
+    // Vector of all buttons participating in Tik-Tak-Tok.
+    vector<shared_ptr<SFML_button_XYQ>> CHS_buttons;
+
+    float x_start = 210;        float y_start = 50;
+    float butWidth = 44;       float butHeight = 44;
+    float butSep = 4;
+
+    for( int i = 7; i >= 0; i-- ){
+    for( int j = 7; j >= 0; j-- ){
+
+        shared_ptr<SFML_button_XYQ> button3X = 
+            shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+
+        button3X->setPos( x_start + ( butWidth + butSep )*j,
+            y_start + ( butHeight + butSep )*i );
+        button3X->setWidth( butHeight );
+        button3X->setHeight( butWidth );
+
+        if( remainder(i+j,2) ){
+            button3X->setUPColor( CHS_SFML_eng::DTILECOLOR );  
+            button3X->setPColor( CHS_SFML_eng::PTILECOLOR );  
+        }else{
+            button3X->setUPColor( CHS_SFML_eng::LTILECOLOR );  
+            button3X->setPColor( CHS_SFML_eng::PTILECOLOR );  
+        }
+
+        button3X->setTxtFont( font );
+        button3X->setTxtStr( "" );
+        button3X->setTxtColor( 255, 0, 0, 255 );
+        button3X->disableSprite();
+        button3X->setUpSprtScale( 0.6f, 0.9f );
+        button3X->setPSprtScale( 0.5f, 0.5f );
+
+        CHS_buttons.push_back( button3X );
+        page3_game.addObj( button3X );
+
+    }}
+
+    // Create chess game object.
+    CHS_SFML_eng CHS_game_obj( CHS_buttons );
+
+    for( const pair< chess::CHS_PIECE_TYPE, shared_ptr<sf::Texture> >& pair_z : 
+        CHS_PCE_W_tex_map )
+        { CHS_game_obj.setCHS_pieceTex( pair_z.first, chess::CHS_PIECE_COLOR::WHITE, pair_z.second ); }
+    for( const pair< chess::CHS_PIECE_TYPE, shared_ptr<sf::Texture> >& pair_z : 
+        CHS_PCE_B_tex_map )
+        { CHS_game_obj.setCHS_pieceTex( pair_z.first, chess::CHS_PIECE_COLOR::BLACK, pair_z.second ); }
+    
+    CHS_game_obj.updateCHSBoard();
+
+    page3_game.update();
+    page3_game.disable();
+
+// ---------------------------------------------------------------------- <<<<<
+
     // Create the main window.
     sf::RenderWindow window(sf::VideoMode(800, 600), "Checkers");
 
@@ -211,7 +301,7 @@ void game::play_chess(){
 
                     if( but2A_back->pressButton( window ) ){}
 
-                    // if( but3A_mmenu->pressButton( window ) ){}
+                    if( but3A_mmenu->pressButton( window ) ){}
                     // if( but3B_reset->pressButton( window ) ){}
 
                     // CHK_game_obj.pressButton( window );
@@ -229,7 +319,7 @@ void game::play_chess(){
 
                     if( but1A_startGame->releaseButton() ){
                         page1_mmenu.disable();
-                        // page3_game.enable();
+                        page3_game.enable();
                         // CHK_game_obj.resetBoard();
                     }
                     if( but1B_readMe->releaseButton() ){
@@ -250,15 +340,15 @@ void game::play_chess(){
                     }
 
 
-                    // // Leave page and return to main menu.
-                    // if( but3A_mmenu->releaseButton() ){
+                    // Leave page and return to main menu.
+                    if( but3A_mmenu->releaseButton() ){
 
-                    //     CHK_game_obj.resetBoard();
+                        // CHK_game_obj.resetBoard();
                         
-                    //     page3_game.disable();
-                    //     page1_mmenu.enable();
+                        page3_game.disable();
+                        page1_mmenu.enable();
                         
-                    // }
+                    }
 
                     // // Reset TTT game.
                     // if( but3B_reset->releaseButton() ){
@@ -317,7 +407,7 @@ void game::play_chess(){
         // Draw the read me page.
         page2_readme.beDrawn( window );
         // Draw the game page.
-        // page3_game.beDrawn( window );
+        page3_game.beDrawn( window );
         // Draw the option page.
         // page4_opt.beDrawn( window );
 

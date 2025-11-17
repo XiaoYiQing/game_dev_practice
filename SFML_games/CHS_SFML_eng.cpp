@@ -221,9 +221,9 @@ void CHS_SFML_eng::updateCHSBoard(){
         // Obtain the current piece.
         shared_ptr<SFML_button_XYQ> but_ij = get_button_at_ij( i, j );
         // Obtain the current piece color.
-        CHS_PIECE_COLOR color_ij = CHS_board[i][i].color;
+        CHS_PIECE_COLOR color_ij = CHS_board[i][j].color;
         // Obtain the current piece type.
-        CHS_PIECE_TYPE type_ij = CHS_board[i][i].type;
+        CHS_PIECE_TYPE type_ij = CHS_board[i][j].type;
 
         // When no color -> empty square.
         if( color_ij == CHS_PIECE_COLOR::NO_C || type_ij == CHS_PIECE_TYPE::NO_P ){
@@ -324,25 +324,28 @@ void CHS_SFML_eng::resetBoard(){
 //      Access Functions
 // ====================================================================== >>>>>
 
+
 bool CHS_SFML_eng::setCHS_pieceTex( chess::chs_piece tarPiece, 
     shared_ptr<sf::Texture> inTex )
-{
+{ return ( setCHS_pieceTex( tarPiece.type, tarPiece.color, inTex ) ); }
 
+bool CHS_SFML_eng::setCHS_pieceTex( chess::CHS_PIECE_TYPE tarType, chess::CHS_PIECE_COLOR tarColor, 
+    shared_ptr<sf::Texture> inTex )
+{
     // Abort if the piece type is none.
-    if( tarPiece.type == CHS_PIECE_TYPE::NO_P ){
+    if( tarType == CHS_PIECE_TYPE::NO_P ){
         return false;
     }
 
-    if( tarPiece.color == CHS_PIECE_COLOR::WHITE ){
+    if( tarColor == CHS_PIECE_COLOR::WHITE ){
         // Assign the input texture to the correct map slot.
-        this->CHS_PCE_W_tex_map[ tarPiece.type ] = inTex;
-    }else if( tarPiece.color == CHS_PIECE_COLOR::BLACK ){
+        this->CHS_PCE_W_tex_map[ tarType ] = inTex;
+    }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
         // Assign the input texture to the correct map slot.
-        this->CHS_PCE_B_tex_map[ tarPiece.type ] = inTex;
+        this->CHS_PCE_B_tex_map[ tarType ] = inTex;
 
     // Abort if the piece color is none.
     }else{
-
         return false;
     }
 

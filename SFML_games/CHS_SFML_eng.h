@@ -26,6 +26,8 @@ namespace gameEngine{
 
 class CHS_SFML_eng : public chess{
 
+public:
+
     // The color of light tiles.
     static const sf::Color LTILECOLOR;
     // The color of dark tiles.
@@ -92,11 +94,14 @@ class CHS_SFML_eng : public chess{
 //      Access Functions
 // ====================================================================== >>>>>
 
-/*
-Set the texture for the target piece. 
-TODO: There is no direct translation from checkers to chess.
-*/
-bool setCHS_pieceTex( chess::chs_piece tarPiece, shared_ptr<sf::Texture> inTex );
+    /*
+    Set the texture for the target piece. 
+    TODO: There is no direct translation from checkers to chess.
+    */
+    bool setCHS_pieceTex( chess::chs_piece tarPiece, shared_ptr<sf::Texture> inTex );
+
+    bool setCHS_pieceTex( chess::CHS_PIECE_TYPE tarType, chess::CHS_PIECE_COLOR tarColor, 
+        shared_ptr<sf::Texture> inTex );
 
 // ====================================================================== <<<<<
 
