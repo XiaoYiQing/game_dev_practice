@@ -220,7 +220,7 @@ void game::play_chess(){
     // Add to page.
     page3_game.addObj( but3B_reset );
 
-    // Vector of all buttons participating in Tik-Tak-Tok.
+    // Vector of all buttons participating in the chess game.
     vector<shared_ptr<SFML_button_XYQ>> CHS_buttons;
 
     float x_start = 210;        float y_start = 50;

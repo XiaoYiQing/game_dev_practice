@@ -136,6 +136,8 @@ bool CHS_SFML_eng::releaseButton(){
                     function. Once the internal game state is changed, update the visual state
                     as well.
                     */
+                    this->ply( act_set_lock_coords.x, act_set_lock_coords.y, 
+                        curr_ij.x, curr_ij.y );
 
                     // Update the visual components representing the game.
                     this->updateCHSBoard();
