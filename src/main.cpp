@@ -38,6 +38,7 @@
 #include "TTT_wt_but_XYQ.h"
 #include "CHK_SFML_eng.h"
 #include "CRG_SFML_eng.h"
+#include "CHS_SFML_eng.h"
 
 #include "chess.h"
 
@@ -86,9 +87,11 @@ int main(int, char**){
 
     // game::play_TikTakTok();
 
-    game::play_Checkers();
+    // game::play_Checkers();
 
     // game::play_cardReact();
+
+    game::play_chess();
 
 // ====================================================================== <<<<<
 
