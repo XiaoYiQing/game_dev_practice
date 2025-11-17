@@ -40,8 +40,6 @@
 #include "CRG_SFML_eng.h"
 #include "CHS_SFML_eng.h"
 
-#include "chess.h"
-
 #include "numUtils.h"
 
 using namespace std;
@@ -92,7 +90,7 @@ int main(int, char**){
     // game::play_cardReact();
 
     game::play_chess();
-
+    
 // ====================================================================== <<<<<
 
     // do_tests(0);
