@@ -128,6 +128,9 @@ bool CHS_SFML_eng::releaseButton(){
                     sf::Vector2i ij_diff = sf::Vector2i( curr_ij.x - act_set_lock_coords.x, 
                         curr_ij.y - act_set_lock_coords.y );
                     
+                    cout << "Start: " << act_set_lock_coords.x << ", " << act_set_lock_coords.y << endl;
+                    cout << "End: " << curr_ij.x << ", " << curr_ij.y << endl;
+
                     /*
                     TODO: This is where you need to update your game state using the play or ply
                     function. Once the internal game state is changed, update the visual state

@@ -228,7 +228,7 @@ void game::play_chess(){
     float butSep = 4;
 
     for( int i = 7; i >= 0; i-- ){
-    for( int j = 7; j >= 0; j-- ){
+    for( int j = 0; j < 8; j++ ){
 
         shared_ptr<SFML_button_XYQ> button3X = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
