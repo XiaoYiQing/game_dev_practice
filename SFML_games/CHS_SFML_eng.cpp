@@ -113,9 +113,9 @@ bool CHS_SFML_eng::releaseButton(){
                     
                     // Reset the tile color of the locked coordinate.
                     if( remainder( act_set_lock_coords.x + act_set_lock_coords.y, 2 ) ){
-                        act_set_lock_but->setUPColor( DTILECOLOR );
-                    }else{
                         act_set_lock_but->setUPColor( LTILECOLOR );
+                    }else{
+                        act_set_lock_but->setUPColor( DTILECOLOR );
                     }
                     act_set_lock_but->update();
 
@@ -132,9 +132,8 @@ bool CHS_SFML_eng::releaseButton(){
                     cout << "End: " << curr_ij.x << ", " << curr_ij.y << endl;
 
                     /*
-                    TODO: This is where you need to update your game state using the play or ply
-                    function. Once the internal game state is changed, update the visual state
-                    as well.
+                    Perform a chess ply (half-turn, or basically a play) according 
+                    the indicated vector.
                     */
                     this->ply( act_set_lock_coords.x, act_set_lock_coords.y, 
                         curr_ij.x, curr_ij.y );
