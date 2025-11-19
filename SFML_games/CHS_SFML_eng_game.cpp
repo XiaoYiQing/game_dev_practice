@@ -144,7 +144,6 @@ void game::play_chess(){
     // Page initialization.
     SFML_page_XYQ page2_readme = SFML_page_XYQ();
 
-
     // Object: button.
     shared_ptr<SFML_button_XYQ> but2A_back = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
@@ -302,7 +301,7 @@ void game::play_chess(){
                     if( but2A_back->pressButton( window ) ){}
 
                     if( but3A_mmenu->pressButton( window ) ){}
-                    // if( but3B_reset->pressButton( window ) ){}
+                    if( but3B_reset->pressButton( window ) ){}
 
                     CHS_game_obj.pressButton( window );
 
@@ -350,12 +349,12 @@ void game::play_chess(){
                         
                     }
 
-                    // // Reset TTT game.
-                    // if( but3B_reset->releaseButton() ){
+                    // Reset TTT game.
+                    if( but3B_reset->releaseButton() ){
 
-                    //     CHS_game_obj.resetBoard();
+                        CHS_game_obj.resetBoard();
 
-                    // }
+                    }
 
                     // // bool gameButRel = CHS_game_obj.releaseButton();
                     bool playMade = CHS_game_obj.releaseButton();
