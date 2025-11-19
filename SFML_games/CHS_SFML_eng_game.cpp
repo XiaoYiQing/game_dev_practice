@@ -313,7 +313,7 @@ void game::play_chess(){
     // Button count increment.
     but_cnt++;
 
-    // Object: button for enabling/disabling AI.
+    // Object: button for deciding if AI plays first or not.
     shared_ptr<SFML_button_XYQ> but4C_AI_playOrd = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
     but4C_AI_playOrd->setPos( p4_x_start, p4_y_start + but_cnt*p4_but_y_leap );

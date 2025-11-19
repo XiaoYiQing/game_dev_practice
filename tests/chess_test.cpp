@@ -2343,3 +2343,234 @@ void tests::chess_full_game_tests(){
 } 
 
 
+
+
+void tests::CHS_SFML_eng_tests(){
+
+// ---------------------------------------------------------------------- >>>>>
+//      SFML Variables Initialization
+// ---------------------------------------------------------------------- >>>>>
+
+    // Create a texture to hold the image
+    string button_img_np_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_np.png";
+    string button_img_p_FFN = RES_PATH_XYQ_str + "/button_orange_long_1_p.png";
+    string funny_img_FFN = RES_PATH_XYQ_str + "/funny_img_2.jpg";
+
+    // Textures file full name for the white pieces.
+    map< chess::CHS_PIECE_TYPE, string > CHS_PCE_W_tex_FFN_map;
+    // Textures file full name for the black pieces.
+    map< chess::CHS_PIECE_TYPE, string > CHS_PCE_B_tex_FFN_map;
+
+    CHS_PCE_W_tex_FFN_map[ chess::CHS_PIECE_TYPE::PAWN ] = 
+        RES_PATH_XYQ_str + "/CHS_w_pawn.png";
+    CHS_PCE_W_tex_FFN_map[ chess::CHS_PIECE_TYPE::KNIGHT ] = 
+        RES_PATH_XYQ_str + "/CHS_w_knight.png";
+    CHS_PCE_W_tex_FFN_map[ chess::CHS_PIECE_TYPE::BISHOP ] = 
+        RES_PATH_XYQ_str + "/CHS_w_bishop.png";
+    CHS_PCE_W_tex_FFN_map[ chess::CHS_PIECE_TYPE::ROOK ] = 
+        RES_PATH_XYQ_str + "/CHS_w_rook.png";
+    CHS_PCE_W_tex_FFN_map[ chess::CHS_PIECE_TYPE::QUEEN ] = 
+        RES_PATH_XYQ_str + "/CHS_w_queen.png";
+    CHS_PCE_W_tex_FFN_map[ chess::CHS_PIECE_TYPE::KING ] = 
+        RES_PATH_XYQ_str + "/CHS_w_king.png";
+
+    CHS_PCE_B_tex_FFN_map[ chess::CHS_PIECE_TYPE::PAWN ] = 
+        RES_PATH_XYQ_str + "/CHS_b_pawn.png";
+    CHS_PCE_B_tex_FFN_map[ chess::CHS_PIECE_TYPE::KNIGHT ] = 
+        RES_PATH_XYQ_str + "/CHS_b_knight.png";
+    CHS_PCE_B_tex_FFN_map[ chess::CHS_PIECE_TYPE::BISHOP ] = 
+        RES_PATH_XYQ_str + "/CHS_b_bishop.png";
+    CHS_PCE_B_tex_FFN_map[ chess::CHS_PIECE_TYPE::ROOK ] = 
+        RES_PATH_XYQ_str + "/CHS_b_rook.png";
+    CHS_PCE_B_tex_FFN_map[ chess::CHS_PIECE_TYPE::QUEEN ] = 
+        RES_PATH_XYQ_str + "/CHS_b_queen.png";
+    CHS_PCE_B_tex_FFN_map[ chess::CHS_PIECE_TYPE::KING ] = 
+        RES_PATH_XYQ_str + "/CHS_b_king.png";
+    
+
+    shared_ptr<sf::Texture> button_img_np_texture = SFMLUtilsXYQ::genTexture( button_img_np_FFN );
+    shared_ptr<sf::Texture> button_img_p_texture = SFMLUtilsXYQ::genTexture( button_img_p_FFN );
+    shared_ptr<sf::Texture> funny_img_texture = SFMLUtilsXYQ::genTexture( funny_img_FFN );
+
+    // shared_ptr<sf::Texture> CHK_red_img_texture = SFMLUtilsXYQ::genTexture( CHK_red_img_FFN );
+    
+    // White piece textures.
+    map< chess::CHS_PIECE_TYPE, shared_ptr<sf::Texture> > CHS_PCE_W_tex_map;
+    // Black piece textures.
+    map< chess::CHS_PIECE_TYPE, shared_ptr<sf::Texture> > CHS_PCE_B_tex_map;
+    // Obtain the white piece textures from specific file locations.
+    for (const pair< chess::CHS_PIECE_TYPE, string >& pair_z : CHS_PCE_W_tex_FFN_map) 
+        { CHS_PCE_W_tex_map[ pair_z.first ] = SFMLUtilsXYQ::genTexture( pair_z.second ); }
+    // Obtain the black piece textures from specific file locations.
+    for (const pair< chess::CHS_PIECE_TYPE, string >& pair_z : CHS_PCE_B_tex_FFN_map) 
+        { CHS_PCE_B_tex_map[ pair_z.first ] = SFMLUtilsXYQ::genTexture( pair_z.second ); }
+
+    // Obtain the font used for the game's texts.
+    sf::Font font = SFMLUtilsXYQ::getArialFont( RES_PATH_XYQ_str );
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Page 3 Game
+// ---------------------------------------------------------------------- >>>>>
+
+    // Page initialization.
+    SFML_page_XYQ page3_game = SFML_page_XYQ();
+
+    // Object: button for returning to the main page.
+    shared_ptr<SFML_button_XYQ> but3A_mmenu = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3A_mmenu->setPos( 200, 500 );
+    but3A_mmenu->setWidth( 150 );      
+    but3A_mmenu->setHeight( 50 );      
+    but3A_mmenu->setTxtFont( font );
+    but3A_mmenu->setTxtStr( "Back" );
+    but3A_mmenu->setTxtColor( 50, 50, 50, 255 );
+    but3A_mmenu->setUPTexture( button_img_np_texture );
+    but3A_mmenu->setPTexture( button_img_p_texture );
+    // Add to page.
+    page3_game.addObj( but3A_mmenu );
+
+    // Object: button for resetting the game board.
+    shared_ptr<SFML_button_XYQ> but3B_reset = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3B_reset->setPos( 400, 500 );
+    but3B_reset->setWidth( 150 );      
+    but3B_reset->setHeight( 50 );      
+    but3B_reset->setTxtFont( font );
+    but3B_reset->setTxtStr( "Reset" );
+    but3B_reset->setTxtColor( 50, 50, 50, 255 );
+    but3B_reset->setUPTexture( button_img_np_texture );
+    but3B_reset->setPTexture( button_img_p_texture );
+    // Add to page.
+    page3_game.addObj( but3B_reset );
+
+    // Vector of all buttons participating in the chess game.
+    vector<shared_ptr<SFML_button_XYQ>> CHS_buttons;
+
+    float x_start = 210;        float y_start = 50;
+    float butWidth = 44;       float butHeight = 44;
+    float butSep = 4;
+
+    for( int i = 7; i >= 0; i-- ){
+    for( int j = 0; j < 8; j++ ){
+
+        shared_ptr<SFML_button_XYQ> button3X = 
+            shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+
+        button3X->setPos( x_start + ( butWidth + butSep )*j,
+            y_start + ( butHeight + butSep )*i );
+        button3X->setWidth( butHeight );
+        button3X->setHeight( butWidth );
+
+        if( remainder(i+j,2) ){
+            button3X->setUPColor( CHS_SFML_eng::DTILECOLOR );  
+            button3X->setPColor( CHS_SFML_eng::PTILECOLOR );  
+        }else{
+            button3X->setUPColor( CHS_SFML_eng::LTILECOLOR );  
+            button3X->setPColor( CHS_SFML_eng::PTILECOLOR );  
+        }
+
+        button3X->setTxtFont( font );
+        button3X->setTxtStr( "" );
+        button3X->setTxtColor( 255, 0, 0, 255 );
+        button3X->disableSprite();
+        button3X->setUpSprtScale( 0.6f, 0.9f );
+        button3X->setPSprtScale( 0.5f, 0.5f );
+
+        CHS_buttons.push_back( button3X );
+        page3_game.addObj( button3X );
+
+    }}
+
+    // Create chess game object.
+    CHS_SFML_eng CHS_game_obj( CHS_buttons );
+
+    for( const pair< chess::CHS_PIECE_TYPE, shared_ptr<sf::Texture> >& pair_z : 
+        CHS_PCE_W_tex_map )
+        { CHS_game_obj.setCHS_pieceTex( pair_z.first, chess::CHS_PIECE_COLOR::WHITE, pair_z.second ); }
+    for( const pair< chess::CHS_PIECE_TYPE, shared_ptr<sf::Texture> >& pair_z : 
+        CHS_PCE_B_tex_map )
+        { CHS_game_obj.setCHS_pieceTex( pair_z.first, chess::CHS_PIECE_COLOR::BLACK, pair_z.second ); }
+    
+    CHS_game_obj.updateCHSBoard();
+
+    page3_game.update();
+    page3_game.enable();
+
+// ---------------------------------------------------------------------- <<<<<
+
+    // Create the main window.
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Checkers");
+
+    // Main loop.
+    while (window.isOpen()) {
+
+        sf::Event event;
+        while (window.pollEvent(event)) {
+
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+
+
+            // Mouse pressed event.
+            if (event.type == sf::Event::MouseButtonPressed) {
+                // Specific left click event.
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    
+                    // if( but3A_mmenu->pressButton( window ) ){}
+                    if( but3B_reset->pressButton( window ) ){}
+
+                    CHS_game_obj.pressButton( window );
+
+                }
+            }
+
+            // Mouse released event.
+            if (event.type == sf::Event::MouseButtonReleased){
+                if( event.mouseButton.button == sf::Mouse::Left ){
+
+                    // // Leave page and return to main menu.
+                    // if( but3A_mmenu->releaseButton() ){
+
+                    //     CHS_game_obj.resetBoard();
+                        
+                    //     page3_game.disable();
+                        
+                    // }
+
+                    // Reset TTT game.
+                    if( but3B_reset->releaseButton() ){
+
+                        CHS_game_obj.resetBoard();
+
+                    }
+
+                    bool playMade = CHS_game_obj.releaseButton();
+                    // if( playMade ){
+
+                    //     // Create a new thread that runs the runInThread function
+                    //     std::thread myThread( CHK_SFML_eng::AI_play, ref( CHS_game_obj ) );
+                    //     myThread.detach();
+
+                    // }
+
+                }
+            }
+
+        }
+
+        // Clear the window.
+        window.clear(sf::Color::Black); // Background color
+
+        // Draw the game page.
+        page3_game.beDrawn( window );
+
+        // Display what has been rendered to the window
+        window.display();
+
+    }
+
+}

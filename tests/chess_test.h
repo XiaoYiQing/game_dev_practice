@@ -2,8 +2,11 @@
 #define CHESS_TEST_H
 
 #include "chess.h"
+#include "CHS_SFML_eng.h"
 
 using namespace std;
+
+extern string RES_PATH_XYQ_str;
 
 namespace tests{
 
@@ -35,7 +38,7 @@ namespace tests{
 
     void chess_full_game_tests();
 
-    
+    void CHS_SFML_eng_tests();
 
 }
 

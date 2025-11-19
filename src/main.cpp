@@ -89,11 +89,11 @@ int main(int, char**){
 
     // game::play_cardReact();
 
-    game::play_chess();
+    // game::play_chess();
     
 // ====================================================================== <<<<<
 
-    // do_tests(0);
+    do_tests(0);
 
     return 0;
 
@@ -142,7 +142,7 @@ void do_tests( unsigned int test_id ){
 
     // tests::chess_base_tests();
     // tests::chess_chs_move_tests();
-    tests::chess_alg_coord_trans_tests();
+    // tests::chess_alg_coord_trans_tests();
     // tests::chess_game_manip_tests();
     // tests::chess_move_tests();
     // tests::chess_atk_check_tests();
@@ -156,6 +156,8 @@ void do_tests( unsigned int test_id ){
     // tests::chess_draw_tests();
     
     // tests::chess_full_game_tests();
+
+    tests::CHS_SFML_eng_tests();
 
 }
 
