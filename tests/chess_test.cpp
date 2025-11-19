@@ -2501,6 +2501,48 @@ void tests::CHS_SFML_eng_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Specific Scenario Setup
+// ---------------------------------------------------------------------- >>>>>
+
+    CHS_game_obj.clearBoard();
+
+    int scen_idx = 1;
+
+    switch( scen_idx ){
+    
+    // Castling.
+    case 0:
+        CHS_game_obj.set_piece_at( 0, 4, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+        CHS_game_obj.set_piece_at( 0, 7, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+        CHS_game_obj.set_piece_at( 0, 0, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+        CHS_game_obj.set_piece_at( 7, 4, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+        CHS_game_obj.set_piece_at( 7, 7, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+        CHS_game_obj.set_piece_at( 7, 0, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+        break;
+    
+    // Promotion.
+    case 1: 
+        CHS_game_obj.set_piece_at( 6, 3, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+        CHS_game_obj.set_piece_at( 1, 4, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+        
+        break;
+    };
+
+    CHS_game_obj.updateCHSBoard();
+
+// ---------------------------------------------------------------------- <<<<<
+
+
     // Create the main window.
     sf::RenderWindow window(sf::VideoMode(800, 600), "Checkers");
 

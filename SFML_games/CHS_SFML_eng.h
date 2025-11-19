@@ -135,6 +135,11 @@ protected:
     The vector of buttons representing the CHS board squares.
     */
     vector< shared_ptr< SFML_button_XYQ > > CHS_buttons;
+    
+    /**
+     * Vector of buttons for indicating what a pawn should be promoted to.
+     */
+    vector< shared_ptr< SFML_button_XYQ > > promo_buttons;
 
     // Textures for the white pieces.
     map< CHS_PIECE_TYPE, shared_ptr<sf::Texture> > CHS_PCE_W_tex_map;

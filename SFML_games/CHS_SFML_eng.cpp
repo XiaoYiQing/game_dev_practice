@@ -49,6 +49,27 @@ CHS_SFML_eng::CHS_SFML_eng() : chess(){
     }
     }
 
+    for( unsigned int i = 0; i < 4; i++ ){
+
+        shared_ptr<SFML_button_XYQ> buttonX = 
+            shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+
+        buttonX->setPos( x_start + ( butHeight + butSep )*i, 
+            y_start + ( butWidth + butSep )*BOARDWIDTH );
+        buttonX->setWidth( butWidth );      
+        buttonX->setHeight( butHeight ); 
+
+        buttonX->setUPColor( LTILECOLOR );  
+        buttonX->setPColor( PTILECOLOR );  
+
+        buttonX->setTxtStr( "" );
+        buttonX->setTxtColor( 255, 0, 0, 255 );
+        buttonX->disableSprite();
+
+        this->promo_buttons.push_back( buttonX );
+
+    }
+
 }
 
 
