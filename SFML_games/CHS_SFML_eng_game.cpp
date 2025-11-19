@@ -274,6 +274,87 @@ void game::play_chess(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Page 4 Options
+// ---------------------------------------------------------------------- >>>>>
+
+    float p4_x_start = 300;
+    float p4_y_start = 150;
+    float p4_but_y_leap = 100;
+    but_cnt = 0;
+    string enabledAI_str = "VS AI: enabled";
+    string disabledAI_str = "VS AI: disabled";
+
+    bool AI_first = false;
+    string AI_first_str = "AI first";
+    string AI_not_first_str = "Player first";
+
+    // Page initialization.
+    SFML_page_XYQ page4_opt = SFML_page_XYQ();
+
+    // Object: button for enabling/disabling AI.
+    shared_ptr<SFML_button_XYQ> but4B_AI_enable = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but4B_AI_enable->setPos( p4_x_start, p4_y_start + but_cnt*p4_but_y_leap );
+    but4B_AI_enable->setWidth( 200 );      
+    but4B_AI_enable->setHeight( 50 );      
+    but4B_AI_enable->setTxtFont( font );
+    // if( CHK_game_obj.is_AI_enabled() ){
+    //     but4B_AI_enable->setTxtStr( enabledAI_str );
+    // }else{
+        but4B_AI_enable->setTxtStr( disabledAI_str );
+    // }
+    but4B_AI_enable->setTxtColor( 50, 50, 50, 255 );
+    but4B_AI_enable->setUPTexture( button_img_np_texture );
+    but4B_AI_enable->setPTexture( button_img_p_texture );
+    // Add to page.
+    page4_opt.addObj( but4B_AI_enable );
+    // Button count increment.
+    but_cnt++;
+
+    // Object: button for enabling/disabling AI.
+    shared_ptr<SFML_button_XYQ> but4C_AI_playOrd = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but4C_AI_playOrd->setPos( p4_x_start, p4_y_start + but_cnt*p4_but_y_leap );
+    but4C_AI_playOrd->setWidth( 200 );      
+    but4C_AI_playOrd->setHeight( 50 );      
+    but4C_AI_playOrd->setTxtFont( font );
+    if( AI_first ){
+        but4C_AI_playOrd->setTxtStr( AI_first_str );
+    }else{
+        but4C_AI_playOrd->setTxtStr( AI_not_first_str );
+    }
+    but4C_AI_playOrd->setTxtColor( 50, 50, 50, 255 );
+    but4C_AI_playOrd->setUPTexture( button_img_np_texture );
+    but4C_AI_playOrd->setPTexture( button_img_p_texture );
+    // Add to page.
+    page4_opt.addObj( but4C_AI_playOrd );
+    // Button count increment.
+    but_cnt++;
+
+    // Object: button for returning to the main page.
+    shared_ptr<SFML_button_XYQ> but4A_mmenu = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but4A_mmenu->setPos( p4_x_start, p4_y_start + but_cnt*p4_but_y_leap );
+    but4A_mmenu->setWidth( 200 );      
+    but4A_mmenu->setHeight( 50 );      
+    but4A_mmenu->setTxtFont( font );
+    but4A_mmenu->setTxtStr( "Back" );
+    but4A_mmenu->setTxtColor( 50, 50, 50, 255 );
+    but4A_mmenu->setUPTexture( button_img_np_texture );
+    but4A_mmenu->setPTexture( button_img_p_texture );
+    // Add to page.
+    page4_opt.addObj( but4A_mmenu );
+    // Button count increment.
+    but_cnt++;
+
+
+    page4_opt.update();
+    page4_opt.disable();
+
+// ---------------------------------------------------------------------- <<<<<
+
     // Create the main window.
     sf::RenderWindow window(sf::VideoMode(800, 600), "Checkers");
 
@@ -305,7 +386,7 @@ void game::play_chess(){
 
                     CHS_game_obj.pressButton( window );
 
-                    // if( but4A_mmenu->pressButton( window ) ){}
+                    if( but4A_mmenu->pressButton( window ) ){}
                     // if( but4B_AI_enable->pressButton( window ) ){}
                     // if( but4C_AI_playOrd->pressButton( window ) ){}
 
@@ -330,7 +411,7 @@ void game::play_chess(){
                     }
                     if( but1D_opt->releaseButton() ){
                         page1_mmenu.disable();
-                        // page4_opt.enable();
+                        page4_opt.enable();
                     }
 
                     if( but2A_back->releaseButton() ){
@@ -366,10 +447,10 @@ void game::play_chess(){
 
                     // }
 
-                    // if( but4A_mmenu->releaseButton() ){
-                    //     page4_opt.disable();
-                    //     page1_mmenu.enable();
-                    // }
+                    if( but4A_mmenu->releaseButton() ){
+                        page4_opt.disable();
+                        page1_mmenu.enable();
+                    }
 
                     // if( but4B_AI_enable->releaseButton() ){
                     //     CHS_game_obj.toggle_AI();
@@ -408,7 +489,7 @@ void game::play_chess(){
         // Draw the game page.
         page3_game.beDrawn( window );
         // Draw the option page.
-        // page4_opt.beDrawn( window );
+        page4_opt.beDrawn( window );
 
         // Display what has been rendered to the window
         window.display();
