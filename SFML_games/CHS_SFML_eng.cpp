@@ -364,8 +364,12 @@ void CHS_SFML_eng::updateCHSBoard(){
     }
     }
 
+    // TODO: Note that when white turn, the promotion standby is actually on a black piece
+    // and vice versa. If you want turn to remain white while a white pawn is waiting for
+    // promotion (and same consistency for black), you would need to modify the base class
+    // chess.
     if( this->promo_lock ){
-        if( this->is_white_turn() ){
+        if( this->is_black_turn() ){
             for( auto but_z : this->promo_buttons ){
                 if( this->CHS_PCE_W_tex_map[but_z.first] ){
                     but_z.second->setPTexture( this->CHS_PCE_W_tex_map[but_z.first] );
