@@ -49,6 +49,11 @@ CHS_SFML_eng::CHS_SFML_eng() : chess(){
     }
     }
 
+    // Define vector of promotion choices.
+    vector<chess::CHS_PIECE_TYPE> promo_types = { chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_TYPE::QUEEN };
+
+
     for( unsigned int i = 0; i < 4; i++ ){
 
         shared_ptr<SFML_button_XYQ> buttonX = 
@@ -66,7 +71,7 @@ CHS_SFML_eng::CHS_SFML_eng() : chess(){
         buttonX->setTxtColor( 255, 0, 0, 255 );
         buttonX->disableSprite();
 
-        this->promo_buttons.push_back( buttonX );
+        this->promo_buttons[ promo_types[i] ] = buttonX;
 
     }
 
@@ -77,6 +82,44 @@ CHS_SFML_eng::CHS_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> CHS_buttons ) : 
 {
     act_set_lock = false;
     this->CHS_buttons = CHS_buttons;
+
+    // Define the default locations and sizes of the buttons.
+    float x_start = 100;        float y_start = 100;
+    float butWidth = 50;       float butHeight = 50;
+    float butSep = 5;
+    // Define vector of promotion choices.
+    vector<chess::CHS_PIECE_TYPE> promo_types = { chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_TYPE::QUEEN };
+
+    for( unsigned int i = 0; i < 4; i++ ){
+
+        shared_ptr<SFML_button_XYQ> buttonX = 
+            shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+        
+        buttonX->setPos( x_start + ( butHeight + butSep )*i, 
+            y_start + ( butWidth + butSep )*BOARDWIDTH );
+        buttonX->setWidth( butWidth );      
+        buttonX->setHeight( butHeight ); 
+
+        buttonX->setUPColor( LTILECOLOR );  
+        buttonX->setPColor( PTILECOLOR );  
+
+        buttonX->setTxtStr( "" );
+        buttonX->setTxtColor( 255, 0, 0, 255 );
+        buttonX->disableSprite();
+
+        this->promo_buttons[ promo_types[i] ] = buttonX;
+
+    }
+
+}
+
+CHS_SFML_eng::CHS_SFML_eng( vector<shared_ptr<SFML_button_XYQ>> CHS_buttons, 
+    map< CHS_PIECE_TYPE, shared_ptr< SFML_button_XYQ > > promo_buttons ) : chess()
+{
+    act_set_lock = false;
+    this->CHS_buttons = CHS_buttons;
+    this->promo_buttons = promo_buttons;
 }
 
 
@@ -319,6 +362,35 @@ void CHS_SFML_eng::updateCHSBoard(){
         but_ij->update();
 
     }
+    }
+
+    if( this->promo_lock ){
+        if( this->is_white_turn() ){
+            for( auto but_z : this->promo_buttons ){
+                if( this->CHS_PCE_W_tex_map[but_z.first] ){
+                    but_z.second->setPTexture( this->CHS_PCE_W_tex_map[but_z.first] );
+                    but_z.second->setUPTexture( this->CHS_PCE_W_tex_map[but_z.first] );
+                    but_z.second->disableText();
+                    but_z.second->enableSprite();
+                }
+            }
+        }else{
+            for( auto but_z : this->promo_buttons ){
+                if( this->CHS_PCE_B_tex_map[but_z.first] ){
+                    but_z.second->setPTexture( this->CHS_PCE_B_tex_map[but_z.first] );
+                    but_z.second->setUPTexture( this->CHS_PCE_B_tex_map[but_z.first] );
+                    but_z.second->disableText();
+                    but_z.second->enableSprite();
+                }
+            }
+        }
+        for( auto but_z : this->promo_buttons ){
+            but_z.second->enable();
+        }
+    }else{
+        for( auto but_z : this->promo_buttons ){
+            but_z.second->disable();
+        }
     }
 
     return;

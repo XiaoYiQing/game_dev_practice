@@ -2448,13 +2448,16 @@ void tests::CHS_SFML_eng_tests(){
 
     // Vector of all buttons participating in the chess game.
     vector<shared_ptr<SFML_button_XYQ>> CHS_buttons;
+    // Vector of buttons utilized to select which chess piece a pawn becomes upon promotion.
+    map< chess::CHS_PIECE_TYPE, shared_ptr<SFML_button_XYQ> > promo_buttons;
 
     float x_start = 210;        float y_start = 50;
     float butWidth = 44;       float butHeight = 44;
     float butSep = 4;
 
-    for( int i = 7; i >= 0; i-- ){
-    for( int j = 0; j < 8; j++ ){
+    // Initialize the chess board tile buttons.
+    for( int i = chess::BOARDHEIGHT - 1; i >= 0; i-- ){
+    for( int j = 0; j < chess::BOARDWIDTH; j++ ){
 
         shared_ptr<SFML_button_XYQ> button3X = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
@@ -2484,8 +2487,39 @@ void tests::CHS_SFML_eng_tests(){
 
     }}
 
+    vector<chess::CHS_PIECE_TYPE> promo_types = { chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_TYPE::QUEEN };
+    // Initialize the promotion buttons.
+    for( unsigned int i = 0; i < 4; i++ ){
+
+        shared_ptr<SFML_button_XYQ> buttonX = 
+            shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+        
+        buttonX->setPos( x_start + ( butWidth + butSep )*( 1 + chess::BOARDWIDTH ), 
+            y_start + ( butHeight + butSep )*i );
+        buttonX->setWidth( butWidth );      
+        buttonX->setHeight( butHeight ); 
+
+        buttonX->setUPColor( CHS_SFML_eng::LTILECOLOR );  
+        buttonX->setPColor( CHS_SFML_eng::PTILECOLOR );  
+
+        buttonX->setTxtFont( font );
+        buttonX->setTxtStr( "" );
+        buttonX->setTxtColor( 255, 0, 0, 255 );
+        buttonX->disableSprite();
+        buttonX->setUpSprtScale( 0.6f, 0.9f );
+        buttonX->setPSprtScale( 0.5f, 0.5f );
+
+        // Disable the promotion button until a promotion case happens.
+        buttonX->disable();
+
+        promo_buttons[ promo_types[i] ] = buttonX;
+        page3_game.addObj( buttonX );
+
+    }
+
     // Create chess game object.
-    CHS_SFML_eng CHS_game_obj( CHS_buttons );
+    CHS_SFML_eng CHS_game_obj( CHS_buttons, promo_buttons );
 
     for( const pair< chess::CHS_PIECE_TYPE, shared_ptr<sf::Texture> >& pair_z : 
         CHS_PCE_W_tex_map )
@@ -2603,6 +2637,12 @@ void tests::CHS_SFML_eng_tests(){
             }
 
         }
+
+        // if( CHS_game_obj.getPromo_lock() ){
+        //     for( auto item_z : promo_buttons ){
+        //         item_z->enable();
+        //     }
+        // }
 
         // Clear the window.
         window.clear(sf::Color::Black); // Background color
