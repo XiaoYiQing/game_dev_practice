@@ -157,6 +157,12 @@ bool CHS_SFML_eng::pressButton( const sf::RenderWindow& window ){
 
     }
 
+    for( auto but_z : this->promo_buttons ){
+
+        success = but_z.second->pressButton( window );
+
+    }
+
     return success;
 
 }
@@ -224,6 +230,23 @@ bool CHS_SFML_eng::releaseButton(){
         }
     }
     
+    for( auto but_z : this->promo_buttons ){
+
+        released = but_z.second->releaseButton();
+        // When promotion selection is successful, apply the chess piece type
+        // to the target being promoted.
+        if( released ){
+            if( this->promote( promo_point.second, but_z.first ) ){
+                // Update the visual components representing the game.
+                this->updateCHSBoard();
+            }else{
+                throw runtime_error( "Pawn promotion failed even when conditions were met." );
+            }
+            break;
+        }
+
+    }
+
     return played;
 
 }
@@ -389,11 +412,15 @@ void CHS_SFML_eng::updateCHSBoard(){
             }
         }
         for( auto but_z : this->promo_buttons ){
+            but_z.second->unlock();
             but_z.second->enable();
+            but_z.second->update();
         }
     }else{
         for( auto but_z : this->promo_buttons ){
+            but_z.second->lock();
             but_z.second->disable();
+            but_z.second->update();
         }
     }
 
