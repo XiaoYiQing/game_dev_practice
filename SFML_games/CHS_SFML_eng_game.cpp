@@ -554,6 +554,12 @@ void game::play_chess(){
 
         }
 
+        // Obtain current game state.
+        chess::CHS_STATE currState = CHS_game_obj.getState();
+        // Update the game state.
+        but3D_stateDisplay->setTxtStr( chess::get_CHS_STATE_Str( currState ) );
+        but3D_stateDisplay->update();
+
         // Clear the window.
         window.clear(sf::Color::Black); // Background color
 
