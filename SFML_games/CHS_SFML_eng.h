@@ -97,10 +97,6 @@ public:
 //      Access Functions
 // ====================================================================== >>>>>
 
-    /*
-    Set the texture for the target piece. 
-    TODO: There is no direct translation from checkers to chess.
-    */
     bool setCHS_pieceTex( chess::chs_piece tarPiece, shared_ptr<sf::Texture> inTex );
 
     bool setCHS_pieceTex( chess::CHS_PIECE_TYPE tarType, chess::CHS_PIECE_COLOR tarColor, 

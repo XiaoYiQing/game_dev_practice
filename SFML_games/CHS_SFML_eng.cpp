@@ -392,7 +392,7 @@ void CHS_SFML_eng::updateCHSBoard(){
     // promotion (and same consistency for black), you would need to modify the base class
     // chess.
     if( this->promo_lock ){
-        if( this->is_black_turn() ){
+        if( this->get_piece_at( this->promo_point ).color == CHS_PIECE_COLOR::WHITE ){
             for( auto but_z : this->promo_buttons ){
                 if( this->CHS_PCE_W_tex_map[but_z.first] ){
                     but_z.second->setPTexture( this->CHS_PCE_W_tex_map[but_z.first] );
