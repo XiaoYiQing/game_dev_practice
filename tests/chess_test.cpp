@@ -2542,7 +2542,7 @@ void tests::CHS_SFML_eng_tests(){
 
     CHS_game_obj.clearBoard();
 
-    int scen_idx = 1;
+    int scen_idx = 2;
 
     switch( scen_idx ){
     
@@ -2570,6 +2570,14 @@ void tests::CHS_SFML_eng_tests(){
             chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
         
         break;
+    
+    // Draw state.
+    case 2:
+        CHS_game_obj.set_piece_at( 6, 3, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+        CHS_game_obj.set_piece_at( 1, 4, chess::chs_piece( 
+            chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
     };
 
     CHS_game_obj.updateCHSBoard();

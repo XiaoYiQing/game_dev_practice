@@ -324,9 +324,9 @@ void game::play_chess(){
     but3D_stateDisplay->setTxtFont( font );
     // but3D_stateDisplay->setTxtSize( 20 );
     but3D_stateDisplay->setTxtStr( "Display" );
-    but3D_stateDisplay->setTxtColor( 200, 200, 200, 255 );
-    but3D_stateDisplay->setUPColor( 100, 100, 255, 255 );
-    but3D_stateDisplay->setPColor( 100, 100, 255, 255 );
+    but3D_stateDisplay->setTxtColor( 0, 0, 0, 255 );
+    but3D_stateDisplay->setUPColor( 180, 180, 255, 255 );
+    but3D_stateDisplay->setPColor( 180, 180, 255, 255 );
     but3D_stateDisplay->disableSprite();
     // Add to page.
     page3_game.addObj( but3D_stateDisplay );

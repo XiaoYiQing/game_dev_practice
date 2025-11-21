@@ -393,7 +393,8 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 {
 
     // Prevent play if the game is already in a win state.
-    if( this->state == CHS_STATE::BWIN || this->state == CHS_STATE::WWIN ){
+    if( this->state == CHS_STATE::BWIN || this->state == CHS_STATE::WWIN || 
+        this->state == CHS_STATE::DRAW ){
         return false;
     }
 
@@ -2432,9 +2433,11 @@ void chess::upd_end_game_state(){
             this->state = CHS_STATE::BWIN;
         }
         return;
+    }else{
+        if( this->is_draw() ){
+            this->state = CHS_STATE::DRAW;
+        }
     }
-
-
 
 }
 
