@@ -191,11 +191,26 @@ void game::play_chess(){
     // Page initialization.
     SFML_page_XYQ page3_game = SFML_page_XYQ();
 
+    // Define key coordinates and visual object sizes.
+
+    pair<float,float> chs_board_UL = { 150.0f, 50.0f };   // Chess board upper-left corner.
+    float chs_but_W = 46.0f;    
+    float chs_but_H = 46.0f;
+    float chs_but_sep = 4.0f;
+
+    // Upper-left corner of the control buttons section.
+    pair<float,float> ctrl_buts_UL = { 150.0f, chs_board_UL.second + 
+        ( chs_but_H + chs_but_sep )*chess::BOARDHEIGHT - chs_but_sep + 20 };
+    float but_X_sep = 50;
+    float but_Y_sep = 10;
+    float but_W = 150;
+    float but_H = 50;
+
     // Object: button for returning to the main page.
     shared_ptr<SFML_button_XYQ> but3A_mmenu = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    but3A_mmenu->setPos( 200, 500 );
-    but3A_mmenu->setWidth( 150 );      
+    but3A_mmenu->setPos( ctrl_buts_UL.first, ctrl_buts_UL.second );
+    but3A_mmenu->setWidth( but_W );      
     but3A_mmenu->setHeight( 50 );      
     but3A_mmenu->setTxtFont( font );
     but3A_mmenu->setTxtStr( "Back" );
@@ -208,9 +223,10 @@ void game::play_chess(){
     // Object: button for resetting the game board.
     shared_ptr<SFML_button_XYQ> but3B_reset = 
         shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
-    but3B_reset->setPos( 400, 500 );
-    but3B_reset->setWidth( 150 );      
-    but3B_reset->setHeight( 50 );      
+    but3B_reset->setPos( ctrl_buts_UL.first + but_W + but_X_sep, 
+        ctrl_buts_UL.second );
+    but3B_reset->setWidth( but_W );      
+    but3B_reset->setHeight( but_H );      
     but3B_reset->setTxtFont( font );
     but3B_reset->setTxtStr( "Reset" );
     but3B_reset->setTxtColor( 50, 50, 50, 255 );
@@ -219,14 +235,13 @@ void game::play_chess(){
     // Add to page.
     page3_game.addObj( but3B_reset );
 
+
     // Vector of all buttons participating in the chess game.
     vector<shared_ptr<SFML_button_XYQ>> CHS_buttons;
     // Vector of buttons utilized to select which chess piece a pawn becomes upon promotion.
     map< chess::CHS_PIECE_TYPE, shared_ptr<SFML_button_XYQ> > promo_buttons;
 
-    float x_start = 210;        float y_start = 50;
-    float butWidth = 44;       float butHeight = 44;
-    float butSep = 4;
+    float x_start = chs_board_UL.first;        float y_start = chs_board_UL.second;
 
     for( int i = chess::BOARDHEIGHT - 1; i >= 0; i-- ){
     for( int j = 0; j < chess::BOARDWIDTH; j++ ){
@@ -234,10 +249,10 @@ void game::play_chess(){
         shared_ptr<SFML_button_XYQ> button3X = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
 
-        button3X->setPos( x_start + ( butWidth + butSep )*j,
-            y_start + ( butHeight + butSep )*i );
-        button3X->setWidth( butHeight );
-        button3X->setHeight( butWidth );
+        button3X->setPos( x_start + ( chs_but_W + chs_but_sep )*j,
+            y_start + ( chs_but_H + chs_but_sep )*i );
+        button3X->setWidth( chs_but_H );
+        button3X->setHeight( chs_but_W );
 
         if( remainder(i+j,2) ){
             button3X->setUPColor( CHS_SFML_eng::DTILECOLOR );  
@@ -251,26 +266,32 @@ void game::play_chess(){
         button3X->setTxtStr( "" );
         button3X->setTxtColor( 255, 0, 0, 255 );
         button3X->disableSprite();
-        button3X->setUpSprtScale( 0.6f, 0.9f );
-        button3X->setPSprtScale( 0.5f, 0.5f );
+        button3X->setUpSprtScale( 0.5f, 0.9f );
+        button3X->setPSprtScale( 0.4f, 0.7f );
 
         CHS_buttons.push_back( button3X );
         page3_game.addObj( button3X );
 
     }}
 
+    // Obtain the end x and y positions from the previously defined visual objects.
+    float x_end = CHS_buttons[ chess::BOARDWIDTH - 1 ]->getX() + 
+        CHS_buttons[ CHS_buttons.size() - 1 ]->getWidth();
+    float y_end = CHS_buttons[ chess::BOARDWIDTH - 1 ]->getY() + 
+        CHS_buttons[ CHS_buttons.size() - 1 ]->getHeight();
+
     vector<chess::CHS_PIECE_TYPE> promo_types = { chess::CHS_PIECE_TYPE::KNIGHT,
         chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_TYPE::QUEEN };
     // Initialize the promotion buttons.
-    for( unsigned int i = 0; i < 4; i++ ){
+    for( unsigned int i = 0; i < promo_types.size(); i++ ){
 
         shared_ptr<SFML_button_XYQ> buttonX = 
             shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
         
-        buttonX->setPos( x_start + ( butWidth + butSep )*( 1 + chess::BOARDWIDTH ), 
-            y_start + ( butHeight + butSep )*i );
-        buttonX->setWidth( butWidth );      
-        buttonX->setHeight( butHeight ); 
+        buttonX->setPos( x_end + 3*chs_but_sep, 
+            y_start + ( chs_but_H + chs_but_sep )*i );
+        buttonX->setWidth( chs_but_W );      
+        buttonX->setHeight( chs_but_H ); 
 
         buttonX->setUPColor( CHS_SFML_eng::LTILECOLOR );  
         buttonX->setPColor( CHS_SFML_eng::PTILECOLOR );  
@@ -279,8 +300,8 @@ void game::play_chess(){
         buttonX->setTxtStr( "" );
         buttonX->setTxtColor( 255, 0, 0, 255 );
         buttonX->disableSprite();
-        buttonX->setUpSprtScale( 0.6f, 0.9f );
-        buttonX->setPSprtScale( 0.5f, 0.5f );
+        buttonX->setUpSprtScale( 0.5f, 0.9f );
+        buttonX->setPSprtScale( 0.4f, 0.7f );
 
         // Disable the promotion button until a promotion case happens.
         buttonX->disable();
@@ -289,6 +310,27 @@ void game::play_chess(){
         page3_game.addObj( buttonX );
 
     }
+
+    x_end = promo_buttons[ promo_types[ promo_types.size()-1 ] ]->getX();
+    y_end = promo_buttons[ promo_types[ promo_types.size()-1 ] ]->getY() + 
+        promo_buttons[ promo_types[ promo_types.size()-1 ] ]->getHeight();
+
+    // Object: button for displaying the current state of the game.
+    shared_ptr<SFML_button_XYQ> but3D_stateDisplay = 
+        shared_ptr<SFML_button_XYQ>( new SFML_button_XYQ() );
+    but3D_stateDisplay->setPos( x_end, y_end + but_Y_sep );
+    but3D_stateDisplay->setWidth( but_W );      
+    but3D_stateDisplay->setHeight( but_H );      
+    but3D_stateDisplay->setTxtFont( font );
+    // but3D_stateDisplay->setTxtSize( 20 );
+    but3D_stateDisplay->setTxtStr( "Display" );
+    but3D_stateDisplay->setTxtColor( 200, 200, 200, 255 );
+    but3D_stateDisplay->setUPColor( 100, 100, 255, 255 );
+    but3D_stateDisplay->setPColor( 100, 100, 255, 255 );
+    but3D_stateDisplay->disableSprite();
+    // Add to page.
+    page3_game.addObj( but3D_stateDisplay );
+
 
     // Create chess game object.
     CHS_SFML_eng CHS_game_obj( CHS_buttons, promo_buttons );
@@ -389,7 +431,7 @@ void game::play_chess(){
 // ---------------------------------------------------------------------- <<<<<
 
     // Create the main window.
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Checkers");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Chess");
 
     // Main loop.
     while (window.isOpen()) {
