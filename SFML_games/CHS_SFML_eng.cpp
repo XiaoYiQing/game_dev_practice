@@ -254,8 +254,11 @@ bool CHS_SFML_eng::releaseButton(){
 
 // Lock all buttons.
 void CHS_SFML_eng::lock_buttons(){
-    for( shared_ptr<SFML_button_XYQ> button_z : CHS_buttons ){
+    for( shared_ptr<SFML_button_XYQ> button_z : this->CHS_buttons ){
         button_z->lock();
+    }
+    for( pair< CHS_PIECE_TYPE, shared_ptr<SFML_button_XYQ> > but_pair_z : this->promo_buttons ){
+        but_pair_z.second->lock();
     }
 }
 
@@ -263,6 +266,9 @@ void CHS_SFML_eng::lock_buttons(){
 void CHS_SFML_eng::unlock_buttons(){
     for( shared_ptr<SFML_button_XYQ> button_z : CHS_buttons ){
         button_z->unlock();
+    }
+    for( pair< CHS_PIECE_TYPE, shared_ptr<SFML_button_XYQ> > but_pair_z : this->promo_buttons ){
+        but_pair_z.second->unlock();
     }
 }
 
@@ -387,12 +393,9 @@ void CHS_SFML_eng::updateCHSBoard(){
     }
     }
 
-    // TODO: Note that when white turn, the promotion standby is actually on a black piece
-    // and vice versa. If you want turn to remain white while a white pawn is waiting for
-    // promotion (and same consistency for black), you would need to modify the base class
-    // chess.
     if( this->promo_lock ){
-        if( this->get_piece_at( this->promo_point ).color == CHS_PIECE_COLOR::WHITE ){
+        chs_piece curr_pce = this->get_piece_at( this->promo_point );
+        if( curr_pce.color == CHS_PIECE_COLOR::WHITE && curr_pce.type == CHS_PIECE_TYPE::PAWN ){
             for( auto but_z : this->promo_buttons ){
                 if( this->CHS_PCE_W_tex_map[but_z.first] ){
                     but_z.second->setPTexture( this->CHS_PCE_W_tex_map[but_z.first] );
@@ -401,7 +404,7 @@ void CHS_SFML_eng::updateCHSBoard(){
                     but_z.second->enableSprite();
                 }
             }
-        }else{
+        }else if( curr_pce.color == CHS_PIECE_COLOR::BLACK && curr_pce.type == CHS_PIECE_TYPE::PAWN ){
             for( auto but_z : this->promo_buttons ){
                 if( this->CHS_PCE_B_tex_map[but_z.first] ){
                     but_z.second->setPTexture( this->CHS_PCE_B_tex_map[but_z.first] );
@@ -410,6 +413,8 @@ void CHS_SFML_eng::updateCHSBoard(){
                     but_z.second->enableSprite();
                 }
             }
+        }else{
+            throw runtime_error( "Promotion point's chess piece is invalid." );
         }
         for( auto but_z : this->promo_buttons ){
             but_z.second->unlock();
