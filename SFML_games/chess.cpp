@@ -62,6 +62,25 @@ chess::CHS_STATE chess::get_CHS_STATE_AtIdx( int idx ){
 
 
 // ====================================================================== >>>>>
+//      Class Enum "CHS_AI_OPT" Help Functions
+// ====================================================================== >>>>>
+
+string chess::get_CHS_AI_OPT_Str( CHS_AI_OPT tar_CHS_AI_OPT ){
+    return string( magic_enum::enum_name( tar_CHS_AI_OPT ) );
+}
+
+chess::CHS_AI_OPT chess::get_CHS_AI_OPT_AtIdx( int idx ){
+    if( idx >= 0 && idx < chess::CHS_AI_OPT_Count ){
+        return static_cast<chess::CHS_AI_OPT>(idx);
+    }else{
+        throw invalid_argument( "Invalid int index for accessing enum \"CHS_AI_OPT\"." );
+    }
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Chess Piece Class
 // ====================================================================== >>>>>
 

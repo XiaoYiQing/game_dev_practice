@@ -137,6 +137,41 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
 
 // ====================================================================== >>>>>
+//      Class Enum "CHS_AI_OPT" Help Functions
+// ====================================================================== >>>>>
+/**
+ * Options with AI selection:
+ * - [0 = standard minmax]
+ * - [1 = multi-threaded standard minmax]
+ * - [2 = minmax with AB-pruning]
+ * - [3 = multi-threaded minmax with AB-pruning]
+ */
+
+    /**
+     * Enum representing the AI options being used.
+     */
+    enum class CHS_AI_OPT{ STD_MM, MT_MM, STD_AB_MM, MT_AB_MM };
+    // The number of enum entries in the enum "CHS_AI_OPT" (Uses magic enum).
+    const static int CHS_AI_OPT_Count = (int) magic_enum::enum_count<CHS_AI_OPT>();
+    /**
+     * Obtain the string of the target enum case (Uses magic enum).
+     * 
+     * @param tar_CHS_AI_OPT The target CHS_AI_OPT enum.
+     * @return The string representation of the target CHS_AI_OPT enum.
+     */
+    static string get_CHS_AI_OPT_Str( CHS_AI_OPT tar_CHS_AI_OPT );
+    /**
+     * Obtain the CHS_AI_OPT enum whose native index matches the target index.
+     * 
+     * @param idx The target index for which we seek a matching CHS_AI_OPT enum.
+     * @return The matching CHS_AI_OPT enum to the target index, if it exists.
+     */
+    static CHS_AI_OPT get_CHS_AI_OPT_AtIdx( int idx );
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Chess Piece Class
 // ====================================================================== >>>>>
 
