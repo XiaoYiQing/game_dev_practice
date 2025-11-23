@@ -2664,3 +2664,95 @@ void tests::CHS_SFML_eng_tests(){
     }
 
 }
+
+
+void tests::chess_all_alg_comm_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    chess myGame_tmp;
+    
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.resetBoard();
+
+    vector< string > alg_comm_vec = myGame.get_all_psbl_alg_comm();
+
+    myGame_tmp = myGame;
+    for( string alg_comm_z : alg_comm_vec ){
+        myGame_tmp.ply_ag_comm( alg_comm_z );
+        // myGame_tmp.printBoard();
+        myGame_tmp = myGame;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board With No Pawns
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.resetBoard();
+
+    chess::chs_piece empty_piece;
+    empty_piece.type = chess::CHS_PIECE_TYPE::NO_P;
+    empty_piece.color = chess::CHS_PIECE_COLOR::NO_C;
+
+    for( int z = 0; z < 8; z++ ){
+        myGame.set_piece_at( 1, z, empty_piece );
+        myGame.set_piece_at( 6, z, empty_piece );
+    }
+
+    alg_comm_vec = myGame.get_all_psbl_alg_comm();
+
+    myGame_tmp = myGame;
+    for( string alg_comm_z : alg_comm_vec ){
+        try{
+            myGame_tmp.ply_ag_comm( alg_comm_z );
+        }catch(...){
+            int LOOL = 0;
+        }
+        // myGame_tmp.printBoard();
+        myGame_tmp = myGame;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Going Into Promotion
+// ---------------------------------------------------------------------- >>>>>
+
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 1, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 0, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    myGame.printBoard();
+    alg_comm_vec = myGame.get_all_psbl_alg_comm();
+
+    myGame_tmp = myGame;
+    for( string alg_comm_z : alg_comm_vec ){
+        try{
+            myGame_tmp.ply_ag_comm( alg_comm_z );
+        }catch(...){
+        }
+        myGame_tmp.printBoard();
+        myGame_tmp = myGame;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+
+}
+

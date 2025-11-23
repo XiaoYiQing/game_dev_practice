@@ -2147,15 +2147,20 @@ void chess::upd_mid_game_state(){
 
 vector< string > chess::get_all_psbl_alg_comm() const{
 
-    // Obtain all possible white plays.
+    // Obtain all current possible plays.
     vector<chs_move> all_plays = this->get_all_valid_moves();
     vector<chs_move> all_atks = this->get_all_valid_atks();
     all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
+
+    // Initialize final vector of algebraic commands.
+    vector< string > alg_comm_vec;
+    alg_comm_vec.reserve( all_plays.size() + 12 );
     
-    string alg_comm_z = "";
-    CHS_PIECE_TYPE pce_type_z;
-    pair<char,int> str_alg_z;
-    pair<char,int> end_alg_z;
+    string alg_comm_z = "";         // Current algebraic command being constructed.
+    CHS_PIECE_TYPE pce_type_z;      // The chess piece type of the current piece subject to play.
+    pair<char,int> str_alg_z;       // Current piece starting algebraic position.
+    pair<char,int> end_alg_z;       // Current piece ending algebraic position (after play).
+
     for( chs_move play_z : all_plays ){
 
         alg_comm_z = "";
@@ -2186,10 +2191,35 @@ vector< string > chess::get_all_psbl_alg_comm() const{
         str_alg_z = cart_to_alg( play_z.pt_a );
         end_alg_z = cart_to_alg( play_z.pt_b );
 
+        alg_comm_z += str_alg_z.first;
+        alg_comm_z += to_string( str_alg_z.second );
+        alg_comm_z += end_alg_z.first;
+        alg_comm_z += to_string( end_alg_z.second );
+
+        
+
+        // Special promotion options when a pawn is played to the last row.
+        if( pce_type_z == CHS_PIECE_TYPE::PAWN && ( play_z.pt_b.first == 0 || 
+            play_z.pt_b.first == chess::BOARDHEIGHT - 1 ) )
+        {
+            alg_comm_vec.push_back( alg_comm_z + 'N' );
+            alg_comm_vec.push_back( alg_comm_z + 'B' );
+            alg_comm_vec.push_back( alg_comm_z + 'R' );
+            alg_comm_vec.push_back( alg_comm_z + 'Q' );
+
+        // Any other case, just add the command to the list.
+        }else{
+            alg_comm_vec.push_back( alg_comm_z );
+        }
+
     }
 
-    vector< string > tmp = { "LOL", "HAHA" };
-    return tmp;
+
+    
+
+    alg_comm_vec.shrink_to_fit();
+    
+    return alg_comm_vec;
 
 }
 

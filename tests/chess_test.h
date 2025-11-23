@@ -40,6 +40,8 @@ namespace tests{
 
     void CHS_SFML_eng_tests();
 
+    void chess_all_alg_comm_tests();
+
 }
 
 
