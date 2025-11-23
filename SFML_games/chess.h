@@ -592,7 +592,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \return Vector of all possible plys in algebraic command format.
      */
-    vector< string > get_all_psbl_alg_comm();
+    vector< string > get_all_psbl_alg_comm() const;
 
     /**
      * \brief Check whether the game is in checkmate state.
@@ -662,10 +662,10 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      Access Function
 // ====================================================================== >>>>>
     
-    pair<int,int> alg_to_cart( pair<char,int> );
-    pair<int,int> alg_to_cart( char file, int rank );
-    pair<char,int> cart_to_alg( pair<int,int> );
-    pair<char,int> cart_to_alg( int row_idx, int col_idx );
+    static pair<int,int> alg_to_cart( pair<char,int> );
+    static pair<int,int> alg_to_cart( char file, int rank );
+    static pair<char,int> cart_to_alg( pair<int,int> );
+    static pair<char,int> cart_to_alg( int row_idx, int col_idx );
 
     /**
      * The algebraic command that is to be translated into class dedicated command.

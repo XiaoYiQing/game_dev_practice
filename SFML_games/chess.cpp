@@ -2145,7 +2145,51 @@ void chess::upd_mid_game_state(){
 }
 
 
-vector< string > chess::get_all_psbl_alg_comm(){
+vector< string > chess::get_all_psbl_alg_comm() const{
+
+    // Obtain all possible white plays.
+    vector<chs_move> all_plays = this->get_all_valid_moves();
+    vector<chs_move> all_atks = this->get_all_valid_atks();
+    all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
+    
+    string alg_comm_z = "";
+    CHS_PIECE_TYPE pce_type_z;
+    pair<char,int> str_alg_z;
+    pair<char,int> end_alg_z;
+    for( chs_move play_z : all_plays ){
+
+        alg_comm_z = "";
+
+        pce_type_z = this->get_piece_at( play_z.pt_a ).type;
+        switch( pce_type_z ){
+        case CHS_PIECE_TYPE::PAWN:
+            break;
+        case CHS_PIECE_TYPE::KNIGHT:
+            alg_comm_z += 'N';
+            break;
+        case CHS_PIECE_TYPE::BISHOP:
+            alg_comm_z += 'B';
+            break;
+        case CHS_PIECE_TYPE::ROOK:
+            alg_comm_z += 'R';
+            break;
+        case CHS_PIECE_TYPE::QUEEN:
+            alg_comm_z += 'Q';
+            break;
+        case CHS_PIECE_TYPE::KING:
+            alg_comm_z += 'K';
+            break;
+        default:
+            throw runtime_error( "Non-recognized chess piece type." );
+        }
+
+        str_alg_z = cart_to_alg( play_z.pt_a );
+        end_alg_z = cart_to_alg( play_z.pt_b );
+
+    }
+
+    vector< string > tmp = { "LOL", "HAHA" };
+    return tmp;
 
 }
 
