@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <magic_enum.hpp>
+#include <map>
 #include <mutex>
 #include <regex>
 #include <stack>
@@ -360,6 +361,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
 
 // ====================================================================== >>>>>
+//      AI Related Functions
+// ====================================================================== >>>>>
+
+
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Gameplay Functions
 // ====================================================================== >>>>>
 
@@ -574,6 +584,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return All currently possible attacks.
      */
     vector<chs_move> get_all_valid_atks() const;
+    
+    /**
+     * \brief Obtain all possible algebraic commands that can be played currently.
+     * 
+     * \note Command validity also depends on current turn.
+     * 
+     * \return Vector of all possible plys in algebraic command format.
+     */
+    vector< string > get_all_psbl_alg_comm();
 
     /**
      * \brief Check whether the game is in checkmate state.
@@ -860,11 +879,86 @@ protected:
 
     // Flag indicating whether the game should write messages to the console.
     bool verbose;
+
+// ====================================================================== >>>>>
+//      AI Related Functions (Protected)
+// ====================================================================== >>>>>
+
     
+
+    /**
+     * Options with AI selection:
+     * - [0 = standard minmax]
+     * - [1 = multi-threaded standard minmax]
+     * - [2 = minmax with AB-pruning]
+     * - [3 = multi-threaded minmax with AB-pruning]
+     */
+    CHS_AI_OPT AI_opt;
+
     /**
      * Flag indicating if this game enables AI to play as opponent.
      */
     bool vsAI = false;
+
+    /**
+     * The map of values used to calculate the minmax score.
+     * 
+     * - "std_piece_val": The value of a standard piece.
+     * - "crown_piece_val": The value of a crowned piece.
+     * - "win_val": The value of a win.
+     * - "draw_val": The value of a draw.
+     */
+    map< CHS_PIECE_TYPE, float > tmp_map;
+    
+
+    /**
+     * Flag indicating if the AI plays first over a versus AI game.
+     */
+    bool AI_first = false;
+
+    /**
+     * \brief Flag used for separate thread running the AI process.
+     * 
+     * This flag is normally turned on when the AI process starts to run.
+     * If this flag is turned off during an AI process run, the AI process 
+     * is to stop at the earliest convenience.
+     */
+    bool AI_proc_flag;
+
+    /**
+     * The number of threads that this game seek to use if multithread AI usage 
+     * is enabled.
+     * 
+     * \note Won't try to use more than available number of threads given local
+     *  hardware limits.
+     */
+    unsigned int thread_to_use;
+
+    /**
+     * Class static mutex for the purpose of synchronizing use of shared variables.
+     */
+    static std::mutex mtx_shared_move_list;
+
+    /**
+     * Class static shared list of moves.
+     * 
+     * This list serves as a shared pool of moves to be dipped by multiple threads 
+     * at the same time. To prevent the same move from being analysed by more than 
+     * one thread, you need to use mutex to ensure synchronization. 
+     * 
+     * The moves are stored following algebraic string command notation.
+     */
+    static stack<string> shared_move_stk;
+
+    /**
+     * Class static shared stack of minmax operation results.
+     * 
+     * This stack serves as the deposit point of results from running minmax
+     * over several threads at the same time.
+     */
+    static stack<int> shared_minmax_res;
+
+// ====================================================================== >>>>>
 
 private:
 

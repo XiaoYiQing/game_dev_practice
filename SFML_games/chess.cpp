@@ -2145,6 +2145,11 @@ void chess::upd_mid_game_state(){
 }
 
 
+vector< string > chess::get_all_psbl_alg_comm(){
+
+}
+
+
 bool chess::is_check_mate(){
 
     // If the check state is true, determine if it is a checkmate.
