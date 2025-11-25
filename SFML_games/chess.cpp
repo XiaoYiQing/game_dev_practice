@@ -198,6 +198,21 @@ chess::chess(){
         this->atk_list_by_W[z].reserve( BOARDHEIGHT*BOARDWIDTH );
     }
 
+    // Initialize piece counter.
+    wPieceCounter[ CHS_PIECE_TYPE::PAWN ] = 0;
+    wPieceCounter[ CHS_PIECE_TYPE::KNIGHT ] = 0;
+    wPieceCounter[ CHS_PIECE_TYPE::BISHOP ] = 0;
+    wPieceCounter[ CHS_PIECE_TYPE::ROOK ] = 0;
+    wPieceCounter[ CHS_PIECE_TYPE::QUEEN ] = 0;
+    wPieceCounter[ CHS_PIECE_TYPE::KING ] = 0;
+    bPieceCounter[ CHS_PIECE_TYPE::PAWN ] = 0;
+    bPieceCounter[ CHS_PIECE_TYPE::KNIGHT ] = 0;
+    bPieceCounter[ CHS_PIECE_TYPE::BISHOP ] = 0;
+    bPieceCounter[ CHS_PIECE_TYPE::ROOK ] = 0;
+    bPieceCounter[ CHS_PIECE_TYPE::QUEEN ] = 0;
+    bPieceCounter[ CHS_PIECE_TYPE::KING ] = 0;
+
+
     this->verbose = false;
 
     // Default AI option is standard minmax with AB-pruning.
@@ -212,6 +227,10 @@ chess::chess(){
     this->chs_pce_val_map[ CHS_PIECE_TYPE::ROOK ] = 5;
     this->chs_pce_val_map[ CHS_PIECE_TYPE::QUEEN ] = 9;
     this->chs_pce_val_map[ CHS_PIECE_TYPE::KING ] = 1000;
+
+    this->minmax_vals["win"] = (int) chs_pce_val_map[ CHS_PIECE_TYPE::KING ];
+    this->minmax_vals["draw"] = 0;
+    this->minmax_vals["check"] = 1;
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -369,6 +388,30 @@ void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs
 
         // Update the game state before proceeding.
         this->upd_all();
+
+        switch( this->state ){
+        case CHS_STATE::WWIN: 
+            stateValue += this->minmax_vals["win"];
+            break;
+        case CHS_STATE::BWIN: 
+            stateValue -= this->minmax_vals["win"];
+            break;
+        case CHS_STATE::DRAW:
+            stateValue -= this->minmax_vals["draw"];
+            break;
+        case CHS_STATE::WCHK:
+            stateValue -= this->minmax_vals["check"];
+            break;
+        case CHS_STATE::BCHK:
+            stateValue += this->minmax_vals["check"];
+            break;
+        case CHS_STATE::ONGOING:
+            
+        default:
+            throw runtime_error( "gameStateEval: Unrecognized chess game state. Abort." );
+        }
+
+        return stateValue;
 
     }
 
@@ -2048,6 +2091,28 @@ vector<chess::chs_move> chess::get_all_valid_atks() const{
 
 }
 
+void chess::upd_pce_cnt_list(){
+
+    // Reset all counters.
+    for( pair< CHS_PIECE_TYPE, int > cnt_z : this->wPieceCounter ){
+        this->wPieceCounter[ cnt_z.first ] = 0;
+        this->bPieceCounter[ cnt_z.first ] = 0;
+    }
+
+    chs_piece currPce;
+    // Parse through the entire board and counter the number of pieces.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+        currPce = this->get_piece_at( ind2sub( z ) );
+        if( currPce.type != CHS_PIECE_TYPE::NO_P ){
+            if( currPce.color == CHS_PIECE_COLOR::WHITE ){
+                this->wPieceCounter[ currPce.type ]++;
+            }else if( currPce.color == CHS_PIECE_COLOR::BLACK ){
+                this->bPieceCounter[ currPce.type ]++;
+            }
+        }
+    }
+}
+
 
 void chess::upd_atk_lists(){
 
@@ -2538,6 +2603,8 @@ bool chess::is_draw(){
 
 void chess::upd_post_play(){
     
+    this->upd_pce_cnt_list();
+
     this->upd_atk_lists();
 
     this->upd_mid_game_state();
@@ -2546,9 +2613,7 @@ void chess::upd_post_play(){
 
 void chess::upd_all(){
 
-    this->upd_atk_lists();
-
-    this->upd_mid_game_state();
+    this->upd_post_play();
 
     this->upd_end_game_state();
 

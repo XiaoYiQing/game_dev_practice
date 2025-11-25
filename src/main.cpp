@@ -89,11 +89,11 @@ int main(int, char**){
 
     // game::play_cardReact();
     
-    game::play_chess();
+    // game::play_chess();
     
 // ====================================================================== <<<<<
 
-    // do_tests(0);
+    do_tests(0);
 
     return 0;
 

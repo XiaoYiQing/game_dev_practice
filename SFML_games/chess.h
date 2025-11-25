@@ -618,7 +618,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      */
     bool is_draw();
-
+    
+    /**
+     * Update the game's piece counter list.
+     */
+    void upd_pce_cnt_list();
     /**
      * Update the game's attack list.
      * 
@@ -626,6 +630,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  not valid attack options.
      */
     void upd_atk_lists();
+    
 
     /**
      * \brief Update the game's state variable while the game is on going.
@@ -859,6 +864,14 @@ protected:
     chs_piece CHS_board[BOARDHEIGHT][BOARDWIDTH];
     
     /**
+     * Integer vector holding the count of pieces currently on the board.
+     * 
+     * This counter vector only updates with the function "upd_all()".
+     */
+    map< CHS_PIECE_TYPE, int > wPieceCounter;
+    map< CHS_PIECE_TYPE, int > bPieceCounter;
+
+    /**
      * Array of lists of white pieces attacking the square associated to the index
      * in the array. The attacks are not necessarily valid.
      */
@@ -911,6 +924,10 @@ protected:
     bool vsAI;
 
     /**
+     * The map of minmax values of the chess pieces.
+     */
+    map< CHS_PIECE_TYPE, float > chs_pce_val_map;
+    /**
      * The map of values used to calculate the minmax score.
      * 
      * - "std_piece_val": The value of a standard piece.
@@ -918,7 +935,7 @@ protected:
      * - "win_val": The value of a win.
      * - "draw_val": The value of a draw.
      */
-    map< CHS_PIECE_TYPE, float > chs_pce_val_map;
+    std::map<string, int> minmax_vals;
     
 
     /**
