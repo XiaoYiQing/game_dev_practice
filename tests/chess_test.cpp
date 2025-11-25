@@ -2672,20 +2672,26 @@ void tests::chess_all_alg_comm_tests(){
     chess myGame;
     chess myGame_tmp;
     
-
 // ---------------------------------------------------------------------- >>>>>
 //      Initial Board
 // ---------------------------------------------------------------------- >>>>>
 
+    test_bool = true;
     myGame.resetBoard();
 
     vector< string > alg_comm_vec = myGame.get_all_psbl_alg_comm();
+    test_bool = test_bool && ( alg_comm_vec.size() == 20 );
 
     myGame_tmp = myGame;
     for( string alg_comm_z : alg_comm_vec ){
-        myGame_tmp.ply_ag_comm( alg_comm_z );
-        // myGame_tmp.printBoard();
+        test_bool = test_bool && ( myGame_tmp.ply_ag_comm( alg_comm_z ) );
         myGame_tmp = myGame;
+    }
+
+    if( test_bool ){
+        cout << "get_all_psbl_alg_comm standard initial game test: passed!" << endl;
+    }else{
+        cout << "get_all_psbl_alg_comm standard initial game test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
@@ -2695,6 +2701,7 @@ void tests::chess_all_alg_comm_tests(){
 //      Initial Board With No Pawns
 // ---------------------------------------------------------------------- >>>>>
 
+    test_bool = true;
     myGame.resetBoard();
 
     chess::chs_piece empty_piece;
@@ -2707,16 +2714,24 @@ void tests::chess_all_alg_comm_tests(){
     }
 
     alg_comm_vec = myGame.get_all_psbl_alg_comm();
+    test_bool = test_bool && alg_comm_vec.size() == 50;
 
     myGame_tmp = myGame;
     for( string alg_comm_z : alg_comm_vec ){
         try{
-            myGame_tmp.ply_ag_comm( alg_comm_z );
+            test_bool = test_bool && myGame_tmp.ply_ag_comm( alg_comm_z );
         }catch(...){
-            int LOOL = 0;
+            test_bool = false;
+            break;
         }
         // myGame_tmp.printBoard();
         myGame_tmp = myGame;
+    }
+
+    if( test_bool ){
+        cout << "get_all_psbl_alg_comm initial game with no panws test: passed!" << endl;
+    }else{
+        cout << "get_all_psbl_alg_comm initial game with no panws test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
@@ -2726,6 +2741,7 @@ void tests::chess_all_alg_comm_tests(){
 //      Pawn Going Into Promotion
 // ---------------------------------------------------------------------- >>>>>
 
+    test_bool = true;
     myGame.clearBoard();
 
     myGame.set_piece_at( 1, 7, chess::chs_piece(
@@ -2737,17 +2753,41 @@ void tests::chess_all_alg_comm_tests(){
     myGame.set_piece_at( 1, 0, chess::chs_piece(
         chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
     
-    myGame.printBoard();
     alg_comm_vec = myGame.get_all_psbl_alg_comm();
+    test_bool = test_bool && ( alg_comm_vec.size() == 9 );
 
     myGame_tmp = myGame;
     for( string alg_comm_z : alg_comm_vec ){
         try{
-            myGame_tmp.ply_ag_comm( alg_comm_z );
+            test_bool = test_bool && myGame_tmp.ply_ag_comm( alg_comm_z );
         }catch(...){
+            test_bool = false;
+            break;
         }
-        myGame_tmp.printBoard();
         myGame_tmp = myGame;
+    }
+
+    myGame_tmp = myGame;
+    myGame_tmp.ply_ag_comm( alg_comm_vec[5] );
+    test_bool = test_bool && ( myGame_tmp.get_piece_at( 7, 7 ).type == 
+        chess::CHS_PIECE_TYPE::KNIGHT );
+    myGame_tmp = myGame;
+    myGame_tmp.ply_ag_comm( alg_comm_vec[6] );
+    test_bool = test_bool && ( myGame_tmp.get_piece_at( 7, 7 ).type == 
+        chess::CHS_PIECE_TYPE::BISHOP );
+    myGame_tmp = myGame;
+    myGame_tmp.ply_ag_comm( alg_comm_vec[7] );
+    test_bool = test_bool && ( myGame_tmp.get_piece_at( 7, 7 ).type == 
+        chess::CHS_PIECE_TYPE::ROOK );
+    myGame_tmp = myGame;
+    myGame_tmp.ply_ag_comm( alg_comm_vec[8] );
+    test_bool = test_bool && ( myGame_tmp.get_piece_at( 7, 7 ).type == 
+        chess::CHS_PIECE_TYPE::QUEEN );
+
+    if( test_bool ){
+        cout << "get_all_psbl_alg_comm pawn promotion test: passed!" << endl;
+    }else{
+        cout << "get_all_psbl_alg_comm pawn promotion test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
