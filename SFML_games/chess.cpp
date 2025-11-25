@@ -3146,6 +3146,12 @@ void chess::setVerbose( bool verbose )
 bool chess::getVerbose() const
     {return this->verbose;}
 
+int chess::getChs_pce_val( chess::CHS_PIECE_TYPE tarType ) const{
+    if( tarType == CHS_PIECE_TYPE::NO_P ){
+        throw invalid_argument( "The no piece type is not assigned a value." );
+    }
+    return this->chs_pce_val_map.at( tarType );
+}
 map<chess::CHS_PIECE_TYPE,int> chess::getChs_pce_val_map() const
     {return this->chs_pce_val_map;}
 void chess::setChs_pce_val( chess::CHS_PIECE_TYPE tarType, int newVal ){

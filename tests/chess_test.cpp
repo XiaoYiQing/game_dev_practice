@@ -2802,13 +2802,42 @@ void tests::chess_minmax_tests(){
     chess myGame;
 
 // ---------------------------------------------------------------------- >>>>>
-//      Standard Initial Board Case
+//      Game State Eval
 // ---------------------------------------------------------------------- >>>>>
 
+    int game_eval = 0;
     test_bool = true;
     myGame.resetBoard();
 
+    game_eval = myGame.gameStateEval();
+    test_bool = ( 0 == game_eval );
+
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    game_eval = myGame.gameStateEval();
+    test_bool = ( myGame.getChs_pce_val( chess::CHS_PIECE_TYPE::PAWN ) == game_eval );
+
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    game_eval = myGame.gameStateEval();
+    test_bool = ( 0 == game_eval );
+
+    myGame.set_piece_at( 0, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    game_eval = myGame.gameStateEval();
+    test_bool = ( myGame.getChs_pce_val( chess::CHS_PIECE_TYPE::KNIGHT ) == game_eval );
+    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    game_eval = myGame.gameStateEval();
+    test_bool = ( 0 == game_eval );
     
+    if( test_bool ){
+        cout << "gameStateEval tests: passed!" << endl;
+    }else{
+        cout << "gameStateEval tests: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 

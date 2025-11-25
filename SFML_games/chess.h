@@ -847,7 +847,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void setVerbose( bool verbose );
     bool getVerbose() const;
 
+    int getChs_pce_val( chess::CHS_PIECE_TYPE tarType ) const;
     map<CHS_PIECE_TYPE,int> getChs_pce_val_map() const;
+    
     /**
      * \brief Set the value of the target chess piece type.
      * 
