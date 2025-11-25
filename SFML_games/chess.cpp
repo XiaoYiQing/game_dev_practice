@@ -200,6 +200,23 @@ chess::chess(){
 
     this->verbose = false;
 
+    // Default AI option is standard minmax with AB-pruning.
+    AI_opt = CHS_AI_OPT::STD_AB_MM;
+    vsAI = false;
+    AI_first = false;
+    // Define the numerical value to each of the chess piece type.
+    this->chs_pce_val_map[ CHS_PIECE_TYPE::NO_P ] = 0;
+    this->chs_pce_val_map[ CHS_PIECE_TYPE::PAWN ] = 1;
+    this->chs_pce_val_map[ CHS_PIECE_TYPE::KNIGHT ] = 3;
+    this->chs_pce_val_map[ CHS_PIECE_TYPE::BISHOP ] = 3;
+    this->chs_pce_val_map[ CHS_PIECE_TYPE::ROOK ] = 5;
+    this->chs_pce_val_map[ CHS_PIECE_TYPE::QUEEN ] = 9;
+    this->chs_pce_val_map[ CHS_PIECE_TYPE::KING ] = 1000;
+
+    AI_proc_flag = false;
+    // Set the number of threads to utilize.
+    this->thread_to_use = min( 2u, std::thread::hardware_concurrency() );
+
     this->resetBoard();
 
 }
@@ -338,6 +355,22 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
 void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
     set_piece_at( n - 1, c - 'a', inPce );
 }
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
+//      AI Related Functions
+// ====================================================================== >>>>>
+
+    int chess::gameStateEval(){
+
+        int stateValue = 0;
+
+        // Update the game state before proceeding.
+        this->upd_all();
+
+    }
 
 // ====================================================================== <<<<<
 

@@ -364,6 +364,18 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 //      AI Related Functions
 // ====================================================================== >>>>>
 
+    /**
+     * \brief Provide a numerical score to the current state of the game.
+     * 
+     * This function call automatically calls the upd_all() function.
+     * 
+     * \return The numerical value of the current state of the game.
+     * 
+     * \note A negative value is associated to red, a positive value is associated 
+     *  to black, so a high positive value translates to a good board situation 
+     *  for red and vice versa.
+     */
+    int gameStateEval();
 
 
 // ====================================================================== <<<<<
@@ -884,8 +896,6 @@ protected:
 //      AI Related Functions (Protected)
 // ====================================================================== >>>>>
 
-    
-
     /**
      * Options with AI selection:
      * - [0 = standard minmax]
@@ -898,7 +908,7 @@ protected:
     /**
      * Flag indicating if this game enables AI to play as opponent.
      */
-    bool vsAI = false;
+    bool vsAI;
 
     /**
      * The map of values used to calculate the minmax score.
@@ -908,13 +918,13 @@ protected:
      * - "win_val": The value of a win.
      * - "draw_val": The value of a draw.
      */
-    map< CHS_PIECE_TYPE, float > tmp_map;
+    map< CHS_PIECE_TYPE, float > chs_pce_val_map;
     
 
     /**
      * Flag indicating if the AI plays first over a versus AI game.
      */
-    bool AI_first = false;
+    bool AI_first;
 
     /**
      * \brief Flag used for separate thread running the AI process.
