@@ -228,7 +228,7 @@ chess::chess(){
     this->chs_pce_val_map[ CHS_PIECE_TYPE::QUEEN ] = 9;
     this->chs_pce_val_map[ CHS_PIECE_TYPE::KING ] = 1000;
 
-    this->minmax_vals["win"] = (int) chs_pce_val_map[ CHS_PIECE_TYPE::KING ];
+    this->minmax_vals["win"] = chs_pce_val_map[ CHS_PIECE_TYPE::KING ];
     this->minmax_vals["draw"] = 0;
     this->minmax_vals["check"] = 1;
 
@@ -401,12 +401,24 @@ void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs
             break;
         case CHS_STATE::WCHK:
             stateValue -= this->minmax_vals["check"];
+            for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
+                stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
+                stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
+            }
             break;
         case CHS_STATE::BCHK:
             stateValue += this->minmax_vals["check"];
+            for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
+                stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
+                stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
+            }
             break;
         case CHS_STATE::ONGOING:
-            
+            for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
+                stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
+                stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
+            }
+            break;
         default:
             throw runtime_error( "gameStateEval: Unrecognized chess game state. Abort." );
         }
@@ -3133,6 +3145,40 @@ void chess::setVerbose( bool verbose )
 
 bool chess::getVerbose() const
     {return this->verbose;}
+
+map<chess::CHS_PIECE_TYPE,int> chess::getChs_pce_val_map() const
+    {return this->chs_pce_val_map;}
+void chess::setChs_pce_val( chess::CHS_PIECE_TYPE tarType, int newVal ){
+    if( tarType == CHS_PIECE_TYPE::NO_P ){
+        throw invalid_argument( "The no piece type cannot be given a value." );
+    }
+    this->chs_pce_val_map[ tarType ] = newVal;
+}
+
+map<string, int> chess::getMinmax_vals() const
+    { return this->minmax_vals; }
+void chess::setMinmax_vas( string tarVal, int newVal ){
+    for( pair<string, int> pair_z : this->minmax_vals ){
+        if( pair_z.first == tarVal ){
+            this->minmax_vals[tarVal] = newVal;
+            return;
+        }
+    }
+    throw invalid_argument( "Given minmax value string description is invalid." );
+}
+
+bool chess::getAI_first() const
+    { return this->AI_first; }
+void chess::setAI_first( bool AI_first_in )
+    { this->AI_first = AI_first_in; }
+
+bool chess::getAI_proc_flag() const
+    { return this->AI_proc_flag; }
+
+unsigned int chess::getThread_to_use() const
+    { return this->thread_to_use; }
+void chess::setThread_to_use( unsigned int thr_cnt )
+    { this->thread_to_use = thr_cnt; }
 
 // ====================================================================== <<<<<
 

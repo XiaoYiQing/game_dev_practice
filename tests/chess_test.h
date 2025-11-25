@@ -42,6 +42,8 @@ namespace tests{
 
     void chess_all_alg_comm_tests();
 
+    void chess_minmax_tests();
+
 }
 
 

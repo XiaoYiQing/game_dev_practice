@@ -847,6 +847,32 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void setVerbose( bool verbose );
     bool getVerbose() const;
 
+    map<CHS_PIECE_TYPE,int> getChs_pce_val_map() const;
+    /**
+     * \brief Set the value of the target chess piece type.
+     * 
+     * \param tarType The type of the target chess piece.
+     * \param newVal The new value to be associated with target piece type.
+     */
+    void setChs_pce_val( chess::CHS_PIECE_TYPE tarType, int newVal );
+
+    map<string, int> getMinmax_vals() const;
+    /**
+     * \brief Set the value of the target chess game minmax value.
+     * 
+     * \param tarVal String tag assocaited to the target value.
+     * \param newVal The new value to be associated with target piece type.
+     */
+    void setMinmax_vas( string tarVal, int newVal );
+
+    bool getAI_first() const;
+    void setAI_first( bool AI_first_in );
+
+    bool getAI_proc_flag() const;
+
+    unsigned int getThread_to_use() const;
+    void setThread_to_use( unsigned int thr_cnt );
+
 // ====================================================================== <<<<<
 
 
@@ -926,7 +952,7 @@ protected:
     /**
      * The map of minmax values of the chess pieces.
      */
-    map< CHS_PIECE_TYPE, float > chs_pce_val_map;
+    map< CHS_PIECE_TYPE, int > chs_pce_val_map;
     /**
      * The map of values used to calculate the minmax score.
      * 
