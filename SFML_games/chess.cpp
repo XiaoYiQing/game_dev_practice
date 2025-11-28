@@ -427,6 +427,38 @@ void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs
 
     }
 
+    int chess::minmax( bool isMaximizing, int depth ){
+
+        if( ( this->is_white_turn() && !isMaximizing ) ||
+            this->is_black_turn() && isMaximizing ){
+            throw invalid_argument( "minmax: Mismatch of minmax objective with the current turn order." );
+        }
+
+        switch( this->state ){
+        case CHS_STATE::WWIN:
+        case CHS_STATE::BWIN:
+        case CHS_STATE::DRAW:
+            // When game is over, return value immediately.
+            return this->gameStateEval();
+            break;
+        case CHS_STATE::WCHK:
+        case CHS_STATE::BCHK:
+        case CHS_STATE::ONGOING:
+            // If we reached the maximum allowed depth, return value immediately.
+            if( depth <= 0 ){
+                return this->gameStateEval();
+            }
+            break;
+        default:
+            throw runtime_error( "minmax: Unrecognized game state. Abort." );
+        }
+
+        int bestScore = 0;
+    int currScore = 0;
+
+        return 0;
+    }
+
 // ====================================================================== <<<<<
 
 

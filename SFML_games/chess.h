@@ -377,6 +377,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     int gameStateEval();
 
+    int minmax( bool isMaximizing, int depth );
 
 // ====================================================================== <<<<<
 
