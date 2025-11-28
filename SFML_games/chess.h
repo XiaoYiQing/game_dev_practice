@@ -379,6 +379,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     int minmax( bool isMaximizing, int depth );
 
+    /**
+     * Determine the best move to make in the current turn at the current board state
+     * using the standard minmax computation.
+     * 
+     * \return The best move to perform at the current board's state.
+     */
+    string bestMove();
+
 // ====================================================================== <<<<<
 
 
@@ -872,6 +880,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void setAI_first( bool AI_first_in );
 
     bool getAI_proc_flag() const;
+    void setAI_proc_flag( const bool AI_proc_flag_in );
 
     unsigned int getThread_to_use() const;
     void setThread_to_use( unsigned int thr_cnt );
@@ -959,10 +968,9 @@ protected:
     /**
      * The map of values used to calculate the minmax score.
      * 
-     * - "std_piece_val": The value of a standard piece.
-     * - "crown_piece_val": The value of a crowned piece.
-     * - "win_val": The value of a win.
-     * - "draw_val": The value of a draw.
+     * - "win": The value of a win.
+     * - "draw": The value of a draw.
+     * - "check": The value of a check.
      */
     std::map<string, int> minmax_vals;
     

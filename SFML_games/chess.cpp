@@ -382,82 +382,123 @@ void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs
 //      AI Related Functions
 // ====================================================================== >>>>>
 
-    int chess::gameStateEval(){
+int chess::gameStateEval(){
 
-        int stateValue = 0;
+    int stateValue = 0;
 
-        // Update the game state before proceeding.
-        this->upd_all();
+    // Update the game state before proceeding.
+    this->upd_all();
 
-        switch( this->state ){
-        case CHS_STATE::WWIN: 
-            stateValue += this->minmax_vals["win"];
-            break;
-        case CHS_STATE::BWIN: 
-            stateValue -= this->minmax_vals["win"];
-            break;
-        case CHS_STATE::DRAW:
-            stateValue -= this->minmax_vals["draw"];
-            break;
-        case CHS_STATE::WCHK:
-            stateValue -= this->minmax_vals["check"];
-            for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
-                stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
-                stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
-            }
-            break;
-        case CHS_STATE::BCHK:
-            stateValue += this->minmax_vals["check"];
-            for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
-                stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
-                stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
-            }
-            break;
-        case CHS_STATE::ONGOING:
-            for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
-                stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
-                stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
-            }
-            break;
-        default:
-            throw runtime_error( "gameStateEval: Unrecognized chess game state. Abort." );
+    switch( this->state ){
+    case CHS_STATE::WWIN: 
+        stateValue += this->minmax_vals["win"];
+        break;
+    case CHS_STATE::BWIN: 
+        stateValue -= this->minmax_vals["win"];
+        break;
+    case CHS_STATE::DRAW:
+        stateValue -= this->minmax_vals["draw"];
+        break;
+    case CHS_STATE::WCHK:
+        stateValue -= this->minmax_vals["check"];
+        for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
+            stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
+            stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
         }
-
-        return stateValue;
-
+        break;
+    case CHS_STATE::BCHK:
+        stateValue += this->minmax_vals["check"];
+        for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
+            stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
+            stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
+        }
+        break;
+    case CHS_STATE::ONGOING:
+        for( pair<CHS_PIECE_TYPE,int> type_z : this->wPieceCounter ){
+            stateValue += this->chs_pce_val_map[type_z.first] * this->wPieceCounter[type_z.first];
+            stateValue -= this->chs_pce_val_map[type_z.first] * this->bPieceCounter[type_z.first];
+        }
+        break;
+    default:
+        throw runtime_error( "gameStateEval: Unrecognized chess game state. Abort." );
     }
 
-    int chess::minmax( bool isMaximizing, int depth ){
+    return stateValue;
 
-        if( ( this->is_white_turn() && !isMaximizing ) ||
-            this->is_black_turn() && isMaximizing ){
-            throw invalid_argument( "minmax: Mismatch of minmax objective with the current turn order." );
-        }
+}
 
-        switch( this->state ){
-        case CHS_STATE::WWIN:
-        case CHS_STATE::BWIN:
-        case CHS_STATE::DRAW:
-            // When game is over, return value immediately.
+int chess::minmax( bool isMaximizing, int depth ){
+
+    if( ( this->is_white_turn() && !isMaximizing ) ||
+        this->is_black_turn() && isMaximizing ){
+        throw invalid_argument( "minmax: Mismatch of minmax objective with the current turn order." );
+    }
+
+    switch( this->state ){
+    case CHS_STATE::WWIN:
+    case CHS_STATE::BWIN:
+    case CHS_STATE::DRAW:
+        // When game is over, return value immediately.
+        return this->gameStateEval();
+        break;
+    case CHS_STATE::WCHK:
+    case CHS_STATE::BCHK:
+    case CHS_STATE::ONGOING:
+        // If we reached the maximum allowed depth, return value immediately.
+        if( depth <= 0 ){
             return this->gameStateEval();
-            break;
-        case CHS_STATE::WCHK:
-        case CHS_STATE::BCHK:
-        case CHS_STATE::ONGOING:
-            // If we reached the maximum allowed depth, return value immediately.
-            if( depth <= 0 ){
-                return this->gameStateEval();
-            }
-            break;
-        default:
-            throw runtime_error( "minmax: Unrecognized game state. Abort." );
         }
+        break;
+    default:
+        throw runtime_error( "minmax: Unrecognized game state. Abort." );
+    }
 
-        int bestScore = 0;
+    int bestScore = 0;
     int currScore = 0;
 
-        return 0;
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+
+
+    if ( isMaximizing ) {        
+        bestScore = std::numeric_limits<int>::min();
+    }else{
+        bestScore = std::numeric_limits<int>::max();
     }
+
+    for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+        // Current valid move.
+        string move_z = validMovesVect.at(z);
+
+        // Make a copy of the current game.
+        chess newGame = *this;
+
+        // In the game copy, make a play with the next available move.
+        newGame.ply_ag_comm( move_z );
+
+        // Perform next layer minmax.
+        if( newGame.is_white_turn() ){
+            currScore = newGame.minmax( true, depth - 1 );
+        }else if( newGame.is_black_turn() ){
+            currScore = newGame.minmax( false, depth - 1 );
+        }
+        // Thread exit point.
+        if( !this->AI_proc_flag ){
+            return bestScore;
+        }
+
+        if ( isMaximizing ) {        
+            // Update the highest score up to now.
+            bestScore = std::max( bestScore, currScore );
+        }else{
+            // Update the highest score up to now.
+            bestScore = std::min( bestScore, currScore );
+        }
+
+    }
+
+    return bestScore;
+}
 
 // ====================================================================== <<<<<
 
@@ -3212,6 +3253,8 @@ void chess::setAI_first( bool AI_first_in )
 
 bool chess::getAI_proc_flag() const
     { return this->AI_proc_flag; }
+void chess::setAI_proc_flag( const bool AI_proc_flag_in )
+    { this->AI_proc_flag = AI_proc_flag_in; }
 
 unsigned int chess::getThread_to_use() const
     { return this->thread_to_use; }

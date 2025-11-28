@@ -2841,4 +2841,97 @@ void tests::chess_minmax_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+    // Obtain minmax related values.
+    auto chs_pce_val_map = myGame.getChs_pce_val_map();
+    auto minmax_vals = myGame.getMinmax_vals();
+
+// ---------------------------------------------------------------------- >>>>>
+//      minmax General Scenarios
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.setAI_proc_flag(true);
+    
+
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    game_eval = myGame.minmax( true, 1 );
+    test_bool = test_bool && ( game_eval == 0 );
+    
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    game_eval = myGame.minmax( true, 1 );
+    test_bool = test_bool && ( game_eval == chs_pce_val_map[ chess::CHS_PIECE_TYPE::ROOK ] );
+
+    myGame.setTurn_cnt(1);
+    game_eval = myGame.minmax( false, 1 );
+    test_bool = test_bool && ( game_eval == -chs_pce_val_map[ chess::CHS_PIECE_TYPE::ROOK ] );
+
+    myGame.setTurn_cnt(0);
+    myGame.clearBoard();
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    game_eval = myGame.minmax( true, 1 );
+    test_bool = test_bool && ( game_eval == chs_pce_val_map[ chess::CHS_PIECE_TYPE::QUEEN ] -
+        chs_pce_val_map[ chess::CHS_PIECE_TYPE::PAWN ] );
+    game_eval = myGame.minmax( true, 2 );
+    test_bool = test_bool && ( game_eval == 0 );
+    
+    if( test_bool ){
+        cout << "chess minmax general tests: passed!" << endl;
+    }else{
+        cout << "chess minmax general tests: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      minmax End Game Scenarios
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.setAI_proc_flag(true);
+
+    myGame.set_piece_at_ag_coord( 'f', 7, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'g', 7, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'h', 7, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'g', 8, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at_ag_coord( 'e', 1, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'a', 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    game_eval = myGame.minmax( true, 1 );
+    test_bool = test_bool && ( game_eval == minmax_vals[ "win" ] );
+
+    myGame.setTurn_cnt(1);
+    game_eval = myGame.minmax( false, 2 );
+    test_bool = test_bool && ( game_eval == minmax_vals[ "check" ] - 
+        3*chs_pce_val_map[ chess::CHS_PIECE_TYPE::PAWN ] +
+        chs_pce_val_map[ chess::CHS_PIECE_TYPE::ROOK ] );
+
+    if( test_bool ){
+        cout << "chess endgame tests: passed!" << endl;
+    }else{
+        cout << "chess endgame tests: failed!" << endl;
+    }
+    
+// ---------------------------------------------------------------------- <<<<<
+
+
 }
