@@ -276,6 +276,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     };
 
+    /**
+     * Define an impossible move serving as reference for indicating failure to
+     * attain a usable move.
+     */
+    static const chs_move IMPOS_MOVE;
+
+    static const string IMPOS_ALG_COMM;
+
 // ====================================================================== <<<<<
 
 
@@ -385,7 +393,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \return The best move to perform at the current board's state.
      */
-    string bestMove();
+    string bestMove( int depth );
 
 // ====================================================================== <<<<<
 
