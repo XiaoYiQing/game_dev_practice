@@ -3042,7 +3042,7 @@ void tests::chess_bestMove_tests(){
 
     myGame.printBoard_ag_coord();
 
-    string bestMove = myGame.bestMove(4);
+    string bestMove = myGame.bestMove(3);
 
     cout << bestMove << endl;
 
