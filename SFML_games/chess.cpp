@@ -479,6 +479,8 @@ int chess::minmax( bool isMaximizing, int depth ){
         // Current valid move.
         string move_z = validMovesVect.at(z);
 
+        cout << move_z << endl;
+
         // Make a copy of the current game.
         chess newGame = *this;
 

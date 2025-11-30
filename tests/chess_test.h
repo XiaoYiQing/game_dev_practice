@@ -44,6 +44,8 @@ namespace tests{
 
     void chess_minmax_tests();
 
+    void chess_bestMove_tests();
+
 }
 
 
