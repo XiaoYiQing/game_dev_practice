@@ -436,6 +436,119 @@ int chess::gameStateEval(){
 
 }
 
+
+int chess::minmax_debug( bool isMaximizing, int depth ){
+
+    return minmax_debug_loop( isMaximizing, depth, depth );
+
+}
+
+int chess::minmax_debug_loop( bool isMaximizing, int depth, int max_depth ){
+
+    if( ( this->is_white_turn() && !isMaximizing ) ||
+        this->is_black_turn() && isMaximizing ){
+        throw invalid_argument( "minmax: Mismatch of minmax objective with the current turn order." );
+    }
+
+    switch( this->state ){
+    case CHS_STATE::WWIN:
+    case CHS_STATE::BWIN:
+    case CHS_STATE::DRAW:
+        // When game is over, return value immediately.
+        // When game is over, return value immediately.
+        for( int i = 0 ; i < max_depth - depth; i++ ){
+            cout << "  ";
+        }
+        cout << "Score: " << this->gameStateEval() << " <--- ";
+        return this->gameStateEval();
+        break;
+    case CHS_STATE::WCHK:
+    case CHS_STATE::BCHK:
+    case CHS_STATE::ONGOING:
+        // If we reached the maximum allowed depth, return value immediately.
+        if( depth <= 0 ){
+            for( int i = 0 ; i < max_depth - depth; i++ ){
+                cout << "  ";
+            }
+            cout << "Score: " << this->gameStateEval() << " <--- ";
+            return this->gameStateEval();
+        }
+        break;
+    default:
+        throw runtime_error( "minmax: Unrecognized game state. Abort." );
+    }
+
+    int bestScore = 0;
+    int currScore = 0;
+
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+
+
+    if ( isMaximizing ) {        
+        bestScore = std::numeric_limits<int>::min();
+    }else{
+        bestScore = std::numeric_limits<int>::max();
+    }
+
+    for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+        // Current valid move.
+        string move_z = validMovesVect.at(z);
+
+        // Make a copy of the current game.
+        chess newGame = *this;
+
+        if( depth == 2 && move_z == "a7b6" ){
+            int lool = 1;
+            this->printBoard_ag_coord();
+        }
+
+        if( depth == 3 && move_z == "Ra1a6" ){
+            int lool = 1;
+            this->printBoard_ag_coord();
+        }
+
+        // In the game copy, make a play with the next available move.
+        bool tmp = newGame.ply_ag_comm( move_z );
+
+        for( int i = 0 ; i < max_depth - depth; i++ ){
+            cout << "  ";
+        }
+        cout << move_z << endl;
+
+        // Perform next layer minmax.
+        if( newGame.is_white_turn() ){
+            currScore = newGame.minmax_debug_loop( true, depth - 1, max_depth );
+        }else if( newGame.is_black_turn() ){
+            currScore = newGame.minmax_debug_loop( false, depth - 1, max_depth );
+        }
+        // Thread exit point.
+        if( !this->AI_proc_flag ){
+            return bestScore;
+        }
+
+        for( int i = 0 ; i < max_depth - depth; i++ ){
+            cout << "  ";
+        }
+        cout << "MAX: currScore = " << currScore << ", " <<
+            "bestScore = " << bestScore << endl;
+
+        if ( isMaximizing ) {        
+            // Update the highest score up to now.
+            bestScore = std::max( bestScore, currScore );
+        }else{
+            // Update the highest score up to now.
+            bestScore = std::min( bestScore, currScore );
+        }
+
+    }
+
+    return bestScore;
+    
+}
+
+
+
 int chess::minmax( bool isMaximizing, int depth ){
 
     if( ( this->is_white_turn() && !isMaximizing ) ||
@@ -1470,6 +1583,10 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         }
 
     }
+
+    // Check violation.
+    // chess test_game = *this;
+    // bool can_ply = test_game.ply( i_bef, j_bef, i_aft, j_aft );
 
     return true;
 

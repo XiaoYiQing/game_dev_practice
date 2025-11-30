@@ -2792,6 +2792,41 @@ void tests::chess_all_alg_comm_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Special 2 move to mate Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    myGame.set_piece_at_ag_coord( 'b', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'a', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'c', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at_ag_coord( 'a', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'b', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'b', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'a', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.printBoard_ag_coord();
+
+    myGame.ply_ag_comm( "Ra1a6" );
+
+    myGame.ply_ag_comm( "a7b6" );
+
+    myGame.printBoard_ag_coord();
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 
@@ -2961,7 +2996,7 @@ void tests::chess_minmax_tests(){
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
 
 
-    game_eval = myGame.minmax( true, 3 );
+    game_eval = myGame.minmax_debug( true, 3 );
 
     cout << game_eval << endl;
 
