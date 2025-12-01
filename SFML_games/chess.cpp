@@ -1605,8 +1605,8 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
         // Check for state change validity, which involves not having a king remaining
         // in check state after a play.
-        state_ok = state_ok && !( this->state == CHS_STATE::WCHK && chk_status.first );
-        state_ok = state_ok && !( this->state == CHS_STATE::BCHK && chk_status.second );
+        state_ok = state_ok && !( this->is_white_turn() && chk_status.first );
+        state_ok = state_ok && !( this->is_black_turn() && chk_status.second );
         // Additional check making sure both kings are not in check simultaneously.
         state_ok = state_ok && !( chk_status.first && chk_status.second );
         
@@ -1809,8 +1809,8 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     // Check for state change validity, which involves not having a king remaining
     // in check state after a play.
-    state_ok = state_ok && !( this->state == CHS_STATE::WCHK && chk_status.first );
-    state_ok = state_ok && !( this->state == CHS_STATE::BCHK && chk_status.second );
+    state_ok = state_ok && !( this->is_white_turn() && chk_status.first );
+    state_ok = state_ok && !( this->is_black_turn() && chk_status.second );
     // Additional check making sure both kings are not in check simultaneously.
     state_ok = state_ok && !( chk_status.first && chk_status.second );
 
@@ -1826,10 +1826,10 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 // ====================================================================== >>>>>
 
 
-bool chess::is_white_turn(){
+bool chess::is_white_turn() const{
     return ( this->turn_cnt % 2 == 0 );
 }
-bool chess::is_black_turn(){
+bool chess::is_black_turn() const{
     return ( this->turn_cnt % 2 != 0 );
 }
 

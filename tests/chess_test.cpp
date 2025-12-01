@@ -1326,6 +1326,25 @@ void tests::chess_atk_check_tests(){
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    test_bool = test_bool && !myGame.is_atk_valid( 3, 4, 2, 2 );
+
+    if( test_bool ){
+        cout << "is_atk_valid invalid state change test passed!" << endl;
+    }else{
+        cout << "is_atk_valid invalid state change test failed!" << endl;
+    }
+
 // ---------------------------------------------------------------------- <<<<<
 
 
@@ -1369,8 +1388,9 @@ void tests::chess_atk_check_tests(){
     myGame.set_piece_at( 3, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
     valid_atk_vec = myGame.get_all_valid_atk_sq(3,4);
-    test_bool = test_bool && ( valid_atk_vec.size() == 1 );
+    test_bool = test_bool && ( valid_atk_vec.size() == 2 );
     test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 5 );
+    test_bool = test_bool && ( valid_atk_vec.at(1).first == 2 && valid_atk_vec.at(1).second == 3 );
     
     myGame.setTurn_cnt(0);
     valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
