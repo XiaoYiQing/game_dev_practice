@@ -144,7 +144,7 @@ void do_tests( unsigned int test_id ){
     // tests::chess_chs_move_tests();
     // tests::chess_alg_coord_trans_tests();
     // tests::chess_game_manip_tests();
-    // tests::chess_move_tests();
+    tests::chess_move_tests();
     // tests::chess_atk_check_tests();
     // tests::chess_play_tests();
     // tests::chess_promo_tests();
@@ -161,7 +161,7 @@ void do_tests( unsigned int test_id ){
 
     // tests::chess_all_alg_comm_tests();
 
-    tests::chess_minmax_tests();
+    // tests::chess_minmax_tests();
 
     // tests::chess_bestMove_tests();
 

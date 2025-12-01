@@ -1588,14 +1588,33 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     // chess test_game = *this;
     // bool can_ply = test_game.ply( i_bef, j_bef, i_aft, j_aft );
 
+
+    bool state_ok = true;
     /*
     If not castling, check if the game change of state is legal after the move.
     */ 
     if( !cast_poss ){
+
+        // Create a temporary game copy.
+        chess tmp_game = *this;
+        // Perform the move in the game copy without updating game state.
+        tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
+        tmp_game.CHS_board[i_aft][j_aft] = tarPce;
+        // Update the attack lists of the game copy after the move.
+        tmp_game.upd_atk_lists();
+        // Determine check status of both kings.
+        pair<bool,bool> chk_status = tmp_game.is_in_check();
+
+        // Check for state change validity, which involves not having a king remaining
+        // in check state after a play.
+        state_ok = state_ok && !( this->state == CHS_STATE::WCHK && chk_status.first );
+        state_ok = state_ok && !( this->state == CHS_STATE::BCHK && chk_status.second );
+        // Additional check making sure both kings are not in check simultaneously.
+        state_ok = state_ok && !( chk_status.first && chk_status.second );
         
     }
 
-    return true;
+    return state_ok;
 
 }
 
@@ -2661,15 +2680,14 @@ pair<bool,bool> chess::is_in_check(){
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
 
                 if( this->atk_list_by_B[z].size() != 0 ){
-                    sub_idx_z.first = true;
+                    chk_ans.first = true;
                 }
                 
-
             }
             if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
 
                 if( this->atk_list_by_W[z].size() != 0 ){
-                    sub_idx_z.second = true;
+                    chk_ans.second = true;
                 }
                 
             }
@@ -2677,6 +2695,7 @@ pair<bool,bool> chess::is_in_check(){
 
     }
 
+    return chk_ans;
 
 }
 
