@@ -629,6 +629,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     vector< string > get_all_psbl_alg_comm() const;
 
     /**
+      * \brief Check whether the game has either king been in check.
+      * 
+      * \return Boolean pair indicating whether the white and black kings are in 
+      *     check, in that order.
+      */
+    pair<bool,bool> is_in_check();
+
+    /**
      * \brief Check whether the game is in checkmate state.
      * 
      * \return Boolean indicating whether the game has reached a checkmate.

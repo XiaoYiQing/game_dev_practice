@@ -2962,9 +2962,9 @@ void tests::chess_minmax_tests(){
         chs_pce_val_map[ chess::CHS_PIECE_TYPE::ROOK ] );
 
     if( test_bool ){
-        cout << "chess endgame tests: passed!" << endl;
+        cout << "chess minmax endgame tests: passed!" << endl;
     }else{
-        cout << "chess endgame tests: failed!" << endl;
+        cout << "chess minmax endgame tests: failed!" << endl;
     }
     
 // ---------------------------------------------------------------------- <<<<<

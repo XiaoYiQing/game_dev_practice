@@ -927,21 +927,6 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     // Increment the turn count.
     this->turn_cnt++;
     // Update all states of the game.
-    // try{
-    //     this->upd_post_play();
-    // }catch( runtime_error e ){
-    //     string tmp = e.what();
-    //     string expect_msg = "Black and white kings both in check.";
-    //     if( tmp == expect_msg ){
-    //         *this = game_bef;
-    //         return false;
-    //     }else{
-    //         // Rethrow the error if it is an unexpected runtime error.
-    //         throw e;
-    //     }
-    // }catch(...){
-    //     throw;
-    // }
     if( this->upd_post_play() ){
 
     }else{
@@ -1385,6 +1370,10 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
+    // Define flag for unique castling movement which involves two pieces been moved
+    // in one action. 
+    bool cast_poss = false;
+
     // Obtain the type of the current piece.
     CHS_PIECE_TYPE tarType = tarPce.type;
     // Computed the movement vector.
@@ -1467,10 +1456,10 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         // Check for castling possibility.
         }else if( tarPce.not_moved && BOARDHEIGHT == 8 && BOARDWIDTH == 8 ){
 
+            cast_poss = true;
+
             if( tarColor == CHS_PIECE_COLOR::WHITE ){
                 
-                bool cast_poss = true;
-
                 // Right-side castling.
                 if( i_bef == 0 && j_bef == 4 && i_aft == 0 && j_aft == 6 ){
 
@@ -1510,8 +1499,6 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                 }
 
             }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
-
-                bool cast_poss = true;
 
                 // Right-side castling.
                 if( i_bef == 7 && j_bef == 4 && i_aft == 7 && j_aft == 6 ){
@@ -1596,9 +1583,17 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
+    // TODO: check for invalid change in game state.
     // Check violation.
     // chess test_game = *this;
     // bool can_ply = test_game.ply( i_bef, j_bef, i_aft, j_aft );
+
+    /*
+    If not castling, check if the game change of state is legal after the move.
+    */ 
+    if( !cast_poss ){
+        
+    }
 
     return true;
 
@@ -2411,6 +2406,7 @@ void chess::upd_pce_cnt_list(){
             }
         }
     }
+
 }
 
 
@@ -2490,8 +2486,6 @@ void chess::upd_atk_lists(){
 
 bool chess::upd_mid_game_state(){
 
-    bool upd_res = false;
-
     // Set the state to the none case.
     this->state = CHS_STATE::NO_S;
 
@@ -2550,6 +2544,8 @@ bool chess::upd_mid_game_state(){
     if( this->state == CHS_STATE::NO_S ){
         this->state = CHS_STATE::ONGOING;
     }
+
+    return true;
 
 }
 
@@ -2644,6 +2640,43 @@ vector< string > chess::get_all_psbl_alg_comm() const{
     alg_comm_vec.shrink_to_fit();
     
     return alg_comm_vec;
+
+}
+
+
+pair<bool,bool> chess::is_in_check(){
+
+    pair<bool,bool> chk_ans = { false, false };
+
+    pair<int,int> sub_idx_z = {-1,-1};
+    chs_piece pce_z;
+
+    // Perform a full board scan to determine checks.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        sub_idx_z = ind2sub(z);
+        pce_z = this->get_piece_at( sub_idx_z.first, sub_idx_z.second );
+
+        if( pce_z.type == CHS_PIECE_TYPE::KING ){
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+                if( this->atk_list_by_B[z].size() != 0 ){
+                    sub_idx_z.first = true;
+                }
+                
+
+            }
+            if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+
+                if( this->atk_list_by_W[z].size() != 0 ){
+                    sub_idx_z.second = true;
+                }
+                
+            }
+        }
+
+    }
+
 
 }
 
