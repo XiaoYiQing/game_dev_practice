@@ -927,20 +927,26 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     // Increment the turn count.
     this->turn_cnt++;
     // Update all states of the game.
-    try{
-        this->upd_post_play();
-    }catch( runtime_error e ){
-        string tmp = e.what();
-        string expect_msg = "Black and white kings both in check.";
-        if( tmp == expect_msg ){
-            *this = game_bef;
-            return false;
-        }else{
-            // Rethrow the error if it is an unexpected runtime error.
-            throw e;
-        }
-    }catch(...){
-        throw;
+    // try{
+    //     this->upd_post_play();
+    // }catch( runtime_error e ){
+    //     string tmp = e.what();
+    //     string expect_msg = "Black and white kings both in check.";
+    //     if( tmp == expect_msg ){
+    //         *this = game_bef;
+    //         return false;
+    //     }else{
+    //         // Rethrow the error if it is an unexpected runtime error.
+    //         throw e;
+    //     }
+    // }catch(...){
+    //     throw;
+    // }
+    if( this->upd_post_play() ){
+
+    }else{
+        *this = game_bef;
+        return false;
     }
 
     // Record the game state after.
@@ -1005,7 +1011,11 @@ bool chess::ply_ag_comm( string alg_comm ){
             chs_move castle_mov( row_idx, 4, row_idx, 6 );
             return ply( castle_mov );
         }
-        throw runtime_error( "Caslting move currently not valid." );
+
+        if( this->verbose ){
+            cout << "Castling move is currently invalid." << endl;
+        }
+        return false;
 
     }else if( alg_comm == "O-O-O" || alg_comm == "0-0-0" ){
 
@@ -1020,7 +1030,11 @@ bool chess::ply_ag_comm( string alg_comm ){
             chs_move castle_mov( row_idx, 4, row_idx, 2 );
             return ply( castle_mov );
         }
-        throw runtime_error( "Castling move currently not valid." );
+
+        if( this->verbose ){
+            cout << "Castling move is currently invalid." << endl;
+        }
+        return false;
 
     }
 
@@ -2474,7 +2488,9 @@ void chess::upd_atk_lists(){
 }
 
 
-void chess::upd_mid_game_state(){
+bool chess::upd_mid_game_state(){
+
+    bool upd_res = false;
 
     // Set the state to the none case.
     this->state = CHS_STATE::NO_S;
@@ -2495,7 +2511,10 @@ void chess::upd_mid_game_state(){
 
                 if( this->atk_list_by_B[z].size() != 0 ){
                     if( state == CHS_STATE::BCHK ){
-                        throw runtime_error( "Black and white kings both in check." );
+                        if( this->verbose ){
+                            cout << "Black and white kings both in check." << endl;
+                        }
+                        return false;
                     }else{
                         state = CHS_STATE::WCHK;
                     }
@@ -2507,7 +2526,10 @@ void chess::upd_mid_game_state(){
 
                 if( this->atk_list_by_W[z].size() != 0 ){
                     if( state == CHS_STATE::WCHK ){
-                        throw runtime_error( "Black and white kings both in check." );
+                        if( this->verbose ){
+                            cout << "Black and white kings both in check." << endl;
+                        }
+                        return false;
                     }else{
                         state = CHS_STATE::BCHK;
                     }
@@ -2515,7 +2537,10 @@ void chess::upd_mid_game_state(){
                 
             }
             if( pce_z.color == CHS_PIECE_COLOR::NO_C ){
-                throw runtime_error( "Unrecognized chess piece color." );
+                if( this->verbose ){
+                    cout << "Unrecognized chess piece color." << endl;
+                }
+                return false;
             }
         }
 
@@ -2902,21 +2927,29 @@ bool chess::is_draw(){
 }
 
 
-void chess::upd_post_play(){
+bool chess::upd_post_play(){
     
+    bool upd_res = true;
+
     this->upd_pce_cnt_list();
 
     this->upd_atk_lists();
 
-    this->upd_mid_game_state();
+    upd_res = upd_res && ( this->upd_mid_game_state() );
+
+    return upd_res;
 
 }
 
-void chess::upd_all(){
+bool chess::upd_all(){
 
-    this->upd_post_play();
+    bool upd_res = true;
+
+    upd_res = upd_res && ( this->upd_post_play() );
 
     this->upd_end_game_state();
+
+    return upd_res;
 
 }
 
