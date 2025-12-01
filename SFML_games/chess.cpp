@@ -1338,6 +1338,10 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         unsigned int i_aft, unsigned int j_aft ) const
 {
 
+// ---------------------------------------------------------------------- >>>>>
+//      
+// ---------------------------------------------------------------------- >>>>>
+
     // Out of bound check.
     if( max( i_bef, i_aft ) >= BOARDHEIGHT || max( j_bef, j_aft ) >= BOARDHEIGHT ){
         return false;
@@ -1583,12 +1587,6 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
-    // TODO: check for invalid change in game state.
-    // Check violation.
-    // chess test_game = *this;
-    // bool can_ply = test_game.ply( i_bef, j_bef, i_aft, j_aft );
-
-
     bool state_ok = true;
     /*
     If not castling, check if the game change of state is legal after the move.
@@ -1653,10 +1651,10 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
+    // Flag indicating whether the current move is an en-passant attack.
+    bool is_en_pass = false;
     // The unique scenario of en-passant pawn attack superseeds all remaining checks.
     if( tarPce.type == CHS_PIECE_TYPE::PAWN && this->en_pass_flag ){
-
-        bool is_en_pass = false;
 
         // Determine if the current attack matches any of the currently active
         // en-passant possiblities.
@@ -1670,21 +1668,16 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
         }
 
-        if( is_en_pass ){
-            return true;
-        }
-
     }
 
     // Obtain piece at destination.
     chs_piece endPce = this->get_piece_at( i_aft, j_aft );
     // Check empty space at destination.
-    if( endPce.type == CHS_PIECE_TYPE::NO_P || endPce.color == CHS_PIECE_COLOR::NO_C ){
+    if( !is_en_pass && ( endPce.type == CHS_PIECE_TYPE::NO_P || endPce.color == CHS_PIECE_COLOR::NO_C ) ){
         return false;
     }
-
     // Make sure the attacker and the defender are of different colors.
-    if( tarPce.color == endPce.color ){
+    if( !is_en_pass && ( tarPce.color == endPce.color ) ){
         return false;
     }
 
@@ -1796,7 +1789,32 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
-    return true;
+
+
+    bool state_ok = true;
+
+    // Create a temporary game copy.
+    chess tmp_game = *this;
+    // Perform the move in the game copy without updating game state.
+    tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
+    tmp_game.CHS_board[i_aft][j_aft] = tarPce;
+    // Special en-passant attack eliminates pawn on same row and ending column.
+    if( is_en_pass ){
+        tmp_game.CHS_board[i_bef][j_aft].set_as_empty();
+    }
+    // Update the attack lists of the game copy after the move.
+    tmp_game.upd_atk_lists();
+    // Determine check status of both kings.
+    pair<bool,bool> chk_status = tmp_game.is_in_check();
+
+    // Check for state change validity, which involves not having a king remaining
+    // in check state after a play.
+    state_ok = state_ok && !( this->state == CHS_STATE::WCHK && chk_status.first );
+    state_ok = state_ok && !( this->state == CHS_STATE::BCHK && chk_status.second );
+    // Additional check making sure both kings are not in check simultaneously.
+    state_ok = state_ok && !( chk_status.first && chk_status.second );
+
+    return state_ok;
 
 }
 

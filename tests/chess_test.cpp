@@ -1062,8 +1062,6 @@ void tests::chess_move_tests(){
     myGame.set_piece_at( 0, 0, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     
-    myGame.printBoard();
-
     // Knight moving away from position shielding king from upper black rook.
     test_bool = test_bool && !myGame.is_move_valid( 2, 4, 3, 6 );
     // Knight switch shielding from upper to left black rook.
@@ -1319,6 +1317,20 @@ void tests::chess_atk_check_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
+//      is_atk_valid invalid state change tests
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+
+    // Pawn test.
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+
+// ---------------------------------------------------------------------- >>>>>
 //      get_all_valid_atk_sq tests
 // ---------------------------------------------------------------------- >>>>>
 
@@ -1357,9 +1369,8 @@ void tests::chess_atk_check_tests(){
     myGame.set_piece_at( 3, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
     valid_atk_vec = myGame.get_all_valid_atk_sq(3,4);
-    test_bool = test_bool && ( valid_atk_vec.size() == 2 );
+    test_bool = test_bool && ( valid_atk_vec.size() == 1 );
     test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 5 );
-    test_bool = test_bool && ( valid_atk_vec.at(1).first == 2 && valid_atk_vec.at(1).second == 3 );
     
     myGame.setTurn_cnt(0);
     valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
@@ -1670,8 +1681,6 @@ void tests::chess_promo_tests(){
     test_bool = test_bool && myGame.play( 3, 3, 2, 5 );
     // Attempt to play the pawn turned knight using a knight jump.
     test_bool = test_bool && myGame.play( 7, 2, 5, 3 );
-
-    myGame.printBoard();
 
     if( test_bool ){
         cout << "Pawn standard promotion test: passed!" << endl;
@@ -2240,8 +2249,6 @@ void tests::chess_draw_tests(){
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
     myGame.set_piece_at( 2, 6, chess::chs_piece(
         chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.printBoard();
 
     test_bool == test_bool && myGame.is_draw();
     myGame.setTurn_cnt(1);
