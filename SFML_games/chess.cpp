@@ -686,9 +686,9 @@ int chess::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth ){
         newGame.ply_ag_comm( move_z );
 
         // Perform next layer minmax.
-        if( newGame.is_white_turn() == 0 ){
+        if( newGame.is_white_turn() ){
             currScore = newGame.minmaxAB_loop( true, alpha, beta, depth - 1 );
-        }else if( newGame.is_black_turn() == 1 ){
+        }else if( newGame.is_black_turn() ){
             currScore = newGame.minmaxAB_loop( false, alpha, beta, depth - 1 );
         }
         // Thread exit point.
