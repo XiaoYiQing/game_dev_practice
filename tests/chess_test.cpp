@@ -9,6 +9,7 @@ void tests::chess_base_tests(){
     bool test_bool = true;
 
     chess myGame = chess();
+    myGame.clearBoard();
 
     // Test the initilization of a board.
     chess::chs_piece currPiece;
@@ -50,7 +51,6 @@ void tests::chess_base_tests(){
     // Add another piece and see the print result.
     myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
         chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.printBoard();
 
 }
 
@@ -556,7 +556,6 @@ void tests::chess_game_manip_tests(){
 
     // Clear the board and check the two pieces location for empty case.
     myGame.clearBoard();
-    cout << endl;
     test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::NO_P && 
         myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::NO_C );
     test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::NO_P && 
@@ -577,7 +576,6 @@ void tests::chess_game_manip_tests(){
     
     test_bool = true;
     myGame.resetBoard();
-    myGame.printBoard();
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
     test_bool = test_bool && ( myGame.getTurn_cnt() == 0 );
     test_bool = test_bool && ( myGame.getNo_change_turn_cnt() == 0 );
@@ -1677,11 +1675,20 @@ void tests::chess_promo_tests(){
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
+    chess::chs_piece tmp_pce;
     chess::chs_piece WP = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
     chess::chs_piece BK = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
 
     myGame.set_piece_at( 6, 2, WP );
     myGame.set_piece_at( 3, 3, BK );
+    tmp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
+    myGame.set_piece_at( 0, 7, tmp_pce );
+    tmp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
+    myGame.set_piece_at( 7, 0, tmp_pce );
+    tmp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    myGame.set_piece_at( 1, 7, tmp_pce );
+    tmp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+    myGame.set_piece_at( 6, 0, tmp_pce );
 
     // Check promo lock is false before going for the promotion move.
     test_bool = test_bool && !myGame.getPromo_lock();

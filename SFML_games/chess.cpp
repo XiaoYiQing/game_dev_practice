@@ -885,7 +885,6 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
     }else if( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) ){
 
-
         // The en-passant attack is a unique attack where the end square is empty.
         bool is_en_pass = this->is_sq_empty( i_aft, j_aft );
 
@@ -930,24 +929,6 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     if( this->upd_post_play() ){
 
     }else{
-        *this = game_bef;
-        return false;
-    }
-
-    // Record the game state after.
-    CHS_STATE state_aft = this->state;
-
-    // If white is still in check whilst going into black's turn, revert move.
-    if( state_aft == CHS_STATE::WCHK && this->is_black_turn() ){
-        if( verbose )
-            cout << "White still in check in black's turn." << endl;
-        *this = game_bef;
-        return false;
-    }
-    // If black is still in check whilst going into white's turn, revert move.
-    if( state_aft == CHS_STATE::BCHK && this->is_white_turn() ){
-        if( verbose )
-            cout << "Black still in check in white's turn." << endl;
         *this = game_bef;
         return false;
     }
