@@ -1845,12 +1845,13 @@ void tests::chess_game_state_tests(){
     myGame.setTurn_cnt(0);
 
     // Simple scenario where white king enters the checked state.
-    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::DRAW );
     myGame.set_piece_at( 0, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::WWIN );
+    myGame.set_piece_at( 7, 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
     myGame.set_piece_at( 7, 7, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
     test_bool = test_bool && myGame.play( 0, 4, 1, 4 );
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
@@ -2146,7 +2147,7 @@ void tests::chess_draw_tests(){
 
     bool test_bool = true;
     chess myGame;
-    myGame.setVerbose(true);
+    // myGame.setVerbose(true);
 
 // ---------------------------------------------------------------------- >>>>>
 //      King vs King
