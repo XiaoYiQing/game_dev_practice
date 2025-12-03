@@ -3104,7 +3104,7 @@ void tests::chess_bestMove_tests(){
     string bestMove = "";
 
 // ---------------------------------------------------------------------- >>>>>
-//      Mate in 2 Problems
+//      Mate in 2 Problems (Tricky Sacrifice to Mate)
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -3140,18 +3140,46 @@ void tests::chess_bestMove_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Mate in 2 Problem 2
+//      Mate in 2 Problem 2 (Stalemate Avoidance)
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
+    myGame.set_piece_at_ag_coord( 'c', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'a', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'c', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'b', 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'd', 5, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'c', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    
+    
+    myGame.set_piece_at_ag_coord( 'b', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    bestMove = myGame.bestMove(3);
+    test_bool = test_bool && ( bestMove == "Bd5h1" );
+
+    if( test_bool ){
+        cout << "chess bestMove Mate in 2 test 2: passed!" << endl;
+    }else{
+        cout << "chess bestMove Mate in 2 test 2: failed!" << endl;
+    }
+
+    cout << bestMove << endl;
+
 // ---------------------------------------------------------------------- <<<<<
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Mate in 2 Problem 5
+//      Mate in 2 Problem 5 (Complicated Situation with Many Pieces)
 // ---------------------------------------------------------------------- >>>>>
     
     test_bool = true;
