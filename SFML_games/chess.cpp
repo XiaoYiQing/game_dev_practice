@@ -578,6 +578,7 @@ int chess::minmax( bool isMaximizing, int depth ){
     int bestScore = 0;
     int currScore = 0;
 
+    // Obtain the entire set of currently valid moves.
     vector<string> validMovesVect = this->get_all_psbl_alg_comm();
 
 
@@ -620,6 +621,107 @@ int chess::minmax( bool isMaximizing, int depth ){
     }
 
     return bestScore;
+}
+
+
+int chess::minmaxAB_init( bool isMaximizing, int depth ){
+
+    // Initial alpha and beta.
+    int alpha = std::numeric_limits<int>::min();
+    int beta = std::numeric_limits<int>::max();
+
+    // Initialize the minmiax process with AB-pruning.
+    return minmaxAB_loop( isMaximizing, alpha, beta, depth );
+
+}
+
+int chess::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth ){
+
+    if( ( this->is_white_turn() && !isMaximizing ) ||
+        this->is_black_turn() && isMaximizing )
+    {
+        throw invalid_argument( "minmaxAB_loop: Mismatch of minmax objective with the current turn order." );
+    }
+
+    switch( this->state ){
+    case CHS_STATE::WWIN:
+    case CHS_STATE::BWIN:
+    case CHS_STATE::DRAW:
+        // When game is over, return value immediately.
+        return this->gameStateEval();
+        break;
+    case CHS_STATE::WCHK:
+    case CHS_STATE::BCHK:
+    case CHS_STATE::ONGOING:
+        // If we reached the maximum allowed depth, return value immediately.
+        if( depth <= 0 ){
+            return this->gameStateEval();
+        }
+        break;
+    default:
+        throw runtime_error( "minmax: Unrecognized game state. Abort." );
+    }
+
+    int bestScore = 0;
+    int currScore = 0;
+
+    // Obtain the entire set of currently valid moves.
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+
+    if ( isMaximizing ) {        
+        bestScore = std::numeric_limits<int>::min();
+    }else{
+        bestScore = std::numeric_limits<int>::max();
+    }
+
+    for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+        // Current valid move.
+        string move_z = validMovesVect.at(z);
+
+        // Make a copy of the current game.
+        chess newGame = *this;
+
+        // In the game copy, make a play with the next available move.
+        newGame.ply_ag_comm( move_z );
+
+        // Perform next layer minmax.
+        if( newGame.is_white_turn() == 0 ){
+            currScore = newGame.minmaxAB_loop( true, alpha, beta, depth - 1 );
+        }else if( newGame.is_black_turn() == 1 ){
+            currScore = newGame.minmaxAB_loop( false, alpha, beta, depth - 1 );
+        }
+        // Thread exit point.
+        if( !this->AI_proc_flag ){
+            return bestScore;
+        }
+
+        if ( isMaximizing ) {        
+            // Update the highest score up to now.
+            bestScore = std::max( bestScore, currScore );
+            // Update the alpha value.
+            alpha = std::max( alpha, currScore );
+            // If current alpha exceeds previous beta, no need to keep looking in 
+            // this search branch.
+            if (beta <= alpha){
+                break;
+            }
+        }else{
+            // Update the highest score up to now.
+            bestScore = std::min( bestScore, currScore );
+            // Update the alpha value.
+            beta = std::min( beta, currScore );
+            // If current beta is inferior to previous alpha, no need to keep looking in 
+            // this search branch.
+            if( beta <= alpha ){
+                break;
+            }
+        }
+
+    }
+
+    return bestScore;
+
 }
 
 
