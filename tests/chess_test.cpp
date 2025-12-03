@@ -3107,34 +3107,34 @@ void tests::chess_bestMove_tests(){
 //      Mate in 2 Problems
 // ---------------------------------------------------------------------- >>>>>
 
-    // test_bool = true;
-    // myGame.clearBoard();
-    // myGame.setTurn_cnt(0);
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
 
-    // myGame.set_piece_at_ag_coord( 'b', 6, 
-    //     chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-    // myGame.set_piece_at_ag_coord( 'a', 1, 
-    //     chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    // myGame.set_piece_at_ag_coord( 'c', 8, 
-    //     chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'b', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'a', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'c', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
 
-    // myGame.set_piece_at_ag_coord( 'a', 7, 
-    //     chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    // myGame.set_piece_at_ag_coord( 'b', 7, 
-    //     chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    // myGame.set_piece_at_ag_coord( 'b', 8, 
-    //     chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    // myGame.set_piece_at_ag_coord( 'a', 8, 
-    //     chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'a', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'b', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'b', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'a', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
 
-    // string bestMove = myGame.bestMove(3);
-    // test_bool = test_bool && ( bestMove == "Ra1a6" );
+    string bestMove = myGame.bestMove(3);
+    test_bool = test_bool && ( bestMove == "Ra1a6" );
 
-    // if( test_bool ){
-    //     cout << "chess bestMove Mate in 2 test 1: passed!" << endl;
-    // }else{
-    //     cout << "chess bestMove Mate in 2 test 1: failed!" << endl;
-    // }
+    if( test_bool ){
+        cout << "chess bestMove Mate in 2 test 1: passed!" << endl;
+    }else{
+        cout << "chess bestMove Mate in 2 test 1: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -3178,8 +3178,13 @@ void tests::chess_bestMove_tests(){
     myGame.printBoard_ag_coord();
 
     bestMove = myGame.bestMove(3);
+    test_bool = test_bool && ( bestMove == "Qc1b2" );
 
-    cout << bestMove << endl;
+    if( test_bool ){
+        cout << "chess bestMove Mate in 2 test 2: passed!" << endl;
+    }else{
+        cout << "chess bestMove Mate in 2 test 2: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 

@@ -2571,24 +2571,9 @@ bool chess::upd_mid_game_state(){
 vector< string > chess::get_all_psbl_alg_comm() const{
 
     // Obtain all current possible plays.
-    vector<chs_move> all_moves = this->get_all_valid_moves();
+    vector<chs_move> all_plays = this->get_all_valid_moves();
     vector<chs_move> all_atks = this->get_all_valid_atks();
-    vector<chs_move> all_plays;
-    all_plays.reserve( all_moves.size() + all_atks.size() );
-
-    // Test out each possible moves.
-    for( chs_move move_z : all_moves ){
-        chess tmp_game = *this;
-        if( tmp_game.play( move_z ) ){
-            all_plays.push_back( move_z );
-        }
-    }
-    for( chs_move atk_z : all_atks ){
-        chess tmp_game = *this;
-        if( tmp_game.play( atk_z ) ){
-            all_plays.push_back( atk_z );
-        }
-    }
+    all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
 
     // Initialize final vector of algebraic commands.
     vector< string > alg_comm_vec;
