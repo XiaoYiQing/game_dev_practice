@@ -2673,8 +2673,8 @@ bool chess::upd_mid_game_state(){
 vector< string > chess::get_all_psbl_alg_comm() const{
 
     // Obtain all current possible plays.
-    vector<chs_move> all_plays = this->get_all_valid_moves();
     vector<chs_move> all_atks = this->get_all_valid_atks();
+    vector<chs_move> all_plays = this->get_all_valid_moves();
     all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
 
     // Initialize final vector of algebraic commands.
