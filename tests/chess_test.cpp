@@ -3127,7 +3127,7 @@ void tests::chess_bestMove_tests(){
     myGame.set_piece_at_ag_coord( 'a', 8, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
 
-    string bestMove = myGame.bestMove(3);
+    bestMove = myGame.bestMove(3);
     test_bool = test_bool && ( bestMove == "Ra1a6" );
 
     if( test_bool ){
@@ -3141,6 +3141,17 @@ void tests::chess_bestMove_tests(){
 
 // ---------------------------------------------------------------------- >>>>>
 //      Mate in 2 Problem 2
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Mate in 2 Problem 5
 // ---------------------------------------------------------------------- >>>>>
     
     test_bool = true;
@@ -3181,9 +3192,9 @@ void tests::chess_bestMove_tests(){
     test_bool = test_bool && ( bestMove == "Qc1b2" );
 
     if( test_bool ){
-        cout << "chess bestMove Mate in 2 test 2: passed!" << endl;
+        cout << "chess bestMove Mate in 2 test 5: passed!" << endl;
     }else{
-        cout << "chess bestMove Mate in 2 test 2: failed!" << endl;
+        cout << "chess bestMove Mate in 2 test 5: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
