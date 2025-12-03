@@ -3219,9 +3219,57 @@ void tests::chess_minmaxAB_tests(){
     test_bool = test_bool && ( minmax_vals[ "win" ] );
 
     if( test_bool ){
-        cout << "chess minmaxAB mate in 2 test: passed!" << endl;
+        cout << "chess minmaxAB mate in 2 test 1: passed!" << endl;
     }else{
-        cout << "chess minmaxAB mate in 2 test: failed!" << endl;
+        cout << "chess minmaxAB mate in 2 test 1: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Mate in 2 Problem 5 (Complicated Situation with Many Pieces)
+// ---------------------------------------------------------------------- >>>>>
+    
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+    myGame.setAI_proc_flag(true);
+
+    chess::chs_piece pce_t;
+    pce_t.type = chess::CHS_PIECE_TYPE::ROOK;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
+    myGame.set_piece_at_ag_coord( 'a', 1, pce_t );
+    myGame.set_piece_at_ag_coord( 'g', 5, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::ROOK;   pce_t.color = chess::CHS_PIECE_COLOR::BLACK;
+    myGame.set_piece_at_ag_coord( 'c', 3, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::KNIGHT; pce_t.color = chess::CHS_PIECE_COLOR::BLACK;
+    myGame.set_piece_at_ag_coord( 'b', 1, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::QUEEN;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
+    myGame.set_piece_at_ag_coord( 'c', 1, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::KING;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
+    myGame.set_piece_at_ag_coord( 'e', 1, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::KING;   pce_t.color = chess::CHS_PIECE_COLOR::BLACK;
+    pce_t.not_moved = false;
+    myGame.set_piece_at_ag_coord( 'h', 1, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::PAWN;   pce_t.color = chess::CHS_PIECE_COLOR::BLACK;
+    myGame.set_piece_at_ag_coord( 'a', 2, pce_t );
+    myGame.set_piece_at_ag_coord( 'f', 3, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::PAWN;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
+    myGame.set_piece_at_ag_coord( 'c', 2, pce_t );
+    myGame.set_piece_at_ag_coord( 'e', 2, pce_t );
+    myGame.set_piece_at_ag_coord( 'f', 2, pce_t );
+    myGame.set_piece_at_ag_coord( 'd', 3, pce_t );
+    myGame.set_piece_at_ag_coord( 'c', 5, pce_t );
+    pce_t.type = chess::CHS_PIECE_TYPE::BISHOP;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
+    myGame.set_piece_at_ag_coord( 'f', 4, pce_t );
+
+    game_eval = myGame.minmaxAB_init( true, 3 );
+    test_bool = test_bool && ( minmax_vals[ "win" ] );
+
+    if( test_bool ){
+        cout << "chess minmaxAB mate in 2 test 5: passed!" << endl;
+    }else{
+        cout << "chess minmaxAB mate in 2 test 5: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<

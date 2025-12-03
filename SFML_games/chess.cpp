@@ -743,10 +743,8 @@ string chess::bestMove( int depth ){
     // Obtain the current best score.
     if( this->is_white_turn() ){
         bestScore = this->minmax( true, depth );
-        // bestScore = this->minmax_debug( true, depth );
     }else{
         bestScore = this->minmax( false, depth );
-        // bestScore = this->minmax_debug( false, depth );
     }
     // Thread exit point.
     if( !this->AI_proc_flag ){
