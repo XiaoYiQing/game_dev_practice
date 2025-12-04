@@ -405,6 +405,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     string bestMove( int depth );
 
+    // 
+    string bestMove_ABP();
+
+    string bestMove_ABP( int depth );
+
 // ====================================================================== <<<<<
 
 
@@ -901,6 +906,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \param newVal The new value to be associated with target piece type.
      */
     void setMinmax_vas( string tarVal, int newVal );
+    
+    void setMinmax_depth( unsigned int minmax_depth_in );
+    unsigned int getMinmax_depth() const;
 
     bool getAI_first() const;
     void setAI_first( bool AI_first_in );
@@ -981,6 +989,11 @@ protected:
      * - [3 = multi-threaded minmax with AB-pruning]
      */
     CHS_AI_OPT AI_opt;
+
+    /**
+     * The depth of the minmax function used by this game instance.
+     */
+    unsigned int minmax_depth;
 
     /**
      * Flag indicating if this game enables AI to play as opponent.

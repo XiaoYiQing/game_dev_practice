@@ -201,7 +201,6 @@ const string chess::IMPOS_ALG_COMM = "";
 
 chess::chess(){
 
-
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
         this->atk_list_by_B[z].reserve( BOARDHEIGHT*BOARDWIDTH );
         this->atk_list_by_W[z].reserve( BOARDHEIGHT*BOARDWIDTH );
@@ -226,6 +225,7 @@ chess::chess(){
 
     // Default AI option is standard minmax with AB-pruning.
     AI_opt = CHS_AI_OPT::STD_AB_MM;
+    minmax_depth = 3;
     vsAI = false;
     AI_first = false;
     // Define the numerical value to each of the chess piece type.
@@ -795,6 +795,11 @@ string chess::bestMove( int depth ){
 
     return optimComm;
 
+}
+
+
+string chess::bestMove_ABP(){
+    return bestMove_ABP( this->minmax_depth );
 }
 
 // ====================================================================== <<<<<
@@ -3630,6 +3635,11 @@ void chess::setMinmax_vas( string tarVal, int newVal ){
     }
     throw invalid_argument( "Given minmax value string description is invalid." );
 }
+
+void chess::setMinmax_depth( unsigned int minmax_depth_in )
+    { this->minmax_depth = minmax_depth_in; }
+unsigned int chess::getMinmax_depth() const
+    { return this->minmax_depth; }
 
 bool chess::getAI_first() const
     { return this->AI_first; }
