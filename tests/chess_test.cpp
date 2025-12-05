@@ -3053,39 +3053,78 @@ void tests::chess_minmax_tests(){
 //      Mate in 2 Problem 1
 // ---------------------------------------------------------------------- >>>>>
 
+    // test_bool = true;
+    // myGame.clearBoard();
+    // myGame.setTurn_cnt(0);
+    // myGame.setAI_proc_flag(true);
+
+    // myGame.set_piece_at_ag_coord( 'b', 6, 
+    //     chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    // myGame.set_piece_at_ag_coord( 'a', 1, 
+    //     chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    // myGame.set_piece_at_ag_coord( 'c', 8, 
+    //     chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // myGame.set_piece_at_ag_coord( 'a', 7, 
+    //     chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    // myGame.set_piece_at_ag_coord( 'b', 7, 
+    //     chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    // myGame.set_piece_at_ag_coord( 'b', 8, 
+    //     chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    // myGame.set_piece_at_ag_coord( 'a', 8, 
+    //     chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
+
+    // game_eval = myGame.minmax( true, 3 );
+    // test_bool = test_bool && ( minmax_vals[ "win" ] );
+
+    // if( test_bool ){
+    //     cout << "chess minmax mate in 2 test: passed!" << endl;
+    // }else{
+    //     cout << "chess minmax mate in 2 test: failed!" << endl;
+    // }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      minmax_alt End Game Scenarios
+// ---------------------------------------------------------------------- >>>>>
+
     test_bool = true;
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
     myGame.setAI_proc_flag(true);
 
-    myGame.set_piece_at_ag_coord( 'b', 6, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at_ag_coord( 'a', 1, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at_ag_coord( 'c', 8, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'f', 7, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'g', 7, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'h', 7, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'g', 8, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
 
-    myGame.set_piece_at_ag_coord( 'a', 7, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at_ag_coord( 'b', 7, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at_ag_coord( 'b', 8, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at_ag_coord( 'a', 8, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'e', 1, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'a', 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    pair<int,string> MM_res = myGame.minmax_alt( true, 1 );
+    test_bool = test_bool && ( MM_res.first == minmax_vals[ "win" ] );
 
-
-    game_eval = myGame.minmax( true, 3 );
-    test_bool = test_bool && ( minmax_vals[ "win" ] );
+    myGame.setTurn_cnt(1);
+    MM_res = myGame.minmax_alt( false, 2 );
+    test_bool = test_bool && ( MM_res.first == minmax_vals[ "check" ] - 
+        3*chs_pce_val_map[ chess::CHS_PIECE_TYPE::PAWN ] +
+        chs_pce_val_map[ chess::CHS_PIECE_TYPE::ROOK ] );
 
     if( test_bool ){
-        cout << "chess minmax mate in 2 test: passed!" << endl;
+        cout << "chess minmax endgame tests: passed!" << endl;
     }else{
-        cout << "chess minmax mate in 2 test: failed!" << endl;
+        cout << "chess minmax endgame tests: failed!" << endl;
     }
-
+    
 // ---------------------------------------------------------------------- <<<<<
-
 
 
 }

@@ -498,16 +498,6 @@ int chess::minmax_debug_loop( bool isMaximizing, int depth, int max_depth ){
         // Make a copy of the current game.
         chess newGame = *this;
 
-        if( depth == 2 && move_z == "a7b6" ){
-            int lool = 1;
-            this->printBoard_ag_coord();
-        }
-
-        if( depth == 3 && move_z == "Ra1a6" ){
-            int lool = 1;
-            this->printBoard_ag_coord();
-        }
-
         // In the game copy, make a play with the next available move.
         bool tmp = newGame.ply_ag_comm( move_z );
 
@@ -621,6 +611,91 @@ int chess::minmax( bool isMaximizing, int depth ){
     }
 
     return bestScore;
+}
+
+
+pair<int,string> chess::minmax_alt( bool isMaximizing, int depth ){
+
+    if( ( this->is_white_turn() && !isMaximizing ) ||
+        this->is_black_turn() && isMaximizing ){
+        throw invalid_argument( "minmax: Mismatch of minmax objective with the current turn order." );
+    }
+
+    switch( this->state ){
+    case CHS_STATE::WWIN:
+    case CHS_STATE::BWIN:
+    case CHS_STATE::DRAW:
+        // When game is over, return value immediately.
+        return pair<int,string>( this->gameStateEval(), chess::IMPOS_ALG_COMM );
+        break;
+    case CHS_STATE::WCHK:
+    case CHS_STATE::BCHK:
+    case CHS_STATE::ONGOING:
+        // If we reached the maximum allowed depth, return value immediately.
+        if( depth <= 0 ){
+            return pair<int,string>( this->gameStateEval(), chess::IMPOS_ALG_COMM );
+        }
+        break;
+    default:
+        throw runtime_error( "minmax: Unrecognized game state. Abort." );
+    }
+
+    int bestScore = 0;
+    string bestPlay = chess::IMPOS_ALG_COMM;
+    pair< int, string > currMMres = { 0, chess::IMPOS_ALG_COMM };
+
+    // Obtain the entire set of currently valid moves.
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+
+    if ( isMaximizing ) {        
+        bestScore = std::numeric_limits<int>::min();
+    }else{
+        bestScore = std::numeric_limits<int>::max();
+    }
+    
+    for( unsigned int z = 0; z < validMovesVect.size(); z++ ){
+
+        // Current valid move.
+        string move_z = validMovesVect.at(z);
+
+        // Make a copy of the current game.
+        chess newGame = *this;
+
+        // In the game copy, make a play with the next available move.
+        newGame.ply_ag_comm( move_z );
+
+        // Perform next layer minmax.
+        if( newGame.is_white_turn() ){
+            currMMres = newGame.minmax_alt( true, depth - 1 );
+        }else if( newGame.is_black_turn() ){
+            currMMres = newGame.minmax_alt( false, depth - 1 );
+        }
+        // Thread exit point.
+        if( !this->AI_proc_flag ){
+            return pair<int,string>( bestScore, bestPlay );
+        }
+
+        if ( isMaximizing ) {        
+            // Update the highest score and play up to now.
+            // bestScore = std::max( bestScore, currMMres.first );
+            if( currMMres.first > bestScore ){
+                bestScore = currMMres.first;
+                bestPlay = move_z;
+            }
+        }else{
+            // Update the highest score and play up to now.
+            // bestScore = std::min( bestScore, currMMres.first );
+            if( currMMres.first < bestScore ){
+                bestScore = currMMres.first;
+                bestPlay = move_z;
+            }
+        }
+
+    }
+
+
+    return pair<int,string>( bestScore, bestPlay );
+
 }
 
 
