@@ -407,11 +407,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     string bestMove( int depth );
 
-    // 
-    string bestMove_ABP();
-
-    string bestMove_ABP( int depth );
-
 // ====================================================================== <<<<<
 
 
