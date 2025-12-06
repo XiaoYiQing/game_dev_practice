@@ -614,7 +614,7 @@ int chess::minmax( bool isMaximizing, int depth ){
 }
 
 
-pair<int,string> chess::minmax_alt( bool isMaximizing, int depth ){
+pair<int,string> chess::minmax_bestMove( bool isMaximizing, int depth ){
 
     if( ( this->is_white_turn() && !isMaximizing ) ||
         this->is_black_turn() && isMaximizing ){

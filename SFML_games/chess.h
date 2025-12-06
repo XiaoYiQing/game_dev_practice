@@ -392,7 +392,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     int minmax( bool isMaximizing, int depth );
 
-    pair<int,string> minmax_alt( bool isMaximizing, int depth );
+    pair<int,string> minmax_bestMove( bool isMaximizing, int depth );
 
 
     int minmaxAB_init( bool isMaximizing, int depth );

@@ -3088,7 +3088,7 @@ void tests::chess_minmax_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      minmax_alt End Game Scenarios
+//      minmax_bestMove End Game Scenarios
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -3109,11 +3109,11 @@ void tests::chess_minmax_tests(){
         chess::CHS_PIECE_COLOR::WHITE ) );
     myGame.set_piece_at_ag_coord( 'a', 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
         chess::CHS_PIECE_COLOR::WHITE ) );
-    pair<int,string> MM_res = myGame.minmax_alt( true, 1 );
+    pair<int,string> MM_res = myGame.minmax_bestMove( true, 1 );
     test_bool = test_bool && ( MM_res.first == minmax_vals[ "win" ] );
 
     myGame.setTurn_cnt(1);
-    MM_res = myGame.minmax_alt( false, 2 );
+    MM_res = myGame.minmax_bestMove( false, 2 );
     test_bool = test_bool && ( MM_res.first == minmax_vals[ "check" ] - 
         3*chs_pce_val_map[ chess::CHS_PIECE_TYPE::PAWN ] +
         chs_pce_val_map[ chess::CHS_PIECE_TYPE::ROOK ] );
