@@ -391,13 +391,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
 
     int minmax( bool isMaximizing, int depth );
-
     pair<int,string> minmax_bestMove( bool isMaximizing, int depth );
 
 
     int minmaxAB_init( bool isMaximizing, int depth );
-
     int minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth );
+
+    pair<int,string> minmaxAB_bestMove( bool isMaximizing, int depth );
 
     /**
      * Determine the best move to make in the current turn at the current board state
