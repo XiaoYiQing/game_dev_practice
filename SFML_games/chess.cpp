@@ -641,8 +641,9 @@ pair<int,string> chess::minmax_alt( bool isMaximizing, int depth ){
     }
 
     int bestScore = 0;
+    int currScore = 0;
     string bestPlay = chess::IMPOS_ALG_COMM;
-    pair< int, string > currMMres = { 0, chess::IMPOS_ALG_COMM };
+    
 
     // Obtain the entire set of currently valid moves.
     vector<string> validMovesVect = this->get_all_psbl_alg_comm();
@@ -666,9 +667,9 @@ pair<int,string> chess::minmax_alt( bool isMaximizing, int depth ){
 
         // Perform next layer minmax.
         if( newGame.is_white_turn() ){
-            currMMres = newGame.minmax_alt( true, depth - 1 );
+            currScore = newGame.minmax( true, depth - 1 );
         }else if( newGame.is_black_turn() ){
-            currMMres = newGame.minmax_alt( false, depth - 1 );
+            currScore = newGame.minmax( false, depth - 1 );
         }
         // Thread exit point.
         if( !this->AI_proc_flag ){
@@ -677,22 +678,19 @@ pair<int,string> chess::minmax_alt( bool isMaximizing, int depth ){
 
         if ( isMaximizing ) {        
             // Update the highest score and play up to now.
-            // bestScore = std::max( bestScore, currMMres.first );
-            if( currMMres.first > bestScore ){
-                bestScore = currMMres.first;
+            if( currScore > bestScore ){
+                bestScore = currScore;
                 bestPlay = move_z;
             }
         }else{
             // Update the highest score and play up to now.
-            // bestScore = std::min( bestScore, currMMres.first );
-            if( currMMres.first < bestScore ){
-                bestScore = currMMres.first;
+            if( currScore < bestScore ){
+                bestScore = currScore;
                 bestPlay = move_z;
             }
         }
 
     }
-
 
     return pair<int,string>( bestScore, bestPlay );
 
