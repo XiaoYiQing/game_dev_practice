@@ -48,6 +48,8 @@ namespace tests{
 
     void chess_bestMove_tests();
 
+    void chess_minmax_bestMove_tests();
+
     void chess_bestMove_ABP_tests();
 
 }

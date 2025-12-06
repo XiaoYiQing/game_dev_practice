@@ -161,11 +161,13 @@ void do_tests( unsigned int test_id ){
 
     // tests::chess_all_alg_comm_tests();
 
-    tests::chess_minmax_tests();
+    // tests::chess_minmax_tests();
 
     // tests::chess_minmaxAB_tests();
 
     // tests::chess_bestMove_tests();
+
+    tests::chess_minmax_bestMove_tests();
 
     // tests::chess_bestMove_ABP_tests();
 
