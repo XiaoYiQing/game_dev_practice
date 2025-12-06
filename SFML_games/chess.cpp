@@ -899,6 +899,25 @@ pair<int,string> chess::minmaxAB_bestMove( bool isMaximizing, int depth ){
 }
 
 
+pair<int,string> chess::minmaxAB_split_init( chess& tarGame, bool isMaximizing, 
+    int depth )
+{
+
+    // Define number of threads.
+    unsigned int thread_cnt = min( tarGame.thread_to_use, 
+        std::thread::hardware_concurrency() );
+
+    // Empty the shared move stack.
+    while ( !shared_move_stk.empty() ) {
+        shared_move_stk.pop(); 
+    }
+    // Obtain the entire set of currently valid moves.
+    vector<string> validMovesVect = tarGame.get_all_psbl_alg_comm();
+
+    return pair<int,string>(0,"");
+
+}
+
 // ====================================================================== <<<<<
 
 
