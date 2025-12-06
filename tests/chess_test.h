@@ -52,6 +52,8 @@ namespace tests{
 
     void chess_bestMove_ABP_tests();
 
+    void chess_minmaxAB_bestMove_tests();
+
 }
 
 

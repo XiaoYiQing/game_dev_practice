@@ -854,11 +854,7 @@ pair<int,string> chess::minmaxAB_bestMove( bool isMaximizing, int depth ){
         newGame.ply_ag_comm( move_z );
 
         // Perform next layer minmax.
-        if( newGame.is_white_turn() ){
-            currScore = newGame.minmaxAB_loop( true, alpha, beta, depth - 1 );
-        }else if( newGame.is_black_turn() ){
-            currScore = newGame.minmaxAB_loop( false, alpha, beta, depth - 1 );
-        }
+        currScore = newGame.minmaxAB_loop( newGame.is_white_turn(), alpha, beta, depth - 1 );
         // Thread exit point.
         if( !this->AI_proc_flag ){
             return pair<int,string>( bestScore, bestPlay );
