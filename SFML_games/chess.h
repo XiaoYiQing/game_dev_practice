@@ -397,7 +397,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     int minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth );
     pair<int,string> minmaxAB_bestMove( bool isMaximizing, int depth );
 
+
     static pair<int,string> minmaxAB_split_init( chess& tarGame, bool isMaximizing, int depth );
+    static int minmaxAB_split( chess& tarGame, bool isMaximizing, int depth );
 
     /**
      * Determine the best move to make in the current turn at the current board state
@@ -1056,7 +1058,7 @@ protected:
      * This stack serves as the deposit point of results from running minmax
      * over several threads at the same time.
      */
-    static stack<int> shared_minmax_res;
+    static stack< pair<int,string> > shared_minmax_res;
 
 // ====================================================================== >>>>>
 

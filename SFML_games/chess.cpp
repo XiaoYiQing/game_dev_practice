@@ -914,8 +914,17 @@ pair<int,string> chess::minmaxAB_split_init( chess& tarGame, bool isMaximizing,
     // Obtain the entire set of currently valid moves.
     vector<string> validMovesVect = tarGame.get_all_psbl_alg_comm();
 
+    // Push the entire set of valid moves unto the shared stack.
+    for( string move_z : validMovesVect ){
+        shared_move_stk.push( move_z );
+    }
+
     return pair<int,string>(0,"");
 
+}
+
+int chess::minmaxAB_split( chess& tarGame, bool isMaximizing, int depth ){
+    
 }
 
 // ====================================================================== <<<<<
