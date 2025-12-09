@@ -923,8 +923,142 @@ pair<int,string> chess::minmaxAB_split_init( chess& tarGame, bool isMaximizing,
 
 }
 
-int chess::minmaxAB_split( chess& tarGame, bool isMaximizing, int depth ){
+pair<int,string> chess::minmaxAB_split( chess& tarGame, bool isMaximizing, int depth ){
     
+    if( ( tarGame.is_white_turn() && !isMaximizing ) ||
+        tarGame.is_black_turn() && isMaximizing )
+    {
+        throw invalid_argument( "minmaxAB_loop: Mismatch of minmax objective with the current turn order." );
+    }
+
+
+    pair<int,string> finalRes;
+
+    switch( tarGame.state ){
+
+        case CHS_STATE::WWIN:
+        case CHS_STATE::BWIN:
+        case CHS_STATE::DRAW:
+
+            finalRes = pair<int,string>( tarGame.gameStateEval(), chess::IMPOS_ALG_COMM );
+            // When game is over, return value immediately.
+            mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
+            // Add the best score to the shared stack.
+            shared_minmax_res.push( finalRes );
+            mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+            return finalRes;
+            break;
+
+        case CHS_STATE::WCHK:
+        case CHS_STATE::BCHK:
+        case CHS_STATE::ONGOING:
+
+            // If we reached the maximum allowed depth, return value immediately.
+            if( depth <= 0 ){
+                
+                finalRes = pair<int,string>( tarGame.gameStateEval(), chess::IMPOS_ALG_COMM );
+                // When game is over, return value immediately.
+                mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
+                // Add the best score to the shared stack.
+                shared_minmax_res.push( finalRes );
+                mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+                return finalRes;
+            }
+            break;
+
+        default:
+            throw runtime_error( "minmaxAB_split: Unrecognized game state." );
+
+    }
+
+    // Initial alpha and beta.
+    int alpha = std::numeric_limits<int>::min();
+    int beta = std::numeric_limits<int>::max();
+
+    int bestScore = 0;
+    int currScore = 0;
+    bool hasMoveLeft = false;
+    string move_z = chess::IMPOS_ALG_COMM;
+    string bestPlay = chess::IMPOS_ALG_COMM;
+
+    if ( isMaximizing ) {        
+        bestScore = std::numeric_limits<int>::min();
+    }else{
+        bestScore = std::numeric_limits<int>::max();
+    }
+
+    while(true){
+
+        mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
+        hasMoveLeft = !( chess::shared_move_stk.empty() );
+        if( hasMoveLeft ){
+            // Get current valid move.
+            move_z = shared_move_stk.top();
+            // Delete obtained move from stack.
+            shared_move_stk.pop();
+        }
+        mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+
+        // Exit condition.
+        if( !hasMoveLeft ){
+            break;
+        }
+
+        // Make a copy of the current game.
+        chess newGame = tarGame;
+
+        // In the game copy, make a play with the next available move.
+        newGame.ply_ag_comm( move_z );
+
+        // Perform next layer minmax.
+        currScore = newGame.minmaxAB_loop( newGame.is_white_turn(), alpha, beta, 
+            depth - 1 );
+        // Thread exit point.
+        if( !tarGame.AI_proc_flag ){
+            break;
+        }
+
+        if( isMaximizing ){
+
+            // Update the highest score and play up to now.
+            if( currScore > bestScore ){
+                bestScore = currScore;
+                bestPlay = move_z;
+            }
+            // Update the alpha value.
+            alpha = std::max( alpha, currScore );
+            // If current alpha exceeds previous beta, no need to keep looking in 
+            // this search branch.
+            if ( beta <= alpha ){
+                break;
+            }
+
+        }else{
+
+            // Update the highest score and play up to now.
+            if( currScore < bestScore ){
+                bestScore = currScore;
+                bestPlay = move_z;
+            }
+            // Update the beta value.
+            beta = std::min( beta, currScore );
+            // If current beta is inferior to previous alpha, no need to keep looking in 
+            // this search branch.
+            if( beta <= alpha ){
+                break;
+            }
+
+        }
+
+    }
+
+    mtx_shared_move_list.lock(); // mutex lock start ------------ >>>>>
+    // Add the best score to the shared stack.
+    shared_minmax_res.push( pair<int,string>( bestScore, bestPlay ) );
+    mtx_shared_move_list.unlock(); // mutex lock end ------------ <<<<<
+
+    return pair<int,string>( bestScore, bestPlay );
+
 }
 
 // ====================================================================== <<<<<

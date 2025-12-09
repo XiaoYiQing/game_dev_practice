@@ -399,7 +399,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
 
     static pair<int,string> minmaxAB_split_init( chess& tarGame, bool isMaximizing, int depth );
-    static int minmaxAB_split( chess& tarGame, bool isMaximizing, int depth );
+    static pair<int,string> minmaxAB_split( chess& tarGame, bool isMaximizing, int depth );
 
     /**
      * Determine the best move to make in the current turn at the current board state
