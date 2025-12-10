@@ -3582,3 +3582,52 @@ void tests::chess_minmaxAB_bestMove_tests(){
 // ---------------------------------------------------------------------- <<<<<
 
 }
+
+
+void tests::chess_minmaxAB_split_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    myGame.setAI_proc_flag(true);
+    
+    // Obtain minmax related values.
+    auto chs_pce_val_map = myGame.getChs_pce_val_map();
+    auto minmax_vals = myGame.getMinmax_vals();
+
+    pair<int,string> MM_res = { 0, "" };
+
+// ---------------------------------------------------------------------- >>>>>
+//      Mate in 2 Problems (Tricky Sacrifice to Mate)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    myGame.setTurn_cnt(0);
+
+    myGame.set_piece_at_ag_coord( 'b', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'a', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at_ag_coord( 'c', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at_ag_coord( 'a', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'b', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'b', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at_ag_coord( 'a', 8, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    MM_res = chess::minmaxAB_split_init( myGame, true, 3 );
+    test_bool = test_bool && ( MM_res.second == "Ra1a6" );
+    if( test_bool ){
+        cout << "chess minmaxAB_split Mate in 2 test 1: passed!" << endl;
+    }else{
+        cout << "chess minmaxAB_split Mate in 2 test 1: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+}

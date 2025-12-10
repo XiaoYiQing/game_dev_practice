@@ -50,6 +50,8 @@ namespace tests{
 
     void chess_minmaxAB_bestMove_tests();
 
+    void chess_minmaxAB_split_tests();
+
 }
 
 

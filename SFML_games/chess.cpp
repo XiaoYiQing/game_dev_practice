@@ -391,6 +391,12 @@ void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs
 //      AI Related Functions
 // ====================================================================== >>>>>
 
+std::mutex chess::mtx_shared_move_list;
+
+stack<string> chess::shared_move_stk;
+
+stack< pair<int,string> > chess::shared_minmax_res;
+
 int chess::gameStateEval(){
 
     int stateValue = 0;
@@ -906,7 +912,6 @@ pair<int,string> chess::minmaxAB_split_init( chess& tarGame, bool isMaximizing,
     // Define number of threads.
     unsigned int thread_cnt = min( tarGame.thread_to_use, 
         std::thread::hardware_concurrency() );
-
     // Empty the shared move stack.
     while ( !shared_move_stk.empty() ) {
         shared_move_stk.pop(); 
@@ -919,7 +924,50 @@ pair<int,string> chess::minmaxAB_split_init( chess& tarGame, bool isMaximizing,
         shared_move_stk.push( move_z );
     }
 
-    return pair<int,string>(0,"");
+    // Create separate threads to run the split minmax function.
+    vector< std::thread > myThreads;
+    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
+        myThreads.emplace_back( chess::minmaxAB_split, ref( tarGame ), isMaximizing, depth );
+    }
+    // The current thread starts its own split minmax run after initiating the 
+    // other threads.
+    minmaxAB_split( ref( tarGame ), isMaximizing, depth );
+
+    // Wait for all separate threads to finish.
+    for( unsigned int z = 0; z < thread_cnt - 1; z++ ){
+        if( myThreads.at(z).joinable() ){
+            myThreads.at(z).join();
+        }
+    }
+
+    // Summarize the best score results from the individual results generated
+    // from the threads.
+    int bestScore = 0;
+    string bestPlay = chess::IMPOS_ALG_COMM;
+
+    pair<int, string> bestRes;
+
+    if( isMaximizing ){
+        bestScore = std::numeric_limits<int>::min();
+        while( !tarGame.shared_minmax_res.empty() ){
+            if( shared_minmax_res.top().first > bestScore ){
+                bestScore = shared_minmax_res.top().first;
+                bestRes = shared_minmax_res.top();
+            }
+            shared_minmax_res.pop();
+        }
+    }else{
+        bestScore = std::numeric_limits<int>::max();
+        while( !tarGame.shared_minmax_res.empty() ){
+            if( shared_minmax_res.top().first < bestScore ){
+                bestScore = shared_minmax_res.top().first;
+                bestRes = shared_minmax_res.top();
+            }
+            shared_minmax_res.pop();
+        }
+    }
+
+    return bestRes;
 
 }
 
@@ -930,7 +978,6 @@ pair<int,string> chess::minmaxAB_split( chess& tarGame, bool isMaximizing, int d
     {
         throw invalid_argument( "minmaxAB_loop: Mismatch of minmax objective with the current turn order." );
     }
-
 
     pair<int,string> finalRes;
 
