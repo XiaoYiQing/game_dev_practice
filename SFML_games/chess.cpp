@@ -812,10 +812,6 @@ pair<int,string> chess::minmaxAB_bestMove( bool isMaximizing, int depth ){
         throw invalid_argument( "minmaxAB_loop: Mismatch of minmax objective with the current turn order." );
     }
 
-    // Initial alpha and beta.
-    int alpha = std::numeric_limits<int>::min();
-    int beta = std::numeric_limits<int>::max();
-
     switch( this->state ){
     case CHS_STATE::WWIN:
     case CHS_STATE::BWIN:
@@ -834,6 +830,11 @@ pair<int,string> chess::minmaxAB_bestMove( bool isMaximizing, int depth ){
     default:
         throw runtime_error( "minmaxAB_bestMove: Unrecognized game state. Abort." );
     }
+
+    
+    // Initial alpha and beta.
+    int alpha = std::numeric_limits<int>::min();
+    int beta = std::numeric_limits<int>::max();
 
     int bestScore = 0;
     int currScore = 0;
@@ -976,7 +977,7 @@ pair<int,string> chess::minmaxAB_split( chess& tarGame, bool isMaximizing, int d
     if( ( tarGame.is_white_turn() && !isMaximizing ) ||
         tarGame.is_black_turn() && isMaximizing )
     {
-        throw invalid_argument( "minmaxAB_loop: Mismatch of minmax objective with the current turn order." );
+        throw invalid_argument( "minmaxAB_split: Mismatch of minmax objective with the current turn order." );
     }
 
     pair<int,string> finalRes;

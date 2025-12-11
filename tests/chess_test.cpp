@@ -3672,6 +3672,7 @@ void tests::chess_minmaxAB_split_tests(){
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
     myGame.setAI_proc_flag(true);
+    myGame.setThread_to_use(2);
 
     chess::chs_piece pce_t;
     pce_t.type = chess::CHS_PIECE_TYPE::ROOK;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
@@ -3700,7 +3701,21 @@ void tests::chess_minmaxAB_split_tests(){
     pce_t.type = chess::CHS_PIECE_TYPE::BISHOP;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
     myGame.set_piece_at_ag_coord( 'f', 4, pce_t );
 
+
+    auto start = std::chrono::steady_clock::now();
     MM_res = chess::minmaxAB_split_init( myGame, myGame.is_white_turn(), 3 );
+    auto end = std::chrono::steady_clock::now();
+    // Calculate the duration in microseconds
+    auto time_AB_split = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    
+    start = std::chrono::steady_clock::now();
+    MM_res = myGame.minmaxAB_bestMove( myGame.is_white_turn(), 3 );
+    end = std::chrono::steady_clock::now();
+    auto time_AB = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    cout << "Split time: " << time_AB_split << endl;
+    cout << "Standard time: " << time_AB << endl;
+
     test_bool = test_bool && ( MM_res.second == "Qc1b2" );
 
     if( test_bool ){
