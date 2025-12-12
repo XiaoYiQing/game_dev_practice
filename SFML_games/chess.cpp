@@ -1672,7 +1672,13 @@ bool chess::ply_ag_comm( string alg_comm ){
     }
 
 
-    bool res_bool = this->ply( chs_move( bef_coord, aft_coord ) );
+    // bool res_bool = this->ply( chs_move( bef_coord, aft_coord ) );
+    bool res_bool = this->play( chs_move( bef_coord, aft_coord ) );
+    // Check if the play induces an endgame state.
+    if( res_bool ){
+        this->upd_end_game_state();
+    }
+
     // Perform pawn promotion, if specified correctly in the command.
     if( promo_tar != CHS_PIECE_TYPE::NO_P && promo_tar != CHS_PIECE_TYPE::PAWN ){
         if( pce_type == CHS_PIECE_TYPE::PAWN ){
