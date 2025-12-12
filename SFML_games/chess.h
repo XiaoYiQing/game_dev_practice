@@ -973,6 +973,9 @@ protected:
     // The state of the game.
     CHS_STATE state;
 
+    // Boolean indicating whether this game instance is updated.
+    bool is_state_upd;
+
     // Flag indicating whether the game should write messages to the console.
     bool verbose;
 
