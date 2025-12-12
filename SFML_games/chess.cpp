@@ -1203,7 +1203,15 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     // Obtain the target piece.
     chs_piece currPiece = get_piece_at( i_bef, j_bef );
 
-    if( this->is_move_valid( i_bef, j_bef, i_aft, j_aft ) ){
+    // Attack condition.
+    bool is_atk = !this->is_sq_empty( i_aft, j_aft );
+    // Special en-passant attack condition.
+    if( currPiece.type == CHS_PIECE_TYPE::PAWN ){
+        is_atk = j_bef != j_aft;
+    }
+
+
+    if( !is_atk ){
 
         // Perform the displacement.
         this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
@@ -1295,7 +1303,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
         }
 
-    }else if( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) ){
+    }else{
 
         // The en-passant attack is a unique attack where the end square is empty.
         bool is_en_pass = this->is_sq_empty( i_aft, j_aft );
@@ -1316,8 +1324,6 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
             }
         }
 
-    }else{
-        return false;
     }
 
     // If the piece played is a pawn and it has reached the end of its column.
@@ -1694,8 +1700,15 @@ bool chess::ply( chs_move tarMove ){
 bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
+
     bool play_success = false;
-    play_success = this->play( i_bef, j_bef, i_aft, j_aft );
+    if( this->is_move_valid( i_bef, j_bef, i_aft, j_aft ) ||
+        this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) )
+    {
+        play_success = this->play( i_bef, j_bef, i_aft, j_aft );
+    }else{
+        return false;
+    }
 
     // Check if the play induces an endgame state.
     if( play_success ){

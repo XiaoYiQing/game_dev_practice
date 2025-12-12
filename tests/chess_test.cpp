@@ -1560,7 +1560,7 @@ void tests::chess_play_tests(){
     test_bool = test_bool && myGame.is_sq_empty( 6, 4 );
     test_bool = test_bool && ( myGame.get_piece_at( 4, 4 ) == BP );
     // Attempt to push white pawn forward by 2 despite having moved already.
-    test_bool = test_bool && !myGame.play( 3, 3, 5, 3 );
+    test_bool = test_bool && !myGame.ply( 3, 3, 5, 3 );
     
     // White pawn takes black pawn.
     test_bool = test_bool && myGame.play( 3, 3, 4, 4 );
@@ -1638,7 +1638,7 @@ void tests::chess_play_tests(){
     myGame.set_piece_at( 1, 6, BR );
     
     // Attempt castling when path is threatened.
-    test_bool = test_bool && !myGame.play( 0, 4, 0, 6 );
+    test_bool = test_bool && !myGame.ply( 0, 4, 0, 6 );
     
     // Attemp castling without the black rook.
     myGame.clearSquare( 1, 6 );
@@ -1785,7 +1785,7 @@ void tests::chess_en_pass_tests(){
     test_bool = test_bool && ( atk_list_by_B[25].empty() );
     test_bool = test_bool && myGame.play( 1, 6, 2, 6 );
     // Attempt the en-passant late.
-    test_bool = test_bool && !myGame.play( 3, 2, 2, 1 );
+    test_bool = test_bool && !myGame.ply( 3, 2, 2, 1 );
 
     if( test_bool ){
         cout << "En-passant expiration test: passed!" << endl;
@@ -1875,14 +1875,14 @@ void tests::chess_game_state_tests(){
     myGame.set_piece_at( 7, 5, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     // Try to play the king towards the threatened column.
-    test_bool = test_bool && !myGame.play( 1, 4, 1, 5 );
+    test_bool = test_bool && !myGame.ply( 1, 4, 1, 5 );
     // Place a white knight to block the black rook that is checking the white king.
     myGame.set_piece_at( 2, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
     // Game state now expected to switch back to ongoing.
     test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
     // Attempt to play the white knight, which would leave the white king exposed to check.
-    test_bool = test_bool && !myGame.play( 2, 4, 1, 2 );
+    test_bool = test_bool && !myGame.ply( 2, 4, 1, 2 );
 
     if( test_bool ){
         cout << "Chess state -> voluntary check state test: passed!" << endl;
@@ -3707,7 +3707,7 @@ void tests::chess_minmaxAB_split_tests(){
     auto end = std::chrono::steady_clock::now();
     // Calculate the duration in microseconds
     auto time_AB_split = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    
+
     start = std::chrono::steady_clock::now();
     MM_res = myGame.minmaxAB_bestMove( myGame.is_white_turn(), 3 );
     end = std::chrono::steady_clock::now();
