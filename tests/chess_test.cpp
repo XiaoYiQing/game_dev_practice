@@ -2896,13 +2896,13 @@ void tests::chess_all_alg_comm_tests(){
     myGame.set_piece_at_ag_coord( 'a', 8, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
 
-    myGame.printBoard_ag_coord();
+    // myGame.printBoard_ag_coord();
 
     myGame.ply_ag_comm( "Ra1a6" );
 
     myGame.ply_ag_comm( "a7b6" );
 
-    myGame.printBoard_ag_coord();
+    // myGame.printBoard_ag_coord();
 
 // ---------------------------------------------------------------------- <<<<<
 
