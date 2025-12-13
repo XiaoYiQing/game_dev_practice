@@ -4029,3 +4029,82 @@ vector<string> chess::getAll_psbl_alg_comm() const
 
 // ====================================================================== <<<<<
 
+
+
+void chess::upd_all_psbl_alg_comm(){
+
+    // Clear all currently saved possible plays.
+    this->all_psbl_alg_comm.clear();
+    this->is_psbl_alg_comm_upd = false;
+
+    // Obtain all current possible plays.
+    vector<chs_move> all_atks = this->get_all_valid_atks();
+    vector<chs_move> all_plays = this->get_all_valid_moves();
+    all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
+
+    // Initialize final vector of algebraic commands.
+    all_psbl_alg_comm.reserve( all_plays.size() + 12 );
+    
+    string alg_comm_z = "";         // Current algebraic command being constructed.
+    CHS_PIECE_TYPE pce_type_z;      // The chess piece type of the current piece subject to play.
+    pair<char,int> str_alg_z;       // Current piece starting algebraic position.
+    pair<char,int> end_alg_z;       // Current piece ending algebraic position (after play).
+
+    for( chs_move play_z : all_plays ){
+
+        alg_comm_z = "";
+
+        pce_type_z = this->get_piece_at( play_z.pt_a ).type;
+        switch( pce_type_z ){
+        case CHS_PIECE_TYPE::PAWN:
+            break;
+        case CHS_PIECE_TYPE::KNIGHT:
+            alg_comm_z += 'N';
+            break;
+        case CHS_PIECE_TYPE::BISHOP:
+            alg_comm_z += 'B';
+            break;
+        case CHS_PIECE_TYPE::ROOK:
+            alg_comm_z += 'R';
+            break;
+        case CHS_PIECE_TYPE::QUEEN:
+            alg_comm_z += 'Q';
+            break;
+        case CHS_PIECE_TYPE::KING:
+            alg_comm_z += 'K';
+            break;
+        default:
+            throw runtime_error( "Non-recognized chess piece type." );
+        }
+
+        str_alg_z = cart_to_alg( play_z.pt_a );
+        end_alg_z = cart_to_alg( play_z.pt_b );
+
+        alg_comm_z += str_alg_z.first;
+        alg_comm_z += to_string( str_alg_z.second );
+        alg_comm_z += end_alg_z.first;
+        alg_comm_z += to_string( end_alg_z.second );
+
+        
+
+        // Special promotion options when a pawn is played to the last row.
+        if( pce_type_z == CHS_PIECE_TYPE::PAWN && ( play_z.pt_b.first == 0 || 
+            play_z.pt_b.first == chess::BOARDHEIGHT - 1 ) )
+        {
+            all_psbl_alg_comm.push_back( alg_comm_z + 'N' );
+            all_psbl_alg_comm.push_back( alg_comm_z + 'B' );
+            all_psbl_alg_comm.push_back( alg_comm_z + 'R' );
+            all_psbl_alg_comm.push_back( alg_comm_z + 'Q' );
+
+        // Any other case, just add the command to the list.
+        }else{
+            all_psbl_alg_comm.push_back( alg_comm_z );
+        }
+
+    }
+
+    all_psbl_alg_comm.shrink_to_fit();
+    // Update the flag variable.
+    is_psbl_alg_comm_upd = true;
+
+}

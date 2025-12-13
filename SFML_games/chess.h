@@ -697,18 +697,14 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool upd_all();
     
     /**
-     * \brief Function makes necessary changes based on the fact the game's situation has changed.
-     *  This function should be called whenever a change is made in the game: a play is
-     *  made, a piece is changed forcibly, turn order has been changed forcibly, etc. 
-     *  It then updates necessary variables used to track the game's current situation.
+     * \brief Function performs a trigger on the flags of all tracking variables of the chess game.
+     * Tracking variables are not part of the variables affected by "upd_all()". They
+     * are not directly related to the game, but are rather meant to help chess AI perform 
+     * efficiently.
      * 
-     *  Different from "upd_all()", this function deals with variables separate 
-     *  from the main state variables of the chess objects. These variables are 
-     *  made to track progress of the game and they do not actually directly 
-     *  affect the game state. Tracking variables are intended to help chess AI
-     *  perform efficiently.
-     * 
-     * 
+     * This function is (should be) used whenever the game situation changes, such as a 
+     * play being made, a piece being changed forcibly, the turn order is change forcibily, etc.
+     * Doing so invalidates all current tracking variables.
      */
     void game_tracking_signal();
 
@@ -1065,6 +1061,10 @@ protected:
      * Vector of all current possible plays in algebraic syntax.
      */
     vector<string> all_psbl_alg_comm;
+    /**
+     * Update the list of all currently possible plays in algebraic command format.
+     */
+    void upd_all_psbl_alg_comm();
 
     /**
      * Class static mutex for the purpose of synchronizing use of shared variables.
