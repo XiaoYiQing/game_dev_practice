@@ -1483,6 +1483,7 @@ bool chess::ply_ag_comm( string alg_comm ){
 
         pce_type = CHS_PIECE_TYPE::PAWN;
 
+        // Promotion indicator check and parse.
         if( (unsigned int)( alg_comm.at( alg_comm.size() - 1 ) - 'A' ) < 26 ){
 
             switch( alg_comm.at( alg_comm.size() - 1 ) ){

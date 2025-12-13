@@ -980,7 +980,7 @@ protected:
     bool verbose;
 
 // ====================================================================== >>>>>
-//      AI Related Functions (Protected)
+//      AI Related Variables and Functions (Protected)
 // ====================================================================== >>>>>
 
     /**
@@ -1038,6 +1038,15 @@ protected:
      *  hardware limits.
      */
     unsigned int thread_to_use;
+    
+    /**
+     * Boolean indicating whether if the available algebraic commands are still up-to-date.
+     */
+    bool is_psbl_alg_comm_upd;
+    /**
+     * Vector of all current possible plays in algebraic syntax.
+     */
+    vector<string> all_psbl_alg_comm;
 
     /**
      * Class static mutex for the purpose of synchronizing use of shared variables.
