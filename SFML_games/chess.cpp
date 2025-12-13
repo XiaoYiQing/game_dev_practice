@@ -493,7 +493,7 @@ int chess::minmax_debug_loop( bool isMaximizing, int depth, int max_depth ){
     int bestScore = 0;
     int currScore = 0;
 
-    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
 
 
     if ( isMaximizing ) {        
@@ -581,7 +581,7 @@ int chess::minmax( bool isMaximizing, int depth ){
     int currScore = 0;
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
 
 
     if ( isMaximizing ) {        
@@ -658,7 +658,7 @@ pair<int,string> chess::minmax_bestMove( bool isMaximizing, int depth ){
     
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
 
     if ( isMaximizing ) {        
         bestScore = std::numeric_limits<int>::min();
@@ -751,7 +751,7 @@ int chess::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth ){
     int currScore = 0;
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
 
     if ( isMaximizing ) {        
         bestScore = std::numeric_limits<int>::min();
@@ -847,7 +847,7 @@ pair<int,string> chess::minmaxAB_bestMove( bool isMaximizing, int depth ){
     string bestPlay = chess::IMPOS_ALG_COMM;
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
+    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
 
     if ( isMaximizing ) {        
         bestScore = std::numeric_limits<int>::min();
@@ -924,7 +924,7 @@ pair<int,string> chess::minmaxAB_split_init( chess& tarGame, bool isMaximizing,
         shared_move_stk.pop(); 
     }
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = tarGame.getAll_psbl_alg_comm();
+    vector<string> validMovesVect = tarGame.get_all_psbl_alg_comm();
 
     // Push the entire set of valid moves unto the shared stack.
     for( string move_z : validMovesVect ){
@@ -3945,7 +3945,7 @@ void chess::setThread_to_use( unsigned int thr_cnt )
 
 bool chess::getIs_psbl_alg_comm_upd() const
     { return this->is_psbl_alg_comm_upd; }
-vector<string> chess::getAll_psbl_alg_comm(){ 
+vector<string> chess::get_all_psbl_alg_comm(){ 
     if( !is_psbl_alg_comm_upd ){
         this->upd_all_psbl_alg_comm();
     }

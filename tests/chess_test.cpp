@@ -2758,7 +2758,7 @@ void tests::chess_all_alg_comm_tests(){
     test_bool = true;
     myGame.resetBoard();
 
-    vector< string > alg_comm_vec = myGame.getAll_psbl_alg_comm();
+    vector< string > alg_comm_vec = myGame.get_all_psbl_alg_comm();
     test_bool = test_bool && ( alg_comm_vec.size() == 20 );
 
     myGame_tmp = myGame;
@@ -2792,7 +2792,7 @@ void tests::chess_all_alg_comm_tests(){
         myGame.set_piece_at( 6, z, empty_piece );
     }
 
-    alg_comm_vec = myGame.getAll_psbl_alg_comm();
+    alg_comm_vec = myGame.get_all_psbl_alg_comm();
     test_bool = test_bool && alg_comm_vec.size() == 50;
 
     myGame_tmp = myGame;
@@ -2808,9 +2808,9 @@ void tests::chess_all_alg_comm_tests(){
     }
 
     if( test_bool ){
-        cout << "getAll_psbl_alg_comm initial game with no panws test: passed!" << endl;
+        cout << "get_all_psbl_alg_comm initial game with no panws test: passed!" << endl;
     }else{
-        cout << "getAll_psbl_alg_comm initial game with no panws test: failed!" << endl;
+        cout << "get_all_psbl_alg_comm initial game with no panws test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
@@ -2832,7 +2832,7 @@ void tests::chess_all_alg_comm_tests(){
     myGame.set_piece_at( 1, 0, chess::chs_piece(
         chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
     
-    alg_comm_vec = myGame.getAll_psbl_alg_comm();
+    alg_comm_vec = myGame.get_all_psbl_alg_comm();
     test_bool = test_bool && ( alg_comm_vec.size() == 9 );
 
     myGame_tmp = myGame;
@@ -2864,9 +2864,9 @@ void tests::chess_all_alg_comm_tests(){
         chess::CHS_PIECE_TYPE::QUEEN );
 
     if( test_bool ){
-        cout << "getAll_psbl_alg_comm pawn promotion test: passed!" << endl;
+        cout << "get_all_psbl_alg_comm pawn promotion test: passed!" << endl;
     }else{
-        cout << "getAll_psbl_alg_comm pawn promotion test: failed!" << endl;
+        cout << "get_all_psbl_alg_comm pawn promotion test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<

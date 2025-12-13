@@ -921,7 +921,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void setThread_to_use( unsigned int thr_cnt );
 
     bool getIs_psbl_alg_comm_upd() const;
-    vector<string> getAll_psbl_alg_comm();
+    vector<string> get_all_psbl_alg_comm();
 
 // ====================================================================== <<<<<
 
