@@ -241,6 +241,8 @@ chess::chess(){
     this->minmax_vals["draw"] = 0;
     this->minmax_vals["check"] = 1;
 
+    this->is_psbl_alg_comm_upd = false;
+
     AI_proc_flag = false;
     // Set the number of threads to utilize.
     this->thread_to_use = min( 2u, std::thread::hardware_concurrency() );
@@ -1351,6 +1353,9 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
+    // Signal for change of board state.
+    this->state_change_signal();
+
     return true;
 
 }
@@ -1723,6 +1728,7 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
     }
 
     return play_success;
+
 }
 
 bool chess::is_move_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const{
@@ -3440,6 +3446,13 @@ void chess::upd_end_game_state(){
 }
 
 
+void chess::state_change_signal(){
+
+    this->is_psbl_alg_comm_upd = false;
+
+}
+
+
 void chess::printBoard() const{
 
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
@@ -3982,6 +3995,11 @@ unsigned int chess::getThread_to_use() const
     { return this->thread_to_use; }
 void chess::setThread_to_use( unsigned int thr_cnt )
     { this->thread_to_use = thr_cnt; }
+
+bool chess::getIs_psbl_alg_comm_upd() const
+    { return this->is_psbl_alg_comm_upd; }
+vector<string> chess::getAll_psbl_alg_comm() const
+    { return this->all_psbl_alg_comm; }
 
 // ====================================================================== <<<<<
 

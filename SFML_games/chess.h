@@ -696,6 +696,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool upd_all();
     
+    /**
+     * \brief Function makes necessary changes based on the fact the game state has changed.
+     *  This function should be called whenever a change in made in the game: a play is
+     *  made, a piece is changed forcibly, turn order has been changed forcibly, etc. 
+     * 
+     */
+    void state_change_signal();
 
     /**
      * \brief Print the state of the board onto the console terminal.
@@ -917,6 +924,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     unsigned int getThread_to_use() const;
     void setThread_to_use( unsigned int thr_cnt );
+
+    bool getIs_psbl_alg_comm_upd() const;
+    vector<string> getAll_psbl_alg_comm() const;
 
 // ====================================================================== <<<<<
 
