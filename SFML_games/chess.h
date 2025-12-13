@@ -702,7 +702,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  made, a piece is changed forcibly, turn order has been changed forcibly, etc. 
      * 
      */
-    void state_change_signal();
+    void game_tracking_signal();
 
     /**
      * \brief Print the state of the board onto the console terminal.

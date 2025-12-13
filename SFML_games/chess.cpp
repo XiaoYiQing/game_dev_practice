@@ -269,6 +269,8 @@ void chess::resetStateVars(){
     this->en_pass_moves.reserve(2);
     this->promo_lock = false;
 
+    this->game_tracking_signal();
+
     this->state = CHS_STATE::ONGOING;
 
 }
@@ -372,6 +374,7 @@ void chess::clearSquare( unsigned int i, unsigned int j ){
         throw out_of_range( "clearSquare: the specified coordinate is out of bound." );
     }
     this->CHS_board[i][j].set_as_empty();
+    this->game_tracking_signal();
     this->upd_post_play();
 }
 
@@ -380,6 +383,7 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
         throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
     }
     this->CHS_board[i][j] = inPce;
+    this->game_tracking_signal();
     this->upd_post_play();
 }
 void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
@@ -1162,6 +1166,7 @@ bool chess::promote( unsigned int col_idx, CHS_PIECE_TYPE promo_type ){
     }
 
     this->promo_lock = false;
+    this->game_tracking_signal();
     // Update all states in the game.
     this->upd_all();
 
@@ -1354,7 +1359,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     }
 
     // Signal for change of board state.
-    this->state_change_signal();
+    this->game_tracking_signal();
 
     return true;
 
@@ -3446,7 +3451,7 @@ void chess::upd_end_game_state(){
 }
 
 
-void chess::state_change_signal(){
+void chess::game_tracking_signal(){
 
     this->is_psbl_alg_comm_upd = false;
 
