@@ -611,22 +611,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     vector< pair<int,int> > get_all_valid_move_sq( int i, int j ) const;
     
-    /**
-     * \brief Obtain all current valid moves.
-     * 
-     * \note Current turn must match the piece's color for its move to be considered valid.
-     * 
-     * \return All currently possible moves.
-     */
-    vector<chs_move> get_all_valid_moves() const;
-    /**
-     * \brief Obtain all current valid attacks.
-     * 
-     * \note Current turn must match the piece's color for its attacks to be considered valid.
-     * 
-     * \return All currently possible attacks.
-     */
-    vector<chs_move> get_all_valid_atks() const;
 
     /**
       * \brief Check whether the game has either king been in check.
@@ -924,10 +908,10 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     vector<string> get_all_psbl_alg_comm();
 
     bool getIs_all_valid_moves_upd() const;
-    vector<chs_move> getAll_valid_moves();
+    vector<chs_move> get_all_valid_moves();
 
     bool getIs_all_valid_atks_upd() const;
-    vector<chs_move> getAll_valid_atks();
+    vector<chs_move> get_all_valid_atks();
 
 // ====================================================================== <<<<<
 

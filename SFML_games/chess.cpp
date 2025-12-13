@@ -2789,66 +2789,6 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 }
 
 
-vector<chess::chs_move> chess::get_all_valid_moves() const{
-
-    vector<chess::chs_move> retVec;
-    retVec.reserve( 200 );
-
-    pair<int,int> sub_idx_z;
-    vector< pair<int,int> > move_sq_list_z;
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Add all current piece's possible moves to the batch.
-        for( pair<int,int> move_v : move_sq_list_z ){
-            retVec.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
-                move_v.first, move_v.second ) );
-        }
-
-    }
-
-    retVec.shrink_to_fit();
-
-    return retVec;
-
-}
-
-
-vector<chess::chs_move> chess::get_all_valid_atks() const{
-
-    vector<chess::chs_move> retVec;
-    retVec.reserve( 200 );
-
-    pair<int,int> sub_idx_z;
-    vector< pair<int,int> > atk_sq_list_z;
-
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Add all current piece's possible moves to the batch.
-        for( pair<int,int> move_v : atk_sq_list_z ){
-            retVec.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
-                move_v.first, move_v.second ) );
-        }
-
-    }
-
-    retVec.shrink_to_fit();
-
-    return retVec;
-
-}
-
 void chess::upd_pce_cnt_list(){
 
     // Reset all counters.
@@ -3950,7 +3890,7 @@ void chess::setThread_to_use( unsigned int thr_cnt )
 bool chess::getIs_psbl_alg_comm_upd() const
     { return this->is_psbl_alg_comm_upd; }
 vector<string> chess::get_all_psbl_alg_comm(){ 
-    if( !is_psbl_alg_comm_upd ){
+    if( !this->is_psbl_alg_comm_upd ){
         this->upd_all_psbl_alg_comm();
     }
     return this->all_psbl_alg_comm; 
@@ -3958,9 +3898,22 @@ vector<string> chess::get_all_psbl_alg_comm(){
 
 bool chess::getIs_all_valid_moves_upd() const
     { return this->is_all_valid_moves_upd; }
+vector<chess::chs_move> chess::get_all_valid_moves(){
+    if( !this->is_all_valid_moves_upd ){
+        this->upd_all_valid_moves();
+    }
+    return this->all_valid_moves; 
+}
 
 bool chess::getIs_all_valid_atks_upd() const
     { return this->is_all_valid_atks_upd; }
+vector<chess::chs_move> chess::get_all_valid_atks(){
+    if( !this->is_all_valid_atks_upd ){
+        this->upd_all_valid_atks();
+    }
+    return this->all_valid_atks; 
+}
+
 
 // ====================================================================== <<<<<
 
