@@ -3901,18 +3901,24 @@ chess::chs_piece chess::get_piece_at( pair<int,int> ij ) const{
 
 unsigned int chess::getTurn_cnt() const
     { return this->turn_cnt; }
-void chess::setTurn_cnt( const unsigned int turn_cnt )
-    { this->turn_cnt = turn_cnt; }
+void chess::setTurn_cnt( const unsigned int turn_cnt ){ 
+    this->turn_cnt = turn_cnt; 
+    this->game_tracking_signal();
+}
 
 chess::CHS_STATE chess::getState() const
     { return this->state; }
-void chess::setState( const CHS_STATE state )
-    { this->state = state; }
+void chess::setState( const CHS_STATE state ){ 
+    this->state = state; 
+    this->game_tracking_signal();
+}
 
 unsigned int chess::getNo_change_turn_cnt() const
     { return this->no_change_turn_cnt; }
-void chess::setNo_change_turn_cnt( const unsigned int no_change_turn_cnt )
-    { this->no_change_turn_cnt = no_change_turn_cnt; }
+void chess::setNo_change_turn_cnt( const unsigned int no_change_turn_cnt ){ 
+    this->no_change_turn_cnt = no_change_turn_cnt; 
+    this->game_tracking_signal();
+}
 
 array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W() const
     {return this->atk_list_by_W;}
@@ -3922,18 +3928,24 @@ array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B(
 
 bool chess::getEn_pass_flag() const
     {return this->en_pass_flag;}
-void chess::setEn_pass_flag( bool en_pass_flag )
-    {this->en_pass_flag = en_pass_flag;}
+void chess::setEn_pass_flag( bool en_pass_flag ){
+    this->en_pass_flag = en_pass_flag;
+    this->game_tracking_signal();
+}
 
 vector<chess::chs_move> chess::getEn_pass_moves() const
     {return this->en_pass_moves;}
-void chess::setEn_pass_moves( vector<chs_move> en_pass_move_in )
-    {this->en_pass_moves = en_pass_move_in;}
+void chess::setEn_pass_moves( vector<chs_move> en_pass_move_in ){
+    this->en_pass_moves = en_pass_move_in;
+    this->game_tracking_signal();
+}
 
 bool chess::getPromo_lock() const
     {return this->promo_lock;}
-void chess::setPromo_lock( const bool promo_lock )
-    {this->promo_lock = promo_lock;}
+void chess::setPromo_lock( const bool promo_lock ){
+    this->promo_lock = promo_lock;
+    this->game_tracking_signal();
+}
 
 pair<int,int> chess::getPromo_point() const
     {return this->promo_point;}
@@ -3945,6 +3957,7 @@ void chess::setPromo_point( const pair<int,int> promo_point_in ){
         throw out_of_range( "Specified chess board promotion coordinate is invalid." );
     }
     this->promo_point = promo_point_in;
+    this->game_tracking_signal();
 }
 
 
@@ -3967,6 +3980,7 @@ void chess::setChs_pce_val( chess::CHS_PIECE_TYPE tarType, int newVal ){
         throw invalid_argument( "The no piece type cannot be given a value." );
     }
     this->chs_pce_val_map[ tarType ] = newVal;
+    this->game_tracking_signal();
 }
 
 map<string, int> chess::getMinmax_vals() const
@@ -3975,26 +3989,33 @@ void chess::setMinmax_vas( string tarVal, int newVal ){
     for( pair<string, int> pair_z : this->minmax_vals ){
         if( pair_z.first == tarVal ){
             this->minmax_vals[tarVal] = newVal;
+            this->game_tracking_signal();
             return;
         }
     }
     throw invalid_argument( "Given minmax value string description is invalid." );
 }
 
-void chess::setMinmax_depth( unsigned int minmax_depth_in )
-    { this->minmax_depth = minmax_depth_in; }
+void chess::setMinmax_depth( unsigned int minmax_depth_in ){ 
+    this->minmax_depth = minmax_depth_in; 
+    this->game_tracking_signal();
+}
 unsigned int chess::getMinmax_depth() const
     { return this->minmax_depth; }
 
 bool chess::getAI_first() const
     { return this->AI_first; }
-void chess::setAI_first( bool AI_first_in )
-    { this->AI_first = AI_first_in; }
+void chess::setAI_first( bool AI_first_in ){ 
+    this->AI_first = AI_first_in; 
+    this->game_tracking_signal();
+}
 
 bool chess::getAI_proc_flag() const
     { return this->AI_proc_flag; }
-void chess::setAI_proc_flag( const bool AI_proc_flag_in )
-    { this->AI_proc_flag = AI_proc_flag_in; }
+void chess::setAI_proc_flag( const bool AI_proc_flag_in ){ 
+    this->AI_proc_flag = AI_proc_flag_in; 
+    this->game_tracking_signal();
+}
 
 unsigned int chess::getThread_to_use() const
     { return this->thread_to_use; }

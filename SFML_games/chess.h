@@ -697,9 +697,17 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool upd_all();
     
     /**
-     * \brief Function makes necessary changes based on the fact the game state has changed.
-     *  This function should be called whenever a change in made in the game: a play is
+     * \brief Function makes necessary changes based on the fact the game's situation has changed.
+     *  This function should be called whenever a change is made in the game: a play is
      *  made, a piece is changed forcibly, turn order has been changed forcibly, etc. 
+     *  It then updates necessary variables used to track the game's current situation.
+     * 
+     *  Different from "upd_all()", this function deals with variables separate 
+     *  from the main state variables of the chess objects. These variables are 
+     *  made to track progress of the game and they do not actually directly 
+     *  affect the game state. Tracking variables are intended to help chess AI
+     *  perform efficiently.
+     * 
      * 
      */
     void game_tracking_signal();
