@@ -1764,6 +1764,8 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         unsigned int i_aft, unsigned int j_aft ) const
 {
 
+    
+
 // ---------------------------------------------------------------------- >>>>>
 //      
 // ---------------------------------------------------------------------- >>>>>
@@ -1797,6 +1799,15 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     // Turn check.
     if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
         this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
+        return false;
+    }
+
+    // If list of valid moves up-to-date, just refer to it for answer.
+    if( this->is_all_valid_moves_upd ){
+        chs_move tmp( i_bef, j_bef, i_aft, j_aft );
+        for( chs_move ref_z : this->all_valid_moves )
+            if( tmp == ref_z )
+                return true;
         return false;
     }
 
@@ -2074,6 +2085,15 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
     // Turn check.
     if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
         this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
+        return false;
+    }
+
+    // If list of valid moves up-to-date, just refer to it for answer.
+    if( this->is_all_valid_atks_upd ){
+        chs_move tmp( i_bef, j_bef, i_aft, j_aft );
+        for( chs_move ref_z : this->all_valid_atks )
+            if( tmp == ref_z )
+                return true;
         return false;
     }
 
