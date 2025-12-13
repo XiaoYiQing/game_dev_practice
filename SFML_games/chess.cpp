@@ -493,7 +493,7 @@ int chess::minmax_debug_loop( bool isMaximizing, int depth, int max_depth ){
     int bestScore = 0;
     int currScore = 0;
 
-    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
 
 
     if ( isMaximizing ) {        
@@ -581,7 +581,7 @@ int chess::minmax( bool isMaximizing, int depth ){
     int currScore = 0;
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
 
 
     if ( isMaximizing ) {        
@@ -658,7 +658,7 @@ pair<int,string> chess::minmax_bestMove( bool isMaximizing, int depth ){
     
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
 
     if ( isMaximizing ) {        
         bestScore = std::numeric_limits<int>::min();
@@ -751,7 +751,7 @@ int chess::minmaxAB_loop( bool isMaximizing, int alpha, int beta, int depth ){
     int currScore = 0;
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
 
     if ( isMaximizing ) {        
         bestScore = std::numeric_limits<int>::min();
@@ -847,7 +847,7 @@ pair<int,string> chess::minmaxAB_bestMove( bool isMaximizing, int depth ){
     string bestPlay = chess::IMPOS_ALG_COMM;
 
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = this->get_all_psbl_alg_comm();
+    vector<string> validMovesVect = this->getAll_psbl_alg_comm();
 
     if ( isMaximizing ) {        
         bestScore = std::numeric_limits<int>::min();
@@ -924,7 +924,7 @@ pair<int,string> chess::minmaxAB_split_init( chess& tarGame, bool isMaximizing,
         shared_move_stk.pop(); 
     }
     // Obtain the entire set of currently valid moves.
-    vector<string> validMovesVect = tarGame.get_all_psbl_alg_comm();
+    vector<string> validMovesVect = tarGame.getAll_psbl_alg_comm();
 
     // Push the entire set of valid moves unto the shared stack.
     for( string move_z : validMovesVect ){
@@ -3011,85 +3011,6 @@ bool chess::upd_mid_game_state(){
 }
 
 
-vector< string > chess::get_all_psbl_alg_comm() const{
-
-    // Obtain all current possible plays.
-    vector<chs_move> all_atks = this->get_all_valid_atks();
-    vector<chs_move> all_plays = this->get_all_valid_moves();
-    all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
-
-    // Initialize final vector of algebraic commands.
-    vector< string > alg_comm_vec;
-    alg_comm_vec.reserve( all_plays.size() + 12 );
-    
-    string alg_comm_z = "";         // Current algebraic command being constructed.
-    CHS_PIECE_TYPE pce_type_z;      // The chess piece type of the current piece subject to play.
-    pair<char,int> str_alg_z;       // Current piece starting algebraic position.
-    pair<char,int> end_alg_z;       // Current piece ending algebraic position (after play).
-
-    for( chs_move play_z : all_plays ){
-
-        alg_comm_z = "";
-
-        pce_type_z = this->get_piece_at( play_z.pt_a ).type;
-        switch( pce_type_z ){
-        case CHS_PIECE_TYPE::PAWN:
-            break;
-        case CHS_PIECE_TYPE::KNIGHT:
-            alg_comm_z += 'N';
-            break;
-        case CHS_PIECE_TYPE::BISHOP:
-            alg_comm_z += 'B';
-            break;
-        case CHS_PIECE_TYPE::ROOK:
-            alg_comm_z += 'R';
-            break;
-        case CHS_PIECE_TYPE::QUEEN:
-            alg_comm_z += 'Q';
-            break;
-        case CHS_PIECE_TYPE::KING:
-            alg_comm_z += 'K';
-            break;
-        default:
-            throw runtime_error( "Non-recognized chess piece type." );
-        }
-
-        str_alg_z = cart_to_alg( play_z.pt_a );
-        end_alg_z = cart_to_alg( play_z.pt_b );
-
-        alg_comm_z += str_alg_z.first;
-        alg_comm_z += to_string( str_alg_z.second );
-        alg_comm_z += end_alg_z.first;
-        alg_comm_z += to_string( end_alg_z.second );
-
-        
-
-        // Special promotion options when a pawn is played to the last row.
-        if( pce_type_z == CHS_PIECE_TYPE::PAWN && ( play_z.pt_b.first == 0 || 
-            play_z.pt_b.first == chess::BOARDHEIGHT - 1 ) )
-        {
-            alg_comm_vec.push_back( alg_comm_z + 'N' );
-            alg_comm_vec.push_back( alg_comm_z + 'B' );
-            alg_comm_vec.push_back( alg_comm_z + 'R' );
-            alg_comm_vec.push_back( alg_comm_z + 'Q' );
-
-        // Any other case, just add the command to the list.
-        }else{
-            alg_comm_vec.push_back( alg_comm_z );
-        }
-
-    }
-
-
-    
-
-    alg_comm_vec.shrink_to_fit();
-    
-    return alg_comm_vec;
-
-}
-
-
 pair<bool,bool> chess::is_in_check(){
 
     pair<bool,bool> chk_ans = { false, false };
@@ -4024,9 +3945,9 @@ void chess::setThread_to_use( unsigned int thr_cnt )
 
 bool chess::getIs_psbl_alg_comm_upd() const
     { return this->is_psbl_alg_comm_upd; }
-vector<string> chess::getAll_psbl_alg_comm() const{ 
+vector<string> chess::getAll_psbl_alg_comm(){ 
     if( !is_psbl_alg_comm_upd ){
-        throw runtime_error( "The possible commands are not updated." );
+        this->upd_all_psbl_alg_comm();
     }
     return this->all_psbl_alg_comm; 
 }

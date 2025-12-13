@@ -627,15 +627,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return All currently possible attacks.
      */
     vector<chs_move> get_all_valid_atks() const;
-    
-    /**
-     * \brief Obtain all possible algebraic commands that can be played currently.
-     * 
-     * \note Command validity also depends on current turn.
-     * 
-     * \return Vector of all possible plys in algebraic command format.
-     */
-    vector< string > get_all_psbl_alg_comm() const;
 
     /**
       * \brief Check whether the game has either king been in check.
@@ -930,7 +921,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void setThread_to_use( unsigned int thr_cnt );
 
     bool getIs_psbl_alg_comm_upd() const;
-    vector<string> getAll_psbl_alg_comm() const;
+    vector<string> getAll_psbl_alg_comm();
 
 // ====================================================================== <<<<<
 

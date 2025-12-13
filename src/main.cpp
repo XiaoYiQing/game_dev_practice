@@ -159,7 +159,7 @@ void do_tests( unsigned int test_id ){
 
     // tests::CHS_SFML_eng_tests();
 
-    // tests::chess_all_alg_comm_tests();
+    tests::chess_all_alg_comm_tests();
 
     // tests::chess_minmax_tests();
 
@@ -173,7 +173,7 @@ void do_tests( unsigned int test_id ){
 
     // tests::chess_minmaxAB_bestMove_tests();
 
-    tests::chess_minmaxAB_split_tests();
+    // tests::chess_minmaxAB_split_tests();
 
 }
 
