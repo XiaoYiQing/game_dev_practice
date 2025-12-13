@@ -4024,8 +4024,12 @@ void chess::setThread_to_use( unsigned int thr_cnt )
 
 bool chess::getIs_psbl_alg_comm_upd() const
     { return this->is_psbl_alg_comm_upd; }
-vector<string> chess::getAll_psbl_alg_comm() const
-    { return this->all_psbl_alg_comm; }
+vector<string> chess::getAll_psbl_alg_comm() const{ 
+    if( !is_psbl_alg_comm_upd ){
+        throw runtime_error( "The possible commands are not updated." );
+    }
+    return this->all_psbl_alg_comm; 
+}
 
 // ====================================================================== <<<<<
 
