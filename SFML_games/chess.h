@@ -923,6 +923,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool getIs_psbl_alg_comm_upd() const;
     vector<string> get_all_psbl_alg_comm();
 
+    bool getIs_all_valid_moves_upd() const;
+    vector<chs_move> getAll_valid_moves();
+
+    bool getIs_all_valid_atks_upd() const;
+    vector<chs_move> getAll_valid_atks();
+
 // ====================================================================== <<<<<
 
 
@@ -1056,6 +1062,13 @@ protected:
      * Update the list of all currently possible plays in algebraic command format.
      */
     void upd_all_psbl_alg_comm();
+
+    bool is_all_valid_moves_upd;
+    vector<chs_move> all_valid_moves;
+    void upd_all_valid_moves();
+    bool is_all_valid_atks_upd;
+    vector<chs_move> all_valid_atks;
+    void upd_all_valid_atks();
 
     /**
      * Class static mutex for the purpose of synchronizing use of shared variables.

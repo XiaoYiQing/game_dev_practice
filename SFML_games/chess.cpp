@@ -242,6 +242,8 @@ chess::chess(){
     this->minmax_vals["check"] = 1;
 
     this->is_psbl_alg_comm_upd = false;
+    this->is_all_valid_moves_upd = false;
+    this->is_all_valid_atks_upd = false;
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -3375,6 +3377,8 @@ void chess::upd_end_game_state(){
 void chess::game_tracking_signal(){
 
     this->is_psbl_alg_comm_upd = false;
+    this->is_all_valid_moves_upd = false;
+    this->is_all_valid_atks_upd = false;
 
 }
 
@@ -3952,6 +3956,12 @@ vector<string> chess::get_all_psbl_alg_comm(){
     return this->all_psbl_alg_comm; 
 }
 
+bool chess::getIs_all_valid_moves_upd() const
+    { return this->is_all_valid_moves_upd; }
+
+bool chess::getIs_all_valid_atks_upd() const
+    { return this->is_all_valid_atks_upd; }
+
 // ====================================================================== <<<<<
 
 
@@ -4030,6 +4040,73 @@ void chess::upd_all_psbl_alg_comm(){
 
     all_psbl_alg_comm.shrink_to_fit();
     // Update the flag variable.
-    is_psbl_alg_comm_upd = true;
+    this->is_psbl_alg_comm_upd = true;
+
+}
+
+
+void chess::upd_all_valid_moves(){
+
+    // Clear all currently saved possible plays.
+    this->all_valid_moves.clear();
+    this->is_all_valid_moves_upd = false;
+
+    all_valid_moves.reserve( 200 );
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > move_sq_list_z;
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Add all current piece's possible moves to the batch.
+        for( pair<int,int> move_v : move_sq_list_z ){
+            all_valid_moves.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+                move_v.first, move_v.second ) );
+        }
+
+    }
+
+    all_valid_moves.shrink_to_fit();
+
+    this->is_all_valid_moves_upd = true;
+
+}
+
+
+void chess::upd_all_valid_atks(){
+
+    // Clear all currently saved possible plays.
+    this->all_valid_atks.clear();
+    this->is_all_valid_atks_upd = false;
+
+    all_valid_atks.reserve( 200 );
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > atk_sq_list_z;
+
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Add all current piece's possible moves to the batch.
+        for( pair<int,int> move_v : atk_sq_list_z ){
+            all_valid_atks.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+                move_v.first, move_v.second ) );
+        }
+
+    }
+
+    all_valid_atks.shrink_to_fit();
+
+    this->is_all_valid_atks_upd = true;
 
 }
