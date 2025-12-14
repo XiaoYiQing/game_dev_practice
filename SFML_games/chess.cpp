@@ -3925,6 +3925,10 @@ vector<chess::chs_move> chess::get_all_valid_moves(){
     return this->all_valid_moves; 
 }
 
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_moves_map(){
+    return this->valid_moves_map; 
+}
+
 bool chess::getIs_all_valid_atks_upd() const
     { return this->is_all_valid_atks_upd; }
 vector<chess::chs_move> chess::get_all_valid_atks(){
@@ -4047,6 +4051,36 @@ void chess::upd_all_valid_moves(){
     all_valid_moves.shrink_to_fit();
 
     this->is_all_valid_moves_upd = true;
+
+// ---------------------------------------------------------------------- >>>>>
+
+
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        this->valid_moves_map[z].clear();
+        this->valid_moves_map[z].reserve(14);
+    }
+    // this->is_all_valid_moves_upd = false;
+
+    // pair<int,int> sub_idx_z;
+    // vector< pair<int,int> > move_sq_list_z;
+    // Parse through each linear coordinate of the board.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Add all current piece's possible moves to the batch.
+        for( pair<int,int> move_v : move_sq_list_z ){
+            this->valid_moves_map[z].push_back( chess::sub2ind( move_v ) );
+        }
+        this->valid_moves_map[z].shrink_to_fit();
+
+    }
+
+    // this->is_all_valid_moves_upd = true;
 
 }
 

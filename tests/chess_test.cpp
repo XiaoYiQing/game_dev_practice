@@ -3727,3 +3727,19 @@ void tests::chess_minmaxAB_split_tests(){
 // ---------------------------------------------------------------------- <<<<<
 
 }
+
+
+void tests::valid_maps_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    myGame.resetBoard();
+
+    myGame.upd_all_valid_moves();
+
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_tmp
+         = myGame.get_valid_moves_map();
+
+    int lol = 0;
+
+}

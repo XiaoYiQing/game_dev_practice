@@ -52,6 +52,8 @@ namespace tests{
 
     void chess_minmaxAB_split_tests();
 
+    void valid_maps_tests();
+
 }
 
 

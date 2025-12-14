@@ -409,6 +409,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     string bestMove( int depth );
 
+    void upd_all_valid_moves();
+    void upd_all_valid_atks();
+
 // ====================================================================== <<<<<
 
 
@@ -910,6 +913,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool getIs_all_valid_moves_upd() const;
     vector<chs_move> get_all_valid_moves();
 
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_moves_map();
+
     bool getIs_all_valid_atks_upd() const;
     vector<chs_move> get_all_valid_atks();
 
@@ -1049,10 +1054,12 @@ protected:
 
     bool is_all_valid_moves_upd;
     vector<chs_move> all_valid_moves;
-    void upd_all_valid_moves();
+    std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_moves_map;
+    
+
     bool is_all_valid_atks_upd;
     vector<chs_move> all_valid_atks;
-    void upd_all_valid_atks();
+    
 
     /**
      * Class static mutex for the purpose of synchronizing use of shared variables.
