@@ -1055,6 +1055,8 @@ protected:
     bool is_all_valid_moves_upd;
     vector<chs_move> all_valid_moves;
     std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_moves_map;
+    std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_moves_map;
+    std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_moves_map;
     
 
     bool is_all_valid_atks_upd;
