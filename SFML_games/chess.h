@@ -914,6 +914,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     vector<chs_move> get_all_valid_moves();
 
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_moves_map();
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_moves_map();
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_B_moves_map();
 
     bool getIs_all_valid_atks_upd() const;
     vector<chs_move> get_all_valid_atks();

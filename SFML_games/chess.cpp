@@ -3929,6 +3929,13 @@ array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_move
     return this->valid_moves_map; 
 }
 
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_moves_map(){
+    return this->valid_W_moves_map; 
+}
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_moves_map(){
+    return this->valid_B_moves_map; 
+}
+
 bool chess::getIs_all_valid_atks_upd() const
     { return this->is_all_valid_atks_upd; }
 vector<chess::chs_move> chess::get_all_valid_atks(){
@@ -4058,6 +4065,10 @@ void chess::upd_all_valid_moves(){
     for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
         this->valid_moves_map[z].clear();
         this->valid_moves_map[z].reserve(14);
+        this->valid_W_moves_map[z].clear();
+        this->valid_W_moves_map[z].reserve(14);
+        this->valid_B_moves_map[z].clear();
+        this->valid_B_moves_map[z].reserve(14);
     }
     // this->is_all_valid_moves_upd = false;
 
@@ -4077,6 +4088,18 @@ void chess::upd_all_valid_moves(){
             this->valid_moves_map[z].push_back( chess::sub2ind( move_v ) );
         }
         this->valid_moves_map[z].shrink_to_fit();
+
+        if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
+            for( pair<int,int> move_v : move_sq_list_z ){
+                this->valid_W_moves_map[z].push_back( chess::sub2ind( move_v ) );
+            }
+        }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
+            for( pair<int,int> move_v : move_sq_list_z ){
+                this->valid_B_moves_map[z].push_back( chess::sub2ind( move_v ) );
+            }
+        }
+        this->valid_W_moves_map[z].shrink_to_fit();
+        this->valid_B_moves_map[z].shrink_to_fit();
 
     }
 

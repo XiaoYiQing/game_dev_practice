@@ -3740,6 +3740,11 @@ void tests::valid_maps_tests(){
     array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_tmp
          = myGame.get_valid_moves_map();
 
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_W_tmp
+         = myGame.get_valid_W_moves_map();
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_tmp
+         = myGame.get_valid_B_moves_map();
+
     int lol = 0;
 
 }
