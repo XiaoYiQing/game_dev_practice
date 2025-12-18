@@ -437,7 +437,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \brief Play a chess piece with the specified beginning and ending square coordinates.
      * 
      * This function is essentially the follow up combination of the methods 
-     * "is_move_legal" and "is_atk_valid" and takes the next step in actually
+     * "is_move_legal" and "is_atk_legal" and takes the next step in actually
      * executing the play, whether it be a move or an attack.
      * This function furthermore verifies and updates the game state before and after
      * the play:
@@ -548,10 +548,10 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \param j_aft Column index of the attack target's position.
      * \return Boolean indicating whether this attack is valid.
      */
-    bool is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
+    bool is_atk_legal( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft  ) const;
 
-    bool is_atk_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const;
+    bool is_atk_legal( pair<int,int> coord_bef, pair<int,int> coord_aft ) const;
     
 // ====================================================================== <<<<<
 

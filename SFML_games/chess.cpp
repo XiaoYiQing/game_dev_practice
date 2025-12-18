@@ -1593,7 +1593,7 @@ bool chess::ply_ag_comm( string alg_comm ){
                     this->get_piece_at( coord_z ).color == pce_color )
                 {
                     if( is_atk ){
-                        if( this->is_atk_valid( coord_z, aft_coord ) ){
+                        if( this->is_atk_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -1624,7 +1624,7 @@ bool chess::ply_ag_comm( string alg_comm ){
                     this->get_piece_at( coord_z ).color == pce_color )
                 {
                     if( is_atk ){
-                        if( this->is_atk_valid( coord_z, aft_coord ) ){
+                        if( this->is_atk_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -1659,7 +1659,7 @@ bool chess::ply_ag_comm( string alg_comm ){
             {
                 
                 if( is_atk ){
-                    if( this->is_atk_valid( coord_z, aft_coord ) ){
+                    if( this->is_atk_legal( coord_z, aft_coord ) ){
                         bef_coord = coord_z;
                         fnd_cnt++;
                     }
@@ -1722,7 +1722,7 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
 
     bool play_success = false;
     if( this->is_move_legal( i_bef, j_bef, i_aft, j_aft ) ||
-        this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) )
+        this->is_atk_legal( i_bef, j_bef, i_aft, j_aft ) )
     {
         play_success = this->play( i_bef, j_bef, i_aft, j_aft );
     }else{
@@ -2067,12 +2067,12 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
 }
 
-bool chess::is_atk_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const{
-    return this->is_atk_valid( coord_bef.first, coord_bef.second, 
+bool chess::is_atk_legal( pair<int,int> coord_bef, pair<int,int> coord_aft ) const{
+    return this->is_atk_legal( coord_bef.first, coord_bef.second, 
         coord_aft.first, coord_aft.second );
 }
 
-bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
+bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft  ) const
 {
 
@@ -2723,7 +2723,7 @@ vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
 
     for( pair<int,int> atk_sq_z : all_atk_sq ){
 
-        if( is_atk_valid( i, j, atk_sq_z.first, atk_sq_z.second ) ){
+        if( is_atk_legal( i, j, atk_sq_z.first, atk_sq_z.second ) ){
             all_valid_atk_sq.push_back( atk_sq_z );
         }
 
@@ -3659,7 +3659,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
                     this->get_piece_at( coord_z ).color == pce_color )
                 {
                     if( is_atk ){
-                        if( this->is_atk_valid( coord_z, aft_coord ) ){
+                        if( this->is_atk_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -3690,7 +3690,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
                     this->get_piece_at( coord_z ).color == pce_color )
                 {
                     if( is_atk ){
-                        if( this->is_atk_valid( coord_z, aft_coord ) ){
+                        if( this->is_atk_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -3725,7 +3725,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
             {
                 
                 if( is_atk ){
-                    if( this->is_atk_valid( coord_z, aft_coord ) ){
+                    if( this->is_atk_legal( coord_z, aft_coord ) ){
                         bef_coord = coord_z;
                         fnd_cnt++;
                     }
