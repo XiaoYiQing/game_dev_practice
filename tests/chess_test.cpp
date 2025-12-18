@@ -66,37 +66,37 @@ void tests::chess_chs_move_tests(){
 
     // chess::chs_move spec_move( 0, 0, 1, 0 );
     // // Coloreless case.
-    // test_bool = test_bool && !( spec_move.is_move_valid( chess::CHS_PIECE_TYPE::ROOK, 
+    // test_bool = test_bool && !( spec_move.is_move_legal( chess::CHS_PIECE_TYPE::ROOK, 
     //     chess::CHS_PIECE_COLOR::NO_C ) );
     // // Typeless case.
-    // test_bool = test_bool && !( spec_move.is_move_valid( chess::CHS_PIECE_TYPE::NO_P, 
+    // test_bool = test_bool && !( spec_move.is_move_legal( chess::CHS_PIECE_TYPE::NO_P, 
     //     chess::CHS_PIECE_COLOR::WHITE ) );
     
     // // Invalid initial position case (< 0).
     // spec_move.pt_a = pair<int,int>(-1,0);   
     // spec_move.pt_b = pair<int,int>(1,0);
-    // test_bool = test_bool && !( spec_move.is_move_valid( chess::CHS_PIECE_TYPE::ROOK, 
+    // test_bool = test_bool && !( spec_move.is_move_legal( chess::CHS_PIECE_TYPE::ROOK, 
     //     chess::CHS_PIECE_COLOR::WHITE ) );
     // // Invalid initial position case (>= BOARDHEIGHT).
     // spec_move.pt_a = pair<int,int>(chess::BOARDHEIGHT,0);   
     // spec_move.pt_b = pair<int,int>(1,0);
-    // test_bool = test_bool && !( spec_move.is_move_valid( chess::CHS_PIECE_TYPE::ROOK, 
+    // test_bool = test_bool && !( spec_move.is_move_legal( chess::CHS_PIECE_TYPE::ROOK, 
     //     chess::CHS_PIECE_COLOR::WHITE ) );
     
     // // Invalid final position case (< 0).
     // spec_move.pt_a = pair<int,int>(0,0);
     // spec_move.pt_b = pair<int,int>(0,-1);
-    // test_bool = test_bool && !( spec_move.is_move_valid( chess::CHS_PIECE_TYPE::ROOK, 
+    // test_bool = test_bool && !( spec_move.is_move_legal( chess::CHS_PIECE_TYPE::ROOK, 
     //     chess::CHS_PIECE_COLOR::WHITE ) );
     // // Invalid final position case (>= BOARDWIDTH).
     // spec_move.pt_a = pair<int,int>(0,0);
     // spec_move.pt_b = pair<int,int>(0,chess::BOARDWIDTH);
-    // test_bool = test_bool && !( spec_move.is_move_valid( chess::CHS_PIECE_TYPE::ROOK, 
+    // test_bool = test_bool && !( spec_move.is_move_legal( chess::CHS_PIECE_TYPE::ROOK, 
     //     chess::CHS_PIECE_COLOR::WHITE ) );
     // // Null move case.
     // spec_move.pt_a = pair<int,int>(1,1);
     // spec_move.pt_b = pair<int,int>(1,1);
-    // test_bool = test_bool && !( spec_move.is_move_valid( chess::CHS_PIECE_TYPE::ROOK, 
+    // test_bool = test_bool && !( spec_move.is_move_legal( chess::CHS_PIECE_TYPE::ROOK, 
     //     chess::CHS_PIECE_COLOR::WHITE ) );
 
     // if( test_bool ){
@@ -115,10 +115,10 @@ void tests::chess_chs_move_tests(){
 
     // chess::chs_move move_bad( 2, 4, 3, 4 );
     // chess::chs_move move_good( 2, 4, 1, 4 );
-    // test_bool = test_bool && !( move_bad.is_move_valid( wPawn ) );
-    // test_bool = test_bool && ( move_good.is_move_valid( wPawn ) );
-    // test_bool = test_bool && ( move_bad.is_move_valid( bPawn ) );
-    // test_bool = test_bool && !( move_good.is_move_valid( bPawn ) );
+    // test_bool = test_bool && !( move_bad.is_move_legal( wPawn ) );
+    // test_bool = test_bool && ( move_good.is_move_legal( wPawn ) );
+    // test_bool = test_bool && ( move_bad.is_move_legal( bPawn ) );
+    // test_bool = test_bool && !( move_good.is_move_legal( bPawn ) );
     // if( test_bool ){
     //     cout << "chess_chs_move_tests pawn case tests: passed!" << endl;
     // }else{
@@ -133,8 +133,8 @@ void tests::chess_chs_move_tests(){
 
     // move_bad = chess::chs_move( 4, 4, 3, 5 );
     // move_good = chess::chs_move( 4, 4, 3, 6 );
-    // test_bool = test_bool && !( move_bad.is_move_valid( wKnight ) );
-    // test_bool = test_bool && ( move_good.is_move_valid( wKnight ) );
+    // test_bool = test_bool && !( move_bad.is_move_legal( wKnight ) );
+    // test_bool = test_bool && ( move_good.is_move_legal( wKnight ) );
     // if( test_bool ){
     //     cout << "chess_chs_move_tests knight case tests: passed!" << endl;
     // }else{
@@ -148,8 +148,8 @@ void tests::chess_chs_move_tests(){
     //     chess::CHS_PIECE_COLOR::WHITE );
     // move_bad = chess::chs_move( 4, 4, 7, 6 );
     // move_good = chess::chs_move( 4, 4, 2, 2 );
-    // test_bool = test_bool && !( move_bad.is_move_valid( wBishop ) );
-    // test_bool = test_bool && ( move_good.is_move_valid( wBishop ) );
+    // test_bool = test_bool && !( move_bad.is_move_legal( wBishop ) );
+    // test_bool = test_bool && ( move_good.is_move_legal( wBishop ) );
     // if( test_bool ){
     //     cout << "chess_chs_move_tests bishop case tests: passed!" << endl;
     // }else{
@@ -163,8 +163,8 @@ void tests::chess_chs_move_tests(){
     //     chess::CHS_PIECE_COLOR::WHITE );
     // move_bad = chess::chs_move( 4, 4, 5, 7 );
     // move_good = chess::chs_move( 4, 4, 2, 4 );
-    // test_bool = test_bool && !( move_bad.is_move_valid( wRook ) );
-    // test_bool = test_bool && ( move_good.is_move_valid( wRook ) );
+    // test_bool = test_bool && !( move_bad.is_move_legal( wRook ) );
+    // test_bool = test_bool && ( move_good.is_move_legal( wRook ) );
     // if( test_bool ){
     //     cout << "chess_chs_move_tests rook case tests: passed!" << endl;
     // }else{
@@ -178,9 +178,9 @@ void tests::chess_chs_move_tests(){
     // move_bad = chess::chs_move( 4, 4, 5, 6 );
     // move_good = chess::chs_move( 4, 4, 0, 0 );
     // chess::chs_move move_good2 = chess::chs_move( 4, 4, 4, 0 );
-    // test_bool = test_bool && !( move_bad.is_move_valid( wQueen ) );
-    // test_bool = test_bool && ( move_good.is_move_valid( wQueen ) );
-    // test_bool = test_bool && ( move_good2.is_move_valid( wQueen ) );
+    // test_bool = test_bool && !( move_bad.is_move_legal( wQueen ) );
+    // test_bool = test_bool && ( move_good.is_move_legal( wQueen ) );
+    // test_bool = test_bool && ( move_good2.is_move_legal( wQueen ) );
     // if( test_bool ){
     //     cout << "chess_chs_move_tests queen case tests: passed!" << endl;
     // }else{
@@ -194,9 +194,9 @@ void tests::chess_chs_move_tests(){
     // move_bad = chess::chs_move( 4, 4, 6, 6 );
     // move_good = chess::chs_move( 4, 4, 5, 5 );
     // move_good2 = chess::chs_move( 4, 4, 4, 5 );
-    // test_bool = test_bool && !( move_bad.is_move_valid( wKing ) );
-    // test_bool = test_bool && ( move_good.is_move_valid( wKing ) );
-    // test_bool = test_bool && ( move_good2.is_move_valid( wKing ) );
+    // test_bool = test_bool && !( move_bad.is_move_legal( wKing ) );
+    // test_bool = test_bool && ( move_good.is_move_legal( wKing ) );
+    // test_bool = test_bool && ( move_good2.is_move_legal( wKing ) );
     // if( test_bool ){
     //     cout << "chess_chs_move_tests king case tests: passed!" << endl;
     // }else{
@@ -660,20 +660,20 @@ void tests::chess_move_tests(){
 // ---------------------------------------------------------------------- >>>>>
 
     // Out of bound move.
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 0, 8, 0 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 0, 8, 0 ) );
     // Trivial move.
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 0, 0, 0 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 0, 0, 0 ) );
     // No piece at start square move.
-    test_bool = test_bool && !( myGame.is_move_valid( 2, 0, 0, 0 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 2, 0, 0, 0 ) );
     // Obstruction at end square move.
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 0, 1, 0 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 0, 1, 0 ) );
     // Wrong turn move.
-    test_bool = test_bool && !( myGame.is_move_valid( 6, 0, 5, 0 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 6, 0, 5, 0 ) );
 
     if( test_bool ){
-        cout << "chess::is_move_valid invalid moves test: passed!" << endl;
+        cout << "chess::is_move_legal invalid moves test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid invalid moves test: failed!" << endl;
+        cout << "chess::is_move_legal invalid moves test: failed!" << endl;
     }
 
     // Reset test boolean.
@@ -686,32 +686,32 @@ void tests::chess_move_tests(){
 // ---------------------------------------------------------------------- >>>>>
 
     // Unstarted white pawn up 1.
-    test_bool = test_bool && ( myGame.is_move_valid( 1, 2, 2, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 1, 2, 2, 2 ) );
     // Unstarted white pawn up 2.
-    test_bool = test_bool && ( myGame.is_move_valid( 1, 2, 3, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 1, 2, 3, 2 ) );
     // Unstarted white pawn up 3.
-    test_bool = test_bool && !( myGame.is_move_valid( 1, 2, 4, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 1, 2, 4, 2 ) );
     // White pawn down 1.
-    test_bool = test_bool && !( myGame.is_move_valid( 1, 2, 0, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 1, 2, 0, 2 ) );
     // White pawn diagonal.
-    test_bool = test_bool && !( myGame.is_move_valid( 1, 2, 2, 3 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 1, 2, 2, 3 ) );
 
     // Set the turn to black's turn
     myGame.setTurn_cnt(1u);
     // Unstarted black pawn up 1.
-    test_bool = test_bool && ( myGame.is_move_valid( 6, 2, 5, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 6, 2, 5, 2 ) );
     // Unstarted black pawn up 2.
-    test_bool = test_bool && ( myGame.is_move_valid( 6, 2, 4, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 6, 2, 4, 2 ) );
     // Unstarted black pawn up 3.
-    test_bool = test_bool && !( myGame.is_move_valid( 6, 2, 3, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 6, 2, 3, 2 ) );
     // Black pawn down 1.
-    test_bool = test_bool && !( myGame.is_move_valid( 6, 2, 7, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 6, 2, 7, 2 ) );
 
 
     if( test_bool ){
-        cout << "chess::is_move_valid pawn move test: passed!" << endl;
+        cout << "chess::is_move_legal pawn move test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid pawn move test: failed!" << endl;
+        cout << "chess::is_move_legal pawn move test: failed!" << endl;
     }
 
     // Reset to white's move.
@@ -727,22 +727,22 @@ void tests::chess_move_tests(){
 // ---------------------------------------------------------------------- >>>>>
 
     // Basic knight moves.
-    test_bool = test_bool && ( myGame.is_move_valid( 0, 1, 2, 0 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 0, 1, 2, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 0, 1, 2, 0 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 0, 1, 2, 2 ) );
     // Wrong knight move.
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 1, 3, 1 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 1, 3, 1 ) );
 
     // Set the turn to black's turn
     myGame.setTurn_cnt(1u);
-    test_bool = test_bool && ( myGame.is_move_valid( 7, 1, 5, 0 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 7, 1, 5, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 7, 1, 5, 0 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 7, 1, 5, 2 ) );
     // Wrong knight move.
-    test_bool = test_bool && !( myGame.is_move_valid( 7, 1, 4, 1 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 7, 1, 4, 1 ) );
 
     if( test_bool ){
-        cout << "chess::is_move_valid knight move test: passed!" << endl;
+        cout << "chess::is_move_legal knight move test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid knight move test: failed!" << endl;
+        cout << "chess::is_move_legal knight move test: failed!" << endl;
     }
 
     // Reset to white's move.
@@ -763,10 +763,10 @@ void tests::chess_move_tests(){
     myGame.set_piece_at( 3, 3, newWB );
 
     // Basic bishop moves.
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 2, 2 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 2, 4 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 2 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 4 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 2, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 2, 4 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 4, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 4, 4 ) );
 
     chess::chs_piece newBB = chess::chs_piece(
         chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK
@@ -776,17 +776,17 @@ void tests::chess_move_tests(){
     // Set the turn to black's turn
     myGame.setTurn_cnt(1u);
     // Basic bishop moves.
-    test_bool = test_bool && !( myGame.is_move_valid( 4, 4, 3, 3 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 4, 4, 3, 5 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 4, 4, 5, 3 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 4, 4, 5, 5 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 4, 4, 3, 3 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 4, 4, 3, 5 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 4, 4, 5, 3 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 4, 4, 5, 5 ) );
     // Obstacle case.
-    test_bool = test_bool && !( myGame.is_move_valid( 4, 4, 2, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 4, 4, 2, 2 ) );
 
     if( test_bool ){
-        cout << "chess::is_move_valid bishop move test: passed!" << endl;
+        cout << "chess::is_move_legal bishop move test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid bishop move test: failed!" << endl;
+        cout << "chess::is_move_legal bishop move test: failed!" << endl;
     }
 
     // Reset to white's move.
@@ -815,25 +815,25 @@ void tests::chess_move_tests(){
     myGame.set_piece_at( 3, 5, newBR );
 
     // Basic rook moves.
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 3, 3, 7 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 0, 3 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 3 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 3, 1 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 3, 4, 4 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 3, 3, 7 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 0, 3 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 4, 3 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 3, 1 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 3, 4, 4 ) );
 
     // Set the turn to black's turn
     myGame.setTurn_cnt(1u);
     // Basic rook moves.
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 5, 3, 2 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 5, 3, 7 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 5, 1, 5 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 5, 6, 5 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 5, 2, 1 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 5, 3, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 5, 3, 7 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 5, 1, 5 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 5, 6, 5 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 5, 2, 1 ) );
 
     if( test_bool ){
-        cout << "chess::is_move_valid rook move test: passed!" << endl;
+        cout << "chess::is_move_legal rook move test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid rook move test: failed!" << endl;
+        cout << "chess::is_move_legal rook move test: failed!" << endl;
     }
 
     // Reset to white's move.
@@ -864,33 +864,33 @@ void tests::chess_move_tests(){
     myGame.set_piece_at( 2, 5, newWP );
 
     // Horizontal and vertical moves.
-    test_bool = test_bool && !( myGame.is_move_valid( 2, 2, 2, 6 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 2, 2, 2, 0 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 2, 2, 6, 2 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 2, 2, 1, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 2, 2, 2, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 2, 2, 2, 0 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 2, 2, 6, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 2, 2, 1, 2 ) );
     // Diagonal moves.
-    test_bool = test_bool && !( myGame.is_move_valid( 2, 2, 6, 6 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 2, 2, 0, 0 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 2, 2, 3, 1 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 2, 2, 0, 4 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 2, 2, 6, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 2, 2, 0, 0 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 2, 2, 3, 1 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 2, 2, 0, 4 ) );
 
     // Set the turn to black's turn
     myGame.setTurn_cnt(1u);
     // Horizontal and vertical moves.
-    test_bool = test_bool && ( myGame.is_move_valid( 5, 5, 5, 7 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 5, 5, 5, 1 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 5, 5, 7, 5 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 5, 5, 1, 5 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 5, 5, 5, 7 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 5, 5, 5, 1 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 5, 5, 7, 5 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 5, 5, 1, 5 ) );
     // Diagonal moves.
-    test_bool = test_bool && ( myGame.is_move_valid( 5, 5, 7, 7 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 5, 5, 1, 1 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 5, 5, 3, 7 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 5, 5, 6, 4 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 5, 5, 7, 7 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 5, 5, 1, 1 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 5, 5, 3, 7 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 5, 5, 6, 4 ) );
 
     if( test_bool ){
-        cout << "chess::is_move_valid queen move test: passed!" << endl;
+        cout << "chess::is_move_legal queen move test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid queen move test: failed!" << endl;
+        cout << "chess::is_move_legal queen move test: failed!" << endl;
     }
 
     // Reset to white's move.
@@ -922,30 +922,30 @@ void tests::chess_move_tests(){
     
 
     // All around.
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 3, 3, 4 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 3, 4, 4 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 3 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 4, 2 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 3, 2 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 2, 2 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 3, 2, 3 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 3, 2, 4 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 3, 3, 4 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 3, 4, 4 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 4, 3 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 4, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 3, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 2, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 3, 2, 3 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 3, 2, 4 ) );
 
     // All around.
     myGame.setTurn_cnt(1u);
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 5, 3, 6 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 5, 4, 6 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 5, 4, 5 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 5, 4, 4 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 5, 3, 4 ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 3, 5, 2, 4 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 5, 2, 5 ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 3, 5, 2, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 5, 3, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 5, 4, 6 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 5, 4, 5 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 5, 4, 4 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 5, 3, 4 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 3, 5, 2, 4 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 5, 2, 5 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 3, 5, 2, 6 ) );
 
     if( test_bool ){
-        cout << "chess::is_move_valid king move test: passed!" << endl;
+        cout << "chess::is_move_legal king move test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid king move test: failed!" << endl;
+        cout << "chess::is_move_legal king move test: failed!" << endl;
     }
 
     // Clear the board.
@@ -966,31 +966,31 @@ void tests::chess_move_tests(){
     
     myGame.setTurn_cnt(0);
     // Right-side white king castling.
-    test_bool = test_bool && ( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 0, 4, 0, 6 ) );
     // Left-side white king castling.
-    test_bool = test_bool && ( myGame.is_move_valid( 0, 4, 0, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 0, 4, 0, 2 ) );
     // Right-side white king castling with obstruction.
     myGame.set_piece_at( 0, 5, chess::chs_piece(
         chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 4, 0, 6 ) );
     // Left-side white king castling with obstruction.
     myGame.set_piece_at( 0, 1, chess::chs_piece(
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 4, 0, 2 ) );
 
     myGame.setTurn_cnt(1u);
     // Right-side black king castling.
-    test_bool = test_bool && ( myGame.is_move_valid( 7, 4, 7, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 7, 4, 7, 6 ) );
     // Left-side black king castling.
-    test_bool = test_bool && ( myGame.is_move_valid( 7, 4, 7, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 7, 4, 7, 2 ) );
     // Right-side black king castling with obstruction.
     myGame.set_piece_at( 7, 5, chess::chs_piece(
         chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 6 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 7, 4, 7, 6 ) );
     // Left-side black king castling with obstruction.
     myGame.set_piece_at( 7, 1, chess::chs_piece(
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 7, 4, 7, 2 ) );
 
     myGame.setTurn_cnt(0);
     // White king right-side castling with threat.
@@ -999,18 +999,18 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
     myGame.set_piece_at( 0, 7, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 0, 4, 0, 6 ) );
     myGame.set_piece_at( 2, 5, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 4, 0, 6 ) );
     
     // White king left-side castling with threat.
     myGame.set_piece_at( 0, 0, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 0, 4, 0, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 0, 4, 0, 2 ) );
     myGame.set_piece_at( 2, 2, chess::chs_piece(
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 0, 4, 0, 6 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 0, 4, 0, 6 ) );
     
     myGame.setTurn_cnt(1u);
     // Black king right-side castling with threat.
@@ -1018,23 +1018,23 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
     myGame.set_piece_at( 7, 7, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 7, 4, 7, 6 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 7, 4, 7, 6 ) );
     myGame.set_piece_at( 5, 6, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 6 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 7, 4, 7, 6 ) );
 
     // Black king left-side castling with threat.
     myGame.set_piece_at( 7, 0, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && ( myGame.is_move_valid( 7, 4, 7, 2 ) );
+    test_bool = test_bool && ( myGame.is_move_legal( 7, 4, 7, 2 ) );
     myGame.set_piece_at( 5, 2, chess::chs_piece(
         chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && !( myGame.is_move_valid( 7, 4, 7, 2 ) );
+    test_bool = test_bool && !( myGame.is_move_legal( 7, 4, 7, 2 ) );
 
     if( test_bool ){
-        cout << "chess::is_move_valid king castling test: passed!" << endl;
+        cout << "chess::is_move_legal king castling test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid king castling test: failed!" << endl;
+        cout << "chess::is_move_legal king castling test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
@@ -1061,21 +1061,21 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     
     // Knight moving away from position shielding king from upper black rook.
-    test_bool = test_bool && !myGame.is_move_valid( 2, 4, 3, 6 );
+    test_bool = test_bool && !myGame.is_move_legal( 2, 4, 3, 6 );
     // Knight switch shielding from upper to left black rook.
-    test_bool = test_bool && !myGame.is_move_valid( 2, 4, 0, 3 );
+    test_bool = test_bool && !myGame.is_move_legal( 2, 4, 0, 3 );
     // King moves out of danger.
-    test_bool = test_bool && myGame.is_move_valid( 0, 4, 1, 5 );
-    test_bool = test_bool && myGame.is_move_valid( 0, 4, 1, 4 );
-    test_bool = test_bool && myGame.is_move_valid( 0, 4, 1, 3 );
+    test_bool = test_bool && myGame.is_move_legal( 0, 4, 1, 5 );
+    test_bool = test_bool && myGame.is_move_legal( 0, 4, 1, 4 );
+    test_bool = test_bool && myGame.is_move_legal( 0, 4, 1, 3 );
     // King moves into danger.
-    test_bool = test_bool && !myGame.is_move_valid( 0, 4, 0, 5 );
-    test_bool = test_bool && !myGame.is_move_valid( 0, 4, 0, 3 );
+    test_bool = test_bool && !myGame.is_move_legal( 0, 4, 0, 5 );
+    test_bool = test_bool && !myGame.is_move_legal( 0, 4, 0, 3 );
 
     if( test_bool ){
-        cout << "chess::is_move_valid invalid game state change test: passed!" << endl;
+        cout << "chess::is_move_legal invalid game state change test: passed!" << endl;
     }else{
-        cout << "chess::is_move_valid invalid game state change test: failed!" << endl;
+        cout << "chess::is_move_legal invalid game state change test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- >>>>>
