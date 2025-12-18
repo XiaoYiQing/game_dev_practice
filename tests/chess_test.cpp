@@ -1938,13 +1938,13 @@ void tests::chess_psbl_plays_tests(){
     test_bool = true;
     myGame.resetBoard();
 
-    auto all_valid_moves = myGame.get_all_valid_moves();
-    test_bool = test_bool && ( all_valid_moves.size() == 20 );
+    auto all_legal_moves = myGame.get_all_legal_moves();
+    test_bool = test_bool && ( all_legal_moves.size() == 20 );
     auto all_valid_atks = myGame.get_all_valid_atks();
     test_bool = test_bool && ( all_valid_atks.size() == 0 );
     myGame.setTurn_cnt(1);
-    all_valid_moves = myGame.get_all_valid_moves();
-    test_bool = test_bool && ( all_valid_moves.size() == 20 );
+    all_legal_moves = myGame.get_all_legal_moves();
+    test_bool = test_bool && ( all_legal_moves.size() == 20 );
     all_valid_atks = myGame.get_all_valid_atks();
     test_bool = test_bool && ( all_valid_atks.size() == 0 );
 
@@ -1975,13 +1975,13 @@ void tests::chess_psbl_plays_tests(){
         myGame.set_piece_at( chess::BOARDHEIGHT - 2, z, emp_pce );
     }
 
-    all_valid_moves = myGame.get_all_valid_moves();
-    test_bool = test_bool && ( all_valid_moves.size() == 47 );
+    all_legal_moves = myGame.get_all_legal_moves();
+    test_bool = test_bool && ( all_legal_moves.size() == 47 );
     all_valid_atks = myGame.get_all_valid_atks();
     test_bool = test_bool && ( all_valid_atks.size() == 3 );
     myGame.setTurn_cnt(1);
-    all_valid_moves = myGame.get_all_valid_moves();
-    test_bool = test_bool && ( all_valid_moves.size() == 47 );
+    all_legal_moves = myGame.get_all_legal_moves();
+    test_bool = test_bool && ( all_legal_moves.size() == 47 );
     all_valid_atks = myGame.get_all_valid_atks();
     test_bool = test_bool && ( all_valid_atks.size() == 3 );
     
@@ -3735,7 +3735,7 @@ void tests::valid_maps_tests(){
     chess myGame;
     myGame.resetBoard();
 
-    myGame.upd_all_valid_moves();
+    myGame.upd_all_legal_moves();
 
     array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_tmp
          = myGame.get_valid_moves_map();
