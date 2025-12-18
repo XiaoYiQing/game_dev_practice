@@ -409,7 +409,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     string bestMove( int depth );
 
-    void upd_all_valid_moves();
+    void upd_all_legal_moves();
     void upd_all_valid_atks();
 
 // ====================================================================== <<<<<
@@ -924,8 +924,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool getIs_psbl_alg_comm_upd() const;
     vector<string> get_all_psbl_alg_comm();
 
-    bool getIs_all_valid_moves_upd() const;
-    vector<chs_move> get_all_valid_moves();
+    bool getIs_all_legal_moves_upd() const;
+    vector<chs_move> get_all_legal_moves();
 
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_moves_map();
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_moves_map();
@@ -1068,8 +1068,8 @@ protected:
      */
     void upd_all_psbl_alg_comm();
 
-    bool is_all_valid_moves_upd;
-    vector<chs_move> all_valid_moves;
+    bool is_all_legal_moves_upd;
+    vector<chs_move> all_legal_moves;
     std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_moves_map;
     std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_moves_map;
     std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_moves_map;
