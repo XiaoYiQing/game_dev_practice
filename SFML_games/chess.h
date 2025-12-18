@@ -498,7 +498,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
         unsigned int i_aft, unsigned int j_aft );
 
     /**
-     * \brief Determine if the specified move (displacement) is valid.
+     * \brief Determine if the specified move (displacement) is legal. A move
+     *  is legal if it is valid and respects the current board situation (turn, state).
      * 
      * Does not perform the move.
      * 
@@ -519,6 +520,19 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool is_move_legal( pair<int,int> coord_bef, pair<int,int> coord_aft ) const;
     
     bool is_move_legal( chs_move tarMov ) const;
+
+    /**
+     * \brief Determines if a move is valid. A move is valid if
+     * 
+     *  - The piece's capability is matched.
+     * 
+     *  - The way is clear.
+     * 
+     *  - The ending square is on the board.
+     * 
+     */
+    bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft ) const;
 
     /**
      * \brief Determine if the specified attack is valid.

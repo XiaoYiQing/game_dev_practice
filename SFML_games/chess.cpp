@@ -242,7 +242,7 @@ chess::chess(){
     this->minmax_vals["check"] = 1;
 
     this->is_psbl_alg_comm_upd = false;
-    this->is_all_valid_moves_upd = false;
+    this->is_all_legal_moves_upd = false;
     this->is_all_valid_atks_upd = false;
 
     AI_proc_flag = false;
@@ -1598,7 +1598,7 @@ bool chess::ply_ag_comm( string alg_comm ){
                             fnd_cnt++;
                         }
                     }else{
-                        if( this->is_move_valid( coord_z, aft_coord ) ){
+                        if( this->is_move_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -1629,7 +1629,7 @@ bool chess::ply_ag_comm( string alg_comm ){
                             fnd_cnt++;
                         }
                     }else{
-                        if( this->is_move_valid( coord_z, aft_coord ) ){
+                        if( this->is_move_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -1664,7 +1664,7 @@ bool chess::ply_ag_comm( string alg_comm ){
                         fnd_cnt++;
                     }
                 }else{
-                    if( this->is_move_valid( coord_z, aft_coord ) ){
+                    if( this->is_move_legal( coord_z, aft_coord ) ){
                         bef_coord = coord_z;
                         fnd_cnt++;
                     }
@@ -1721,7 +1721,7 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
 {
 
     bool play_success = false;
-    if( this->is_move_valid( i_bef, j_bef, i_aft, j_aft ) ||
+    if( this->is_move_legal( i_bef, j_bef, i_aft, j_aft ) ||
         this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) )
     {
         play_success = this->play( i_bef, j_bef, i_aft, j_aft );
@@ -1738,13 +1738,13 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
 
 }
 
-bool chess::is_move_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const{
-    return this->is_move_valid( coord_bef.first, coord_bef.second, 
+bool chess::is_move_legal( pair<int,int> coord_bef, pair<int,int> coord_aft ) const{
+    return this->is_move_legal( coord_bef.first, coord_bef.second, 
         coord_aft.first, coord_aft.second );
 }
 
-bool chess::is_move_valid( chs_move tarMov ) const{
-    return this->is_move_valid( tarMov.pt_a, tarMov.pt_b );
+bool chess::is_move_legal( chs_move tarMov ) const{
+    return this->is_move_legal( tarMov.pt_a, tarMov.pt_b );
 }
 
 /*
@@ -1760,11 +1760,9 @@ bool chess::is_move_valid( chs_move tarMov ) const{
 - Check if there is any obstable between the starting and ending point (Except knight).
 */
 
-bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef, 
+bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft ) const
 {
-
-    
 
 // ---------------------------------------------------------------------- >>>>>
 //      
@@ -1803,9 +1801,9 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     }
 
     // If list of valid moves up-to-date, just refer to it for answer.
-    if( this->is_all_valid_moves_upd ){
+    if( this->is_all_legal_moves_upd ){
         chs_move tmp( i_bef, j_bef, i_aft, j_aft );
-        for( chs_move ref_z : this->all_valid_moves )
+        for( chs_move ref_z : this->all_legal_moves )
             if( tmp == ref_z )
                 return true;
         return false;
@@ -2053,6 +2051,47 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
 }
 
+
+bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft ) const
+{
+    // Out of bound check.
+    if( max( i_bef, i_aft ) >= BOARDHEIGHT || max( j_bef, j_aft ) >= BOARDHEIGHT ){
+        return false;
+    }
+
+    // Trivial move check.
+    if( i_bef == i_aft && j_bef == j_aft ){
+        return false;
+    }
+
+    // Obtain the target piece to play.
+    chs_piece tarPce = this->get_piece_at( i_bef, j_bef );
+    // Empty starting square check.
+    if( tarPce.type == CHS_PIECE_TYPE::NO_P || tarPce.color == CHS_PIECE_COLOR::NO_C ){
+        return false;
+    }
+
+    // Obtain piece at destination.
+    chs_piece endPce = this->get_piece_at( i_aft, j_aft );
+    // Check empty space at destination.
+    if( endPce.type != CHS_PIECE_TYPE::NO_P || endPce.color != CHS_PIECE_COLOR::NO_C ){
+        return false;
+    }
+
+    // Obtain the color of the current piece.
+    CHS_PIECE_COLOR tarColor = tarPce.color;
+
+    // // If list of valid moves up-to-date, just refer to it for answer.
+    // if( this->is_all_legal_moves_upd ){
+    //     chs_move tmp( i_bef, j_bef, i_aft, j_aft );
+    //     for( chs_move ref_z : this->all_legal_moves )
+    //         if( tmp == ref_z )
+    //             return true;
+    //     return false;
+    // }
+
+}
 
 bool chess::is_atk_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const{
     return this->is_atk_valid( coord_bef.first, coord_bef.second, 
@@ -2770,7 +2809,7 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 
         pair<int,int> atk_ij_coord = chess::ind2sub( atk_ij );
 
-        if( this->is_move_valid( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
+        if( this->is_move_legal( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
             val_mov_vec.push_back( atk_ij_coord );
         }
         
@@ -2781,10 +2820,10 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
         int sign_mult = 1;
         tarPce.color == CHS_PIECE_COLOR::BLACK ? sign_mult = -1 : sign_mult = 1;
 
-        if( this->is_move_valid( i, j, i + sign_mult * 1, j ) ){
+        if( this->is_move_legal( i, j, i + sign_mult * 1, j ) ){
             val_mov_vec.push_back( pair<int,int>( i + sign_mult * 1, j ) );
         }
-        if( this->is_move_valid( i, j, i + sign_mult * 2, j ) ){
+        if( this->is_move_legal( i, j, i + sign_mult * 2, j ) ){
             val_mov_vec.push_back( pair<int,int>( i + sign_mult * 2, j ) );
         }
        
@@ -2793,11 +2832,11 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 
         if( tarPce.not_moved ){
             // Right castling.
-            if( this->is_move_valid( i, j, i, j + 2 ) ){
+            if( this->is_move_legal( i, j, i, j + 2 ) ){
                 val_mov_vec.push_back( pair<int,int>( i, j + 2 ) );
             }
             // Left castling.
-            if( this->is_move_valid( i, j, i, j - 2 ) ){
+            if( this->is_move_legal( i, j, i, j - 2 ) ){
                 val_mov_vec.push_back( pair<int,int>( i, j - 2 ) );
             }
         }
@@ -3023,7 +3062,7 @@ bool chess::is_check_mate(){
         game_copy.setVerbose(false);
 
         // Obtain all possible white plays.
-        vector<chs_move> all_plays = game_copy.get_all_valid_moves();
+        vector<chs_move> all_plays = game_copy.get_all_legal_moves();
         vector<chs_move> tmp = game_copy.get_all_valid_atks();
         all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
 
@@ -3057,7 +3096,7 @@ bool chess::is_check_mate(){
         game_copy.setTurn_cnt(1);
 
         // Obtain all possible black plays.
-        vector<chs_move> all_plays = game_copy.get_all_valid_moves();
+        vector<chs_move> all_plays = game_copy.get_all_legal_moves();
         vector<chs_move> tmp = game_copy.get_all_valid_atks();
         all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
 
@@ -3111,7 +3150,7 @@ bool chess::is_draw(){
     bool no_valid_moves = false;
     // If there is no move possible at all, stalemate.
     no_valid_moves = this->get_all_valid_atks().size() == 0 && 
-        this->get_all_valid_moves().size() == 0;
+        this->get_all_legal_moves().size() == 0;
     if( no_valid_moves ){
         if( verbose )
             cout << "Stalemate!!" << endl;
@@ -3337,7 +3376,7 @@ void chess::upd_end_game_state(){
 void chess::game_tracking_signal(){
 
     this->is_psbl_alg_comm_upd = false;
-    this->is_all_valid_moves_upd = false;
+    this->is_all_legal_moves_upd = false;
     this->is_all_valid_atks_upd = false;
 
 }
@@ -3475,7 +3514,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
 
         if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
             chs_move castle_mov( row_idx, 4, row_idx, 6 );
-            if( this->is_move_valid( castle_mov ) ){
+            if( this->is_move_legal( castle_mov ) ){
                 return castle_mov;
             }
         }
@@ -3492,7 +3531,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
 
         if( this->get_piece_at( row_idx, 4 ).type == CHS_PIECE_TYPE::KING ){
             chs_move castle_mov( row_idx, 4, row_idx, 2 );
-            if( this->is_move_valid( castle_mov ) ){
+            if( this->is_move_legal( castle_mov ) ){
                 return castle_mov;
             }
         }
@@ -3651,7 +3690,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
                             fnd_cnt++;
                         }
                     }else{
-                        if( this->is_move_valid( coord_z, aft_coord ) ){
+                        if( this->is_move_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -3682,7 +3721,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
                             fnd_cnt++;
                         }
                     }else{
-                        if( this->is_move_valid( coord_z, aft_coord ) ){
+                        if( this->is_move_legal( coord_z, aft_coord ) ){
                             bef_coord = coord_z;
                             fnd_cnt++;
                         }
@@ -3717,7 +3756,7 @@ chess::chs_move chess::alg_comm_to_move( string alg_comm ){
                         fnd_cnt++;
                     }
                 }else{
-                    if( this->is_move_valid( coord_z, aft_coord ) ){
+                    if( this->is_move_legal( coord_z, aft_coord ) ){
                         bef_coord = coord_z;
                         fnd_cnt++;
                     }
@@ -3916,13 +3955,13 @@ vector<string> chess::get_all_psbl_alg_comm(){
     return this->all_psbl_alg_comm; 
 }
 
-bool chess::getIs_all_valid_moves_upd() const
-    { return this->is_all_valid_moves_upd; }
-vector<chess::chs_move> chess::get_all_valid_moves(){
-    if( !this->is_all_valid_moves_upd ){
-        this->upd_all_valid_moves();
+bool chess::getIs_all_legal_moves_upd() const
+    { return this->is_all_legal_moves_upd; }
+vector<chess::chs_move> chess::get_all_legal_moves(){
+    if( !this->is_all_legal_moves_upd ){
+        this->upd_all_legal_moves();
     }
-    return this->all_valid_moves; 
+    return this->all_legal_moves; 
 }
 
 array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_moves_map(){
@@ -3958,7 +3997,7 @@ void chess::upd_all_psbl_alg_comm(){
 
     // Obtain all current possible plays.
     vector<chs_move> all_atks = this->get_all_valid_atks();
-    vector<chs_move> all_plays = this->get_all_valid_moves();
+    vector<chs_move> all_plays = this->get_all_legal_moves();
     all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
 
     // Initialize final vector of algebraic commands.
@@ -4029,13 +4068,13 @@ void chess::upd_all_psbl_alg_comm(){
 }
 
 
-void chess::upd_all_valid_moves(){
+void chess::upd_all_legal_moves(){
 
     // Clear all currently saved possible plays.
-    this->all_valid_moves.clear();
-    this->is_all_valid_moves_upd = false;
+    this->all_legal_moves.clear();
+    this->is_all_legal_moves_upd = false;
 
-    all_valid_moves.reserve( 200 );
+    all_legal_moves.reserve( 200 );
 
     pair<int,int> sub_idx_z;
     vector< pair<int,int> > move_sq_list_z;
@@ -4049,15 +4088,15 @@ void chess::upd_all_valid_moves(){
 
         // Add all current piece's possible moves to the batch.
         for( pair<int,int> move_v : move_sq_list_z ){
-            all_valid_moves.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+            all_legal_moves.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
                 move_v.first, move_v.second ) );
         }
 
     }
 
-    all_valid_moves.shrink_to_fit();
+    all_legal_moves.shrink_to_fit();
 
-    this->is_all_valid_moves_upd = true;
+    this->is_all_legal_moves_upd = true;
 
 // ---------------------------------------------------------------------- >>>>>
 
@@ -4070,7 +4109,7 @@ void chess::upd_all_valid_moves(){
         this->valid_B_moves_map[z].clear();
         this->valid_B_moves_map[z].reserve(14);
     }
-    // this->is_all_valid_moves_upd = false;
+    // this->is_all_legal_moves_upd = false;
 
     // pair<int,int> sub_idx_z;
     // vector< pair<int,int> > move_sq_list_z;
@@ -4103,7 +4142,7 @@ void chess::upd_all_valid_moves(){
 
     }
 
-    // this->is_all_valid_moves_upd = true;
+    // this->is_all_legal_moves_upd = true;
 
 }
 
