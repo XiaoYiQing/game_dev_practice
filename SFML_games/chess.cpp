@@ -243,7 +243,7 @@ chess::chess(){
 
     this->is_psbl_alg_comm_upd = false;
     this->is_all_legal_moves_upd = false;
-    this->is_all_valid_atks_upd = false;
+    this->is_all_legal_atks_upd = false;
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -2076,6 +2076,31 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
     unsigned int i_aft, unsigned int j_aft  ) const
 {
 
+    // Obtain the color of the current piece.
+    CHS_PIECE_COLOR tarColor = this->CHS_board[i_bef][j_bef].color;
+    // Turn check.
+    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
+        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
+        return false;
+    }
+
+    // If list of valid moves up-to-date, just refer to it for answer.
+    if( this->is_all_legal_atks_upd ){
+        chs_move tmp( i_bef, j_bef, i_aft, j_aft );
+        for( chs_move ref_z : this->all_legal_atks )
+            if( tmp == ref_z )
+                return true;
+        return false;
+    }
+
+    return this->is_atk_valid( i_bef, j_bef, i_aft, j_aft );
+
+}
+
+bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
+    unsigned int i_aft, unsigned int j_aft ) const
+{
+
     // Out of bound check.
     if( max( i_bef, i_aft ) >= BOARDHEIGHT || max( j_bef, j_aft ) >= BOARDHEIGHT ){
         return false;
@@ -2095,20 +2120,6 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
 
     // Obtain the color of the current piece.
     CHS_PIECE_COLOR tarColor = tarPce.color;
-    // Turn check.
-    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
-        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
-        return false;
-    }
-
-    // If list of valid moves up-to-date, just refer to it for answer.
-    if( this->is_all_valid_atks_upd ){
-        chs_move tmp( i_bef, j_bef, i_aft, j_aft );
-        for( chs_move ref_z : this->all_valid_atks )
-            if( tmp == ref_z )
-                return true;
-        return false;
-    }
 
     // Flag indicating whether the current move is an en-passant attack.
     bool is_en_pass = false;
@@ -3037,7 +3048,7 @@ bool chess::is_check_mate(){
 
         // Obtain all possible white plays.
         vector<chs_move> all_plays = game_copy.get_all_legal_moves();
-        vector<chs_move> tmp = game_copy.get_all_valid_atks();
+        vector<chs_move> tmp = game_copy.get_all_legal_atks();
         all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
 
         // Try to play all possibilities and check if the white check state 
@@ -3071,7 +3082,7 @@ bool chess::is_check_mate(){
 
         // Obtain all possible black plays.
         vector<chs_move> all_plays = game_copy.get_all_legal_moves();
-        vector<chs_move> tmp = game_copy.get_all_valid_atks();
+        vector<chs_move> tmp = game_copy.get_all_legal_atks();
         all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
 
         // Try to play all possibilities and check if the black check state 
@@ -3123,7 +3134,7 @@ bool chess::is_draw(){
 
     bool no_valid_moves = false;
     // If there is no move possible at all, stalemate.
-    no_valid_moves = this->get_all_valid_atks().size() == 0 && 
+    no_valid_moves = this->get_all_legal_atks().size() == 0 && 
         this->get_all_legal_moves().size() == 0;
     if( no_valid_moves ){
         if( verbose )
@@ -3351,7 +3362,7 @@ void chess::game_tracking_signal(){
 
     this->is_psbl_alg_comm_upd = false;
     this->is_all_legal_moves_upd = false;
-    this->is_all_valid_atks_upd = false;
+    this->is_all_legal_atks_upd = false;
 
 }
 
@@ -3949,13 +3960,13 @@ array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_mo
     return this->valid_B_moves_map; 
 }
 
-bool chess::getIs_all_valid_atks_upd() const
-    { return this->is_all_valid_atks_upd; }
-vector<chess::chs_move> chess::get_all_valid_atks(){
-    if( !this->is_all_valid_atks_upd ){
-        this->upd_all_valid_atks();
+bool chess::getIs_all_legal_atks_upd() const
+    { return this->is_all_legal_atks_upd; }
+vector<chess::chs_move> chess::get_all_legal_atks(){
+    if( !this->is_all_legal_atks_upd ){
+        this->upd_all_legal_atks();
     }
-    return this->all_valid_atks; 
+    return this->all_legal_atks; 
 }
 
 
@@ -3970,7 +3981,7 @@ void chess::upd_all_psbl_alg_comm(){
     this->is_psbl_alg_comm_upd = false;
 
     // Obtain all current possible plays.
-    vector<chs_move> all_atks = this->get_all_valid_atks();
+    vector<chs_move> all_atks = this->get_all_legal_atks();
     vector<chs_move> all_plays = this->get_all_legal_moves();
     all_plays.insert( all_plays.end(), all_atks.begin(), all_atks.end() );
 
@@ -4121,13 +4132,13 @@ void chess::upd_all_legal_moves(){
 }
 
 
-void chess::upd_all_valid_atks(){
+void chess::upd_all_legal_atks(){
 
     // Clear all currently saved possible plays.
-    this->all_valid_atks.clear();
-    this->is_all_valid_atks_upd = false;
+    this->all_legal_atks.clear();
+    this->is_all_legal_atks_upd = false;
 
-    all_valid_atks.reserve( 200 );
+    all_legal_atks.reserve( 200 );
 
     pair<int,int> sub_idx_z;
     vector< pair<int,int> > atk_sq_list_z;
@@ -4142,14 +4153,14 @@ void chess::upd_all_valid_atks(){
 
         // Add all current piece's possible moves to the batch.
         for( pair<int,int> move_v : atk_sq_list_z ){
-            all_valid_atks.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+            all_legal_atks.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
                 move_v.first, move_v.second ) );
         }
 
     }
 
-    all_valid_atks.shrink_to_fit();
+    all_legal_atks.shrink_to_fit();
 
-    this->is_all_valid_atks_upd = true;
+    this->is_all_legal_atks_upd = true;
 
 }

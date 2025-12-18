@@ -410,7 +410,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     string bestMove( int depth );
 
     void upd_all_legal_moves();
-    void upd_all_valid_atks();
+    void upd_all_legal_atks();
 
 // ====================================================================== <<<<<
 
@@ -553,6 +553,21 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     bool is_atk_legal( pair<int,int> coord_bef, pair<int,int> coord_aft ) const;
     
+    /**
+     * \brief Determines if an attack is valid. An attack is valid if
+     * 
+     *  - The piece's capability is matched.
+     * 
+     *  - The way is clear.
+     * 
+     *  - The ending square is on the board.
+     * 
+     *  - The ending square is a piece of the opposite color.
+     * 
+     */
+    bool is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft ) const;
+
 // ====================================================================== <<<<<
 
 
@@ -931,8 +946,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_moves_map();
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_B_moves_map();
 
-    bool getIs_all_valid_atks_upd() const;
-    vector<chs_move> get_all_valid_atks();
+    bool getIs_all_legal_atks_upd() const;
+    vector<chs_move> get_all_legal_atks();
 
 // ====================================================================== <<<<<
 
@@ -1075,8 +1090,8 @@ protected:
     std::array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_moves_map;
     
 
-    bool is_all_valid_atks_upd;
-    vector<chs_move> all_valid_atks;
+    bool is_all_legal_atks_upd;
+    vector<chs_move> all_legal_atks;
     
 
     /**

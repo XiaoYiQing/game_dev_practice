@@ -1940,13 +1940,13 @@ void tests::chess_psbl_plays_tests(){
 
     auto all_legal_moves = myGame.get_all_legal_moves();
     test_bool = test_bool && ( all_legal_moves.size() == 20 );
-    auto all_valid_atks = myGame.get_all_valid_atks();
-    test_bool = test_bool && ( all_valid_atks.size() == 0 );
+    auto all_legal_atks = myGame.get_all_legal_atks();
+    test_bool = test_bool && ( all_legal_atks.size() == 0 );
     myGame.setTurn_cnt(1);
     all_legal_moves = myGame.get_all_legal_moves();
     test_bool = test_bool && ( all_legal_moves.size() == 20 );
-    all_valid_atks = myGame.get_all_valid_atks();
-    test_bool = test_bool && ( all_valid_atks.size() == 0 );
+    all_legal_atks = myGame.get_all_legal_atks();
+    test_bool = test_bool && ( all_legal_atks.size() == 0 );
 
     
 
@@ -1977,13 +1977,13 @@ void tests::chess_psbl_plays_tests(){
 
     all_legal_moves = myGame.get_all_legal_moves();
     test_bool = test_bool && ( all_legal_moves.size() == 47 );
-    all_valid_atks = myGame.get_all_valid_atks();
-    test_bool = test_bool && ( all_valid_atks.size() == 3 );
+    all_legal_atks = myGame.get_all_legal_atks();
+    test_bool = test_bool && ( all_legal_atks.size() == 3 );
     myGame.setTurn_cnt(1);
     all_legal_moves = myGame.get_all_legal_moves();
     test_bool = test_bool && ( all_legal_moves.size() == 47 );
-    all_valid_atks = myGame.get_all_valid_atks();
-    test_bool = test_bool && ( all_valid_atks.size() == 3 );
+    all_legal_atks = myGame.get_all_legal_atks();
+    test_bool = test_bool && ( all_legal_atks.size() == 3 );
     
     if( test_bool ){
         cout << "Chess all plays -> initial board without pawns case tests: passed!" << endl;
