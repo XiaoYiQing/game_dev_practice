@@ -2304,8 +2304,33 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
-    return true;
-    
+    bool state_ok = true;
+    /*
+    If not castling, check if the game change of state is legal after the move.
+    */ 
+    if( !cast_poss ){
+
+        // Create a temporary game copy.
+        chess tmp_game = *this;
+        // Perform the move in the game copy without updating game state.
+        tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
+        tmp_game.CHS_board[i_aft][j_aft] = tarPce;
+        // Update the attack lists of the game copy after the move.
+        tmp_game.upd_atk_lists();
+        // Determine check status of both kings.
+        pair<bool,bool> chk_status = tmp_game.is_in_check();
+
+        // Check for state change validity, which involves not having a king remaining
+        // in check state after a play.
+        state_ok = state_ok && !( this->is_white_turn() && chk_status.first );
+        state_ok = state_ok && !( this->is_black_turn() && chk_status.second );
+        // Additional check making sure both kings are not in check simultaneously.
+        state_ok = state_ok && !( chk_status.first && chk_status.second );
+        
+    }
+
+    return state_ok;
+
 }
 
 bool chess::is_atk_valid( pair<int,int> coord_bef, pair<int,int> coord_aft ) const{
