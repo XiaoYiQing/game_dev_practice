@@ -2726,7 +2726,7 @@ vector< pair<int,int> > chess::get_all_atk_sq_spec( int i, int j ) const{
 }
 
 
-vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
+vector< pair<int,int> > chess::get_all_legal_atk_sq( int i, int j ) const{
 
     vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq(i,j);
     vector<pair<int,int>> all_valid_atk_sq;
@@ -4149,7 +4149,7 @@ void chess::upd_all_legal_atks(){
         sub_idx_z = ind2sub(z);
         // Obtain all possible moves (if any) for the piece (if it exists) at the 
         // current coordinate 
-        atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
+        atk_sq_list_z = get_all_legal_atk_sq( sub_idx_z.first, sub_idx_z.second );
 
         // Add all current piece's possible moves to the batch.
         for( pair<int,int> move_v : atk_sq_list_z ){

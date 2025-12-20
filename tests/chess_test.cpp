@@ -1082,7 +1082,7 @@ void tests::chess_move_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      get_all_valid_atk_sq Tests
+//      get_all_legal_atk_sq Tests
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;   
@@ -1117,7 +1117,7 @@ void tests::chess_move_tests(){
 // ---------------------------------------------------------------------- <<<<<
 
 // ---------------------------------------------------------------------- >>>>>
-//      get_all_valid_atk_sq Tests Part 2
+//      get_all_legal_atk_sq Tests Part 2
 // ---------------------------------------------------------------------- >>>>>
 
     // Castle possible moves with castling.
@@ -1348,7 +1348,7 @@ void tests::chess_atk_check_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      get_all_valid_atk_sq tests
+//      get_all_legal_atk_sq tests
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -1362,43 +1362,43 @@ void tests::chess_atk_check_tests(){
         chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
     myGame.set_piece_at( 4, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    valid_atk_vec = myGame.get_all_valid_atk_sq(2,3);
+    valid_atk_vec = myGame.get_all_legal_atk_sq(2,3);
     test_bool = test_bool && ( valid_atk_vec.size() == 1 );
     test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
     
     myGame.set_piece_at( 4, 5, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
-    valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
+    valid_atk_vec = myGame.get_all_legal_atk_sq(4,5);
     test_bool = test_bool && ( valid_atk_vec.size() == 1 );
     test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
 
     myGame.set_piece_at( 0, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    valid_atk_vec = myGame.get_all_valid_atk_sq(2,3);
+    valid_atk_vec = myGame.get_all_legal_atk_sq(2,3);
     test_bool = test_bool && ( valid_atk_vec.size() == 2 );
     test_bool = test_bool && ( valid_atk_vec.at(1).first == 0 && valid_atk_vec.at(1).second == 4 );
     
-    valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
+    valid_atk_vec = myGame.get_all_legal_atk_sq(4,5);
     test_bool = test_bool && ( valid_atk_vec.size() == 0 );
 
 
     myGame.setTurn_cnt(1);
     myGame.set_piece_at( 3, 4, 
         chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    valid_atk_vec = myGame.get_all_valid_atk_sq(3,4);
+    valid_atk_vec = myGame.get_all_legal_atk_sq(3,4);
     test_bool = test_bool && ( valid_atk_vec.size() == 2 );
     test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 5 );
     test_bool = test_bool && ( valid_atk_vec.at(1).first == 2 && valid_atk_vec.at(1).second == 3 );
     
     myGame.setTurn_cnt(0);
-    valid_atk_vec = myGame.get_all_valid_atk_sq(4,5);
+    valid_atk_vec = myGame.get_all_legal_atk_sq(4,5);
     test_bool = test_bool && ( valid_atk_vec.size() == 1 );
     test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
 
     if( test_bool ){
-        cout << "get_all_valid_atk_sq test passed!" << endl;
+        cout << "get_all_legal_atk_sq test passed!" << endl;
     }else{
-        cout << "get_all_valid_atk_sq test failed!" << endl;
+        cout << "get_all_legal_atk_sq test failed!" << endl;
     }
 
 
