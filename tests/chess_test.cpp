@@ -1089,7 +1089,7 @@ void tests::chess_move_tests(){
     bool tmp_bool = false;
     myGame.resetBoard();
 
-    vector< pair<int,int> > valid_mov_vec = myGame.get_all_valid_move_sq( 0, 1 );
+    vector< pair<int,int> > valid_mov_vec = myGame.get_all_legal_move_sq( 0, 1 );
     tmp_bool = false;
     for( pair<int,int> mov_z : valid_mov_vec )
         {tmp_bool = tmp_bool || mov_z == pair<int,int>(2,0);}
@@ -1100,18 +1100,18 @@ void tests::chess_move_tests(){
     test_bool = test_bool && tmp_bool;
 
     // Pawn possible moves before and after first move.
-    valid_mov_vec = myGame.get_all_valid_move_sq( 1, 2 );
+    valid_mov_vec = myGame.get_all_legal_move_sq( 1, 2 );
     test_bool = valid_mov_vec.size() == 2;
     myGame.play( 1, 2, 2, 2 );
     myGame.play( 6, 6, 5, 6 );
-    valid_mov_vec = myGame.get_all_valid_move_sq( 2, 2 );
+    valid_mov_vec = myGame.get_all_legal_move_sq( 2, 2 );
     test_bool = valid_mov_vec.size() == 1;
 
 
     if( test_bool ){
-        cout << "chess::get_all_valid_move_sq test: passed!" << endl;
+        cout << "chess::get_all_legal_move_sq test: passed!" << endl;
     }else{
-        cout << "chess::get_all_valid_move_sq test: failed!" << endl;
+        cout << "chess::get_all_legal_move_sq test: failed!" << endl;
     }
     
 // ---------------------------------------------------------------------- <<<<<
@@ -1138,7 +1138,7 @@ void tests::chess_move_tests(){
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
 
     // White castling move possibility check.
-    valid_mov_vec = myGame.get_all_valid_move_sq( 0, 4 );
+    valid_mov_vec = myGame.get_all_legal_move_sq( 0, 4 );
     test_bool = test_bool && ( valid_mov_vec.size() == 7 );
     tmp_bool = false;
     for( pair<int,int> mov_z : valid_mov_vec )
@@ -1151,7 +1151,7 @@ void tests::chess_move_tests(){
 
     // Black castling move possibility check.
     myGame.setTurn_cnt(1);
-    valid_mov_vec = myGame.get_all_valid_move_sq( chess::BOARDHEIGHT - 1, 4 );
+    valid_mov_vec = myGame.get_all_legal_move_sq( chess::BOARDHEIGHT - 1, 4 );
     test_bool = test_bool && ( valid_mov_vec.size() == 7 );
     tmp_bool = false;
     for( pair<int,int> mov_z : valid_mov_vec )
@@ -1163,9 +1163,9 @@ void tests::chess_move_tests(){
     test_bool = test_bool && tmp_bool;
 
     if( test_bool ){
-        cout << "chess::get_all_valid_move_sq castling case test: passed!" << endl;
+        cout << "chess::get_all_legal_move_sq castling case test: passed!" << endl;
     }else{
-        cout << "chess::get_all_valid_move_sq castling case test: failed!" << endl;
+        cout << "chess::get_all_legal_move_sq castling case test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<

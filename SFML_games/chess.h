@@ -641,7 +641,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \param j Target piece column index.
      * \return All squares that are valid move point from the target piece.
      */
-    vector< pair<int,int> > get_all_valid_move_sq( int i, int j ) const;
+    vector< pair<int,int> > get_all_legal_move_sq( int i, int j ) const;
     
 
     /**

@@ -2745,7 +2745,7 @@ vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
 }
 
 
-vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
+vector< pair<int,int> > chess::get_all_legal_move_sq( int i, int j ) const{
 
     // Obtain the target piece.
     chs_piece tarPce = this->get_piece_at( i, j );
@@ -4069,7 +4069,7 @@ void chess::upd_all_legal_moves(){
         sub_idx_z = ind2sub(z);
         // Obtain all possible moves (if any) for the piece (if it exists) at the 
         // current coordinate 
-        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+        move_sq_list_z = get_all_legal_move_sq( sub_idx_z.first, sub_idx_z.second );
 
         // Add all current piece's possible moves to the batch.
         for( pair<int,int> move_v : move_sq_list_z ){
@@ -4105,7 +4105,7 @@ void chess::upd_all_legal_moves(){
         sub_idx_z = ind2sub(z);
         // Obtain all possible moves (if any) for the piece (if it exists) at the 
         // current coordinate 
-        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+        move_sq_list_z = get_all_legal_move_sq( sub_idx_z.first, sub_idx_z.second );
 
         // Add all current piece's possible moves to the batch.
         for( pair<int,int> move_v : move_sq_list_z ){
