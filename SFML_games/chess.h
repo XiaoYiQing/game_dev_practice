@@ -643,6 +643,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     vector< pair<int,int> > get_all_legal_move_sq( int i, int j ) const;
     
+    vector< pair<int,int> > get_all_valid_move_sq( int i, int j ) const;
 
     /**
       * \brief Check whether the game has either king been in check.

@@ -2752,6 +2752,94 @@ vector< pair<int,int> > chess::get_all_legal_move_sq( int i, int j ) const{
     // Obtain the linear index of the target.
     int tarIndIdx = chess::sub2ind(i,j);
 
+    // Initialize legal move vector
+    vector< pair<int,int> > legal_mov_vec;
+    // Initialize attack list from (i, j)
+    vector<int> atk_list_fr_ij;
+
+    if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
+
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+            for( int ind_v : this->atk_list_by_W[z] ){
+                if( tarIndIdx == ind_v ){
+                    atk_list_fr_ij.push_back( z );
+                    break;
+                }
+            }
+
+        }
+
+    }else if( tarPce.color == CHS_PIECE_COLOR::BLACK ){
+
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+            for( int ind_v : this->atk_list_by_B[z] ){
+                if( tarIndIdx == ind_v ){
+                    atk_list_fr_ij.push_back( z );
+                    break;
+                }
+            }
+
+        }
+        
+    }else{
+        // throw runtime_error( "Unrecognized chess piece color." );
+        return legal_mov_vec;
+    }
+
+    
+    
+    for( int atk_ij: atk_list_fr_ij ){
+
+        pair<int,int> atk_ij_coord = chess::ind2sub( atk_ij );
+
+        if( this->is_move_legal( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
+            legal_mov_vec.push_back( atk_ij_coord );
+        }
+        
+    }
+
+    if( tarPce.type == CHS_PIECE_TYPE::PAWN ){
+
+        int sign_mult = 1;
+        tarPce.color == CHS_PIECE_COLOR::BLACK ? sign_mult = -1 : sign_mult = 1;
+
+        if( this->is_move_legal( i, j, i + sign_mult * 1, j ) ){
+            legal_mov_vec.push_back( pair<int,int>( i + sign_mult * 1, j ) );
+        }
+        if( this->is_move_legal( i, j, i + sign_mult * 2, j ) ){
+            legal_mov_vec.push_back( pair<int,int>( i + sign_mult * 2, j ) );
+        }
+       
+    }
+    if( tarPce.type == CHS_PIECE_TYPE::KING ){
+
+        if( tarPce.not_moved ){
+            // Right castling.
+            if( this->is_move_legal( i, j, i, j + 2 ) ){
+                legal_mov_vec.push_back( pair<int,int>( i, j + 2 ) );
+            }
+            // Left castling.
+            if( this->is_move_legal( i, j, i, j - 2 ) ){
+                legal_mov_vec.push_back( pair<int,int>( i, j - 2 ) );
+            }
+        }
+
+    }
+
+    return legal_mov_vec;
+
+}
+
+
+vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
+
+    // Obtain the target piece.
+    chs_piece tarPce = this->get_piece_at( i, j );
+    // Obtain the linear index of the target.
+    int tarIndIdx = chess::sub2ind(i,j);
+
     // Initialize valid move vector
     vector< pair<int,int> > val_mov_vec;
     // Initialize attack list from (i, j)
@@ -2805,10 +2893,10 @@ vector< pair<int,int> > chess::get_all_legal_move_sq( int i, int j ) const{
         int sign_mult = 1;
         tarPce.color == CHS_PIECE_COLOR::BLACK ? sign_mult = -1 : sign_mult = 1;
 
-        if( this->is_move_legal( i, j, i + sign_mult * 1, j ) ){
+        if( this->is_move_valid( i, j, i + sign_mult * 1, j ) ){
             val_mov_vec.push_back( pair<int,int>( i + sign_mult * 1, j ) );
         }
-        if( this->is_move_legal( i, j, i + sign_mult * 2, j ) ){
+        if( this->is_move_valid( i, j, i + sign_mult * 2, j ) ){
             val_mov_vec.push_back( pair<int,int>( i + sign_mult * 2, j ) );
         }
        
@@ -2817,11 +2905,11 @@ vector< pair<int,int> > chess::get_all_legal_move_sq( int i, int j ) const{
 
         if( tarPce.not_moved ){
             // Right castling.
-            if( this->is_move_legal( i, j, i, j + 2 ) ){
+            if( this->is_move_valid( i, j, i, j + 2 ) ){
                 val_mov_vec.push_back( pair<int,int>( i, j + 2 ) );
             }
             // Left castling.
-            if( this->is_move_legal( i, j, i, j - 2 ) ){
+            if( this->is_move_valid( i, j, i, j - 2 ) ){
                 val_mov_vec.push_back( pair<int,int>( i, j - 2 ) );
             }
         }
