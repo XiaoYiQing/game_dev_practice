@@ -19,6 +19,11 @@ using namespace std;
 
 namespace gameEngine{
 
+/*
+TODO: You need to steamline the attack square determination process.
+Create a table that saves the computed results so that you
+don't need to repeatedly compute when no changes on the board occurred.
+*/
 
 /**
  * My implementation of the chess game.

@@ -2820,6 +2820,7 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
         
     }
 
+    // Pawn moves that do not attack.
     if( tarPce.type == CHS_PIECE_TYPE::PAWN ){
 
         int sign_mult = 1;
@@ -2833,6 +2834,7 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
         }
        
     }
+    // King moves that do not attack.
     if( tarPce.type == CHS_PIECE_TYPE::KING ){
 
         if( tarPce.not_moved ){
