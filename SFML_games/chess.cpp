@@ -3971,9 +3971,6 @@ vector<chess::chs_move> chess::get_all_legal_moves(){
     return this->all_legal_moves; 
 }
 
-array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_moves_map(){
-    return this->valid_moves_map; 
-}
 
 array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_moves_map(){
     return this->valid_W_moves_map; 
@@ -4109,8 +4106,6 @@ void chess::upd_all_legal_moves(){
 
 
     for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
-        this->valid_moves_map[z].clear();
-        this->valid_moves_map[z].reserve(14);
         this->valid_W_moves_map[z].clear();
         this->valid_W_moves_map[z].reserve(14);
         this->valid_B_moves_map[z].clear();
@@ -4128,12 +4123,6 @@ void chess::upd_all_legal_moves(){
         // Obtain all possible moves (if any) for the piece (if it exists) at the 
         // current coordinate 
         move_sq_list_z = get_all_legal_move_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Add all current piece's possible moves to the batch.
-        for( pair<int,int> move_v : move_sq_list_z ){
-            this->valid_moves_map[z].push_back( chess::sub2ind( move_v ) );
-        }
-        this->valid_moves_map[z].shrink_to_fit();
 
         if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
             for( pair<int,int> move_v : move_sq_list_z ){
