@@ -3735,12 +3735,93 @@ void tests::valid_maps_tests(){
     chess myGame;
     myGame.resetBoard();
 
-    myGame.upd_all_legal_moves();
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_W_test;
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_test;
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_W_ans;
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_ans;
 
-    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_W_tmp
-         = myGame.get_valid_W_moves_map();
-    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_tmp
-         = myGame.get_valid_B_moves_map();
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // // Initialization.
+    // test_bool = true;
+    // myGame.resetBoard();
+    // myGame.upd_all_valid_moves();
+    // map_W_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+    // map_B_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+
+    // // Obtain the map of valid moves for both white and black sides.
+    // map_W_test = myGame.get_valid_W_moves_map();
+    // map_B_test = myGame.get_valid_B_moves_map();
+
+    // // Set up expected white valid moves map.
+    // map_W_ans[1].push_back(16);     map_W_ans[1].push_back(18);
+    // map_W_ans[6].push_back(21);     map_W_ans[6].push_back(23);
+    // for( unsigned int z = 0; z < chess::BOARDWIDTH; z++ ){
+    //     unsigned int i_z = 8 + z;
+    //     map_W_ans[i_z].push_back( i_z + chess::BOARDWIDTH );
+    //     map_W_ans[i_z].push_back( i_z + 2*chess::BOARDWIDTH );
+    // }
+
+    // // Set up expected black valid moves map.
+    // array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_ans;
+    // map_B_ans[57].push_back(40);     map_B_ans[57].push_back(42);
+    // map_B_ans[62].push_back(45);     map_B_ans[62].push_back(47);
+    // for( unsigned int z = ( chess::BOARDHEIGHT - 2 )*chess::BOARDWIDTH; 
+    //     z < ( chess::BOARDHEIGHT - 1 )*chess::BOARDWIDTH; z++ ){
+    //     map_B_ans[z].push_back( z - 2*chess::BOARDWIDTH );
+    //     map_B_ans[z].push_back( z - chess::BOARDWIDTH );
+    // }
+
+    // // Compare obtained and expected white move maps.
+    // for( unsigned int z = 0; z < map_W_ans.size(); z++ ){
+    //     for( int tmp_int : map_W_ans[z] ){
+    //         auto it = std::find( map_W_test[z].begin(), map_W_test[z].end(), tmp_int );
+    //         test_bool = test_bool && ( it != map_W_test[z].end() );
+    //     }
+    // }
+    // // Compare obtained and expected black move maps.
+    // for( unsigned int z = 0; z < map_B_ans.size(); z++ ){
+    //     for( int tmp_int : map_B_ans[z] ){
+    //         auto it = std::find( map_B_test[z].begin(), map_B_test[z].end(), tmp_int );
+    //         test_bool = test_bool && ( it != map_B_test[z].end() );
+    //     }
+    // }
+
+    // if( test_bool ){
+    //     cout << "chess valid move maps test: passed!" << endl;
+    // }else{
+    //     cout << "chess valid move maps test: failed!" << endl;
+    // }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board With no Pawns Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialization.
+    test_bool = true;
+    myGame.resetBoard();
+    map_W_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+    map_B_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
+    for( unsigned int z = 0; z < chess::BOARDWIDTH; z++ ){
+        myGame.set_piece_at( 1, z, emp_pce );
+        myGame.set_piece_at( 6, z, emp_pce );
+    }
+    myGame.upd_all_valid_moves();
+    myGame.printBoard_ag_coord();
+
+    // Obtain the map of valid moves for both white and black sides.
+    map_W_test = myGame.get_valid_W_moves_map();
+    map_B_test = myGame.get_valid_B_moves_map();
+
+// ---------------------------------------------------------------------- <<<<<
 
     int lol = 0;
 

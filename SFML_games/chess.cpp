@@ -2058,8 +2058,8 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
         // Check for state change validity, which involves not having a king remaining
         // in check state after a play.
-        state_ok = state_ok && !( this->is_white_turn() && chk_status.first );
-        state_ok = state_ok && !( this->is_black_turn() && chk_status.second );
+        state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
+        state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
         // Additional check making sure both kings are not in check simultaneously.
         state_ok = state_ok && !( chk_status.first && chk_status.second );
         
@@ -2816,7 +2816,7 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 
         pair<int,int> atk_ij_coord = chess::ind2sub( atk_ij );
 
-        if( this->is_move_legal( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
+        if( this->is_move_valid( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
             val_mov_vec.push_back( atk_ij_coord );
         }
         
@@ -4172,6 +4172,9 @@ void chess::upd_all_valid_moves(){
 
         // Obtain current 2D coordinate.
         sub_idx_z = ind2sub(z);
+        if( z == 59 ){
+            int uuuuu = 0;
+        }
         // Obtain all possible moves (if any) for the piece (if it exists) at the 
         // current coordinate 
         move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
