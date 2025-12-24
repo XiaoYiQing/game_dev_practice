@@ -244,8 +244,7 @@ chess::chess(){
     this->is_psbl_alg_comm_upd = false;
     this->is_all_legal_moves_upd = false;
     this->is_all_legal_atks_upd = false;
-    this->is_valid_W_moves_upd = false;
-    this->is_valid_B_moves_upd = false;
+    this->is_valid_moves_upd = false;
     this->is_valid_W_atks_upd = false;
     this->is_valid_B_atks_upd = false;
 
@@ -2077,7 +2076,7 @@ bool chess::is_move_valid( int ind_a, int ind_b ) const{
     pair<int,int> sub_a = ind2sub( ind_a );
     pair<int,int> sub_b = ind2sub( ind_b );
 
-    return this->is_move_valid(  );
+    return this->is_move_valid( sub_a.first, sub_a.second, sub_b.first, sub_b.second );
 
 }
 
@@ -2825,18 +2824,22 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
     // Initialize attack list from (i, j).
     vector<int> atk_list_fr_ij;
 
-    // // If the valid move squares maps are up-to-date, just use them.
-    // if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
 
-    //     int tmp_idx = chess::sub2ind( i, j );
+    if( this->is_valid_moves_upd ){
 
-    //     this->valid_W_moves_map[ tmp_idx ];
+        // If the valid move squares maps are up-to-date, just use them.
+        if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
+            return this->valid_W_moves_map[ tarIndIdx ];
+        }else if( tarPce.color == CHS_PIECE_COLOR::BLACK ){
+            return this->valid_B_moves_map[ tarIndIdx ];
 
-    // }else if( tarPce.color == CHS_PIECE_COLOR::BLACK ){
+        // Non-colored piece is considered empty square.
+        }else{
+            return val_mov_vec;
+        }
 
-    // }else{
-    //     return val_mov_vec;
-    // }
+    }
+    
 
     // TODO: maybe create a function which specifically returns all atk squares 
     // by target piece?
@@ -2869,15 +2872,10 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
     }
 
     
-    
     for( int atk_ij: atk_list_fr_ij ){
-
-        pair<int,int> atk_ij_coord = chess::ind2sub( atk_ij );
-
-        if( this->is_move_valid( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
+        if( this->is_move_valid( tarIndIdx, atk_ij ) ){
             val_mov_vec.push_back( atk_ij );
         }
-        
     }
 
     // Pawn moves that do not attack.
@@ -2886,11 +2884,11 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
         int sign_mult = 1;
         tarPce.color == CHS_PIECE_COLOR::BLACK ? sign_mult = -1 : sign_mult = 1;
 
-        if( this->is_move_valid( i, j, i + sign_mult * 1, j ) ){
-            val_mov_vec.push_back( chess::sub2ind( i + sign_mult * 1, j ) );
+        if( this->is_move_valid( tarIndIdx, tarIndIdx + sign_mult * chess::BOARDWIDTH ) ){
+            val_mov_vec.push_back( tarIndIdx + sign_mult * chess::BOARDWIDTH );
         }
-        if( this->is_move_valid( i, j, i + sign_mult * 2, j ) ){
-            val_mov_vec.push_back( chess::sub2ind( i + sign_mult * 2, j ) );
+        if( this->is_move_valid( tarIndIdx, tarIndIdx + sign_mult * 2 * chess::BOARDWIDTH ) ){
+            val_mov_vec.push_back( tarIndIdx + sign_mult * 2 * chess::BOARDWIDTH );
         }
        
     }
@@ -2899,12 +2897,12 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
 
         if( tarPce.not_moved ){
             // Right castling.
-            if( this->is_move_valid( i, j, i, j + 2 ) ){
-                val_mov_vec.push_back( chess::sub2ind( i, j + 2 ) );
+            if( this->is_move_valid( tarIndIdx, tarIndIdx + 2 ) ){
+                val_mov_vec.push_back( tarIndIdx + 2 );
             }
             // Left castling.
-            if( this->is_move_valid( i, j, i, j - 2 ) ){
-                val_mov_vec.push_back( chess::sub2ind( i, j - 2 ) );
+            if( this->is_move_valid( tarIndIdx, tarIndIdx - 2 ) ){
+                val_mov_vec.push_back( tarIndIdx - 2 );
             }
         }
 
@@ -3445,8 +3443,7 @@ void chess::game_tracking_signal(){
     this->is_all_legal_moves_upd = false;
     this->is_all_legal_atks_upd = false;
 
-    this->is_valid_W_moves_upd = false;
-    this->is_valid_B_moves_upd = false;
+    this->is_valid_moves_upd = false;
     this->is_valid_W_atks_upd = false;
     this->is_valid_B_atks_upd = false;
 
@@ -4039,19 +4036,17 @@ vector<chess::chs_move> chess::get_all_legal_moves(){
     return this->all_legal_moves; 
 }
 
-bool chess::getIs_valid_W_moves_upd() const
-    { return this->is_valid_W_moves_upd; }
+bool chess::getIs_valid_moves_upd() const{
+    return this->is_valid_moves_upd;
+}
 array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_moves_map(){
-    if( !this->is_valid_W_moves_upd ){
+    if( !this->is_valid_moves_upd ){
         this->upd_all_valid_moves();
     }
     return this->valid_W_moves_map; 
 }
-
-bool chess::getIs_valid_B_moves_upd() const
-    { return this->is_valid_B_moves_upd; }
 array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_moves_map(){
-    if( !this->is_valid_B_moves_upd ){
+    if( !this->is_valid_moves_upd ){
         this->upd_all_valid_moves();
     }
     return this->valid_B_moves_map; 
@@ -4243,11 +4238,10 @@ void chess::upd_all_valid_moves(){
         this->valid_B_moves_map[z].clear();
         this->valid_B_moves_map[z].reserve(14);
     }
-    this->is_valid_W_moves_upd = false;
-    this->is_valid_B_moves_upd = false;
+    this->is_valid_moves_upd = false;
 
     pair<int,int> sub_idx_z;
-    vector< pair<int,int> > move_sq_list_z;
+    vector<int> move_sq_list_z;
 
     // Parse through each linear coordinate of the board.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
@@ -4257,16 +4251,16 @@ void chess::upd_all_valid_moves(){
 
         // Obtain all possible moves (if any) for the piece (if it exists) at the 
         // current coordinate 
-        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+        move_sq_list_z = get_all_valid_move_sq( z );
 
         // Assign the moves to the correct map (depending on the piece's color).
         if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
-            for( pair<int,int> move_v : move_sq_list_z ){
-                this->valid_W_moves_map[z].push_back( chess::sub2ind( move_v ) );
+            for( int move_v : move_sq_list_z ){
+                this->valid_W_moves_map[z].push_back( move_v );
             }
         }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
-            for( pair<int,int> move_v : move_sq_list_z ){
-                this->valid_B_moves_map[z].push_back( chess::sub2ind( move_v ) );
+            for( int move_v : move_sq_list_z ){
+                this->valid_B_moves_map[z].push_back( move_v );
             }
         }
         this->valid_W_moves_map[z].shrink_to_fit();
@@ -4274,8 +4268,7 @@ void chess::upd_all_valid_moves(){
 
     }
 
-    this->is_valid_W_moves_upd = true;
-    this->is_valid_B_moves_upd = true;
+    this->is_valid_moves_upd = false;
 
 }
 
