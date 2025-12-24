@@ -542,6 +542,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft ) const;
 
+
     /**
      * \brief Determine if the specified attack is valid.
      * 
@@ -654,6 +655,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     vector< pair<int,int> > get_all_legal_move_sq( int i, int j ) const;
     
     vector< pair<int,int> > get_all_valid_move_sq( int i, int j ) const;
+
+    vector< int > get_all_valid_move_sq( int tarIndIdx ) const;
 
     /**
       * \brief Check whether the game has either king been in check.
@@ -830,6 +833,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \return The target piece at the coordinate.
      */
     chs_piece get_piece_at( pair<int,int> ij ) const;
+    /**
+     * Obtain the chess piece at the target coordinate.
+     * 
+     * \param linIdx The linear board coordinate.
+     * \return The target piece at the coordinate.
+     */
+    chs_piece get_piece_at( int linIdx ) const;
     
     /**
      * \return Current game state turn count.

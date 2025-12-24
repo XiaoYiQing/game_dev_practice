@@ -2790,10 +2790,25 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
     // Obtain the linear index of the target.
     int tarIndIdx = chess::sub2ind(i,j);
 
-    // Initialize valid move vector
+    // Initialize valid move vector.
     vector< pair<int,int> > val_mov_vec;
-    // Initialize attack list from (i, j)
+    // Initialize attack list from (i, j).
     vector<int> atk_list_fr_ij;
+
+    // // If the valid move squares maps are up-to-date, just use them.
+    // if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
+
+    //     int tmp_idx = chess::sub2ind( i, j );
+
+    //     this->valid_W_moves_map[ tmp_idx ];
+
+    // }else if( tarPce.color == CHS_PIECE_COLOR::BLACK ){
+
+    // }else{
+    //     return val_mov_vec;
+    // }
+
+    
 
     // TODO: maybe create a function which specifically returns all atk squares 
     // by target piece?
@@ -2823,9 +2838,6 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 
         }
         
-    }else{
-        // throw runtime_error( "Unrecognized chess piece color." );
-        return val_mov_vec;
     }
 
     
@@ -2874,6 +2886,95 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 
 }
 
+vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
+
+    // Obtain the target piece.
+    chs_piece tarPce = this->get_piece_at( tarIndIdx );
+    // Obtain the 2D coordinate.
+    pair<int,int> ij = chess::ind2sub( tarIndIdx );
+    int i = ij.first;
+    int j = ij.second;
+
+    // Initialize valid move vector.
+    vector<int> val_mov_vec;
+    // Initialize attack list from (i, j).
+    vector<int> atk_list_fr_ij;
+
+    // TODO: maybe create a function which specifically returns all atk squares 
+    // by target piece?
+    if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
+
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+            for( int ind_v : this->atk_list_by_W[z] ){
+                if( tarIndIdx == ind_v ){
+                    atk_list_fr_ij.push_back( z );
+                    break;
+                }
+            }
+
+        }
+
+    }else if( tarPce.color == CHS_PIECE_COLOR::BLACK ){
+
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+            for( int ind_v : this->atk_list_by_B[z] ){
+                if( tarIndIdx == ind_v ){
+                    atk_list_fr_ij.push_back( z );
+                    break;
+                }
+            }
+
+        }
+        
+    }
+
+    
+    
+    for( int atk_ij: atk_list_fr_ij ){
+
+        pair<int,int> atk_ij_coord = chess::ind2sub( atk_ij );
+
+        if( this->is_move_valid( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
+            val_mov_vec.push_back( atk_ij );
+        }
+        
+    }
+
+    // Pawn moves that do not attack.
+    if( tarPce.type == CHS_PIECE_TYPE::PAWN ){
+
+        int sign_mult = 1;
+        tarPce.color == CHS_PIECE_COLOR::BLACK ? sign_mult = -1 : sign_mult = 1;
+
+        if( this->is_move_valid( i, j, i + sign_mult * 1, j ) ){
+            val_mov_vec.push_back( chess::sub2ind( i + sign_mult * 1, j ) );
+        }
+        if( this->is_move_valid( i, j, i + sign_mult * 2, j ) ){
+            val_mov_vec.push_back( chess::sub2ind( i + sign_mult * 2, j ) );
+        }
+       
+    }
+    // King moves that do not attack.
+    if( tarPce.type == CHS_PIECE_TYPE::KING ){
+
+        if( tarPce.not_moved ){
+            // Right castling.
+            if( this->is_move_valid( i, j, i, j + 2 ) ){
+                val_mov_vec.push_back( chess::sub2ind( i, j + 2 ) );
+            }
+            // Left castling.
+            if( this->is_move_valid( i, j, i, j - 2 ) ){
+                val_mov_vec.push_back( chess::sub2ind( i, j - 2 ) );
+            }
+        }
+
+    }
+
+    return val_mov_vec;
+
+}
 
 void chess::upd_pce_cnt_list(){
 
@@ -3853,6 +3954,10 @@ chess::chs_piece chess::get_piece_at( unsigned int i, unsigned int j ) const{
 }
 chess::chs_piece chess::get_piece_at( pair<int,int> ij ) const{
     return this->get_piece_at( ij.first, ij.second );
+}
+chess::chs_piece chess::get_piece_at( int linIdx ) const{
+    pair<int,int> tmp_idx = chess::ind2sub( linIdx );
+    return this->get_piece_at( tmp_idx.first, tmp_idx.second );
 }
 
 unsigned int chess::getTurn_cnt() const
