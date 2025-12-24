@@ -2738,7 +2738,7 @@ vector< pair<int,int> > chess::get_all_legal_atk_sq( int i, int j ) const{
     vector< pair<int,int> > legal_atk_vec;
 
     for( pair<int,int> move_z : valid_atk_vec ){
-        if( is_move_legal( i, j, move_z.first, move_z.second ) ){
+        if( is_atk_legal( i, j, move_z.first, move_z.second ) ){
             legal_atk_vec.push_back( move_z );
         }
     }
