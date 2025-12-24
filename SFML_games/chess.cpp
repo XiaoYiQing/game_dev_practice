@@ -4216,6 +4216,7 @@ void chess::upd_all_valid_moves(){
         // current coordinate 
         move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
 
+        // Assign the moves to the correct map (depending on the piece's color).
         if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
             for( pair<int,int> move_v : move_sq_list_z ){
                 this->valid_W_moves_map[z].push_back( chess::sub2ind( move_v ) );
@@ -4248,7 +4249,7 @@ void chess::upd_all_valid_atks(){
     this->is_valid_B_atks_upd = false;
 
     pair<int,int> sub_idx_z;
-    vector< pair<int,int> > move_sq_list_z;
+    vector< pair<int,int> > atk_sq_list_z;
 
     // Parse through each linear coordinate of the board.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
@@ -4256,12 +4257,27 @@ void chess::upd_all_valid_atks(){
         // Obtain current 2D coordinate.
         sub_idx_z = ind2sub(z);
 
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // Obtain all possible attacks (if any) for the piece (if it exists) at the 
         // current coordinate 
-        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+        atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
 
+        // Assign the attacks to the correct map (depending on the piece's color).
+        if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
+            for( pair<int,int> atk_v : atk_sq_list_z ){
+                this->valid_W_atks_map[z].push_back( chess::sub2ind( atk_v ) );
+            }
+        }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
+            for( pair<int,int> atk_v : atk_sq_list_z ){
+                this->valid_B_atks_map[z].push_back( chess::sub2ind( atk_v ) );
+            }
+        }
+        this->valid_W_atks_map[z].shrink_to_fit();
+        this->valid_B_atks_map[z].shrink_to_fit();
         
     }
+
+    this->is_valid_W_atks_upd = true;
+    this->is_valid_B_atks_upd = true;
 
 }
 
