@@ -2732,19 +2732,18 @@ vector< pair<int,int> > chess::get_all_atk_sq_spec( int i, int j ) const{
 
 vector< pair<int,int> > chess::get_all_legal_atk_sq( int i, int j ) const{
 
-    vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq(i,j);
-    vector<pair<int,int>> all_valid_atk_sq;
-    all_valid_atk_sq.reserve( all_atk_sq.size() );
+    auto valid_atk_vec = this->get_all_valid_atk_sq( i, j );
 
-    for( pair<int,int> atk_sq_z : all_atk_sq ){
+    // Initialize legal attack vector
+    vector< pair<int,int> > legal_atk_vec;
 
-        if( is_atk_legal( i, j, atk_sq_z.first, atk_sq_z.second ) ){
-            all_valid_atk_sq.push_back( atk_sq_z );
+    for( pair<int,int> move_z : valid_atk_vec ){
+        if( is_move_legal( i, j, move_z.first, move_z.second ) ){
+            legal_atk_vec.push_back( move_z );
         }
-
     }
 
-    return all_valid_atk_sq;
+    return legal_atk_vec;
 
 }
 
