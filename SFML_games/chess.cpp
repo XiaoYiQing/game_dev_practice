@@ -246,6 +246,8 @@ chess::chess(){
     this->is_all_legal_atks_upd = false;
     this->is_valid_W_moves_upd = false;
     this->is_valid_B_moves_upd = false;
+    this->is_valid_W_atks_upd = false;
+    this->is_valid_B_atks_upd = false;
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -2281,8 +2283,8 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     // Check for state change validity, which involves not having a king remaining
     // in check state after a play.
-    state_ok = state_ok && !( this->is_white_turn() && chk_status.first );
-    state_ok = state_ok && !( this->is_black_turn() && chk_status.second );
+    state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
+    state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
     // Additional check making sure both kings are not in check simultaneously.
     state_ok = state_ok && !( chk_status.first && chk_status.second );
 
@@ -2746,6 +2748,23 @@ vector< pair<int,int> > chess::get_all_legal_atk_sq( int i, int j ) const{
 
 }
 
+vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
+
+    vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq(i,j);
+    vector<pair<int,int>> all_valid_atk_sq;
+    all_valid_atk_sq.reserve( all_atk_sq.size() );
+
+    for( pair<int,int> atk_sq_z : all_atk_sq ){
+
+        if( this->is_atk_valid( i, j, atk_sq_z.first, atk_sq_z.second ) ){
+            all_valid_atk_sq.push_back( atk_sq_z );
+        }
+
+    }
+
+    return all_valid_atk_sq;
+
+}
 
 vector< pair<int,int> > chess::get_all_legal_move_sq( int i, int j ) const{
 
@@ -3390,6 +3409,8 @@ void chess::game_tracking_signal(){
 
     this->is_valid_W_moves_upd = false;
     this->is_valid_B_moves_upd = false;
+    this->is_valid_W_atks_upd = false;
+    this->is_valid_B_atks_upd = false;
 
 }
 
@@ -4003,6 +4024,24 @@ vector<chess::chs_move> chess::get_all_legal_atks(){
     return this->all_legal_atks; 
 }
 
+bool chess::getIs_valid_W_atks_upd() const
+    { return this->is_valid_W_atks_upd; }
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_atks_map(){
+    if( !this->is_valid_W_atks_upd ){
+        this->upd_all_valid_atks();
+    }
+    return this->valid_W_atks_map; 
+}
+
+bool chess::getIs_valid_B_atks_upd() const
+    { return this->is_valid_B_atks_upd; }
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_atks_map(){
+    if( !this->is_valid_B_atks_upd ){
+        this->upd_all_valid_atks();
+    }
+    return this->valid_B_atks_map; 
+}
+
 
 // ====================================================================== <<<<<
 
@@ -4162,7 +4201,8 @@ void chess::upd_all_valid_moves(){
         this->valid_B_moves_map[z].clear();
         this->valid_B_moves_map[z].reserve(14);
     }
-    // this->is_all_legal_moves_upd = false;
+    this->is_valid_W_moves_upd = false;
+    this->is_valid_B_moves_upd = false;
 
     pair<int,int> sub_idx_z;
     vector< pair<int,int> > move_sq_list_z;
@@ -4172,9 +4212,7 @@ void chess::upd_all_valid_moves(){
 
         // Obtain current 2D coordinate.
         sub_idx_z = ind2sub(z);
-        if( z == 59 ){
-            int uuuuu = 0;
-        }
+
         // Obtain all possible moves (if any) for the piece (if it exists) at the 
         // current coordinate 
         move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
@@ -4195,6 +4233,36 @@ void chess::upd_all_valid_moves(){
 
     this->is_valid_W_moves_upd = true;
     this->is_valid_B_moves_upd = true;
+
+}
+
+
+void chess::upd_all_valid_atks(){
+
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        this->valid_W_atks_map[z].clear();
+        this->valid_W_atks_map[z].reserve(8);
+        this->valid_B_atks_map[z].clear();
+        this->valid_B_atks_map[z].reserve(8);
+    }
+    this->is_valid_W_atks_upd = false;
+    this->is_valid_B_atks_upd = false;
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > move_sq_list_z;
+
+    // Parse through each linear coordinate of the board.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        move_sq_list_z = get_all_valid_move_sq( sub_idx_z.first, sub_idx_z.second );
+
+        
+    }
 
 }
 
