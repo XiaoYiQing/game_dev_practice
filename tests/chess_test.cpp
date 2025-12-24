@@ -3729,7 +3729,7 @@ void tests::chess_minmaxAB_split_tests(){
 }
 
 
-void tests::valid_maps_tests(){
+void tests::valid_move_maps_tests(){
 
     bool test_bool = true;
     chess myGame;
@@ -3737,6 +3737,8 @@ void tests::valid_maps_tests(){
 
     chess::chs_piece emp_pce;
     emp_pce.set_as_empty();
+
+    vector<int>::iterator iter;
 
     array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_W_test;
     array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_test;
@@ -3955,5 +3957,64 @@ void tests::valid_maps_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialization.
+    test_bool = true;
+    map_W_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+    map_B_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+
+    // Board Set up
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Check for right castling in possibilities.
+    map_W_test = myGame.get_valid_W_moves_map();    
+    iter = std::find( map_W_test[4].begin(), map_W_test[4].end(), 6 );
+    test_bool = test_bool && ( iter != map_W_test[4].end() );
+
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    // Check for left castling in possibilities.
+    map_W_test = myGame.get_valid_W_moves_map();    
+    iter = std::find( map_W_test[4].begin(), map_W_test[4].end(), 2 );
+    test_bool = test_bool && ( iter != map_W_test[4].end() );
+
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    // Check for left castling in possibilities.
+    map_B_test = myGame.get_valid_B_moves_map();    
+    iter = std::find( map_B_test[60].begin(), map_B_test[60].end(), 58 );
+    test_bool = test_bool && ( iter != map_B_test[60].end() );
+
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    // Check for right castling in possibilities.
+    map_B_test = myGame.get_valid_B_moves_map();    
+    iter = std::find( map_B_test[60].begin(), map_B_test[60].end(), 62 );
+    test_bool = test_bool && ( iter != map_B_test[60].end() );
+    
+    if( test_bool ){
+        cout << "chess valid move maps castling test: passed!" << endl;
+    }else{
+        cout << "chess valid move maps castling test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+}
+
+
+void tests::valid_atks_maps_tests(){
 
 }

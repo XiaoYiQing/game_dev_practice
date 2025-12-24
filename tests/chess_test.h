@@ -52,7 +52,9 @@ namespace tests{
 
     void chess_minmaxAB_split_tests();
 
-    void valid_maps_tests();
+    void valid_move_maps_tests();
+
+    void valid_atks_maps_tests();
 
 }
 
