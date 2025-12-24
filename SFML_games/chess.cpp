@@ -245,8 +245,7 @@ chess::chess(){
     this->is_all_legal_moves_upd = false;
     this->is_all_legal_atks_upd = false;
     this->is_valid_moves_upd = false;
-    this->is_valid_W_atks_upd = false;
-    this->is_valid_B_atks_upd = false;
+    this->is_valid_atks_upd = false;
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -3444,8 +3443,7 @@ void chess::game_tracking_signal(){
     this->is_all_legal_atks_upd = false;
 
     this->is_valid_moves_upd = false;
-    this->is_valid_W_atks_upd = false;
-    this->is_valid_B_atks_upd = false;
+    this->is_valid_atks_upd = false;
 
 }
 
@@ -4061,19 +4059,16 @@ vector<chess::chs_move> chess::get_all_legal_atks(){
     return this->all_legal_atks; 
 }
 
-bool chess::getIs_valid_W_atks_upd() const
-    { return this->is_valid_W_atks_upd; }
+bool chess::getIs_valid_atks_upd() const
+    { return this->is_valid_atks_upd; }
 array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_atks_map(){
-    if( !this->is_valid_W_atks_upd ){
+    if( !this->is_valid_atks_upd ){
         this->upd_all_valid_atks();
     }
     return this->valid_W_atks_map; 
 }
-
-bool chess::getIs_valid_B_atks_upd() const
-    { return this->is_valid_B_atks_upd; }
 array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_atks_map(){
-    if( !this->is_valid_B_atks_upd ){
+    if( !this->is_valid_atks_upd ){
         this->upd_all_valid_atks();
     }
     return this->valid_B_atks_map; 
@@ -4281,8 +4276,7 @@ void chess::upd_all_valid_atks(){
         this->valid_B_atks_map[z].clear();
         this->valid_B_atks_map[z].reserve(8);
     }
-    this->is_valid_W_atks_upd = false;
-    this->is_valid_B_atks_upd = false;
+    this->is_valid_atks_upd = false;
 
     pair<int,int> sub_idx_z;
     vector< pair<int,int> > atk_sq_list_z;
@@ -4312,8 +4306,7 @@ void chess::upd_all_valid_atks(){
         
     }
 
-    this->is_valid_W_atks_upd = true;
-    this->is_valid_B_atks_upd = true;
+    this->is_valid_atks_upd = true;
 
 }
 

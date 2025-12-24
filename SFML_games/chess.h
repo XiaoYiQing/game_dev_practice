@@ -971,11 +971,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     bool getIs_all_legal_atks_upd() const;
     vector<chs_move> get_all_legal_atks();
-
-    bool getIs_valid_W_atks_upd() const;
+    
+    bool getIs_valid_atks_upd() const;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_atks_map();
-
-    bool getIs_valid_B_atks_upd() const;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_B_atks_map();
 
 // ====================================================================== <<<<<
@@ -1118,14 +1116,12 @@ protected:
     bool is_valid_moves_upd;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_moves_map;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_moves_map;
-    
 
     bool is_all_legal_atks_upd;
     vector<chs_move> all_legal_atks;
 
-    bool is_valid_W_atks_upd;
+    bool is_valid_atks_upd;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_atks_map;
-    bool is_valid_B_atks_upd;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_atks_map;
 
     /**
