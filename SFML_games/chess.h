@@ -542,6 +542,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft ) const;
 
+    bool is_move_valid( int ind_a, int ind_b ) const;
+
 
     /**
      * \brief Determine if the specified attack is valid.

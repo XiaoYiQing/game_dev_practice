@@ -1790,6 +1790,7 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
 }
 
 
+
 bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft ) const
 {
@@ -2068,6 +2069,15 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     }
 
     return state_ok;
+
+}
+
+bool chess::is_move_valid( int ind_a, int ind_b ) const{
+
+    pair<int,int> sub_a = ind2sub( ind_a );
+    pair<int,int> sub_b = ind2sub( ind_b );
+
+    return this->is_move_valid(  );
 
 }
 
@@ -2785,13 +2795,33 @@ vector< pair<int,int> > chess::get_all_legal_move_sq( int i, int j ) const{
 
 vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
 
+    // Obtain linear move coordinates.
+    vector<int> val_mov_ind_vec = 
+        this->get_all_valid_move_sq( sub2ind( i, j ) );
+
+    // Translate coordinates to 2D format.
+    vector< pair<int,int> > val_mov_vec;
+    val_mov_vec.reserve( val_mov_ind_vec.size() );
+    for( int ind_z : val_mov_ind_vec ){
+        val_mov_vec.push_back( chess::ind2sub( ind_z ) );
+    }
+    
+    return val_mov_vec;
+
+}
+
+
+vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
+
     // Obtain the target piece.
-    chs_piece tarPce = this->get_piece_at( i, j );
-    // Obtain the linear index of the target.
-    int tarIndIdx = chess::sub2ind(i,j);
+    chs_piece tarPce = this->get_piece_at( tarIndIdx );
+    // Obtain the 2D coordinate.
+    pair<int,int> ij = chess::ind2sub( tarIndIdx );
+    int i = ij.first;
+    int j = ij.second;
 
     // Initialize valid move vector.
-    vector< pair<int,int> > val_mov_vec;
+    vector<int> val_mov_vec;
     // Initialize attack list from (i, j).
     vector<int> atk_list_fr_ij;
 
@@ -2807,98 +2837,6 @@ vector< pair<int,int> > chess::get_all_valid_move_sq( int i, int j ) const{
     // }else{
     //     return val_mov_vec;
     // }
-
-    
-
-    // TODO: maybe create a function which specifically returns all atk squares 
-    // by target piece?
-    if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
-
-        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-            for( int ind_v : this->atk_list_by_W[z] ){
-                if( tarIndIdx == ind_v ){
-                    atk_list_fr_ij.push_back( z );
-                    break;
-                }
-            }
-
-        }
-
-    }else if( tarPce.color == CHS_PIECE_COLOR::BLACK ){
-
-        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-            for( int ind_v : this->atk_list_by_B[z] ){
-                if( tarIndIdx == ind_v ){
-                    atk_list_fr_ij.push_back( z );
-                    break;
-                }
-            }
-
-        }
-        
-    }
-
-    
-    
-    for( int atk_ij: atk_list_fr_ij ){
-
-        pair<int,int> atk_ij_coord = chess::ind2sub( atk_ij );
-
-        if( this->is_move_valid( i, j, atk_ij_coord.first, atk_ij_coord.second ) ){
-            val_mov_vec.push_back( atk_ij_coord );
-        }
-        
-    }
-
-    // Pawn moves that do not attack.
-    if( tarPce.type == CHS_PIECE_TYPE::PAWN ){
-
-        int sign_mult = 1;
-        tarPce.color == CHS_PIECE_COLOR::BLACK ? sign_mult = -1 : sign_mult = 1;
-
-        if( this->is_move_valid( i, j, i + sign_mult * 1, j ) ){
-            val_mov_vec.push_back( pair<int,int>( i + sign_mult * 1, j ) );
-        }
-        if( this->is_move_valid( i, j, i + sign_mult * 2, j ) ){
-            val_mov_vec.push_back( pair<int,int>( i + sign_mult * 2, j ) );
-        }
-       
-    }
-    // King moves that do not attack.
-    if( tarPce.type == CHS_PIECE_TYPE::KING ){
-
-        if( tarPce.not_moved ){
-            // Right castling.
-            if( this->is_move_valid( i, j, i, j + 2 ) ){
-                val_mov_vec.push_back( pair<int,int>( i, j + 2 ) );
-            }
-            // Left castling.
-            if( this->is_move_valid( i, j, i, j - 2 ) ){
-                val_mov_vec.push_back( pair<int,int>( i, j - 2 ) );
-            }
-        }
-
-    }
-
-    return val_mov_vec;
-
-}
-
-vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
-
-    // Obtain the target piece.
-    chs_piece tarPce = this->get_piece_at( tarIndIdx );
-    // Obtain the 2D coordinate.
-    pair<int,int> ij = chess::ind2sub( tarIndIdx );
-    int i = ij.first;
-    int j = ij.second;
-
-    // Initialize valid move vector.
-    vector<int> val_mov_vec;
-    // Initialize attack list from (i, j).
-    vector<int> atk_list_fr_ij;
 
     // TODO: maybe create a function which specifically returns all atk squares 
     // by target piece?
