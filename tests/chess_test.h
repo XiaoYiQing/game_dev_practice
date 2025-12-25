@@ -54,7 +54,7 @@ namespace tests{
 
     void valid_move_maps_tests();
 
-    void valid_atks_maps_tests();
+    void valid_atk_maps_tests();
 
 }
 

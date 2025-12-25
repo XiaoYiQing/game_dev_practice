@@ -4015,6 +4015,87 @@ void tests::valid_move_maps_tests(){
 }
 
 
-void tests::valid_atks_maps_tests(){
+void tests::valid_atk_maps_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    myGame.resetBoard();
+
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
+
+    vector<int>::iterator iter;
+
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_W_test;
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_test;
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_W_ans;
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_B_ans;
+
+    int i_t = 0;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board With no Pawns Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialization.
+    test_bool = true;
+    map_W_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+    map_B_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+
+    // Board Set up.
+    myGame.resetBoard();
+    for( unsigned int z = 0; z < chess::BOARDWIDTH; z++ ){
+        myGame.set_piece_at( 1, z, emp_pce );
+        myGame.set_piece_at( 6, z, emp_pce );
+    }
+    myGame.upd_all_valid_moves();
+
+    // Obtain the map of valid moves for both white and black sides.
+    map_W_test = myGame.get_valid_W_atks_map();
+    map_B_test = myGame.get_valid_B_atks_map();
+
+    // Set up expected white valid moves map.
+    vector<int> tmp_vec;
+    
+    tmp_vec = { 56 };
+    map_W_ans[0].insert( map_W_ans[0].end(), tmp_vec.begin(), tmp_vec.end() );
+    tmp_vec = { 59 };   
+    map_W_ans[3].insert( map_W_ans[3].end(), tmp_vec.begin(), tmp_vec.end() );
+    tmp_vec = { 63 };
+    map_W_ans[7].insert( map_W_ans[7].end(), tmp_vec.begin(), tmp_vec.end() );
+
+    tmp_vec = { 0 };
+    map_B_ans[56].insert( map_B_ans[56].end(), tmp_vec.begin(), tmp_vec.end() );
+    tmp_vec = { 3 };   
+    map_B_ans[59].insert( map_B_ans[59].end(), tmp_vec.begin(), tmp_vec.end() );
+    tmp_vec = { 7 };
+    map_B_ans[63].insert( map_B_ans[63].end(), tmp_vec.begin(), tmp_vec.end() );
+
+    // Compare obtained and expected white move maps.
+    for( unsigned int z = 0; z < map_W_ans.size(); z++ ){
+        for( int tmp_int : map_W_ans[z] ){
+            auto it = std::find( map_W_test[z].begin(), map_W_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_W_test[z].end() );
+        }
+    }
+    // Compare obtained and expected black move maps.
+    for( unsigned int z = 0; z < map_B_ans.size(); z++ ){
+        for( int tmp_int : map_B_ans[z] ){
+            auto it = std::find( map_B_test[z].begin(), map_B_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_B_test[z].end() );
+        }
+    }
+
+    if( test_bool ){
+        cout << "chess valid attack maps no pawn initial board test: passed!" << endl;
+    }else{
+        cout << "chess valid attack maps no pawn initial board test: failed!" << endl;
+    }
+
+    int lol = 0;
+
+// ---------------------------------------------------------------------- <<<<<
+
+
 
 }

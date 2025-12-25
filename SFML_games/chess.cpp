@@ -2147,16 +2147,16 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
     if( this->is_valid_atks_upd ){
         
         // Obtain the linear indices of the before and after coordinates.
-        int ij_bef = sub2ind( i_bef, j_bef );
-        int ij_aft = sub2ind( i_aft, j_aft );
+        int ind_ij_bef = sub2ind( i_bef, j_bef );
+        int ind_ij_aft = sub2ind( i_aft, j_aft );
 
         if( tarColor == CHS_PIECE_COLOR::WHITE ){
-            for( int z : this->valid_W_atks_map[ ij_bef ] )
-                if( z == ij_aft ){ return true; }
+            for( int z : this->valid_W_atks_map[ ind_ij_bef ] )
+                if( z == ind_ij_aft ){ return true; }
             return false;
         }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
-            for( int z : this->valid_B_atks_map[ ij_bef ] )
-                if( z == ij_aft ){ return true; }
+            for( int z : this->valid_B_atks_map[ ind_ij_bef ] )
+                if( z == ind_ij_aft ){ return true; }
             return false;
         }else{
             return false;
