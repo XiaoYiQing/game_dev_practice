@@ -4230,6 +4230,10 @@ void chess::upd_all_psbl_alg_comm(){
 
 void chess::upd_all_legal_moves(){
 
+    if( this->is_all_legal_moves_upd ){
+        return;
+    }
+
     // Clear all currently saved possible plays.
     this->all_legal_moves.clear();
     this->is_all_legal_moves_upd = false;
@@ -4262,6 +4266,10 @@ void chess::upd_all_legal_moves(){
 
 
 void chess::upd_all_legal_atks(){
+
+    if( this->is_all_legal_atks_upd ){
+        return;
+    }
 
     // Clear all currently saved possible plays.
     this->all_legal_atks.clear();
