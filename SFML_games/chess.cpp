@@ -4233,6 +4233,7 @@ void chess::upd_all_legal_moves(){
     if( this->is_all_legal_moves_upd ){
         return;
     }
+    this->upd_all_valid_moves();
 
     // Clear all currently saved possible plays.
     this->all_legal_moves.clear();
@@ -4270,6 +4271,7 @@ void chess::upd_all_legal_atks(){
     if( this->is_all_legal_atks_upd ){
         return;
     }
+    this->upd_all_valid_atks();
 
     // Clear all currently saved possible plays.
     this->all_legal_atks.clear();
