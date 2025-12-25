@@ -2144,6 +2144,26 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
     // Obtain the color of the current piece.
     CHS_PIECE_COLOR tarColor = tarPce.color;
 
+    if( this->is_valid_atks_upd ){
+        
+        // Obtain the linear indices of the before and after coordinates.
+        int ij_bef = sub2ind( i_bef, j_bef );
+        int ij_aft = sub2ind( i_aft, j_aft );
+
+        if( tarColor == CHS_PIECE_COLOR::WHITE ){
+            for( int z : this->valid_W_atks_map[ ij_bef ] )
+                if( z == ij_aft ){ return true; }
+            return false;
+        }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
+            for( int z : this->valid_B_atks_map[ ij_bef ] )
+                if( z == ij_aft ){ return true; }
+            return false;
+        }else{
+            return false;
+        }
+
+    }
+
     // Flag indicating whether the current move is an en-passant attack.
     bool is_en_pass = false;
     // The unique scenario of en-passant pawn attack superseeds all remaining checks.
@@ -2774,16 +2794,13 @@ vector< pair<int,int> > chess::get_all_legal_atk_sq( int i, int j ) const{
 
 vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
 
-    vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq(i,j);
+    auto all_valid_sub_atk_sq = this->get_all_valid_atk_sq( chess::sub2ind( i, j ) );
+
     vector<pair<int,int>> all_valid_atk_sq;
-    all_valid_atk_sq.reserve( all_atk_sq.size() );
+    all_valid_atk_sq.reserve( all_valid_sub_atk_sq.size() );
 
-    for( pair<int,int> atk_sq_z : all_atk_sq ){
-
-        if( this->is_atk_valid( i, j, atk_sq_z.first, atk_sq_z.second ) ){
-            all_valid_atk_sq.push_back( atk_sq_z );
-        }
-
+    for( int tarInd_z : all_valid_sub_atk_sq ){
+        all_valid_atk_sq.push_back( chess::ind2sub( tarInd_z ) );
     }
 
     return all_valid_atk_sq;
@@ -2792,21 +2809,36 @@ vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
 
 
 vector<int> chess::get_all_valid_atk_sq( int tarIndIdx ) const{
+    
+    // If the valid move squares maps are up-to-date, just use them.
+    if( this->is_valid_atks_upd ){
+
+        // Obtain existing list of valid attacks (Based on piece color).
+        chs_piece tarPce = this->get_piece_at( tarIndIdx );
+        if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
+            return this->valid_W_atks_map[ tarIndIdx ];
+        }else if( tarPce.color == CHS_PIECE_COLOR::BLACK ){
+            return this->valid_B_atks_map[ tarIndIdx ];
+
+        // Non-colored piece is considered empty square.
+        }else{
+            return vector<int>();
+        }
+
+    }
 
     // Linear to 2D coordinate.
     pair<int,int> ij = chess::ind2sub( tarIndIdx );
-    // Obtain all attack squares in 2D coordinates.
-    vector<pair<int,int>>all_valid_sub_atk_sq = 
-        this->get_all_valid_atk_sq( ij.first, ij.second );
+    
+    vector<pair<int,int>> all_atk_sq = this->get_all_atk_sq( ij.first, ij.second );
+    vector<int>all_valid_atk_sq;
+    
+    for( pair<int,int> atk_sq_z : all_atk_sq )
+        if( this->is_atk_valid( ij.first, ij.second, atk_sq_z.first, atk_sq_z.second ) ){
+            all_valid_atk_sq.push_back( chess::sub2ind( atk_sq_z ) );
+        }
 
-    // Translate all 2D coordinates to linear coordinates.
-    vector<int>all_valid_lin_atk_sq;
-    all_valid_lin_atk_sq.reserve( all_valid_sub_atk_sq.size() );
-    for( pair<int,int> ij_z : all_valid_sub_atk_sq ){
-        all_valid_lin_atk_sq.push_back( chess::sub2ind( ij_z ) );
-    }
-
-    return all_valid_lin_atk_sq;
+    return all_valid_atk_sq;
     
 }
 
