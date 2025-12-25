@@ -4297,6 +4297,10 @@ void chess::upd_all_legal_atks(){
 
 void chess::upd_all_valid_moves(){
 
+    if( this->is_valid_moves_upd ){
+        return;
+    }
+
     for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
         this->valid_W_moves_map[z].clear();
         this->valid_W_moves_map[z].reserve(14);
@@ -4339,6 +4343,10 @@ void chess::upd_all_valid_moves(){
 
 
 void chess::upd_all_valid_atks(){
+
+    if( this->is_valid_atks_upd ){
+        return;
+    }
 
     for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
         this->valid_W_atks_map[z].clear();
