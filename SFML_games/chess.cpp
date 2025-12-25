@@ -2793,6 +2793,21 @@ vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
 
 vector<int> chess::get_all_valid_atk_sq( int tarIndIdx ) const{
 
+    // Linear to 2D coordinate.
+    pair<int,int> ij = chess::ind2sub( tarIndIdx );
+    // Obtain all attack squares in 2D coordinates.
+    vector<pair<int,int>>all_valid_sub_atk_sq = 
+        this->get_all_valid_atk_sq( ij.first, ij.second );
+
+    // Translate all 2D coordinates to linear coordinates.
+    vector<int>all_valid_lin_atk_sq;
+    all_valid_lin_atk_sq.reserve( all_valid_sub_atk_sq.size() );
+    for( pair<int,int> ij_z : all_valid_sub_atk_sq ){
+        all_valid_lin_atk_sq.push_back( chess::sub2ind( ij_z ) );
+    }
+
+    return all_valid_lin_atk_sq;
+    
 }
 
 
