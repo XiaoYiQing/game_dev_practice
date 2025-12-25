@@ -1819,14 +1819,25 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     // Obtain the color of the current piece.
     CHS_PIECE_COLOR tarColor = tarPce.color;
 
-    // // If list of valid moves up-to-date, just refer to it for answer.
-    // if( this->is_all_legal_moves_upd ){
-    //     chs_move tmp( i_bef, j_bef, i_aft, j_aft );
-    //     for( chs_move ref_z : this->all_legal_moves )
-    //         if( tmp == ref_z )
-    //             return true;
-    //     return false;
-    // }
+    if( this->is_valid_moves_upd ){
+
+        // Obtain the linear indices of the before and after coordinates.
+        int ij_bef = sub2ind( i_bef, j_bef );
+        int ij_aft = sub2ind( i_aft, j_aft );
+
+        if( tarColor == CHS_PIECE_COLOR::WHITE ){
+            for( int z : this->valid_W_moves_map[ ij_bef ] )
+                if( z == ij_aft ){ return true; }
+            return false;
+        }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
+            for( int z : this->valid_B_moves_map[ ij_bef ] )
+                if( z == ij_aft ){ return true; }
+            return false;
+        }else{
+            return false;
+        }
+
+    }
 
     // Define flag for unique castling movement which involves two pieces been moved
     // in one action. 
@@ -2298,6 +2309,12 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     return state_ok;
 
+}
+
+bool chess::is_atk_valid( int ind_a, int ind_b ) const{
+    pair<int,int> sub_a = ind2sub(ind_a);
+    pair<int,int> sub_b = ind2sub(ind_b);
+    return this->is_atk_valid( sub_a.first, sub_a.second, sub_b.first, sub_b.second );
 }
 
 // ====================================================================== <<<<<
@@ -2772,6 +2789,12 @@ vector< pair<int,int> > chess::get_all_valid_atk_sq( int i, int j ) const{
     return all_valid_atk_sq;
 
 }
+
+
+vector<int> chess::get_all_valid_atk_sq( int tarIndIdx ) const{
+
+}
+
 
 vector< pair<int,int> > chess::get_all_legal_move_sq( int i, int j ) const{
 

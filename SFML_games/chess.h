@@ -579,6 +579,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     bool is_atk_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft ) const;
 
+    bool is_atk_valid( int ind_a, int ind_b ) const;
+
 // ====================================================================== <<<<<
 
 
@@ -641,6 +643,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     vector< pair<int,int> > get_all_legal_atk_sq( int i, int j ) const;
     
     vector< pair<int,int> > get_all_valid_atk_sq( int i, int j ) const;
+
+    vector<int> get_all_valid_atk_sq( int tarIndIdx ) const;
 
     /**
      * \brief Obtain all valid move coordinates from the piece at the target coordinate.
