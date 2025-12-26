@@ -414,6 +414,19 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     string bestMove( int depth );
 
+    /**
+     * Update the game's piece counter list.
+     */
+    void upd_pce_cnt_list();
+    
+    /**
+     * Update the game's attack list.
+     * 
+     * \note The class' attack lists are lists of squares that are threatened, and 
+     *  not valid attack options.
+     */
+    void upd_atk_lists();
+
     void upd_all_legal_moves();
     void upd_all_legal_atks();
 
@@ -685,17 +698,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool is_draw();
     
-    /**
-     * Update the game's piece counter list.
-     */
-    void upd_pce_cnt_list();
-    /**
-     * Update the game's attack list.
-     * 
-     * \note The class' attack lists are lists of squares that are threatened, and 
-     *  not valid attack options.
-     */
-    void upd_atk_lists();
+    
+    
     
 
     /**
@@ -885,14 +889,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void setNo_change_turn_cnt( const unsigned int no_change_turn_cnt );
 
-    /**
-     * Obtain the list of all white pieces attacking each and every square on the board.
-     */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W() const;
-    /**
-     * Obtain the list of all black pieces attacking each and every square on the board.
-     */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B() const;
+    
     
     bool getEn_pass_flag() const;
     void setEn_pass_flag( bool en_pass_flag );
@@ -963,7 +960,18 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     unsigned int getThread_to_use() const;
     void setThread_to_use( unsigned int thr_cnt );
 
+    bool getForce_lists_upd() const;
+    void setForce_lists_upd( bool in_force_lists_upd );
+
     bool getIs_atk_lists_upd() const;
+    /**
+     * Obtain the list of all white pieces attacking each and every square on the board.
+     */
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W();
+    /**
+     * Obtain the list of all black pieces attacking each and every square on the board.
+     */
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B();
 
     bool getIs_psbl_alg_comm_upd() const;
     vector<string> get_all_psbl_alg_comm();
@@ -1110,6 +1118,11 @@ protected:
     bool is_all_legal_moves_upd;
     vector<chs_move> all_legal_moves;
     
+    /**
+     * Boolean for indicating whether lists are forced to update when requested
+     * even if the list's flag indicate no update required.
+     */
+    bool force_lists_upd;
 
     bool is_atk_lists_upd;
     /**
