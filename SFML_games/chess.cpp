@@ -383,7 +383,7 @@ void chess::clearSquare( unsigned int i, unsigned int j ){
     }
     this->CHS_board[i][j].set_as_empty();
     this->game_tracking_signal();
-    this->upd_post_play();
+    this->upd_all();
 }
 
 void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce ){
@@ -392,7 +392,7 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
     }
     this->CHS_board[i][j] = inPce;
     this->game_tracking_signal();
-    this->upd_post_play();
+    this->upd_all();
 }
 void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
     set_piece_at( n - 1, c - 'a', inPce );
@@ -3036,75 +3036,97 @@ pair<bool,bool> chess::is_in_check(){
 bool chess::is_check_mate(){
 
     // If the check state is true, determine if it is a checkmate.
-    if( this->state == CHS_STATE::WCHK ){
+    if( this->state == CHS_STATE::WCHK || this->state == CHS_STATE::BWIN ){
 
-        // Create a copy of the game.
-        chess game_copy = *this;
-        // Force white to play.
-        game_copy.setTurn_cnt(0);
-        // Turn verbose to false.
-        game_copy.setVerbose(false);
+        bool no_options = true;
+        if( this->is_all_legal_atks_upd )
+            { this->upd_all_legal_atks(); }
+        if( this->is_all_legal_moves_upd )
+            { this->upd_all_legal_moves(); }
 
-        // Obtain all possible white plays.
-        vector<chs_move> all_plays = game_copy.get_all_legal_moves();
-        vector<chs_move> tmp = game_copy.get_all_legal_atks();
-        all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
+        no_options = no_options && ( this->all_legal_atks.size() == 0 );
+        no_options = no_options && ( this->all_legal_moves.size() == 0 );
 
-        // Try to play all possibilities and check if the white check state 
-        // changes.
-        for( chs_move play_z : all_plays ){
+        return no_options;
+
+        // // Create a copy of the game.
+        // chess game_copy = *this;
+        // // Force white to play.
+        // game_copy.setTurn_cnt(0);
+        // // Turn verbose to false.
+        // game_copy.setVerbose(false);
+
+        // // Obtain all possible white plays.
+        // vector<chs_move> all_plays = game_copy.get_all_legal_moves();
+        // vector<chs_move> tmp = game_copy.get_all_legal_atks();
+        // all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
+
+        // // Try to play all possibilities and check if the white check state 
+        // // changes.
+        // for( chs_move play_z : all_plays ){
             
-            if( game_copy.play( play_z ) ){
-                if( game_copy.getState() == CHS_STATE::WCHK ){
-                    // If the play did not pull white out of check state, continue trying
-                    // by resetting the copy to the starting check state.
-                    game_copy = *this;
-                    game_copy.setTurn_cnt(0);
-                    game_copy.setVerbose(false);
-                }else{
-                    // Any move that successfully pulls white out of the check state is proof
-                    // that the check is not a mate.
-                    return false;
-                }
-            }
+        //     if( game_copy.play( play_z ) ){
+        //         if( game_copy.getState() == CHS_STATE::WCHK ){
+        //             // If the play did not pull white out of check state, continue trying
+        //             // by resetting the copy to the starting check state.
+        //             game_copy = *this;
+        //             game_copy.setTurn_cnt(0);
+        //             game_copy.setVerbose(false);
+        //         }else{
+        //             // Any move that successfully pulls white out of the check state is proof
+        //             // that the check is not a mate.
+        //             return false;
+        //         }
+        //     }
 
-        }
+        // }
 
-        return true;
+        // return true;
 
-    }else if( state == CHS_STATE::BCHK ){
+    }else if( state == CHS_STATE::BCHK || this->state == CHS_STATE::WWIN ){
 
-        // Create a copy of the game.
-        chess game_copy = *this;
-        // Force black to play.
-        game_copy.setTurn_cnt(1);
+        bool no_options = true;
+        if( !this->is_all_legal_atks_upd )
+            { this->upd_all_legal_atks(); }
+        if( !this->is_all_legal_moves_upd )
+            { this->upd_all_legal_moves(); }
 
-        // Obtain all possible black plays.
-        vector<chs_move> all_plays = game_copy.get_all_legal_moves();
-        vector<chs_move> tmp = game_copy.get_all_legal_atks();
-        all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
+        no_options = no_options && ( this->all_legal_atks.size() == 0 );
+        no_options = no_options && ( this->all_legal_moves.size() == 0 );
 
-        // Try to play all possibilities and check if the black check state 
-        // changes.
-        for( chs_move play_z : all_plays ){
+        return no_options;
+
+        // // Create a copy of the game.
+        // chess game_copy = *this;
+        // // Force black to play.
+        // game_copy.setTurn_cnt(1);
+
+        // // Obtain all possible black plays.
+        // vector<chs_move> all_plays = game_copy.get_all_legal_moves();
+        // vector<chs_move> tmp = game_copy.get_all_legal_atks();
+        // all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
+
+        // // Try to play all possibilities and check if the black check state 
+        // // changes.
+        // for( chs_move play_z : all_plays ){
             
-            if( game_copy.play( play_z ) ){
-                if( game_copy.getState() == CHS_STATE::BCHK ){
-                    // If the play did not pull black out of check state, continue trying
-                    // by resetting the copy to the starting check state.
-                    game_copy = *this;
-                    game_copy.setTurn_cnt(0);
-                    game_copy.setVerbose(false);
-                }else{
-                    // Any move that successfully pulls black out of the check state is proof
-                    // that the check is not a mate.
-                    return false;
-                }
-            }
+        //     if( game_copy.play( play_z ) ){
+        //         if( game_copy.getState() == CHS_STATE::BCHK ){
+        //             // If the play did not pull black out of check state, continue trying
+        //             // by resetting the copy to the starting check state.
+        //             game_copy = *this;
+        //             game_copy.setTurn_cnt(0);
+        //             game_copy.setVerbose(false);
+        //         }else{
+        //             // Any move that successfully pulls black out of the check state is proof
+        //             // that the check is not a mate.
+        //             return false;
+        //         }
+        //     }
 
-        }
+        // }
 
-        return true;
+        // return true;
 
     }else{
 

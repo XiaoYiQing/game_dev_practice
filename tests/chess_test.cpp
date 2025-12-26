@@ -2043,6 +2043,7 @@ void tests::chess_checkmate_tests(){
 
     test_bool = true;
     myGame.clearBoard();
+    myGame.setTurn_cnt(1);
 
     myGame.set_piece_at( 3, 4, chess::chs_piece( 
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
@@ -2058,6 +2059,8 @@ void tests::chess_checkmate_tests(){
     myGame.set_piece_at( 7, 3, chess::chs_piece( 
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
     test_bool = test_bool && ( myGame.is_check_mate() );
+
+    myGame.printBoard();
 
     if( test_bool ){
         cout << "Chess black checkmate standard tests: passed!" << endl;
