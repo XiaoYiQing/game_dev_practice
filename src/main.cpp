@@ -154,7 +154,7 @@ void do_tests( unsigned int test_id ){
     // tests::chess_psbl_plays_tests();
     // tests::chess_checkmate_tests();
     // tests::chess_draw_tests();
-    // tests::chess_full_game_tests();
+    tests::chess_full_game_tests();
 
     // tests::CHS_SFML_eng_tests();
 
@@ -168,7 +168,7 @@ void do_tests( unsigned int test_id ){
 
     // tests::chess_minmax_bestMove_tests();
 
-    tests::chess_minmaxAB_bestMove_tests();
+    // tests::chess_minmaxAB_bestMove_tests();
 
     // tests::chess_minmaxAB_split_tests();
 

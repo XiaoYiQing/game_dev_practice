@@ -296,6 +296,7 @@ void chess::clearBoard(){
     }
     }
 
+    this->game_tracking_signal();
     // Update all state related variables.
     this->upd_post_play();
 
@@ -367,8 +368,9 @@ void chess::resetBoard(){
         }
     }
 
+    this->game_tracking_signal();
     // Update all remaining state related variables.
-    upd_post_play();
+    upd_all();
 
 }
 
@@ -2992,70 +2994,6 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
 
 
 
-bool chess::upd_mid_game_state(){
-
-    // Set the state to the none case.
-    this->state = CHS_STATE::NO_S;
-
-    // Initialize current 2D coordinate variable.
-    pair<int,int> sub_idx_z;
-    // Initialize current chess piece.
-    chs_piece pce_z;
-
-    // Perform a full board scan to determine checks.
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        sub_idx_z = ind2sub(z);
-        pce_z = this->get_piece_at( sub_idx_z.first, sub_idx_z.second );
-
-        if( pce_z.type == CHS_PIECE_TYPE::KING ){
-            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
-
-                if( this->atk_list_by_B[z].size() != 0 ){
-                    if( state == CHS_STATE::BCHK ){
-                        if( this->verbose ){
-                            cout << "Black and white kings both in check." << endl;
-                        }
-                        return false;
-                    }else{
-                        state = CHS_STATE::WCHK;
-                    }
-                }
-                
-
-            }
-            if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
-
-                if( this->atk_list_by_W[z].size() != 0 ){
-                    if( state == CHS_STATE::WCHK ){
-                        if( this->verbose ){
-                            cout << "Black and white kings both in check." << endl;
-                        }
-                        return false;
-                    }else{
-                        state = CHS_STATE::BCHK;
-                    }
-                }
-                
-            }
-            if( pce_z.color == CHS_PIECE_COLOR::NO_C ){
-                if( this->verbose ){
-                    cout << "Unrecognized chess piece color." << endl;
-                }
-                return false;
-            }
-        }
-
-    }
-
-    // If no state has been determined to this point, set as on going by default.
-    if( this->state == CHS_STATE::NO_S ){
-        this->state = CHS_STATE::ONGOING;
-    }
-
-    return true;
-
-}
 
 
 pair<bool,bool> chess::is_in_check(){
@@ -3374,19 +3312,6 @@ bool chess::is_draw(){
 }
 
 
-bool chess::upd_post_play(){
-    
-    bool upd_res = true;
-
-    this->upd_pce_cnt_list();
-
-    this->upd_atk_lists();
-
-    upd_res = upd_res && ( this->upd_mid_game_state() );
-
-    return upd_res;
-
-}
 
 bool chess::upd_all(){
 
@@ -3397,6 +3322,93 @@ bool chess::upd_all(){
     this->upd_end_game_state();
 
     return upd_res;
+
+}
+
+
+
+bool chess::upd_post_play(){
+    
+    bool upd_res = true;
+
+    this->upd_pce_cnt_list();
+
+    this->upd_atk_lists();
+    // this->upd_all_valid_moves();
+    // this->upd_all_valid_atks();
+    this->upd_all_legal_moves();
+    this->upd_all_legal_atks();
+
+    upd_res = upd_res && ( this->upd_mid_game_state() );
+
+    return upd_res;
+
+}
+
+
+
+bool chess::upd_mid_game_state(){
+
+    // Set the state to the none case.
+    this->state = CHS_STATE::NO_S;
+
+    // Initialize current 2D coordinate variable.
+    pair<int,int> sub_idx_z;
+    // Initialize current chess piece.
+    chs_piece pce_z;
+
+    // Perform a full board scan to determine checks.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        sub_idx_z = ind2sub(z);
+        pce_z = this->get_piece_at( sub_idx_z.first, sub_idx_z.second );
+
+        if( pce_z.type == CHS_PIECE_TYPE::KING ){
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+                if( this->atk_list_by_B[z].size() != 0 ){
+                    if( state == CHS_STATE::BCHK ){
+                        if( this->verbose ){
+                            cout << "Black and white kings both in check." << endl;
+                        }
+                        return false;
+                    }else{
+                        state = CHS_STATE::WCHK;
+                    }
+                }
+                
+
+            }
+            if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+
+                if( this->atk_list_by_W[z].size() != 0 ){
+                    if( state == CHS_STATE::WCHK ){
+                        if( this->verbose ){
+                            cout << "Black and white kings both in check." << endl;
+                        }
+                        return false;
+                    }else{
+                        state = CHS_STATE::BCHK;
+                    }
+                }
+                
+            }
+            if( pce_z.color == CHS_PIECE_COLOR::NO_C ){
+                if( this->verbose ){
+                    cout << "Unrecognized chess piece color." << endl;
+                }
+                return false;
+            }
+        }
+
+    }
+
+    // If no state has been determined to this point, set as on going by default.
+    if( this->state == CHS_STATE::NO_S ){
+        this->state = CHS_STATE::ONGOING;
+    }
+
+    return true;
 
 }
 
@@ -3429,6 +3441,283 @@ void chess::game_tracking_signal(){
 
     this->is_valid_moves_upd = false;
     this->is_valid_atks_upd = false;
+
+}
+
+
+
+void chess::upd_pce_cnt_list(){
+
+    // Reset all counters.
+    for( pair< CHS_PIECE_TYPE, int > cnt_z : this->wPieceCounter ){
+        this->wPieceCounter[ cnt_z.first ] = 0;
+        this->bPieceCounter[ cnt_z.first ] = 0;
+    }
+
+    chs_piece currPce;
+    // Parse through the entire board and counter the number of pieces.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+        currPce = this->get_piece_at( ind2sub( z ) );
+        if( currPce.type != CHS_PIECE_TYPE::NO_P ){
+            if( currPce.color == CHS_PIECE_COLOR::WHITE ){
+                this->wPieceCounter[ currPce.type ]++;
+            }else if( currPce.color == CHS_PIECE_COLOR::BLACK ){
+                this->bPieceCounter[ currPce.type ]++;
+            }
+        }
+    }
+
+}
+
+
+void chess::upd_atk_lists(){
+
+    if( this->is_atk_lists_upd && !this->force_lists_upd ){
+        return;
+    }
+
+    // Emtpy the existing attack list vectors.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+        this->atk_list_by_W[z].clear();
+        this->atk_list_by_B[z].clear();
+    }
+    this->is_atk_lists_upd = false;
+    
+    // Current sub index.
+    pair<int,int> coord_z;
+    // Current piece being scanned for attacked squares.
+    chs_piece pce_z;
+    // List of sub coordinates of squares being attacked by the current piece.
+    vector< pair<int,int> > atk_list_z;
+    // List of linear coordinates of squares being attacked by the current piece.
+    vector<int> atk_sub_list_z;
+
+    for( unsigned int z = 0; z < BOARDWIDTH*BOARDHEIGHT; z++ ){
+
+        coord_z = ind2sub(z);
+        // Skip if empty.
+        if( this->is_sq_empty( coord_z.first, coord_z.second ) ){
+            continue;
+        }
+        // Obtain the target piece.
+        pce_z = get_piece_at( coord_z.first, coord_z.second );
+
+        // Obtain the list of all squares attacked by the current piece.
+        // atk_list_z = get_all_atk_sq( coord_z.first, coord_z.second );
+        atk_list_z = get_all_atk_sq_spec( coord_z.first, coord_z.second );
+        // Translate into linear indexing.
+        atk_sub_list_z = sub2ind( atk_list_z );
+
+        if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+            for( int sq_lin_idx : atk_sub_list_z ){
+                this->atk_list_by_W[sq_lin_idx].push_back(z);
+            }
+
+        }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+
+            for( int sq_lin_idx : atk_sub_list_z ){
+                this->atk_list_by_B[sq_lin_idx].push_back(z);
+            }
+
+        }else{
+            throw runtime_error( "Unrecognized chess piece color." );
+        }
+
+    }
+
+    if( this->en_pass_flag ){
+
+        for( chs_move en_pass_move : this->en_pass_moves ){
+            
+            int def_ind_z = sub2ind( en_pass_move.pt_a.first, en_pass_move.pt_b.second );
+            int atk_ind_z = sub2ind( en_pass_move.pt_a.first, en_pass_move.pt_a.second );
+
+            // Attacker is black.
+            if( en_pass_move.pt_a.first == 3 ){
+                atk_list_by_B[ def_ind_z ].push_back( atk_ind_z );
+
+            // Attacker is white.
+            }else if( en_pass_move.pt_a.first == BOARDHEIGHT - 4 ){
+                atk_list_by_W[ def_ind_z ].push_back( atk_ind_z );
+            }
+
+        }
+
+    }
+
+    this->is_atk_lists_upd = true;
+
+}
+
+
+void chess::upd_all_legal_moves(){
+
+    if( this->is_all_legal_moves_upd && !this->force_lists_upd ){
+        return;
+    }
+    this->upd_all_valid_moves();
+
+    // Clear all currently saved possible plays.
+    this->all_legal_moves.clear();
+    this->is_all_legal_moves_upd = false;
+
+    all_legal_moves.reserve( 200 );
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > move_sq_list_z;
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        move_sq_list_z = get_all_legal_move_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Add all current piece's possible moves to the batch.
+        for( pair<int,int> move_v : move_sq_list_z ){
+            all_legal_moves.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+                move_v.first, move_v.second ) );
+        }
+
+    }
+
+    all_legal_moves.shrink_to_fit();
+
+    this->is_all_legal_moves_upd = true;
+
+}
+
+
+void chess::upd_all_legal_atks(){
+
+    if( this->is_all_legal_atks_upd && !this->force_lists_upd ){
+        return;
+    }
+    this->upd_all_valid_atks();
+
+    // Clear all currently saved possible plays.
+    this->all_legal_atks.clear();
+    this->is_all_legal_atks_upd = false;
+
+    all_legal_atks.reserve( 200 );
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > atk_sq_list_z;
+
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        atk_sq_list_z = get_all_legal_atk_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Add all current piece's possible moves to the batch.
+        for( pair<int,int> move_v : atk_sq_list_z ){
+            all_legal_atks.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
+                move_v.first, move_v.second ) );
+        }
+
+    }
+
+    all_legal_atks.shrink_to_fit();
+
+    this->is_all_legal_atks_upd = true;
+
+}
+
+
+void chess::upd_all_valid_moves(){
+
+    if( this->is_valid_moves_upd && !this->force_lists_upd ){
+        return;
+    }
+
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        this->valid_W_moves_map[z].clear();
+        this->valid_W_moves_map[z].reserve(14);
+        this->valid_B_moves_map[z].clear();
+        this->valid_B_moves_map[z].reserve(14);
+    }
+    this->is_valid_moves_upd = false;
+
+    pair<int,int> sub_idx_z;
+    vector<int> move_sq_list_z;
+
+    // Parse through each linear coordinate of the board.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+
+        // Obtain all possible moves (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        move_sq_list_z = get_all_valid_move_sq( z );
+
+        // Assign the moves to the correct map (depending on the piece's color).
+        if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
+            for( int move_v : move_sq_list_z ){
+                this->valid_W_moves_map[z].push_back( move_v );
+            }
+        }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
+            for( int move_v : move_sq_list_z ){
+                this->valid_B_moves_map[z].push_back( move_v );
+            }
+        }
+        this->valid_W_moves_map[z].shrink_to_fit();
+        this->valid_B_moves_map[z].shrink_to_fit();
+
+    }
+
+    this->is_valid_moves_upd = true;
+
+}
+
+
+void chess::upd_all_valid_atks(){
+
+    if( this->is_valid_atks_upd && !this->force_lists_upd ){
+        return;
+    }
+
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        this->valid_W_atks_map[z].clear();
+        this->valid_W_atks_map[z].reserve(8);
+        this->valid_B_atks_map[z].clear();
+        this->valid_B_atks_map[z].reserve(8);
+    }
+    this->is_valid_atks_upd = false;
+
+    pair<int,int> sub_idx_z;
+    vector< pair<int,int> > atk_sq_list_z;
+
+    // Parse through each linear coordinate of the board.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+        // Obtain current 2D coordinate.
+        sub_idx_z = ind2sub(z);
+
+        // Obtain all possible attacks (if any) for the piece (if it exists) at the 
+        // current coordinate 
+        atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
+
+        // Assign the attacks to the correct map (depending on the piece's color).
+        if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
+            for( pair<int,int> atk_v : atk_sq_list_z ){
+                this->valid_W_atks_map[z].push_back( chess::sub2ind( atk_v ) );
+            }
+        }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
+            for( pair<int,int> atk_v : atk_sq_list_z ){
+                this->valid_B_atks_map[z].push_back( chess::sub2ind( atk_v ) );
+            }
+        }
+        this->valid_W_atks_map[z].shrink_to_fit();
+        this->valid_B_atks_map[z].shrink_to_fit();
+        
+    }
+
+    this->is_valid_atks_upd = true;
 
 }
 
@@ -4167,278 +4456,4 @@ void chess::upd_all_psbl_alg_comm(){
 }
 
 
-void chess::upd_pce_cnt_list(){
-
-    // Reset all counters.
-    for( pair< CHS_PIECE_TYPE, int > cnt_z : this->wPieceCounter ){
-        this->wPieceCounter[ cnt_z.first ] = 0;
-        this->bPieceCounter[ cnt_z.first ] = 0;
-    }
-
-    chs_piece currPce;
-    // Parse through the entire board and counter the number of pieces.
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-        currPce = this->get_piece_at( ind2sub( z ) );
-        if( currPce.type != CHS_PIECE_TYPE::NO_P ){
-            if( currPce.color == CHS_PIECE_COLOR::WHITE ){
-                this->wPieceCounter[ currPce.type ]++;
-            }else if( currPce.color == CHS_PIECE_COLOR::BLACK ){
-                this->bPieceCounter[ currPce.type ]++;
-            }
-        }
-    }
-
-}
-
-
-void chess::upd_atk_lists(){
-
-    if( this->is_atk_lists_upd && !this->force_lists_upd ){
-        return;
-    }
-
-    // Emtpy the existing attack list vectors.
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-        this->atk_list_by_W[z].clear();
-        this->atk_list_by_B[z].clear();
-    }
-    this->is_atk_lists_upd = false;
-    
-    // Current sub index.
-    pair<int,int> coord_z;
-    // Current piece being scanned for attacked squares.
-    chs_piece pce_z;
-    // List of sub coordinates of squares being attacked by the current piece.
-    vector< pair<int,int> > atk_list_z;
-    // List of linear coordinates of squares being attacked by the current piece.
-    vector<int> atk_sub_list_z;
-
-    for( unsigned int z = 0; z < BOARDWIDTH*BOARDHEIGHT; z++ ){
-
-        coord_z = ind2sub(z);
-        // Skip if empty.
-        if( this->is_sq_empty( coord_z.first, coord_z.second ) ){
-            continue;
-        }
-        // Obtain the target piece.
-        pce_z = get_piece_at( coord_z.first, coord_z.second );
-
-        // Obtain the list of all squares attacked by the current piece.
-        // atk_list_z = get_all_atk_sq( coord_z.first, coord_z.second );
-        atk_list_z = get_all_atk_sq_spec( coord_z.first, coord_z.second );
-        // Translate into linear indexing.
-        atk_sub_list_z = sub2ind( atk_list_z );
-
-        if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
-
-            for( int sq_lin_idx : atk_sub_list_z ){
-                this->atk_list_by_W[sq_lin_idx].push_back(z);
-            }
-
-        }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
-
-            for( int sq_lin_idx : atk_sub_list_z ){
-                this->atk_list_by_B[sq_lin_idx].push_back(z);
-            }
-
-        }else{
-            throw runtime_error( "Unrecognized chess piece color." );
-        }
-
-    }
-
-    if( this->en_pass_flag ){
-
-        for( chs_move en_pass_move : this->en_pass_moves ){
-            
-            int def_ind_z = sub2ind( en_pass_move.pt_a.first, en_pass_move.pt_b.second );
-            int atk_ind_z = sub2ind( en_pass_move.pt_a.first, en_pass_move.pt_a.second );
-
-            // Attacker is black.
-            if( en_pass_move.pt_a.first == 3 ){
-                atk_list_by_B[ def_ind_z ].push_back( atk_ind_z );
-
-            // Attacker is white.
-            }else if( en_pass_move.pt_a.first == BOARDHEIGHT - 4 ){
-                atk_list_by_W[ def_ind_z ].push_back( atk_ind_z );
-            }
-
-        }
-
-    }
-
-    this->is_atk_lists_upd = true;
-
-}
-
-
-void chess::upd_all_legal_moves(){
-
-    if( this->is_all_legal_moves_upd && !this->force_lists_upd ){
-        return;
-    }
-    this->upd_all_valid_moves();
-
-    // Clear all currently saved possible plays.
-    this->all_legal_moves.clear();
-    this->is_all_legal_moves_upd = false;
-
-    all_legal_moves.reserve( 200 );
-
-    pair<int,int> sub_idx_z;
-    vector< pair<int,int> > move_sq_list_z;
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        move_sq_list_z = get_all_legal_move_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Add all current piece's possible moves to the batch.
-        for( pair<int,int> move_v : move_sq_list_z ){
-            all_legal_moves.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
-                move_v.first, move_v.second ) );
-        }
-
-    }
-
-    all_legal_moves.shrink_to_fit();
-
-    this->is_all_legal_moves_upd = true;
-
-}
-
-
-void chess::upd_all_legal_atks(){
-
-    if( this->is_all_legal_atks_upd && !this->force_lists_upd ){
-        return;
-    }
-    this->upd_all_valid_atks();
-
-    // Clear all currently saved possible plays.
-    this->all_legal_atks.clear();
-    this->is_all_legal_atks_upd = false;
-
-    all_legal_atks.reserve( 200 );
-
-    pair<int,int> sub_idx_z;
-    vector< pair<int,int> > atk_sq_list_z;
-
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        atk_sq_list_z = get_all_legal_atk_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Add all current piece's possible moves to the batch.
-        for( pair<int,int> move_v : atk_sq_list_z ){
-            all_legal_atks.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
-                move_v.first, move_v.second ) );
-        }
-
-    }
-
-    all_legal_atks.shrink_to_fit();
-
-    this->is_all_legal_atks_upd = true;
-
-}
-
-
-void chess::upd_all_valid_moves(){
-
-    if( this->is_valid_moves_upd && !this->force_lists_upd ){
-        return;
-    }
-
-    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
-        this->valid_W_moves_map[z].clear();
-        this->valid_W_moves_map[z].reserve(14);
-        this->valid_B_moves_map[z].clear();
-        this->valid_B_moves_map[z].reserve(14);
-    }
-    this->is_valid_moves_upd = false;
-
-    pair<int,int> sub_idx_z;
-    vector<int> move_sq_list_z;
-
-    // Parse through each linear coordinate of the board.
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        move_sq_list_z = get_all_valid_move_sq( z );
-
-        // Assign the moves to the correct map (depending on the piece's color).
-        if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
-            for( int move_v : move_sq_list_z ){
-                this->valid_W_moves_map[z].push_back( move_v );
-            }
-        }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
-            for( int move_v : move_sq_list_z ){
-                this->valid_B_moves_map[z].push_back( move_v );
-            }
-        }
-        this->valid_W_moves_map[z].shrink_to_fit();
-        this->valid_B_moves_map[z].shrink_to_fit();
-
-    }
-
-    this->is_valid_moves_upd = false;
-
-}
-
-
-void chess::upd_all_valid_atks(){
-
-    if( this->is_valid_atks_upd && !this->force_lists_upd ){
-        return;
-    }
-
-    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
-        this->valid_W_atks_map[z].clear();
-        this->valid_W_atks_map[z].reserve(8);
-        this->valid_B_atks_map[z].clear();
-        this->valid_B_atks_map[z].reserve(8);
-    }
-    this->is_valid_atks_upd = false;
-
-    pair<int,int> sub_idx_z;
-    vector< pair<int,int> > atk_sq_list_z;
-
-    // Parse through each linear coordinate of the board.
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-
-        // Obtain all possible attacks (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Assign the attacks to the correct map (depending on the piece's color).
-        if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
-            for( pair<int,int> atk_v : atk_sq_list_z ){
-                this->valid_W_atks_map[z].push_back( chess::sub2ind( atk_v ) );
-            }
-        }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
-            for( pair<int,int> atk_v : atk_sq_list_z ){
-                this->valid_B_atks_map[z].push_back( chess::sub2ind( atk_v ) );
-            }
-        }
-        this->valid_W_atks_map[z].shrink_to_fit();
-        this->valid_B_atks_map[z].shrink_to_fit();
-        
-    }
-
-    this->is_valid_atks_upd = true;
-
-}
 

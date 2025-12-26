@@ -414,25 +414,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     string bestMove( int depth );
 
-    /**
-     * Update the game's piece counter list.
-     */
-    void upd_pce_cnt_list();
-    
-    /**
-     * Update the game's attack list.
-     * 
-     * \note The class' attack lists are lists of squares that are threatened, and 
-     *  not valid attack options.
-     */
-    void upd_atk_lists();
-
-    void upd_all_legal_moves();
-    void upd_all_legal_atks();
-
-    void upd_all_valid_moves();
-    void upd_all_valid_atks();
-
 // ====================================================================== <<<<<
 
 
@@ -702,6 +683,18 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     
     
 
+    
+    
+    /**
+     * Update everything.
+     */
+    bool upd_all();
+    
+    /**
+     * Update all necessary state related variables after a play is made.
+     */
+    bool upd_post_play();
+    
     /**
      * \brief Update the game's state variable while the game is on going.
      * 
@@ -718,16 +711,6 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_end_game_state();
 
     /**
-     * Update all necessary state related variables after a play is made.
-     */
-    bool upd_post_play();
-    
-    /**
-     * Update everything.
-     */
-    bool upd_all();
-    
-    /**
      * \brief Function performs a trigger on the flags of all tracking variables of the chess game.
      * Tracking variables are not part of the variables affected by "upd_all()". They
      * are not directly related to the game, but are rather meant to help chess AI perform 
@@ -738,6 +721,25 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * Doing so invalidates all current tracking variables.
      */
     void game_tracking_signal();
+
+    /**
+     * Update the game's piece counter list.
+     */
+    void upd_pce_cnt_list();
+    
+    /**
+     * Update the game's attack list.
+     * 
+     * \note The class' attack lists are lists of squares that are threatened, and 
+     *  not valid attack options.
+     */
+    void upd_atk_lists();
+
+    void upd_all_legal_moves();
+    void upd_all_legal_atks();
+
+    void upd_all_valid_moves();
+    void upd_all_valid_atks();
 
     /**
      * \brief Print the state of the board onto the console terminal.
