@@ -3570,8 +3570,13 @@ void tests::chess_minmaxAB_bestMove_tests(){
     pce_t.type = chess::CHS_PIECE_TYPE::BISHOP;   pce_t.color = chess::CHS_PIECE_COLOR::WHITE;
     myGame.set_piece_at_ag_coord( 'f', 4, pce_t );
 
+    auto start = std::chrono::steady_clock::now();
     MM_res = myGame.minmaxAB_bestMove( myGame.is_white_turn(), 3 );
+    auto end = std::chrono::steady_clock::now();
+    auto time_AB = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     test_bool = test_bool && ( MM_res.second == "Qc1b2" );
+
+    cout << "minmax with AB pruning time: " << time_AB << endl;
 
     if( test_bool ){
         cout << "chess minmaxAB_bestMove Mate in 2 test 5: passed!" << endl;
