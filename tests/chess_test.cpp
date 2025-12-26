@@ -1584,6 +1584,15 @@ void tests::chess_play_tests(){
     myGame.clearBoard();
     myGame.setTurn_cnt(0);
 
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
     chess::chs_piece WK = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
         chess::CHS_PIECE_COLOR::WHITE );
     chess::chs_piece BK = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
@@ -2059,8 +2068,6 @@ void tests::chess_checkmate_tests(){
     myGame.set_piece_at( 7, 3, chess::chs_piece( 
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
     test_bool = test_bool && ( myGame.is_check_mate() );
-
-    myGame.printBoard();
 
     if( test_bool ){
         cout << "Chess black checkmate standard tests: passed!" << endl;
@@ -2806,7 +2813,6 @@ void tests::chess_all_alg_comm_tests(){
             test_bool = false;
             break;
         }
-        // myGame_tmp.printBoard();
         myGame_tmp = myGame;
     }
 
