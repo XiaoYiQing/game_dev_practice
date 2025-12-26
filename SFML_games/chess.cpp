@@ -241,6 +241,7 @@ chess::chess(){
     this->minmax_vals["draw"] = 0;
     this->minmax_vals["check"] = 1;
 
+    this->is_atk_lists_upd = false;
     this->is_psbl_alg_comm_upd = false;
     this->is_all_legal_moves_upd = false;
     this->is_all_legal_atks_upd = false;
@@ -2883,17 +2884,7 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
 
     // Obtain the target piece.
     chs_piece tarPce = this->get_piece_at( tarIndIdx );
-    // Obtain the 2D coordinate.
-    pair<int,int> ij = chess::ind2sub( tarIndIdx );
-    int i = ij.first;
-    int j = ij.second;
-
-    // Initialize valid move vector.
-    vector<int> val_mov_vec;
-    // Initialize attack list from (i, j).
-    vector<int> atk_list_fr_ij;
-
-
+    
     if( this->is_valid_moves_upd ){
 
         // If the valid move squares maps are up-to-date, just use them.
@@ -2904,10 +2895,20 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
 
         // Non-colored piece is considered empty square.
         }else{
-            return val_mov_vec;
+            return vector<int>();
         }
 
     }
+
+    // Obtain the 2D coordinate.
+    pair<int,int> ij = chess::ind2sub( tarIndIdx );
+    int i = ij.first;
+    int j = ij.second;
+    
+    // Initialize valid move vector.
+    vector<int> val_mov_vec;
+    // Initialize attack list from (i, j).
+    vector<int> atk_list_fr_ij;
     
 
     // TODO: maybe create a function which specifically returns all atk squares 
@@ -3007,11 +3008,16 @@ void chess::upd_pce_cnt_list(){
 
 void chess::upd_atk_lists(){
 
+    if( this->is_atk_lists_upd ){
+        return;
+    }
+
     // Emtpy the existing attack list vectors.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
         this->atk_list_by_W[z].clear();
         this->atk_list_by_B[z].clear();
     }
+    this->is_atk_lists_upd = false;
     
     // Current sub index.
     pair<int,int> coord_z;
@@ -3075,6 +3081,8 @@ void chess::upd_atk_lists(){
         }
 
     }
+
+    this->is_atk_lists_upd = true;
 
 }
 
@@ -3507,6 +3515,8 @@ void chess::upd_end_game_state(){
 
 
 void chess::game_tracking_signal(){
+
+    this->is_atk_lists_upd = false;
 
     this->is_psbl_alg_comm_upd = false;
     this->is_all_legal_moves_upd = false;
@@ -3984,10 +3994,7 @@ void chess::setNo_change_turn_cnt( const unsigned int no_change_turn_cnt ){
     this->game_tracking_signal();
 }
 
-array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W() const
-    {return this->atk_list_by_W;}
-array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B() const
-    {return this->atk_list_by_B;}
+
 
 
 bool chess::getEn_pass_flag() const
@@ -4086,6 +4093,23 @@ unsigned int chess::getThread_to_use() const
 void chess::setThread_to_use( unsigned int thr_cnt )
     { this->thread_to_use = thr_cnt; }
 
+
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W()
+{
+    if( !this->is_atk_lists_upd ){
+        this->upd_atk_lists();
+    }
+    return this->atk_list_by_W;
+}
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B()
+{
+    if( !this->is_atk_lists_upd ){
+        this->upd_atk_lists();
+    }
+    return this->atk_list_by_B;
+}
+
+
 bool chess::getIs_psbl_alg_comm_upd() const
     { return this->is_psbl_alg_comm_upd; }
 vector<string> chess::get_all_psbl_alg_comm(){ 
@@ -4102,6 +4126,10 @@ vector<chess::chs_move> chess::get_all_legal_moves(){
         this->upd_all_legal_moves();
     }
     return this->all_legal_moves; 
+}
+
+bool chess::getIs_atk_lists_upd() const{
+    return this->is_atk_lists_upd;
 }
 
 bool chess::getIs_valid_moves_upd() const{

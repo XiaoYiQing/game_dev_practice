@@ -963,6 +963,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     unsigned int getThread_to_use() const;
     void setThread_to_use( unsigned int thr_cnt );
 
+    bool getIs_atk_lists_upd() const;
+
     bool getIs_psbl_alg_comm_upd() const;
     vector<string> get_all_psbl_alg_comm();
 
@@ -1004,16 +1006,7 @@ protected:
     map< CHS_PIECE_TYPE, int > wPieceCounter;
     map< CHS_PIECE_TYPE, int > bPieceCounter;
 
-    /**
-     * Array of lists of white pieces attacking the square associated to the index
-     * in the array. The attacks are not necessarily valid.
-     */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_W;
-    /**
-     * Array of lists of black pieces attacking the square associated to the index
-     * in the array. The attacks are not necessarily valid.
-     */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_B;
+    
 
     // The number of times a play has been made. White start at turn 0.
     unsigned int turn_cnt;
@@ -1117,6 +1110,19 @@ protected:
     bool is_all_legal_moves_upd;
     vector<chs_move> all_legal_moves;
     
+
+    bool is_atk_lists_upd;
+    /**
+     * Array of lists of white pieces attacking the square associated to the index
+     * in the array. The attacks are not necessarily valid.
+     */
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_W;
+    /**
+     * Array of lists of black pieces attacking the square associated to the index
+     * in the array. The attacks are not necessarily valid.
+     */
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> atk_list_by_B;
+
     bool is_valid_moves_upd;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_moves_map;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_moves_map;
