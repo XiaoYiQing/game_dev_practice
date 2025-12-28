@@ -250,8 +250,8 @@ chess::chess(){
     this->is_valid_atks_upd = false;
 
     for( unsigned int z = 0; z < this->valid_W_moves_map.size(); z++ ){
-        this->valid_W_moves_map[z].reserve(14);
-        this->valid_B_moves_map[z].reserve(14);
+        this->valid_W_moves_map[z].reserve(27);
+        this->valid_B_moves_map[z].reserve(27);
     }
     
 
@@ -1805,7 +1805,8 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
 
 bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft ) const
-{
+{    
+
     // Out of bound check.
     if( max( i_bef, i_aft ) >= BOARDHEIGHT || max( j_bef, j_aft ) >= BOARDHEIGHT ){
         return false;
@@ -2066,14 +2067,25 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
+    
+
+
     bool state_ok = true;
     /*
     If not castling, check if the game change of state is legal after the move.
     */ 
     if( !cast_poss ){
 
+
+
+        auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
         // Create a temporary game copy.
-        chess tmp_game = *this;
+        chess tmp_game = *this;  
+        auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+        auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        cout << "Game copy create: " << time_AB << endl;
+
+        
         // Perform the move in the game copy without updating game state.
         tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
         tmp_game.CHS_board[i_aft][j_aft] = tarPce;
@@ -2091,6 +2103,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         // Additional check making sure both kings are not in check simultaneously.
         state_ok = state_ok && !( chk_status.first && chk_status.second );
         
+
     }
 
     return state_ok;
@@ -2927,7 +2940,8 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
     // Initialize attack list from (i, j).
     vector<int> atk_list_fr_ij;
     
-
+    
+    
     // TODO: maybe create a function which specifically returns all atk squares 
     // by target piece?
     if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
@@ -2956,13 +2970,18 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
 
         }
         
+    }else{
+        return val_mov_vec;
     }
- 
+
+
+
     for( int atk_ij: atk_list_fr_ij ){
         if( this->is_move_valid( tarIndIdx, atk_ij ) ){
             val_mov_vec.push_back( atk_ij );
         }
     }
+
     
 
     // Pawn moves that do not attack.
@@ -3678,7 +3697,7 @@ void chess::upd_all_valid_moves(){
     pair<int,int> sub_idx_z;
     vector<int> move_sq_list_z;
 
-    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS  
+    
     
     // Parse through each linear coordinate of the board.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
@@ -3700,16 +3719,10 @@ void chess::upd_all_valid_moves(){
                 this->valid_B_moves_map[z].push_back( move_v );
             }
         }
-        // this->valid_W_moves_map[z].shrink_to_fit();
-        // this->valid_B_moves_map[z].shrink_to_fit();
 
     }
 
     this->is_valid_moves_upd = true;
-
-    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    auto time_AB = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();  // TODO: DELETE THIS
-    cout << "All valid moves update: " << time_AB << endl;
 
 }
 
@@ -4211,6 +4224,29 @@ unsigned int chess::getTurn_cnt() const
 void chess::setTurn_cnt( const unsigned int turn_cnt ){ 
     this->turn_cnt = turn_cnt; 
     this->game_tracking_signal();
+}
+
+pair<int,int> chess::get_W_king_pos(){
+    for( unsigned int i = 0; i < chess::BOARDHEIGHT; i++ ){
+    for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
+        if( this->CHS_board[i][j].type == CHS_PIECE_TYPE::KING && 
+            this->CHS_board[i][j].color == CHS_PIECE_COLOR::WHITE ){
+            return pair<int,int>(i,j);
+        }
+    }
+    }
+    throw runtime_error( "No white king on the board when searching for its position." );
+}
+pair<int,int> chess::get_B_king_pos(){
+    for( unsigned int i = 0; i < chess::BOARDHEIGHT; i++ ){
+    for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
+        if( this->CHS_board[i][j].type == CHS_PIECE_TYPE::KING && 
+            this->CHS_board[i][j].color == CHS_PIECE_COLOR::BLACK ){
+            return pair<int,int>(i,j);
+        }
+    }
+    }
+    throw runtime_error( "No black king on the board when searching for its position." );
 }
 
 chess::CHS_STATE chess::getState() const

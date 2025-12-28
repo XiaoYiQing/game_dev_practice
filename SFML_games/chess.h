@@ -702,7 +702,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * Its main purpose is to determine if there is any check or not.
      */
     bool upd_mid_game_state();
-    
+
     /**
      * Check if any end game states have been reached.
      * 
@@ -865,6 +865,9 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void setTurn_cnt( const unsigned int turn_cnt );
     
+    pair<int,int> get_W_king_pos();
+    pair<int,int> get_B_king_pos();
+
     /**
      * \brief Get the current game state.
      * 
