@@ -56,6 +56,8 @@ namespace tests{
 
     void valid_atk_maps_tests();
 
+    void chess_incident_safe_tests();
+
 }
 
 

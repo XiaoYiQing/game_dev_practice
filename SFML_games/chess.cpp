@@ -2080,12 +2080,12 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
 
 
-        auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+        // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
         // Create a temporary game copy.
         chess tmp_game = *this;  
-        auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-        auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-        cout << "Game copy create: " << time_AB << endl;
+        // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+        // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        // cout << "Game copy create: " << time_AB << endl;
 
         
         // Perform the move in the game copy without updating game state.
@@ -2121,7 +2121,7 @@ bool chess::is_move_valid( int ind_a, int ind_b ) const{
 
 }
 
-bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ){
+bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) const{
 
     chs_piece tarPce = this->get_piece_at( i_bef, j_bef );
     CHS_PIECE_COLOR tarColor = tarPce.color;
@@ -2134,29 +2134,59 @@ bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ){
     }else{
         king_pos = this->get_B_king_pos();
     }
+
+    // Calculate the distance between the target piece and its king.
+    int i_diff = i_bef - king_pos.first;
+    int j_diff = j_bef - king_pos.second;
     // Skip if the piece is the king itself.
-    if( king_pos.first == i_bef && king_pos.second == j_bef ){
+    if( i_diff == 0 && j_diff == 0 ){
         return false;
     }
+    // Calculate the distance between the displaced position and the starting position.
+    int i_displ = i_aft - i_bef;
+    int j_displ = j_aft - j_bef;
+    // If no displacement, just return safe.
+    if( i_displ == 0 && j_displ == 0 ){
+        return true;
+    }
 
-    // The unit step from the king to the target piece.
+    // Initialize the unit step from the king to the target piece.
     int i_step = 0; int j_step = 0;
 
     // Make sure the target piece aligns with the king along a row, column, 
     // or diagonal.
-    if( i_bef == king_pos.first || j_bef == king_pos.second || 
-        ( abs( i_bef - king_pos.first ) == abs( j_bef - king_pos.second ) ) )
+    if( i_diff == 0 || j_diff == 0 || abs( i_diff ) == abs( j_diff ) )
     {
 
+        // If the displacement is on the same row and the king shares the same row,
+        // there won't be incidental reveal.
+        if( i_displ == 0 && i_diff == 0 ){
+            return true;
+        }
+        // If the displacement is on the same column and the king shares the same column,
+        // there won't be incidental reveal.
+        if( j_displ == 0 && j_diff == 0 ){
+            return true;
+        }
+        // If the displacement is on the same diagonal and the king shares the same 
+        // diagonal, there won't be incidental reveal.
+        if( abs( i_diff ) == abs( j_diff ) && abs( i_displ ) == abs( j_displ ) ){
+            int displ_sign = i_displ * j_displ;
+            int diff_sign = i_diff * j_diff;
+            if( displ_sign == diff_sign ){
+                return true;
+            }
+        }
+
         // Determine step directions depending on relative position w.r.t. the king.
-        if( i_bef > king_pos.first ){
+        if( i_diff > 0 ){
             i_step = 1;
-        }else if( i_bef < king_pos.first ){
+        }else if( i_diff < 0 ){
             i_step = -1;
         }
-        if( j_bef > king_pos.second ){
+        if( j_diff > 0 ){
             j_step = 1;
-        }else if( j_bef < king_pos.second ){
+        }else if( j_diff < 0 ){
             j_step = -1;
         }
 

@@ -4113,3 +4113,33 @@ void tests::valid_atk_maps_tests(){
 
 
 }
+
+
+
+void tests::chess_incident_safe_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    myGame.clearBoard();
+
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
+
+// ---------------------------------------------------------------------- >>>>>
+//      Simple Test Case 1
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.printBoard();
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}

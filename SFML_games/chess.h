@@ -545,8 +545,10 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \note This function does not assess displacement of a king. Attempting
      *  to do so would return a false.
+     * 
+     * \note This function assumes the displacement is legal.
      */
-    bool is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft );
+    bool is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) const;
 
     /**
      * \brief Determine if the specified attack is valid.
