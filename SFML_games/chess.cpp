@@ -249,6 +249,12 @@ chess::chess(){
     this->is_valid_moves_upd = false;
     this->is_valid_atks_upd = false;
 
+    for( unsigned int z = 0; z < this->valid_W_moves_map.size(); z++ ){
+        this->valid_W_moves_map[z].reserve(14);
+        this->valid_B_moves_map[z].reserve(14);
+    }
+    
+
     AI_proc_flag = false;
     // Set the number of threads to utilize.
     this->thread_to_use = min( 2u, std::thread::hardware_concurrency() );
@@ -1723,11 +1729,11 @@ bool chess::ply( chs_move tarMove ){
         tarMove.pt_b.first, tarMove.pt_b.second );
 }
 
-
 bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
 
+    
     bool play_success = false;
     if( this->is_move_legal( i_bef, j_bef, i_aft, j_aft ) ||
         this->is_atk_legal( i_bef, j_bef, i_aft, j_aft ) )
@@ -1736,6 +1742,8 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
     }else{
         return false;
     }
+    
+
 
     // Check if the play induces an endgame state.
     if( play_success ){
@@ -2949,13 +2957,13 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
         }
         
     }
-
-    
+ 
     for( int atk_ij: atk_list_fr_ij ){
         if( this->is_move_valid( tarIndIdx, atk_ij ) ){
             val_mov_vec.push_back( atk_ij );
         }
     }
+    
 
     // Pawn moves that do not attack.
     if( tarPce.type == CHS_PIECE_TYPE::PAWN ){
@@ -3352,15 +3360,18 @@ bool chess::upd_all(){
 bool chess::upd_post_play(){
     
     bool upd_res = true;
-
+    
     this->upd_pce_cnt_list();
 
     this->upd_atk_lists();
+
     // this->upd_all_valid_moves();
     // this->upd_all_valid_atks();
-    this->upd_all_legal_moves();
-    this->upd_all_legal_atks();
 
+    this->upd_all_legal_moves();
+
+    this->upd_all_legal_atks();
+    
     upd_res = upd_res && ( this->upd_mid_game_state() );
 
     return upd_res;
@@ -3575,10 +3586,12 @@ void chess::upd_atk_lists(){
 
 void chess::upd_all_legal_moves(){
 
+
     if( this->is_all_legal_moves_upd && !this->force_lists_upd ){
         return;
     }
     this->upd_all_valid_moves();
+
 
     // Clear all currently saved possible plays.
     this->all_legal_moves.clear();
@@ -3658,15 +3671,15 @@ void chess::upd_all_valid_moves(){
 
     for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
         this->valid_W_moves_map[z].clear();
-        this->valid_W_moves_map[z].reserve(14);
         this->valid_B_moves_map[z].clear();
-        this->valid_B_moves_map[z].reserve(14);
     }
     this->is_valid_moves_upd = false;
 
     pair<int,int> sub_idx_z;
     vector<int> move_sq_list_z;
 
+    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS  
+    
     // Parse through each linear coordinate of the board.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
 
@@ -3687,12 +3700,16 @@ void chess::upd_all_valid_moves(){
                 this->valid_B_moves_map[z].push_back( move_v );
             }
         }
-        this->valid_W_moves_map[z].shrink_to_fit();
-        this->valid_B_moves_map[z].shrink_to_fit();
+        // this->valid_W_moves_map[z].shrink_to_fit();
+        // this->valid_B_moves_map[z].shrink_to_fit();
 
     }
 
     this->is_valid_moves_upd = true;
+
+    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    auto time_AB = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();  // TODO: DELETE THIS
+    cout << "All valid moves update: " << time_AB << endl;
 
 }
 
