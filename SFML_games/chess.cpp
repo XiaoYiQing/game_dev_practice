@@ -2074,7 +2074,9 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     /*
     If not castling, check if the game change of state is legal after the move.
     */ 
-    if( !cast_poss ){
+    if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
+
+        
 
 
 
@@ -2116,6 +2118,119 @@ bool chess::is_move_valid( int ind_a, int ind_b ) const{
     pair<int,int> sub_b = ind2sub( ind_b );
 
     return this->is_move_valid( sub_a.first, sub_a.second, sub_b.first, sub_b.second );
+
+}
+
+bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ){
+
+    chs_piece tarPce = this->get_piece_at( i_bef, j_bef );
+    CHS_PIECE_COLOR tarColor = tarPce.color;
+    CHS_PIECE_TYPE tarType = tarPce.type;
+
+    // Obtain the position of the king of the same color as the current piece.
+    pair<int,int>king_pos;
+    if( tarColor == CHS_PIECE_COLOR::WHITE ){
+        king_pos = this->get_W_king_pos();
+    }else{
+        king_pos = this->get_B_king_pos();
+    }
+    // Skip if the piece is the king itself.
+    if( king_pos.first == i_bef && king_pos.second == j_bef ){
+        return false;
+    }
+
+    // The unit step from the king to the target piece.
+    int i_step = 0; int j_step = 0;
+
+    // Make sure the target piece aligns with the king along a row, column, 
+    // or diagonal.
+    if( i_bef == king_pos.first || j_bef == king_pos.second || 
+        ( abs( i_bef - king_pos.first ) == abs( j_bef - king_pos.second ) ) )
+    {
+
+        // Determine step directions depending on relative position w.r.t. the king.
+        if( i_bef > king_pos.first ){
+            i_step = 1;
+        }else if( i_bef < king_pos.first ){
+            i_step = -1;
+        }
+        if( j_bef > king_pos.second ){
+            j_step = 1;
+        }else if( j_bef < king_pos.second ){
+            j_step = -1;
+        }
+
+        // Initialize current tracking position.
+        int i_z = king_pos.first + i_step;
+        int j_z = king_pos.second + j_step;
+
+        // Determine if any piece is placed in-between the target piece and its
+        // king.
+        while( i_z != i_bef && j_z != j_bef ){
+
+            // If any obstacle between the piece and the king, no need
+            // to check further.
+            if( !this->is_sq_empty( i_z, j_z ) ){
+                return true;
+            }
+            i_z += i_step;  j_z += j_step;
+
+        }
+
+        // Take one step away from the current piece.
+        i_z += i_step;  j_z += j_step;
+
+        // Assess any piece beyond curent piece.
+        while( i_z >= 0 && j_z >= 0 && i_z < chess::BOARDHEIGHT && 
+            j_z < chess::BOARDWIDTH )
+        {
+
+            if( !this->is_sq_empty( i_z, j_z ) ){
+                
+                // If the piece share the same color, then there is no danger.
+                if( this->CHS_board[i_z][j_z].color == tarColor ){
+                    return true;
+                }
+
+                // If the piece is an enemy queen.
+                if( this->CHS_board[i_z][j_z].type == CHS_PIECE_TYPE::QUEEN ){
+                    return false;
+                }
+
+                // If the piece is an enemy rook and we are searching for row
+                // or column alignement.
+                if( this->CHS_board[i_z][j_z].type == CHS_PIECE_TYPE::ROOK &&
+                    ( i_step == 0 || j_step == 0 ) )
+                {   
+                    return false;
+                }
+
+                // If the piece is an enemy bishop and we are searching for diagonal
+                // alignment.
+                if( this->CHS_board[i_z][j_z].type == CHS_PIECE_TYPE::BISHOP &&
+                    ( i_step != 0 && j_step != 0 ) ){
+                    return false;
+                }
+
+                // Reaching this point means the investigated piece is an enemy
+                // piece that poses no threat through alignment.
+                return true;
+
+            }
+
+            // Increment the scan position.
+            i_z += i_step;  j_z += j_step;
+
+        }
+
+        // No piece beyond target piece that could pose a threat to the king.
+        return true;
+
+    // A piece not aligned with its king can move freely without worrying
+    // about exposing its king to danger.
+    }else{
+        return true;
+    }
 
 }
 
@@ -4226,7 +4341,7 @@ void chess::setTurn_cnt( const unsigned int turn_cnt ){
     this->game_tracking_signal();
 }
 
-pair<int,int> chess::get_W_king_pos(){
+pair<int,int> chess::get_W_king_pos() const{
     for( unsigned int i = 0; i < chess::BOARDHEIGHT; i++ ){
     for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
         if( this->CHS_board[i][j].type == CHS_PIECE_TYPE::KING && 
@@ -4237,7 +4352,7 @@ pair<int,int> chess::get_W_king_pos(){
     }
     throw runtime_error( "No white king on the board when searching for its position." );
 }
-pair<int,int> chess::get_B_king_pos(){
+pair<int,int> chess::get_B_king_pos() const{
     for( unsigned int i = 0; i < chess::BOARDHEIGHT; i++ ){
     for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
         if( this->CHS_board[i][j].type == CHS_PIECE_TYPE::KING && 

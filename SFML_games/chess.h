@@ -537,7 +537,16 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
         unsigned int i_aft, unsigned int j_aft ) const;
 
     bool is_move_valid( int ind_a, int ind_b ) const;
-
+    
+    /**
+     * \brief Determine if moving the piece at the before position towards 
+     *  the after position does not endanger the king sharing the color of
+     *  the target piece.
+     * 
+     * \note This function does not assess displacement of a king. Attempting
+     *  to do so would return a false.
+     */
+    bool is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft );
 
     /**
      * \brief Determine if the specified attack is valid.
@@ -865,8 +874,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     void setTurn_cnt( const unsigned int turn_cnt );
     
-    pair<int,int> get_W_king_pos();
-    pair<int,int> get_B_king_pos();
+    pair<int,int> get_W_king_pos() const;
+    pair<int,int> get_B_king_pos() const;
 
     /**
      * \brief Get the current game state.
