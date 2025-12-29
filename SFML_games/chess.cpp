@@ -2131,8 +2131,10 @@ bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) con
     pair<int,int>king_pos;
     if( tarColor == CHS_PIECE_COLOR::WHITE ){
         king_pos = this->get_W_king_pos();
-    }else{
+    }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
         king_pos = this->get_B_king_pos();
+    }else{
+        throw runtime_error( "Target coordinate has no piece." );
     }
 
     // Calculate the distance between the target piece and its king.
@@ -2170,10 +2172,11 @@ bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) con
         }
         // If the displacement is on the same diagonal and the king shares the same 
         // diagonal, there won't be incidental reveal.
-        if( abs( i_diff ) == abs( j_diff ) && abs( i_displ ) == abs( j_displ ) ){
+        if( ( abs( i_diff ) == abs( j_diff ) ) && ( abs( i_displ ) == abs( j_displ ) ) ){
             int displ_sign = i_displ * j_displ;
             int diff_sign = i_diff * j_diff;
-            if( displ_sign == diff_sign ){
+            if( ( ( displ_sign > 0 ) && ( diff_sign > 0 ) ) ||
+                ( ( displ_sign < 0 ) && ( diff_sign < 0 ) ) ){
                 return true;
             }
         }
@@ -2196,7 +2199,7 @@ bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) con
 
         // Determine if any piece is placed in-between the target piece and its
         // king.
-        while( i_z != i_bef && j_z != j_bef ){
+        while( i_z != i_bef || j_z != j_bef ){
 
             // If any obstacle between the piece and the king, no need
             // to check further.

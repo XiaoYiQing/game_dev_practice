@@ -4125,8 +4125,39 @@ void tests::chess_incident_safe_tests(){
     chess::chs_piece emp_pce;
     emp_pce.set_as_empty();
 
+
 // ---------------------------------------------------------------------- >>>>>
-//      Simple Test Case 1
+//      No Pinning Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Knight attempts to move while not under any restriction.
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 4, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 3, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 3, 3 );
+
+    if( test_bool ){
+        cout << "chess no pinning incidental safe assessment test: passed!" << endl;
+    }else{
+        cout << "chess no pinning incidental safe assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Horizontal and Vertical Tests
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -4134,10 +4165,199 @@ void tests::chess_incident_safe_tests(){
 
     myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
         chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
         chess::CHS_PIECE_COLOR::WHITE ) );
 
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Knight attempts to move while not under any restriction.
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 5, 2, 3 );
+
+    // White rook attempts to move while enemy rook is pinning it against its king.
+    test_bool = test_bool && !myGame.is_incidental_safe( 3, 4, 3, 2 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 0, 2, 1, 2 );
+
+    // White rook attempts to move along column where it is pinned.
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 4, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 0, 2, 0, 1 );
+    test_bool = test_bool && myGame.is_incidental_safe( 0, 2, 0, 3 );
+
+    if( test_bool ){
+        cout << "chess horizontal and vertical incidental safe assessment test: passed!" << endl;
+    }else{
+        cout << "chess horizontal and vertical incidental safe assessment test: failed!" << endl;
+    }
+    
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Diagonal Tests
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 5, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 5, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 1, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    // Upper-left diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 5, 3, 6, 4 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 5, 3, 4, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 5, 3, 6, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 5, 3, 4, 4 );
+    // Upper-left diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 1, 7, 2 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 1, 5, 0 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 1, 5, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 1, 7, 0 );
+
+    // Upper-right diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 6, 5, 5 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 6, 3, 7 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 6, 5, 7 );
+    // Upper-right diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 5, 7, 4 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 5, 5, 6 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 5, 5, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 5, 7, 6 );
+
+    // Lower-right diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 6, 3, 7 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 6, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 6, 1, 7 );
+    // Lower-right diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 5, 4, 7 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 5, 1, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 5, 1, 6 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 5, 3, 4 );
+
+    // Lower-left diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 3, 3, 1 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 3, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 3, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 3, 0, 2 );
+    // Lower-left diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 1, 3, 0 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 1, 0, 3 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 1, 3, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 1, 1, 0 );
+    
+
+    if( test_bool ){
+        cout << "chess diagonal incidental safe assessment test: passed!" << endl;
+    }else{
+        cout << "chess diagonal incidental safe assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pinning with Obstruction Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 1, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 1, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 4, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    // Rook attempt to move in all four directions.
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 5 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 4, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 3 );
+    // Bishop attempt to move in all four directions.
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 4, 5, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 5 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 4, 3, 3 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 3 );
+
+    myGame.set_piece_at( 1, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Rook attempt to move in all four directions.
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 3 );
+    // Bishop attempt to move in all four directions.
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 3 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 3 );
+
     myGame.printBoard();
+
+    if( test_bool ){
+        cout << "chess obstructed incidental safe assessment test: passed!" << endl;
+    }else{
+        cout << "chess obstructed incidental safe assessment test: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
