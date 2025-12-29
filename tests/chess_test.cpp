@@ -804,6 +804,11 @@ void tests::chess_move_tests(){
     // Clear the board.
     myGame.clearBoard();
 
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
     chess::chs_piece newWR = chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE
     );
@@ -850,6 +855,11 @@ void tests::chess_move_tests(){
 
     // Clear the board.
     myGame.clearBoard();
+
+    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
 
     chess::chs_piece newWQ = chess::chs_piece(
         chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE );
@@ -997,6 +1007,8 @@ void tests::chess_move_tests(){
     myGame.clearBoard();
     myGame.set_piece_at( 0, 4, chess::chs_piece(
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
     myGame.set_piece_at( 0, 7, chess::chs_piece(
         chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
     test_bool = test_bool && ( myGame.is_move_legal( 0, 4, 0, 6 ) );
@@ -4350,8 +4362,6 @@ void tests::chess_incident_safe_tests(){
     test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 5 );
     test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 3 );
     test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 3 );
-
-    myGame.printBoard();
 
     if( test_bool ){
         cout << "chess obstructed incidental safe assessment test: passed!" << endl;

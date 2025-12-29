@@ -2078,34 +2078,32 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
         
 
-
-
         // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
-        // Create a temporary game copy.
-        chess tmp_game = *this;  
+        state_ok = this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft );
         // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
         // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
         // cout << "Game copy create: " << time_AB << endl;
 
-        
-        // Perform the move in the game copy without updating game state.
-        tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
-        tmp_game.CHS_board[i_aft][j_aft] = tarPce;
-        // Update the attack lists of the game copy after the move.
-        tmp_game.force_lists_upd = true;
-        tmp_game.upd_atk_lists();
-        tmp_game.force_lists_upd = false;
-        // Determine check status of both kings.
-        pair<bool,bool> chk_status = tmp_game.is_in_check();
+        // // Create a temporary game copy.
+        // chess tmp_game = *this;
 
-        // Check for state change validity, which involves not having a king remaining
-        // in check state after a play.
-        state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
-        state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
-        // Additional check making sure both kings are not in check simultaneously.
-        state_ok = state_ok && !( chk_status.first && chk_status.second );
-        
+        // // Perform the move in the game copy without updating game state.
+        // tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
+        // tmp_game.CHS_board[i_aft][j_aft] = tarPce;
+        // // Update the attack lists of the game copy after the move.
+        // tmp_game.force_lists_upd = true;
+        // tmp_game.upd_atk_lists();
+        // tmp_game.force_lists_upd = false;
+        // // Determine check status of both kings.
+        // pair<bool,bool> chk_status = tmp_game.is_in_check();
 
+        // // Check for state change validity, which involves not having a king remaining
+        // // in check state after a play.
+        // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
+        // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
+        // // Additional check making sure both kings are not in check simultaneously.
+        // state_ok = state_ok && !( chk_status.first && chk_status.second );
+        
     }
 
     return state_ok;
