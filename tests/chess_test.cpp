@@ -2373,6 +2373,9 @@ void tests::chess_full_game_tests(){
     test_bool = test_bool && myGame.ply_ag_coord( 'a',3,'e',7 );
     tmp_state = myGame.getState();
     
+    myGame.printBoard_ag_coord();
+    auto tmp = myGame.get_all_psbl_alg_comm();
+
     test_bool = test_bool && ( tmp_state == chess::CHS_STATE::WWIN );
 
     chess::chs_piece empty_piece;

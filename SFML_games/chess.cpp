@@ -191,6 +191,10 @@ const chess::chs_move chess::IMPOS_MOVE( -1, -1, -1, -1 );
  * failure to attain a usable move.
  */
 const string chess::IMPOS_ALG_COMM = "";
+/**
+ * Define an impossible 2D coordinate on the chess board.
+ */
+const pair<int,int> chess::IMPOS_COORD = {-1,-1};
 
 // ====================================================================== <<<<<
 
@@ -2076,8 +2080,6 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     */ 
     if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
 
-        
-
         // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
         state_ok = this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft );
         // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
@@ -2132,8 +2134,11 @@ bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) con
     }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
         king_pos = this->get_B_king_pos();
     }else{
-        throw runtime_error( "Target coordinate has no piece." );
+        return false;
     }
+    // If there is no king, there is no danger of incidental check.
+    if( king_pos == IMPOS_COORD )
+        return true;
 
     // Calculate the distance between the target piece and its king.
     int i_diff = i_bef - king_pos.first;
@@ -4381,7 +4386,7 @@ pair<int,int> chess::get_W_king_pos() const{
         }
     }
     }
-    throw runtime_error( "No white king on the board when searching for its position." );
+    return chess::IMPOS_COORD;
 }
 pair<int,int> chess::get_B_king_pos() const{
     for( unsigned int i = 0; i < chess::BOARDHEIGHT; i++ ){
@@ -4392,7 +4397,7 @@ pair<int,int> chess::get_B_king_pos() const{
         }
     }
     }
-    throw runtime_error( "No black king on the board when searching for its position." );
+    return chess::IMPOS_COORD;
 }
 
 chess::CHS_STATE chess::getState() const

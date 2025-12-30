@@ -289,6 +289,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     static const string IMPOS_ALG_COMM;
 
+    static const pair<int,int> IMPOS_COORD;
+
 // ====================================================================== <<<<<
 
 
