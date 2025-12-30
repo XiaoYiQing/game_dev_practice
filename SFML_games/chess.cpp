@@ -2402,7 +2402,7 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
             }
             // If a match is found, 
             if( valid_enpass ){
-                return true;
+                return false;
             }
                 
         }

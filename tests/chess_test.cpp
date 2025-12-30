@@ -4528,9 +4528,88 @@ void tests::chess_chk_persist_tests(){
         cout << "chess black king double check persistance assessment test: failed!" << endl;
     }
 
-    int lol = 0;
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Cases
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    test_bool = test_bool && myGame.is_chk_persist( 4, 7, 4, 6 );
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 7, 4, 3 );
+
+
+    if( test_bool ){
+        cout << "chess pawn check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess pawn check persistance assessment test: failed!" << endl;
+    }
+
+    test_bool = true;
+
+    myGame.set_piece_at( 4, 3, emp_pce );
+    myGame.set_piece_at( 4, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.setTurn_cnt(1u);
+
+    test_bool = test_bool && myGame.ply( 6,1, 4,1 );
+    test_bool = test_bool && myGame.getEn_pass_flag();
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 2, 5, 1 );
+    test_bool = test_bool && myGame.ply( 4,2, 5,1 );
+
+    if( test_bool ){
+        cout << "chess pawn en-passant check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess pawn en-passant check persistance assessment test: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Knight Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 5, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 4, 2 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 4, 4 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 2, 3 );
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 3, 5, 3 );
+
+    if( test_bool ){
+        cout << "chess knight check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess knight check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
