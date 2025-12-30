@@ -549,8 +549,21 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  to do so would return a false.
      * 
      * \note This function assumes the displacement is legal.
+     * 
+     * \note This function DOES NOT check if the king is currently in check.
      */
     bool is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) const;
+    
+    /**
+     * \brief Determines if the target piece displacement ends a state of check.
+     *  The king for which the check state is verified is the one sharing the color
+     *  of the piece performing the displacement. If the king is not in check 
+     *  currently, this function returns false.
+     * 
+     * \note This function does not check for self-incidental check, which is when 
+     *  moving your own piece exposes your king to a check.
+     */
+    bool is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const;
 
     /**
      * \brief Determine if the specified attack is valid.

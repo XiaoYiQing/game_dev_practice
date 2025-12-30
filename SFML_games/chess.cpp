@@ -2080,8 +2080,10 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     */ 
     if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
 
-        // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+        
         state_ok = this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft );
+
+        // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
         // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
         // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
         // cout << "Game copy create: " << time_AB << endl;
@@ -2267,6 +2269,142 @@ bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) con
     }else{
         return true;
     }
+
+}
+
+bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
+
+    chs_piece tarPce = this->get_piece_at( i_bef, j_bef );
+    CHS_PIECE_COLOR tarColor = tarPce.color;
+    
+// ---------------------------------------------------------------------- >>>>>
+//      Make Sure Correct Check State
+// ---------------------------------------------------------------------- >>>>>
+
+    if( tarColor == CHS_PIECE_COLOR::WHITE ){
+        // If the white king is not in check, no point calling this function to check
+        // a white move.
+        if( this->state != CHS_STATE::WCHK )
+            return false;
+
+    }else if( tarColor == CHS_PIECE_COLOR::BLACK ){
+        // If the black king is not in check, no point calling this function to check
+        // a black move.
+        if( this->state != CHS_STATE::BCHK )
+            return false;
+
+    }else{
+        throw runtime_error( "No piece at the specified coordinate." );
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Special King Move Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // Obtain the piece's type.
+    CHS_PIECE_TYPE tarType = tarPce.type;
+
+    // If king, simply check whether the destination is clear of danger.
+    if( tarType == CHS_PIECE_TYPE::KING ){
+        if( tarColor == CHS_PIECE_COLOR::WHITE ){
+            return ( this->atk_list_by_B[ chess::sub2ind( i_aft, j_aft ) ].size() != 0 );
+        }else{
+            return ( this->atk_list_by_W[ chess::sub2ind( i_aft, j_aft ) ].size() != 0 );
+        }
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      King and Attacker(s) Coordinate Fetch
+// ---------------------------------------------------------------------- >>>>>
+
+    // Obtain the position of the king of the same color as the current piece.
+    pair<int,int>king_pos;
+    if( tarColor == CHS_PIECE_COLOR::WHITE ){
+        king_pos = this->get_W_king_pos();
+    }else{
+        king_pos = this->get_B_king_pos();
+    }
+    // If there is no king, there is no danger of incidental check.
+    if( king_pos == IMPOS_COORD )
+        throw runtime_error( "The game has no target's king yet it is in a check state for said king." );
+
+
+    // Initialize the coordinate of the attacking piece.
+    pair<int,int> atk_pce_ij;
+    // Obtain the attacking piece coordinate.
+    if( tarColor == CHS_PIECE_COLOR::WHITE ){
+
+        // The check state cannot be disolved if two or more enemy pieces are attacking
+        // the king at the same time.
+        if( this->atk_list_by_B[ chess::sub2ind( king_pos ) ].size() > 1 ){
+            return true;
+        // Obtain the only attacker's coordinate.
+        }else if( this->atk_list_by_B[ chess::sub2ind( king_pos ) ].size() == 1 ){
+            atk_pce_ij = chess::ind2sub( this->atk_list_by_B[ chess::sub2ind( king_pos ) ].at(0) );
+        }else{
+            throw runtime_error( "The white king is not under any threat despite white being in check state." );
+        }
+
+    }else{
+        
+        // The check state cannot be disolved if two or more enemy pieces are attacking
+        // the king at the same time.
+        if( this->atk_list_by_W[ chess::sub2ind( king_pos ) ].size() > 1 ){
+            return true;
+        // Obtain the only attacker's coordinate.
+        }else if( this->atk_list_by_W[ chess::sub2ind( king_pos ) ].size() == 1 ){
+            atk_pce_ij = chess::ind2sub( this->atk_list_by_W[ chess::sub2ind( king_pos ) ].at(0) );
+        }else{
+            throw runtime_error( "The black king is not under any threat despite black being in check state." );
+        }
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Check State Absolution Analysis
+// ---------------------------------------------------------------------- >>>>>
+
+    chs_piece atk_pce = this->get_piece_at( atk_pce_ij );
+    CHS_PIECE_TYPE atkType = atk_pce.type;
+
+    switch( atkType ){
+    case CHS_PIECE_TYPE::PAWN:
+    case CHS_PIECE_TYPE::KNIGHT:
+
+        // A pawn or knight can only be stopped through elimination.
+        if( ( i_aft == atk_pce_ij.first ) && ( j_aft == atk_pce_ij.second ) ){
+            return false;
+        }else{
+            return true;
+        }
+        break;
+
+    case CHS_PIECE_TYPE::BISHOP:
+
+        break;
+
+    case CHS_PIECE_TYPE::ROOK:
+
+        break;
+
+    case CHS_PIECE_TYPE::QUEEN:
+
+        break;
+        
+    default:
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 
 }
 
