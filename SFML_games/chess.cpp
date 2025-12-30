@@ -2378,6 +2378,35 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
 
     switch( atkType ){
     case CHS_PIECE_TYPE::PAWN:
+
+        // Special en-passant case.
+        if( this->en_pass_flag ){
+                
+            bool valid_enpass = true;
+            // Try to match current pawn move to any available en-passant move.
+            for( chs_move move_z : this->en_pass_moves ){
+
+                valid_enpass = true;
+                // Verify if the target move is a pawn performing en-passant.
+                valid_enpass = valid_enpass && ( i_bef == move_z.pt_a.first );
+                valid_enpass = valid_enpass && ( j_bef == move_z.pt_a.second );
+                valid_enpass = valid_enpass && ( i_aft == move_z.pt_b.first );
+                valid_enpass = valid_enpass && ( j_aft == move_z.pt_b.second );
+                // Verify if the en-passant target is the attacking pawn.
+                valid_enpass = valid_enpass && ( atk_pce_ij.first == i_bef );
+                valid_enpass = valid_enpass && ( atk_pce_ij.second == j_aft );
+
+                if( valid_enpass )
+                    break;
+
+            }
+            // If a match is found, 
+            if( valid_enpass ){
+                return true;
+            }
+                
+        }
+
     case CHS_PIECE_TYPE::KNIGHT:
 
         // A pawn or knight can only be stopped through elimination.
@@ -2401,10 +2430,12 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
         break;
         
     default:
-    }
+        break;
+    };
 
 // ---------------------------------------------------------------------- <<<<<
 
+    return false;
 
 }
 

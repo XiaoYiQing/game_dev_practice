@@ -58,6 +58,8 @@ namespace tests{
 
     void chess_incident_safe_tests();
 
+    void chess_chk_persist_tests();
+
 }
 
 
