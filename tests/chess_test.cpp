@@ -4612,4 +4612,82 @@ void tests::chess_chk_persist_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+// ---------------------------------------------------------------------- >>>>>
+//      Rook Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // Row case.
+    myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 5, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 5, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at( 1, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    test_bool = test_bool && !myGame.is_chk_persist( 1, 5, 5, 5 );
+    test_bool = test_bool && myGame.is_chk_persist( 1, 1, 5, 1 );
+    test_bool = test_bool && !myGame.is_chk_persist( 7, 2, 5, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 7, 2, 5, 1 );
+
+    myGame.clearBoard();
+
+    // Row case.
+    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at( 5, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    myGame.printBoard();
+
+    test_bool = test_bool && !myGame.is_chk_persist( 5, 1, 5, 5 );
+    test_bool = test_bool && myGame.is_chk_persist( 1, 1, 1, 5 );
+    test_bool = test_bool && !myGame.is_chk_persist( 2, 7, 3, 5 );
+    test_bool = test_bool && myGame.is_chk_persist( 2, 7, 1, 5 );
+
+    if( test_bool ){
+        cout << "chess rook check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess rook check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Bishop Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // // Row case.
+    // myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+    //     chess::CHS_PIECE_COLOR::WHITE ) );
+    // myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+    //     chess::CHS_PIECE_COLOR::BLACK ) );
+
+// ---------------------------------------------------------------------- <<<<<
+
+
 }
