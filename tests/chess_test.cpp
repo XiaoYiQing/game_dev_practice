@@ -4681,11 +4681,96 @@ void tests::chess_chk_persist_tests(){
     test_bool = true;
     myGame.clearBoard();
 
-    // // Row case.
-    // myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-    //     chess::CHS_PIECE_COLOR::WHITE ) );
-    // myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-    //     chess::CHS_PIECE_COLOR::BLACK ) );
+    // Row case.
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 3, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Block checking bishop with a bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
+    // Move without entering the check diagonal.
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 4 );
+    // Move to a diagonal intersecting the king, but not the attacker.
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 6 );
+    // Move onto the checking diagonal, but not in-between the king and the attacker.
+    test_bool = test_bool && myGame.is_chk_persist( 3, 6, 2, 5 );
+    // Move onto the checking diagonal, but not in-between the king and the attacker.
+    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 7, 0 );
+    // Block checking bishop with a rook.
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 0, 4, 3 );
+        
+    // Move the attacking bishop to the immediate vicinity of the attacked king.
+    myGame.set_piece_at( 4, 3, myGame.get_piece_at( 6, 1 ) );
+    myGame.set_piece_at( 6, 1, emp_pce );
+    // Directly taking the attacking bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
+
+    if( test_bool ){
+        cout << "chess bishop check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess bishop check persistance assessment test: failed!" << endl;
+    }
+    
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Queen Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // Row case.
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Block checking queen with a bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 4 );
+    // Block checking queen with a rook.
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 5, 4, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 5, 4, 4 );
+
+    // Move the attacking queen to the same column of the attacked king.
+    myGame.set_piece_at( 7, 4, myGame.get_piece_at( 6, 1 ) );
+    myGame.set_piece_at( 6, 1, emp_pce );
+    
+    myGame.printBoard();
+
+    // Block checking queen with a bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 7, 4 );
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 5, 4 );
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 4, 3 );
+    // Block checking queen with a rook.
+    test_bool = test_bool && myGame.is_chk_persist( 4, 5, 4, 3 );
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 5, 4, 4 );
+
+    if( test_bool ){
+        cout << "chess queen check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess queen check persistance assessment test: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 

@@ -2376,6 +2376,10 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
     chs_piece atk_pce = this->get_piece_at( atk_pce_ij );
     CHS_PIECE_TYPE atkType = atk_pce.type;
 
+    pair<int,int> atk_to_tar_diff;
+    pair<int,int> tar_to_king_diff;
+
+    // Analysis selection based on the attacker's piece type.
     switch( atkType ){
     case CHS_PIECE_TYPE::PAWN:
 
@@ -2420,9 +2424,9 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
     case CHS_PIECE_TYPE::BISHOP:
 
         // Compute the distance between the attacker and the target.
-        pair<int,int> atk_to_tar_diff = { i_aft - atk_pce_ij.first, j_aft - atk_pce_ij.first };
+        atk_to_tar_diff = { i_aft - atk_pce_ij.first, j_aft - atk_pce_ij.second };
         // Compute the distance between the the target and its king.
-        pair<int,int> tar_to_king_diff = { king_pos.first - i_aft, king_pos.second - j_aft };
+        tar_to_king_diff = { king_pos.first - i_aft, king_pos.second - j_aft };
 
         // The target piece destination must share a diagonal with the attacker and the
         // king in order to be able to block the check.
@@ -2430,35 +2434,22 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
             ( abs( tar_to_king_diff.first ) != abs( tar_to_king_diff.second ) ) )
             return true;
 
-        int atk_to_tar_sign = atk_to_tar_diff.first * atk_to_tar_diff.second;
-        int tar_to_king_sign = tar_to_king_diff.first * tar_to_king_diff.second;
+        /*
+        Note: Having just the knowledge that the target piece ends up along a diagonal
+        with the king as well as with the attacker is sufficient to determine that
+        the target piece is ending up on the same diagonal as both the king and the
+        attacker.
+        This is because we know that the attacker is on the same diagonal as the king by
+        virtue of the fact that it is a bishop attacking the king.
+        */
 
-        // The shared diagonals between the target and the attacker and between the 
-        // target and its king must be the same.
-        if( ( atk_to_tar_sign > 0 && tar_to_king_sign < 0 ) || 
-            ( atk_to_tar_sign < 0 && tar_to_king_sign > 0 ) )
-            return true;
-
-        // Lower-left to upper-right diagonal.
-        if( atk_to_tar_sign > 0 ){
-            
-            if( ( atk_to_tar_diff.first > 0 && tar_to_king_diff.first > 0 ) || 
-                ( atk_to_tar_diff.first < 0 && tar_to_king_diff.first < 0 ) ){
-                return false;
-            }else{
-                return true;
-            }
-
-        // Lower-right to upper-left diagonal.
+        // The target piece ending destination must be in-between the attacker
+        // and the king for the check to be blocked.
+        if( ( atk_to_tar_diff.first >= 0 && tar_to_king_diff.first > 0 ) || 
+            ( atk_to_tar_diff.first <= 0 && tar_to_king_diff.first < 0 ) ){
+            return false;
         }else{
-
-            if( ( atk_to_tar_diff.first > 0 && tar_to_king_diff.first > 0 ) || 
-                ( atk_to_tar_diff.first < 0 && tar_to_king_diff.first < 0 ) ){
-                return false;
-            }else{
-                return true;
-            }
-            
+            return true;
         }
 
         break;
@@ -2472,7 +2463,7 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
             if( i_aft != king_pos.first )
                 return true;
 
-            // Assessment depends whether the column index of the king is higher 
+            // Assessment depends on whether the column index of the king is higher 
             // or lower than its attacker.
             if( king_pos.second > atk_pce_ij.second ){
                 return !( j_aft >= atk_pce_ij.second && j_aft < king_pos.second );
@@ -2502,6 +2493,61 @@ bool chess::is_chk_persist( int i_bef, int j_bef, int i_aft, int j_aft ) const{
         break;
 
     case CHS_PIECE_TYPE::QUEEN:
+
+        // Same row case.
+        if( king_pos.first == atk_pce_ij.first ){
+            
+            // The playing piece must end on the same row as the king and the attacker.
+            if( i_aft != king_pos.first )
+                return true;
+
+            // Assessment depends on whether the column index of the king is higher 
+            // or lower than its attacker.
+            if( king_pos.second > atk_pce_ij.second ){
+                return !( j_aft >= atk_pce_ij.second && j_aft < king_pos.second );
+            }else{
+                return !( j_aft <= atk_pce_ij.second && j_aft > king_pos.second );
+            }
+
+        // Same column case.
+        }else if( king_pos.second == atk_pce_ij.second ){
+
+            // The playing piece must end on the same row as the king and the attacker.
+            if( j_aft != king_pos.second )
+                return true;
+
+            // Assessment depends whether the row index of the king is higher 
+            // or lower than its attacker.
+            if( king_pos.first > atk_pce_ij.first ){
+                return !( i_aft >= atk_pce_ij.first && i_aft < king_pos.first );
+            }else{
+                return !( i_aft <= atk_pce_ij.first && i_aft > king_pos.first );
+            }
+
+        // Same diagonal case.
+        }else{
+
+            // Compute the distance between the attacker and the target.
+            atk_to_tar_diff = { i_aft - atk_pce_ij.first, j_aft - atk_pce_ij.second };
+            // Compute the distance between the the target and its king.
+            tar_to_king_diff = { king_pos.first - i_aft, king_pos.second - j_aft };
+
+            // The target piece destination must share a diagonal with the attacker and the
+            // king in order to be able to block the check.
+            if( ( abs( atk_to_tar_diff.first ) != abs( atk_to_tar_diff.second ) ) ||
+                ( abs( tar_to_king_diff.first ) != abs( tar_to_king_diff.second ) ) )
+                return true;
+
+            // The target piece ending destination must be in-between the attacker
+            // and the king for the check to be blocked.
+            if( ( atk_to_tar_diff.first >= 0 && tar_to_king_diff.first > 0 ) || 
+                ( atk_to_tar_diff.first <= 0 && tar_to_king_diff.first < 0 ) ){
+                return false;
+            }else{
+                return true;
+            }
+
+        }
 
         break;
         
