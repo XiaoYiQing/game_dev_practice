@@ -1212,7 +1212,10 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    // Record the game before.
+    
+    
+    // Record the game before. 
+    // TODO: Instead of using a copy as reserve, just remember the move.
     chess game_bef = *this;
 
     // Promotion lock check.
@@ -1368,7 +1371,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
     // Signal for change of board state.
     this->game_tracking_signal();
-    
+        
     // Increment the turn count.
     this->turn_cnt++;
     // Update all states of the game.
@@ -1377,9 +1380,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     }else{
         *this = game_bef;
         return false;
-    }
-
-    
+    }   
 
     return true;
 
@@ -1738,6 +1739,8 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
 {
 
     
+    
+    
     bool play_success = false;
     if( this->is_move_legal( i_bef, j_bef, i_aft, j_aft ) ||
         this->is_atk_legal( i_bef, j_bef, i_aft, j_aft ) )
@@ -1746,13 +1749,14 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
     }else{
         return false;
     }
-    
 
+    
 
     // Check if the play induces an endgame state.
     if( play_success ){
         this->upd_end_game_state();
     }
+    
 
     return play_success;
 
@@ -2071,46 +2075,20 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
-    
-
-
+    // Initialize temporary boolean flag.
     bool state_ok = true;
     /*
     If not castling, check if the game change of state is legal after the move.
     */ 
     if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
 
-        // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
-
+        // Determine if the move causes own king's check state to end (if it was in check).
         state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
         if( state_ok ){
+            // Determine if the move causes own king to be exposed to a check.
             state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
         }
-        
-        // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-        // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-        // cout << "Game copy create: " << time_AB << endl;
 
-        // // Create a temporary game copy.
-        // chess tmp_game = *this;
-
-        // // Perform the move in the game copy without updating game state.
-        // tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
-        // tmp_game.CHS_board[i_aft][j_aft] = tarPce;
-        // // Update the attack lists of the game copy after the move.
-        // tmp_game.force_lists_upd = true;
-        // tmp_game.upd_atk_lists();
-        // tmp_game.force_lists_upd = false;
-        // // Determine check status of both kings.
-        // pair<bool,bool> chk_status = tmp_game.is_in_check();
-
-        // // Check for state change validity, which involves not having a king remaining
-        // // in check state after a play.
-        // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
-        // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
-        // // Additional check making sure both kings are not in check simultaneously.
-        // state_ok = state_ok && !( chk_status.first && chk_status.second );
-        
     }
 
     return state_ok;
@@ -2776,37 +2754,14 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
-
-
+    // Initialize temporary boolean flag.
     bool state_ok = true;
-
+    // Determine if the attack causes own king's check state to end (if it was in check).
     state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
     if( state_ok ){
+        // Determine if the attack causes own king to be exposed to a check.
         state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
     }
-
-    // // Create a temporary game copy.
-    // chess tmp_game = *this;
-    // // Perform the move in the game copy without updating game state.
-    // tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
-    // tmp_game.CHS_board[i_aft][j_aft] = tarPce;
-    // // Special en-passant attack eliminates pawn on same row and ending column.
-    // if( is_en_pass ){
-    //     tmp_game.CHS_board[i_bef][j_aft].set_as_empty();
-    // }
-    // // Update the attack lists of the game copy after the move.
-    // tmp_game.force_lists_upd = true;
-    // tmp_game.upd_atk_lists();
-    // tmp_game.force_lists_upd = false;
-    // // Determine check status of both kings.
-    // pair<bool,bool> chk_status = tmp_game.is_in_check();
-
-    // // Check for state change validity, which involves not having a king remaining
-    // // in check state after a play.
-    // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
-    // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
-    // // Additional check making sure both kings are not in check simultaneously.
-    // state_ok = state_ok && !( chk_status.first && chk_status.second );
 
     return state_ok;
 
@@ -3828,22 +3783,31 @@ bool chess::upd_all(){
 
 bool chess::upd_post_play(){
     
+    
+
     bool upd_res = true;
     
     this->upd_pce_cnt_list();
 
     this->upd_atk_lists();
 
-    // this->upd_all_valid_moves();
-    // this->upd_all_valid_atks();
+    
 
     upd_res = upd_res && ( this->upd_mid_game_state() );
 
-    this->upd_all_legal_moves();
+    
+    
+    
+    this->upd_all_valid_moves();
+    this->upd_all_valid_atks();
 
+    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    this->upd_all_legal_moves();
     this->upd_all_legal_atks();
-    
-    
+
+    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    cout << "Game copy create: " << time_AB << endl;
 
     return upd_res;
 
