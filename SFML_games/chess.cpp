@@ -3795,13 +3795,10 @@ bool chess::upd_post_play(){
 
     upd_res = upd_res && ( this->upd_mid_game_state() );
 
-    
-    
-    
+    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+
     this->upd_all_valid_moves();
     this->upd_all_valid_atks();
-
-    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
     this->upd_all_legal_moves();
     this->upd_all_legal_atks();
 
@@ -4018,7 +4015,9 @@ void chess::upd_atk_lists(){
 
 }
 
-
+// TODO: legal moves are currently saved on a singular vector. Perhaps
+// its best to design it the same way valid moves are saved. This will
+// also make updating legal moves far easier.
 void chess::upd_all_legal_moves(){
 
 
