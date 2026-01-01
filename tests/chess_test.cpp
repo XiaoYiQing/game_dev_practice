@@ -1026,6 +1026,8 @@ void tests::chess_move_tests(){
     
     myGame.setTurn_cnt(1u);
     // Black king right-side castling with threat.
+    myGame.set_piece_at( 7, 7, chess::chs_piece(
+        chess::CHS_PIECE_TYPE::NO_P, chess::CHS_PIECE_COLOR::NO_C ) );
     myGame.set_piece_at( 7, 4, chess::chs_piece(
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
     myGame.set_piece_at( 7, 7, chess::chs_piece(
@@ -2328,41 +2330,49 @@ void tests::chess_full_game_tests(){
 
     myGame.resetBoard();
 
+    // Turn 0.
     test_bool = test_bool && myGame.ply_ag_coord( 'e',2,'e',4 );    
     test_bool = test_bool && myGame.ply_ag_coord( 'e',7,'e',5 );
     test_bool = test_bool && myGame.ply_ag_coord( 'g',1,'f',3 );
     test_bool = test_bool && myGame.ply_ag_coord( 'b',8,'c',6 );
     test_bool = test_bool && myGame.ply_ag_coord( 'f',1,'c',4 );
+    // Turn 5.
     test_bool = test_bool && myGame.ply_ag_coord( 'f',8,'c',5 );
     test_bool = test_bool && myGame.ply_ag_coord( 'b',2,'b',4 );
     test_bool = test_bool && myGame.ply_ag_coord( 'c',5,'b',4 );
     test_bool = test_bool && myGame.ply_ag_coord( 'c',2,'c',3 );
     test_bool = test_bool && myGame.ply_ag_coord( 'b',4,'a',5 );
+    // Turn 10.
     test_bool = test_bool && myGame.ply_ag_coord( 'd',2,'d',4 );
     test_bool = test_bool && myGame.ply_ag_coord( 'e',5,'d',4 );
     test_bool = test_bool && myGame.ply_ag_coord( 'e',1,'g',1 );
     test_bool = test_bool && myGame.ply_ag_coord( 'd',4,'d',3 );
     test_bool = test_bool && myGame.ply_ag_coord( 'd',1,'b',3 );
+    // Turn 15.
     test_bool = test_bool && myGame.ply_ag_coord( 'd',8,'f',6 );
     test_bool = test_bool && myGame.ply_ag_coord( 'e',4,'e',5 );
     test_bool = test_bool && myGame.ply_ag_coord( 'f',6,'g',6 );
     test_bool = test_bool && myGame.ply_ag_coord( 'f',1,'e',1 );
     test_bool = test_bool && myGame.ply_ag_coord( 'g',8,'e',7 );
+    // Turn 20.
     test_bool = test_bool && myGame.ply_ag_coord( 'c',1,'a',3 );
     test_bool = test_bool && myGame.ply_ag_coord( 'b',7,'b',5 );
     test_bool = test_bool && myGame.ply_ag_coord( 'b',3,'b',5 );
     test_bool = test_bool && myGame.ply_ag_coord( 'a',8,'b',8 );
     test_bool = test_bool && myGame.ply_ag_coord( 'b',5,'a',4 );
+    // Turn 25.
     test_bool = test_bool && myGame.ply_ag_coord( 'a',5,'b',6 );
     test_bool = test_bool && myGame.ply_ag_coord( 'b',1,'d',2 );
     test_bool = test_bool && myGame.ply_ag_coord( 'c',8,'b',7 );
     test_bool = test_bool && myGame.ply_ag_coord( 'd',2,'e',4 );
     test_bool = test_bool && myGame.ply_ag_coord( 'g',6,'f',5 );
+    // Turn 30.
     test_bool = test_bool && myGame.ply_ag_coord( 'c',4,'d',3 );
     test_bool = test_bool && myGame.ply_ag_coord( 'f',5,'h',5 );
     test_bool = test_bool && myGame.ply_ag_coord( 'e',4,'f',6 );
     test_bool = test_bool && myGame.ply_ag_coord( 'g',7,'f',6 );
     test_bool = test_bool && myGame.ply_ag_coord( 'e',5,'f',6 );
+    // Turn 35.
     test_bool = test_bool && myGame.ply_ag_coord( 'h',8,'g',8 );
     test_bool = test_bool && myGame.ply_ag_coord( 'a',1,'d',1 );
     test_bool = test_bool && myGame.ply_ag_coord( 'h',5,'f',3 );
@@ -2373,7 +2383,6 @@ void tests::chess_full_game_tests(){
     test_bool = test_bool && myGame.ply_ag_coord( 'a',3,'e',7 );
     tmp_state = myGame.getState();
     
-    myGame.printBoard_ag_coord();
     auto tmp = myGame.get_all_psbl_alg_comm();
 
     test_bool = test_bool && ( tmp_state == chess::CHS_STATE::WWIN );
@@ -4658,8 +4667,6 @@ void tests::chess_chk_persist_tests(){
     myGame.set_piece_at( 2, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
         chess::CHS_PIECE_COLOR::BLACK ) );
     
-    myGame.printBoard();
-
     test_bool = test_bool && !myGame.is_chk_persist( 5, 1, 5, 5 );
     test_bool = test_bool && myGame.is_chk_persist( 1, 1, 1, 5 );
     test_bool = test_bool && !myGame.is_chk_persist( 2, 7, 3, 5 );
@@ -4756,8 +4763,6 @@ void tests::chess_chk_persist_tests(){
     myGame.set_piece_at( 7, 4, myGame.get_piece_at( 6, 1 ) );
     myGame.set_piece_at( 6, 1, emp_pce );
     
-    myGame.printBoard();
-
     // Block checking queen with a bishop.
     test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 7, 4 );
     test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 5, 4 );

@@ -2080,10 +2080,13 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     */ 
     if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
 
-        
-        state_ok = this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft );
-
         // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+
+        state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+        if( state_ok ){
+            state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
+        }
+        
         // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
         // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
         // cout << "Game copy create: " << time_AB << endl;
@@ -3829,11 +3832,13 @@ bool chess::upd_post_play(){
     // this->upd_all_valid_moves();
     // this->upd_all_valid_atks();
 
+    upd_res = upd_res && ( this->upd_mid_game_state() );
+
     this->upd_all_legal_moves();
 
     this->upd_all_legal_atks();
     
-    upd_res = upd_res && ( this->upd_mid_game_state() );
+    
 
     return upd_res;
 
