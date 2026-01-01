@@ -14,9 +14,11 @@ namespace tests{
 
     void chess_chs_move_tests();
 
-    void chess_alg_coord_trans_tests();
-
     void chess_game_manip_tests();
+
+    void chess_incident_safe_tests();
+
+    void chess_chk_persist_tests();
 
     void chess_move_tests();
 
@@ -38,6 +40,8 @@ namespace tests{
 
     void chess_full_game_tests();
 
+    void chess_alg_coord_trans_tests();
+
     void CHS_SFML_eng_tests();
 
     void chess_all_alg_comm_tests();
@@ -56,9 +60,7 @@ namespace tests{
 
     void valid_atk_maps_tests();
 
-    void chess_incident_safe_tests();
-
-    void chess_chk_persist_tests();
+    
 
 }
 

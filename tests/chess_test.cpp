@@ -208,323 +208,247 @@ void tests::chess_chs_move_tests(){
 }
 
 
-void tests::chess_alg_coord_trans_tests(){
-    
+
+
+void tests::chess_incident_safe_tests(){
+
     bool test_bool = true;
     chess myGame;
     myGame.clearBoard();
 
-// ---------------------------------------------------------------------- >>>>>
-//      Standard Test 1
-// ---------------------------------------------------------------------- >>>>>
-
-    // Add first piece to play.
-    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    
-    chess::chs_move play1; 
-    play1 = myGame.alg_comm_to_move( "Qd4f6" );
-    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
-    play1 = myGame.alg_comm_to_move( "Q4f6" );
-    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
-    play1 = myGame.alg_comm_to_move( "Qdf6" );
-    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
-    play1 = myGame.alg_comm_to_move( "Qf6" );
-    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
-
-    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    play1 = myGame.alg_comm_to_move( "Qd4f6" );
-    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
-    // Try abbreviate alg coord with only rank when two white queens on same rank.
-    try{
-        play1 = myGame.alg_comm_to_move( "Q4f6" );
-        test_bool = false;
-    }catch( runtime_error e ){
-        // Success!!
-    }catch(...){
-        test_bool = false;
-    }
-    play1 = myGame.alg_comm_to_move( "Qdf6" );
-    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
-    // Try abbreviate alg coord with no starting coord when two white queens are on the board.
-    try{
-        play1 = myGame.alg_comm_to_move( "Qf6" );
-        test_bool = false;
-    }catch( runtime_error e ){
-        // Success!!
-    }catch(...){
-        test_bool = false;
-    }
-
-    if( test_bool ){
-        cout << "chess alg_comm_to_move standard test 1: passed!" << endl;
-    }else{
-        cout << "chess alg_comm_to_move standard test 1: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Castling Test
+//      No Pinning Case
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
     myGame.clearBoard();
 
-    // Add first piece to play.
-    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+    myGame.set_piece_at( 3, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
         chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
         chess::CHS_PIECE_COLOR::WHITE ) );
 
-    chess::chs_move play2; 
-    // Attempt right castling.
-    play2 = myGame.alg_comm_to_move( "O-O" );
-    test_bool = test_bool && ( play2 == chess::chs_move( 0, 4, 0, 6 ) );
-
-    // Attempt left castling when there is no left rook.
-    try{
-        play2 = myGame.alg_comm_to_move( "O-O-O" );
-        test_bool = false;
-    }catch( const runtime_error e ){
-
-    }catch( ... ){
-        test_bool = false;
-    }
-
-    // Attempt left castling after left rook is inserted.
-    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    play2 = myGame.alg_comm_to_move( "O-O-O" );
-    test_bool = test_bool && ( play2 == chess::chs_move( 0, 4, 0, 2 ) );
-    
-    // Add black king and rook.
-    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    // Set turn to black.
-    myGame.setTurn_cnt( 1 );
-    // Attempt right castling.
-    play2 = myGame.alg_comm_to_move( "O-O" );
-    test_bool = test_bool && ( play2 == chess::chs_move( 7, 4, 7, 6 ) );
-
-    // Attempt left castling when there is no left rook.
-    try{
-        play2 = myGame.alg_comm_to_move( "O-O-O" );
-        test_bool = false;
-    }catch( const runtime_error e ){
-
-    }catch( ... ){
-        test_bool = false;
-    }
-    // Attempt left castling after left rook is inserted.
-    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    play2 = myGame.alg_comm_to_move( "O-O-O" );
-    test_bool = test_bool && ( play2 == chess::chs_move( 7, 4, 7, 2 ) );
-
+    // Knight attempts to move while not under any restriction.
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 4, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 3, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 3, 3 );
 
     if( test_bool ){
-        cout << "chess alg_comm_to_move castling: passed!" << endl;
+        cout << "chess no pinning incidental safe assessment test: passed!" << endl;
     }else{
-        cout << "chess alg_comm_to_move castling: failed!" << endl;
+        cout << "chess no pinning incidental safe assessment test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Full Game Test (Deep Blue V.S. Kasparov Game 1, 1996 )
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.resetBoard();
-
-    vector<string> mov_strs(0);
-    // Turns 1 - 10
-    mov_strs.push_back( "e4" );     mov_strs.push_back( "c5" );
-    mov_strs.push_back( "c3" );     mov_strs.push_back( "d5" );
-    mov_strs.push_back( "exd5" );    mov_strs.push_back( "Qxd5" );
-    mov_strs.push_back( "d4" );   mov_strs.push_back( "Nf6" );
-    mov_strs.push_back( "Nf3" );    mov_strs.push_back( "Bg4" );
-    mov_strs.push_back( "Be2" );    mov_strs.push_back( "e6" );
-    mov_strs.push_back( "h3" );   mov_strs.push_back( "Bh5" );
-    mov_strs.push_back( "O-O" );   mov_strs.push_back( "Nc6" );
-    mov_strs.push_back( "Be3" );    mov_strs.push_back( "cxd4" );
-    mov_strs.push_back( "cxd4" );   mov_strs.push_back( "Bb4" );
-    // // Turns 11 - 20
-    mov_strs.push_back( "a3" );     mov_strs.push_back( "Ba5" );
-    mov_strs.push_back( "Nc3" );     mov_strs.push_back( "Qd6" );
-    mov_strs.push_back( "Nb5" );    mov_strs.push_back( "Qe7" );
-    mov_strs.push_back( "Ne5" );   mov_strs.push_back( "Bxe2" );
-    mov_strs.push_back( "Qxe2" );    mov_strs.push_back( "O-O" );
-    mov_strs.push_back( "Rac1" );    mov_strs.push_back( "Rac8" );
-    mov_strs.push_back( "Bg5" );   mov_strs.push_back( "Bb6" );
-    mov_strs.push_back( "Bxf6" );   mov_strs.push_back( "gxf6" );
-    mov_strs.push_back( "Nc4" );    mov_strs.push_back( "Rfd8" );
-    mov_strs.push_back( "Nxb6" );   mov_strs.push_back( "axb6" );
-    // // Turn 21 - 30
-    mov_strs.push_back( "Rfd1" );     mov_strs.push_back( "f5" );
-    mov_strs.push_back( "Qe3" );     mov_strs.push_back( "Qf6" );
-    mov_strs.push_back( "d5" );    mov_strs.push_back( "Rxd5" );
-    mov_strs.push_back( "Rxd5" );   mov_strs.push_back( "exd5" );
-    mov_strs.push_back( "b3" );    mov_strs.push_back( "Kh8" );
-    mov_strs.push_back( "Qxb6" );    mov_strs.push_back( "Rg8" );
-    mov_strs.push_back( "Qc5" );   mov_strs.push_back( "d4" );
-    mov_strs.push_back( "Nd6" );   mov_strs.push_back( "f4" );
-    mov_strs.push_back( "Nxb7" );    mov_strs.push_back( "Ne5" );
-    mov_strs.push_back( "Qd5" );   mov_strs.push_back( "f3" );
-    // // Turn 31 - 39
-    mov_strs.push_back( "g3" );     mov_strs.push_back( "Nd3" );
-    mov_strs.push_back( "Rc7" );     mov_strs.push_back( "Re8" );
-    mov_strs.push_back( "Nd6" );     mov_strs.push_back( "Re1+" );
-    mov_strs.push_back( "Kh2" );     mov_strs.push_back( "Nxf2" );
-    mov_strs.push_back( "Nxf7+" );     mov_strs.push_back( "Kg7" );
-    mov_strs.push_back( "Ng5+" );     mov_strs.push_back( "Kh6" );
-    mov_strs.push_back( "Rxh7+" );     // mov_strs.push_back( "1-0" );
-
-    for( string str_z : mov_strs ){
-        play2 = myGame.alg_comm_to_move( str_z );
-        myGame.ply( play2 );
-    }
-
-    // Define the end game piece list.
-    chess endGame;
-    endGame.clearBoard();
-
-    endGame.set_piece_at_ag_coord( 'e', 1, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    endGame.set_piece_at_ag_coord( 'f', 2, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
-    endGame.set_piece_at_ag_coord( 'h', 2, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
-    endGame.set_piece_at_ag_coord( 'a', 3, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-    endGame.set_piece_at_ag_coord( 'b', 3, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-    endGame.set_piece_at_ag_coord( 'f', 3, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    endGame.set_piece_at_ag_coord( 'g', 3, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-    endGame.set_piece_at_ag_coord( 'h', 3, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-    endGame.set_piece_at_ag_coord( 'd', 4, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    endGame.set_piece_at_ag_coord( 'd', 5, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
-    endGame.set_piece_at_ag_coord( 'g', 5, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
-    endGame.set_piece_at_ag_coord( 'f', 6, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
-    endGame.set_piece_at_ag_coord( 'h', 6, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
-    endGame.set_piece_at_ag_coord( 'h', 7, 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    
-    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
-        test_bool = test_bool && ( myGame.get_piece_at( chess::ind2sub(z) ) == 
-            endGame.get_piece_at( chess::ind2sub(z) ) );
-    }
-
-    if( test_bool ){
-        cout << "chess alg_comm_to_move full game playout test: passed!" << endl;
-    }else{
-        cout << "chess alg_comm_to_move full game playout test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      ply_ag_comm Promotion Test
+//      Horizontal and Vertical Tests
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
     myGame.clearBoard();
 
-    myGame.set_piece_at( 6, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
         chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
         chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.ply_ag_comm( "e8Q" );
-    myGame.ply_ag_comm( "b1R" );
-    test_bool = test_bool && ( myGame.get_piece_at( 7, 4 ).type == chess::CHS_PIECE_TYPE::QUEEN );
-    test_bool = test_bool && ( myGame.get_piece_at( 0, 1 ).type == chess::CHS_PIECE_TYPE::ROOK );
+
+    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Knight attempts to move while not under any restriction.
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 5, 2, 3 );
+
+    // White rook attempts to move while enemy rook is pinning it against its king.
+    test_bool = test_bool && !myGame.is_incidental_safe( 3, 4, 3, 2 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 0, 2, 1, 2 );
+
+    // White rook attempts to move along column where it is pinned.
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 4, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 0, 2, 0, 1 );
+    test_bool = test_bool && myGame.is_incidental_safe( 0, 2, 0, 3 );
 
     if( test_bool ){
-        cout << "chess ply_ag_comm promotion test: passed!" << endl;
+        cout << "chess horizontal and vertical incidental safe assessment test: passed!" << endl;
     }else{
-        cout << "chess ply_ag_comm promotion test: failed!" << endl;
+        cout << "chess horizontal and vertical incidental safe assessment test: failed!" << endl;
     }
+    
 
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Diagonal Tests
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 5, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 5, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 1, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    // Upper-left diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 5, 3, 6, 4 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 5, 3, 4, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 5, 3, 6, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 5, 3, 4, 4 );
+    // Upper-left diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 1, 7, 2 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 1, 5, 0 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 1, 5, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 1, 7, 0 );
+
+    // Upper-right diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 6, 5, 5 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 6, 3, 7 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 6, 5, 7 );
+    // Upper-right diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 5, 7, 4 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 6, 5, 5, 6 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 5, 5, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 6, 5, 7, 6 );
+
+    // Lower-right diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 6, 3, 7 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 6, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 6, 1, 7 );
+    // Lower-right diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 5, 4, 7 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 5, 1, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 5, 1, 6 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 5, 3, 4 );
+
+    // Lower-left diagonal (white).
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 3, 3, 1 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 3, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 3, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 3, 0, 2 );
+    // Lower-left diagonal (black).
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 1, 3, 0 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 2, 1, 0, 3 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 1, 3, 2 );
+    test_bool = test_bool && myGame.is_incidental_safe( 2, 1, 1, 0 );
+    
+
+    if( test_bool ){
+        cout << "chess diagonal incidental safe assessment test: passed!" << endl;
+    }else{
+        cout << "chess diagonal incidental safe assessment test: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
 // ---------------------------------------------------------------------- >>>>>
-//      Full Game Test with ply_ag_comm (Deep Blue V.S. Kasparov Game 1, 1996 )
+//      Pinning with Obstruction Case
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
-    myGame.resetBoard();
+    myGame.clearBoard();
 
-    // Turns 1 - 10
-    myGame.ply_ag_comm( "e4" );     myGame.ply_ag_comm( "c5" );
-    myGame.ply_ag_comm( "c3" );     myGame.ply_ag_comm( "d5" );
-    myGame.ply_ag_comm( "exd5" );   myGame.ply_ag_comm( "Qxd5" );
-    myGame.ply_ag_comm( "d4" );     myGame.ply_ag_comm( "Nf6" );
-    myGame.ply_ag_comm( "Nf3" );    myGame.ply_ag_comm( "Bg4" );
-    myGame.ply_ag_comm( "Be2" );    myGame.ply_ag_comm( "e6" );
-    myGame.ply_ag_comm( "h3" );     myGame.ply_ag_comm( "Bh5" );
-    myGame.ply_ag_comm( "O-O" );    myGame.ply_ag_comm( "Nc6" );
-    myGame.ply_ag_comm( "Be3" );    myGame.ply_ag_comm( "cxd4" );
-    myGame.ply_ag_comm( "cxd4" );   myGame.ply_ag_comm( "Bb4" );
-    // Turns 11 - 20
-    myGame.ply_ag_comm( "a3" );     myGame.ply_ag_comm( "Ba5" );
-    myGame.ply_ag_comm( "Nc3" );    myGame.ply_ag_comm( "Qd6" );
-    myGame.ply_ag_comm( "Nb5" );    myGame.ply_ag_comm( "Qe7" );
-    myGame.ply_ag_comm( "Ne5" );    myGame.ply_ag_comm( "Bxe2" );
-    myGame.ply_ag_comm( "Qxe2" );   myGame.ply_ag_comm( "O-O" );
-    myGame.ply_ag_comm( "Rac1" );   myGame.ply_ag_comm( "Rac8" );
-    myGame.ply_ag_comm( "Bg5" );    myGame.ply_ag_comm( "Bb6" );
-    myGame.ply_ag_comm( "Bxf6" );   myGame.ply_ag_comm( "gxf6" );
-    myGame.ply_ag_comm( "Nc4" );    myGame.ply_ag_comm( "Rfd8" );
-    myGame.ply_ag_comm( "Nxb6" );   myGame.ply_ag_comm( "axb6" );
-    // Turn 21 - 30
-    myGame.ply_ag_comm( "Rfd1" );   myGame.ply_ag_comm( "f5" );
-    myGame.ply_ag_comm( "Qe3" );    myGame.ply_ag_comm( "Qf6" );
-    myGame.ply_ag_comm( "d5" );     myGame.ply_ag_comm( "Rxd5" );
-    myGame.ply_ag_comm( "Rxd5" );   myGame.ply_ag_comm( "exd5" );
-    myGame.ply_ag_comm( "b3" );     myGame.ply_ag_comm( "Kh8" );
-    myGame.ply_ag_comm( "Qxb6" );   myGame.ply_ag_comm( "Rg8" );
-    myGame.ply_ag_comm( "Qc5" );    myGame.ply_ag_comm( "d4" );
-    myGame.ply_ag_comm( "Nd6" );    myGame.ply_ag_comm( "f4" );
-    myGame.ply_ag_comm( "Nxb7" );   myGame.ply_ag_comm( "Ne5" );
-    myGame.ply_ag_comm( "Qd5" );    myGame.ply_ag_comm( "f3" );
-    // Turn 31 - 39
-    myGame.ply_ag_comm( "g3" );     myGame.ply_ag_comm( "Nd3" );
-    myGame.ply_ag_comm( "Rc7" );    myGame.ply_ag_comm( "Re8" );
-    myGame.ply_ag_comm( "Nd6" );    myGame.ply_ag_comm( "Re1+" );
-    test_bool = myGame.getState() == chess::CHS_STATE::WCHK;
-    myGame.ply_ag_comm( "Kh2" );    myGame.ply_ag_comm( "Nxf2" );
-    myGame.ply_ag_comm( "Nxf7+" );  
-    test_bool = myGame.getState() == chess::CHS_STATE::BCHK;
-    myGame.ply_ag_comm( "Kg7" );
-    myGame.ply_ag_comm( "Ng5+" );   myGame.ply_ag_comm( "Kh6" );
-    myGame.ply_ag_comm( "Rxh7+" );  myGame.ply_ag_comm( "1-0" );
-    test_bool = myGame.getState() == chess::CHS_STATE::WWIN;
+    myGame.set_piece_at( 1, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
 
-    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
-        test_bool = test_bool && ( myGame.get_piece_at( chess::ind2sub(z) ) == 
-            endGame.get_piece_at( chess::ind2sub(z) ) );
-    }
+    myGame.set_piece_at( 1, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 4, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    // Rook attempt to move in all four directions.
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 5 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 1, 4, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 3 );
+    // Bishop attempt to move in all four directions.
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 4, 5, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 5 );
+    test_bool = test_bool && !myGame.is_incidental_safe( 4, 4, 3, 3 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 3 );
+
+    myGame.set_piece_at( 1, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Rook attempt to move in all four directions.
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 2, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 0, 4 );
+    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 3 );
+    // Bishop attempt to move in all four directions.
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 5 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 3 );
+    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 3 );
 
     if( test_bool ){
-        cout << "chess ply_ag_comm full game playout test: passed!" << endl;
+        cout << "chess obstructed incidental safe assessment test: passed!" << endl;
     }else{
-        cout << "chess ply_ag_comm full game playout test: failed!" << endl;
+        cout << "chess obstructed incidental safe assessment test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
@@ -532,120 +456,399 @@ void tests::chess_alg_coord_trans_tests(){
 }
 
 
-void tests::chess_game_manip_tests(){
+void tests::chess_chk_persist_tests(){
 
-    // Test boolean init.
     bool test_bool = true;
-
-    chess myGame = chess();
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Test clearBoard
-// ---------------------------------------------------------------------- >>>>>
-
-    // Put two test pieces on the empty board.
-    chess::chs_piece myPiece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
-    myGame.set_piece_at( 1, 2, myPiece );
-    test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::PAWN && 
-        myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::WHITE );
-    myPiece = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
-    myGame.set_piece_at( 5, 4, myPiece );
-    test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::KNIGHT && 
-        myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::BLACK );
-
-    // Clear the board and check the two pieces location for empty case.
+    chess myGame;
     myGame.clearBoard();
-    test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::NO_P && 
-        myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::NO_C );
-    test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::NO_P && 
-        myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::NO_C );
-    
-    if( test_bool ){
-        cout << "chess clearBoard test: passed!" << endl;
-    }else{
-        cout << "chess clearBoard test: failed!" << endl;
-    }
 
-// ---------------------------------------------------------------------- <<<<<
-
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
 
 // ---------------------------------------------------------------------- >>>>>
-//      Test resetBoard
+//      No Check Case
 // ---------------------------------------------------------------------- >>>>>
-    
+
     test_bool = true;
-    myGame.resetBoard();
-    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
-    test_bool = test_bool && ( myGame.getTurn_cnt() == 0 );
-    test_bool = test_bool && ( myGame.getNo_change_turn_cnt() == 0 );
+    myGame.clearBoard();
 
-    unsigned int col_idx = 0;
-    unsigned int row_idx = 0;
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
-    col_idx = 1;
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
-    col_idx = 2;
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
-    col_idx = 3;
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
-    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
-        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
 
-    // Compare the pawns.
-    row_idx = 1;
-    for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
-        test_bool = test_bool && ( myGame.get_piece_at( row_idx, j ) ==
-            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-        test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, j ) ==
-            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
-    }
+    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
 
-    // Compare empty spaces.
-    chess::chs_piece NONE_PIECE( chess::CHS_PIECE_TYPE::NO_P, chess::CHS_PIECE_COLOR::NO_C );
-    for( unsigned int i = 2; i < chess::BOARDHEIGHT - 2; i++ ){
-        for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
-            test_bool = test_bool && ( myGame.get_piece_at( i, j ) == NONE_PIECE );
-        }
-    }
+    test_bool = test_bool && !myGame.is_chk_persist( 3, 3, 3, 5 );
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 4, 3, 4 );
 
     if( test_bool ){
-        cout << "chess resetBoard test: passed!" << endl;
+        cout << "chess no check check persistance assessment test: passed!" << endl;
     }else{
-        cout << "chess resetBoard test: failed!" << endl;
+        cout << "chess no check check persistance assessment test: failed!" << endl;
     }
+
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      King Move Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 5, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 3, 2 );
+    test_bool = test_bool && !myGame.is_chk_persist( 2, 2, 3, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 2, 3 );
+    test_bool = test_bool && !myGame.is_chk_persist( 2, 2, 1, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 1, 2 );
+    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 1, 1 );
+    test_bool = test_bool && !myGame.is_chk_persist( 2, 2, 2, 1 );
+    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 3, 1 );
+    
+    if( test_bool ){
+        cout << "chess white king move check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess white king move check persistance assessment test: failed!" << endl;
+    }
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 5, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 6, 5 );
+    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 6, 6 );
+    test_bool = test_bool && !myGame.is_chk_persist( 5, 5, 5, 6 );
+    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 4, 6 );
+    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 4, 5 );
+    test_bool = test_bool && !myGame.is_chk_persist( 5, 5, 4, 4 );
+    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 5, 4 );
+    test_bool = test_bool && !myGame.is_chk_persist( 5, 5, 6, 4 );
+        
+    if( test_bool ){
+        cout << "chess black king move check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess black king move check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Double (or more) Check Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 7, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE) );
+
+    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 2 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 3 );
+    
+    if( test_bool ){
+        cout << "chess white king double check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess white king double check persistance assessment test: failed!" << endl;
+    }
+
+    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at( 7, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 2 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 3 );
+
+    if( test_bool ){
+        cout << "chess black king double check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess black king double check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Cases
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    test_bool = test_bool && myGame.is_chk_persist( 4, 7, 4, 6 );
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 7, 4, 3 );
+
+
+    if( test_bool ){
+        cout << "chess pawn check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess pawn check persistance assessment test: failed!" << endl;
+    }
+
+    test_bool = true;
+
+    myGame.set_piece_at( 4, 3, emp_pce );
+    myGame.set_piece_at( 4, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.setTurn_cnt(1u);
+
+    test_bool = test_bool && myGame.ply( 6,1, 4,1 );
+    test_bool = test_bool && myGame.getEn_pass_flag();
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 2, 5, 1 );
+    test_bool = test_bool && myGame.ply( 4,2, 5,1 );
+
+    if( test_bool ){
+        cout << "chess pawn en-passant check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess pawn en-passant check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Knight Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 3, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 5, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 4, 2 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 4, 4 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 2, 3 );
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 3, 5, 3 );
+
+    if( test_bool ){
+        cout << "chess knight check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess knight check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      Rook Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // Row case.
+    myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 5, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 5, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at( 1, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    test_bool = test_bool && !myGame.is_chk_persist( 1, 5, 5, 5 );
+    test_bool = test_bool && myGame.is_chk_persist( 1, 1, 5, 1 );
+    test_bool = test_bool && !myGame.is_chk_persist( 7, 2, 5, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 7, 2, 5, 1 );
+
+    myGame.clearBoard();
+
+    // Row case.
+    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.set_piece_at( 5, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 2, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    test_bool = test_bool && !myGame.is_chk_persist( 5, 1, 5, 5 );
+    test_bool = test_bool && myGame.is_chk_persist( 1, 1, 1, 5 );
+    test_bool = test_bool && !myGame.is_chk_persist( 2, 7, 3, 5 );
+    test_bool = test_bool && myGame.is_chk_persist( 2, 7, 1, 5 );
+
+    if( test_bool ){
+        cout << "chess rook check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess rook check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Bishop Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // Row case.
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 3, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Block checking bishop with a bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
+    // Move without entering the check diagonal.
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 4 );
+    // Move to a diagonal intersecting the king, but not the attacker.
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 6 );
+    // Move onto the checking diagonal, but not in-between the king and the attacker.
+    test_bool = test_bool && myGame.is_chk_persist( 3, 6, 2, 5 );
+    // Move onto the checking diagonal, but not in-between the king and the attacker.
+    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 7, 0 );
+    // Block checking bishop with a rook.
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 0, 4, 3 );
+        
+    // Move the attacking bishop to the immediate vicinity of the attacked king.
+    myGame.set_piece_at( 4, 3, myGame.get_piece_at( 6, 1 ) );
+    myGame.set_piece_at( 6, 1, emp_pce );
+    // Directly taking the attacking bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
+
+    if( test_bool ){
+        cout << "chess bishop check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess bishop check persistance assessment test: failed!" << endl;
+    }
+    
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Queen Case
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // Row case.
+    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 4, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    // Block checking queen with a bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 4 );
+    // Block checking queen with a rook.
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 5, 4, 3 );
+    test_bool = test_bool && myGame.is_chk_persist( 4, 5, 4, 4 );
+
+    // Move the attacking queen to the same column of the attacked king.
+    myGame.set_piece_at( 7, 4, myGame.get_piece_at( 6, 1 ) );
+    myGame.set_piece_at( 6, 1, emp_pce );
+    
+    // Block checking queen with a bishop.
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 7, 4 );
+    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 5, 4 );
+    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 4, 3 );
+    // Block checking queen with a rook.
+    test_bool = test_bool && myGame.is_chk_persist( 4, 5, 4, 3 );
+    test_bool = test_bool && !myGame.is_chk_persist( 4, 5, 4, 4 );
+
+    if( test_bool ){
+        cout << "chess queen check persistance assessment test: passed!" << endl;
+    }else{
+        cout << "chess queen check persistance assessment test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
-
-
 
 
 void tests::chess_move_tests(){
@@ -2457,6 +2660,444 @@ void tests::chess_full_game_tests(){
 
 
 
+void tests::chess_alg_coord_trans_tests(){
+    
+    bool test_bool = true;
+    chess myGame;
+    myGame.clearBoard();
+
+// ---------------------------------------------------------------------- >>>>>
+//      Standard Test 1
+// ---------------------------------------------------------------------- >>>>>
+
+    // Add first piece to play.
+    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    
+    chess::chs_move play1; 
+    play1 = myGame.alg_comm_to_move( "Qd4f6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    play1 = myGame.alg_comm_to_move( "Q4f6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    play1 = myGame.alg_comm_to_move( "Qdf6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    play1 = myGame.alg_comm_to_move( "Qf6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+
+    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    play1 = myGame.alg_comm_to_move( "Qd4f6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    // Try abbreviate alg coord with only rank when two white queens on same rank.
+    try{
+        play1 = myGame.alg_comm_to_move( "Q4f6" );
+        test_bool = false;
+    }catch( runtime_error e ){
+        // Success!!
+    }catch(...){
+        test_bool = false;
+    }
+    play1 = myGame.alg_comm_to_move( "Qdf6" );
+    test_bool = test_bool && ( play1 == chess::chs_move( 3, 3, 5, 5 ) );
+    // Try abbreviate alg coord with no starting coord when two white queens are on the board.
+    try{
+        play1 = myGame.alg_comm_to_move( "Qf6" );
+        test_bool = false;
+    }catch( runtime_error e ){
+        // Success!!
+    }catch(...){
+        test_bool = false;
+    }
+
+    if( test_bool ){
+        cout << "chess alg_comm_to_move standard test 1: passed!" << endl;
+    }else{
+        cout << "chess alg_comm_to_move standard test 1: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    // Add first piece to play.
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    chess::chs_move play2; 
+    // Attempt right castling.
+    play2 = myGame.alg_comm_to_move( "O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 0, 4, 0, 6 ) );
+
+    // Attempt left castling when there is no left rook.
+    try{
+        play2 = myGame.alg_comm_to_move( "O-O-O" );
+        test_bool = false;
+    }catch( const runtime_error e ){
+
+    }catch( ... ){
+        test_bool = false;
+    }
+
+    // Attempt left castling after left rook is inserted.
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    play2 = myGame.alg_comm_to_move( "O-O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 0, 4, 0, 2 ) );
+    
+    // Add black king and rook.
+    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    // Set turn to black.
+    myGame.setTurn_cnt( 1 );
+    // Attempt right castling.
+    play2 = myGame.alg_comm_to_move( "O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 7, 4, 7, 6 ) );
+
+    // Attempt left castling when there is no left rook.
+    try{
+        play2 = myGame.alg_comm_to_move( "O-O-O" );
+        test_bool = false;
+    }catch( const runtime_error e ){
+
+    }catch( ... ){
+        test_bool = false;
+    }
+    // Attempt left castling after left rook is inserted.
+    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    play2 = myGame.alg_comm_to_move( "O-O-O" );
+    test_bool = test_bool && ( play2 == chess::chs_move( 7, 4, 7, 2 ) );
+
+
+    if( test_bool ){
+        cout << "chess alg_comm_to_move castling: passed!" << endl;
+    }else{
+        cout << "chess alg_comm_to_move castling: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Full Game Test (Deep Blue V.S. Kasparov Game 1, 1996 )
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+
+    vector<string> mov_strs(0);
+    // Turns 1 - 10
+    mov_strs.push_back( "e4" );     mov_strs.push_back( "c5" );
+    mov_strs.push_back( "c3" );     mov_strs.push_back( "d5" );
+    mov_strs.push_back( "exd5" );    mov_strs.push_back( "Qxd5" );
+    mov_strs.push_back( "d4" );   mov_strs.push_back( "Nf6" );
+    mov_strs.push_back( "Nf3" );    mov_strs.push_back( "Bg4" );
+    mov_strs.push_back( "Be2" );    mov_strs.push_back( "e6" );
+    mov_strs.push_back( "h3" );   mov_strs.push_back( "Bh5" );
+    mov_strs.push_back( "O-O" );   mov_strs.push_back( "Nc6" );
+    mov_strs.push_back( "Be3" );    mov_strs.push_back( "cxd4" );
+    mov_strs.push_back( "cxd4" );   mov_strs.push_back( "Bb4" );
+    // // Turns 11 - 20
+    mov_strs.push_back( "a3" );     mov_strs.push_back( "Ba5" );
+    mov_strs.push_back( "Nc3" );     mov_strs.push_back( "Qd6" );
+    mov_strs.push_back( "Nb5" );    mov_strs.push_back( "Qe7" );
+    mov_strs.push_back( "Ne5" );   mov_strs.push_back( "Bxe2" );
+    mov_strs.push_back( "Qxe2" );    mov_strs.push_back( "O-O" );
+    mov_strs.push_back( "Rac1" );    mov_strs.push_back( "Rac8" );
+    mov_strs.push_back( "Bg5" );   mov_strs.push_back( "Bb6" );
+    mov_strs.push_back( "Bxf6" );   mov_strs.push_back( "gxf6" );
+    mov_strs.push_back( "Nc4" );    mov_strs.push_back( "Rfd8" );
+    mov_strs.push_back( "Nxb6" );   mov_strs.push_back( "axb6" );
+    // // Turn 21 - 30
+    mov_strs.push_back( "Rfd1" );     mov_strs.push_back( "f5" );
+    mov_strs.push_back( "Qe3" );     mov_strs.push_back( "Qf6" );
+    mov_strs.push_back( "d5" );    mov_strs.push_back( "Rxd5" );
+    mov_strs.push_back( "Rxd5" );   mov_strs.push_back( "exd5" );
+    mov_strs.push_back( "b3" );    mov_strs.push_back( "Kh8" );
+    mov_strs.push_back( "Qxb6" );    mov_strs.push_back( "Rg8" );
+    mov_strs.push_back( "Qc5" );   mov_strs.push_back( "d4" );
+    mov_strs.push_back( "Nd6" );   mov_strs.push_back( "f4" );
+    mov_strs.push_back( "Nxb7" );    mov_strs.push_back( "Ne5" );
+    mov_strs.push_back( "Qd5" );   mov_strs.push_back( "f3" );
+    // // Turn 31 - 39
+    mov_strs.push_back( "g3" );     mov_strs.push_back( "Nd3" );
+    mov_strs.push_back( "Rc7" );     mov_strs.push_back( "Re8" );
+    mov_strs.push_back( "Nd6" );     mov_strs.push_back( "Re1+" );
+    mov_strs.push_back( "Kh2" );     mov_strs.push_back( "Nxf2" );
+    mov_strs.push_back( "Nxf7+" );     mov_strs.push_back( "Kg7" );
+    mov_strs.push_back( "Ng5+" );     mov_strs.push_back( "Kh6" );
+    mov_strs.push_back( "Rxh7+" );     // mov_strs.push_back( "1-0" );
+
+    for( string str_z : mov_strs ){
+        play2 = myGame.alg_comm_to_move( str_z );
+        myGame.ply( play2 );
+    }
+
+    // Define the end game piece list.
+    chess endGame;
+    endGame.clearBoard();
+
+    endGame.set_piece_at_ag_coord( 'e', 1, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'f', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'h', 2, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'a', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'b', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'f', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'g', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'h', 3, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'd', 4, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'd', 5, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'g', 5, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    endGame.set_piece_at_ag_coord( 'f', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'h', 6, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    endGame.set_piece_at_ag_coord( 'h', 7, 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        test_bool = test_bool && ( myGame.get_piece_at( chess::ind2sub(z) ) == 
+            endGame.get_piece_at( chess::ind2sub(z) ) );
+    }
+
+    if( test_bool ){
+        cout << "chess alg_comm_to_move full game playout test: passed!" << endl;
+    }else{
+        cout << "chess alg_comm_to_move full game playout test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      ply_ag_comm Promotion Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+
+    myGame.set_piece_at( 6, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.ply_ag_comm( "e8Q" );
+    myGame.ply_ag_comm( "b1R" );
+    test_bool = test_bool && ( myGame.get_piece_at( 7, 4 ).type == chess::CHS_PIECE_TYPE::QUEEN );
+    test_bool = test_bool && ( myGame.get_piece_at( 0, 1 ).type == chess::CHS_PIECE_TYPE::ROOK );
+
+    if( test_bool ){
+        cout << "chess ply_ag_comm promotion test: passed!" << endl;
+    }else{
+        cout << "chess ply_ag_comm promotion test: failed!" << endl;
+    }
+
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      Full Game Test with ply_ag_comm (Deep Blue V.S. Kasparov Game 1, 1996 )
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+
+    // Turns 1 - 10
+    myGame.ply_ag_comm( "e4" );     myGame.ply_ag_comm( "c5" );
+    myGame.ply_ag_comm( "c3" );     myGame.ply_ag_comm( "d5" );
+    myGame.ply_ag_comm( "exd5" );   myGame.ply_ag_comm( "Qxd5" );
+    myGame.ply_ag_comm( "d4" );     myGame.ply_ag_comm( "Nf6" );
+    myGame.ply_ag_comm( "Nf3" );    myGame.ply_ag_comm( "Bg4" );
+    myGame.ply_ag_comm( "Be2" );    myGame.ply_ag_comm( "e6" );
+    myGame.ply_ag_comm( "h3" );     myGame.ply_ag_comm( "Bh5" );
+    myGame.ply_ag_comm( "O-O" );    myGame.ply_ag_comm( "Nc6" );
+    myGame.ply_ag_comm( "Be3" );    myGame.ply_ag_comm( "cxd4" );
+    myGame.ply_ag_comm( "cxd4" );   myGame.ply_ag_comm( "Bb4" );
+    // Turns 11 - 20
+    myGame.ply_ag_comm( "a3" );     myGame.ply_ag_comm( "Ba5" );
+    myGame.ply_ag_comm( "Nc3" );    myGame.ply_ag_comm( "Qd6" );
+    myGame.ply_ag_comm( "Nb5" );    myGame.ply_ag_comm( "Qe7" );
+    myGame.ply_ag_comm( "Ne5" );    myGame.ply_ag_comm( "Bxe2" );
+    myGame.ply_ag_comm( "Qxe2" );   myGame.ply_ag_comm( "O-O" );
+    myGame.ply_ag_comm( "Rac1" );   myGame.ply_ag_comm( "Rac8" );
+    myGame.ply_ag_comm( "Bg5" );    myGame.ply_ag_comm( "Bb6" );
+    myGame.ply_ag_comm( "Bxf6" );   myGame.ply_ag_comm( "gxf6" );
+    myGame.ply_ag_comm( "Nc4" );    myGame.ply_ag_comm( "Rfd8" );
+    myGame.ply_ag_comm( "Nxb6" );   myGame.ply_ag_comm( "axb6" );
+    // Turn 21 - 30
+    myGame.ply_ag_comm( "Rfd1" );   myGame.ply_ag_comm( "f5" );
+    myGame.ply_ag_comm( "Qe3" );    myGame.ply_ag_comm( "Qf6" );
+    myGame.ply_ag_comm( "d5" );     myGame.ply_ag_comm( "Rxd5" );
+    myGame.ply_ag_comm( "Rxd5" );   myGame.ply_ag_comm( "exd5" );
+    myGame.ply_ag_comm( "b3" );     myGame.ply_ag_comm( "Kh8" );
+    myGame.ply_ag_comm( "Qxb6" );   myGame.ply_ag_comm( "Rg8" );
+    myGame.ply_ag_comm( "Qc5" );    myGame.ply_ag_comm( "d4" );
+    myGame.ply_ag_comm( "Nd6" );    myGame.ply_ag_comm( "f4" );
+    myGame.ply_ag_comm( "Nxb7" );   myGame.ply_ag_comm( "Ne5" );
+    myGame.ply_ag_comm( "Qd5" );    myGame.ply_ag_comm( "f3" );
+    // Turn 31 - 39
+    myGame.ply_ag_comm( "g3" );     myGame.ply_ag_comm( "Nd3" );
+    myGame.ply_ag_comm( "Rc7" );    myGame.ply_ag_comm( "Re8" );
+    myGame.ply_ag_comm( "Nd6" );    myGame.ply_ag_comm( "Re1+" );
+    test_bool = myGame.getState() == chess::CHS_STATE::WCHK;
+    myGame.ply_ag_comm( "Kh2" );    myGame.ply_ag_comm( "Nxf2" );
+    myGame.ply_ag_comm( "Nxf7+" );  
+    test_bool = myGame.getState() == chess::CHS_STATE::BCHK;
+    myGame.ply_ag_comm( "Kg7" );
+    myGame.ply_ag_comm( "Ng5+" );   myGame.ply_ag_comm( "Kh6" );
+    myGame.ply_ag_comm( "Rxh7+" );  myGame.ply_ag_comm( "1-0" );
+    test_bool = myGame.getState() == chess::CHS_STATE::WWIN;
+
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
+        test_bool = test_bool && ( myGame.get_piece_at( chess::ind2sub(z) ) == 
+            endGame.get_piece_at( chess::ind2sub(z) ) );
+    }
+
+    if( test_bool ){
+        cout << "chess ply_ag_comm full game playout test: passed!" << endl;
+    }else{
+        cout << "chess ply_ag_comm full game playout test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+}
+
+
+void tests::chess_game_manip_tests(){
+
+    // Test boolean init.
+    bool test_bool = true;
+
+    chess myGame = chess();
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Test clearBoard
+// ---------------------------------------------------------------------- >>>>>
+
+    // Put two test pieces on the empty board.
+    chess::chs_piece myPiece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    myGame.set_piece_at( 1, 2, myPiece );
+    test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::PAWN && 
+        myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::WHITE );
+    myPiece = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    myGame.set_piece_at( 5, 4, myPiece );
+    test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::KNIGHT && 
+        myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::BLACK );
+
+    // Clear the board and check the two pieces location for empty case.
+    myGame.clearBoard();
+    test_bool = test_bool && ( myGame.get_piece_at( 1, 2 ).type == chess::CHS_PIECE_TYPE::NO_P && 
+        myGame.get_piece_at( 1, 2 ).color == chess::CHS_PIECE_COLOR::NO_C );
+    test_bool = test_bool && ( myGame.get_piece_at( 5, 4 ).type == chess::CHS_PIECE_TYPE::NO_P && 
+        myGame.get_piece_at( 5, 4 ).color == chess::CHS_PIECE_COLOR::NO_C );
+    
+    if( test_bool ){
+        cout << "chess clearBoard test: passed!" << endl;
+    }else{
+        cout << "chess clearBoard test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Test resetBoard
+// ---------------------------------------------------------------------- >>>>>
+    
+    test_bool = true;
+    myGame.resetBoard();
+    test_bool = test_bool && ( myGame.getState() == chess::CHS_STATE::ONGOING );
+    test_bool = test_bool && ( myGame.getTurn_cnt() == 0 );
+    test_bool = test_bool && ( myGame.getNo_change_turn_cnt() == 0 );
+
+    unsigned int col_idx = 0;
+    unsigned int row_idx = 0;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
+    col_idx = 1;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    col_idx = 2;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
+    col_idx = 3;
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK ) );
+    test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, chess::BOARDWIDTH - 1 - col_idx ) == 
+        chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+
+    // Compare the pawns.
+    row_idx = 1;
+    for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
+        test_bool = test_bool && ( myGame.get_piece_at( row_idx, j ) ==
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+        test_bool = test_bool && ( myGame.get_piece_at( chess::BOARDHEIGHT - 1 - row_idx, j ) ==
+            chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK ) );
+    }
+
+    // Compare empty spaces.
+    chess::chs_piece NONE_PIECE( chess::CHS_PIECE_TYPE::NO_P, chess::CHS_PIECE_COLOR::NO_C );
+    for( unsigned int i = 2; i < chess::BOARDHEIGHT - 2; i++ ){
+        for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
+            test_bool = test_bool && ( myGame.get_piece_at( i, j ) == NONE_PIECE );
+        }
+    }
+
+    if( test_bool ){
+        cout << "chess resetBoard test: passed!" << endl;
+    }else{
+        cout << "chess resetBoard test: failed!" << endl;
+    }
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
+
+
 
 void tests::CHS_SFML_eng_tests(){
 
@@ -4139,645 +4780,3 @@ void tests::valid_atk_maps_tests(){
 }
 
 
-
-void tests::chess_incident_safe_tests(){
-
-    bool test_bool = true;
-    chess myGame;
-    myGame.clearBoard();
-
-    chess::chs_piece emp_pce;
-    emp_pce.set_as_empty();
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      No Pinning Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 3, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    // Knight attempts to move while not under any restriction.
-    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 4, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 3, 5 );
-    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 2, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 3, 3 );
-
-    if( test_bool ){
-        cout << "chess no pinning incidental safe assessment test: passed!" << endl;
-    }else{
-        cout << "chess no pinning incidental safe assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Horizontal and Vertical Tests
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    // Knight attempts to move while not under any restriction.
-    test_bool = test_bool && myGame.is_incidental_safe( 3, 5, 2, 3 );
-
-    // White rook attempts to move while enemy rook is pinning it against its king.
-    test_bool = test_bool && !myGame.is_incidental_safe( 3, 4, 3, 2 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 0, 2, 1, 2 );
-
-    // White rook attempts to move along column where it is pinned.
-    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 4, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 3, 4, 2, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 0, 2, 0, 1 );
-    test_bool = test_bool && myGame.is_incidental_safe( 0, 2, 0, 3 );
-
-    if( test_bool ){
-        cout << "chess horizontal and vertical incidental safe assessment test: passed!" << endl;
-    }else{
-        cout << "chess horizontal and vertical incidental safe assessment test: failed!" << endl;
-    }
-    
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Diagonal Tests
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 3, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    
-    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 5, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 1, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 5, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 4, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 0, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 1, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 2, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 1, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 2, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    
-    // Upper-left diagonal (white).
-    test_bool = test_bool && !myGame.is_incidental_safe( 5, 3, 6, 4 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 5, 3, 4, 2 );
-    test_bool = test_bool && myGame.is_incidental_safe( 5, 3, 6, 2 );
-    test_bool = test_bool && myGame.is_incidental_safe( 5, 3, 4, 4 );
-    // Upper-left diagonal (black).
-    test_bool = test_bool && !myGame.is_incidental_safe( 6, 1, 7, 2 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 6, 1, 5, 0 );
-    test_bool = test_bool && myGame.is_incidental_safe( 6, 1, 5, 2 );
-    test_bool = test_bool && myGame.is_incidental_safe( 6, 1, 7, 0 );
-
-    // Upper-right diagonal (white).
-    test_bool = test_bool && !myGame.is_incidental_safe( 4, 6, 5, 5 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 4, 6, 3, 7 );
-    test_bool = test_bool && myGame.is_incidental_safe( 4, 6, 5, 7 );
-    // Upper-right diagonal (black).
-    test_bool = test_bool && !myGame.is_incidental_safe( 6, 5, 7, 4 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 6, 5, 5, 6 );
-    test_bool = test_bool && myGame.is_incidental_safe( 6, 5, 5, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 6, 5, 7, 6 );
-
-    // Lower-right diagonal (white).
-    test_bool = test_bool && !myGame.is_incidental_safe( 2, 6, 3, 7 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 2, 6, 0, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 2, 6, 1, 7 );
-    // Lower-right diagonal (black).
-    test_bool = test_bool && !myGame.is_incidental_safe( 2, 5, 4, 7 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 2, 5, 1, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 2, 5, 1, 6 );
-    test_bool = test_bool && myGame.is_incidental_safe( 2, 5, 3, 4 );
-
-    // Lower-left diagonal (white).
-    test_bool = test_bool && !myGame.is_incidental_safe( 1, 3, 3, 1 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 1, 3, 0, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 3, 2, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 3, 0, 2 );
-    // Lower-left diagonal (black).
-    test_bool = test_bool && !myGame.is_incidental_safe( 2, 1, 3, 0 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 2, 1, 0, 3 );
-    test_bool = test_bool && myGame.is_incidental_safe( 2, 1, 3, 2 );
-    test_bool = test_bool && myGame.is_incidental_safe( 2, 1, 1, 0 );
-    
-
-    if( test_bool ){
-        cout << "chess diagonal incidental safe assessment test: passed!" << endl;
-    }else{
-        cout << "chess diagonal incidental safe assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-// ---------------------------------------------------------------------- >>>>>
-//      Pinning with Obstruction Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 1, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 1, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 1, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 4, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    // Rook attempt to move in all four directions.
-    test_bool = test_bool && !myGame.is_incidental_safe( 1, 4, 2, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 5 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 1, 4, 0, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 3 );
-    // Bishop attempt to move in all four directions.
-    test_bool = test_bool && !myGame.is_incidental_safe( 4, 4, 5, 5 );
-    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 5 );
-    test_bool = test_bool && !myGame.is_incidental_safe( 4, 4, 3, 3 );
-    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 3 );
-
-    myGame.set_piece_at( 1, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 2, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    // Rook attempt to move in all four directions.
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 2, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 5 );
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 0, 4 );
-    test_bool = test_bool && myGame.is_incidental_safe( 1, 4, 1, 3 );
-    // Bishop attempt to move in all four directions.
-    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 5 );
-    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 5 );
-    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 3, 3 );
-    test_bool = test_bool && myGame.is_incidental_safe( 4, 4, 5, 3 );
-
-    if( test_bool ){
-        cout << "chess obstructed incidental safe assessment test: passed!" << endl;
-    }else{
-        cout << "chess obstructed incidental safe assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-}
-
-
-void tests::chess_chk_persist_tests(){
-
-    bool test_bool = true;
-    chess myGame;
-    myGame.clearBoard();
-
-    chess::chs_piece emp_pce;
-    emp_pce.set_as_empty();
-
-// ---------------------------------------------------------------------- >>>>>
-//      No Check Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 3, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 4, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    test_bool = test_bool && !myGame.is_chk_persist( 3, 3, 3, 5 );
-    test_bool = test_bool && !myGame.is_chk_persist( 4, 4, 3, 4 );
-
-    if( test_bool ){
-        cout << "chess no check check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess no check check persistance assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      King Move Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 5, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 2, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 3, 2 );
-    test_bool = test_bool && !myGame.is_chk_persist( 2, 2, 3, 3 );
-    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 2, 3 );
-    test_bool = test_bool && !myGame.is_chk_persist( 2, 2, 1, 3 );
-    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 1, 2 );
-    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 1, 1 );
-    test_bool = test_bool && !myGame.is_chk_persist( 2, 2, 2, 1 );
-    test_bool = test_bool && myGame.is_chk_persist( 2, 2, 3, 1 );
-    
-    if( test_bool ){
-        cout << "chess white king move check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess white king move check persistance assessment test: failed!" << endl;
-    }
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 5, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 6, 5 );
-    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 6, 6 );
-    test_bool = test_bool && !myGame.is_chk_persist( 5, 5, 5, 6 );
-    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 4, 6 );
-    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 4, 5 );
-    test_bool = test_bool && !myGame.is_chk_persist( 5, 5, 4, 4 );
-    test_bool = test_bool && myGame.is_chk_persist( 5, 5, 5, 4 );
-    test_bool = test_bool && !myGame.is_chk_persist( 5, 5, 6, 4 );
-        
-    if( test_bool ){
-        cout << "chess black king move check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess black king move check persistance assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Double (or more) Check Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 7, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE) );
-
-    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 2 );
-    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 3 );
-    
-    if( test_bool ){
-        cout << "chess white king double check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess white king double check persistance assessment test: failed!" << endl;
-    }
-
-    myGame.set_piece_at( 2, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 5, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    myGame.set_piece_at( 7, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    
-    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 2 );
-    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 4, 3 );
-
-    if( test_bool ){
-        cout << "chess black king double check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess black king double check persistance assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Pawn Cases
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 3, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 4, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    test_bool = test_bool && myGame.is_chk_persist( 4, 7, 4, 6 );
-    test_bool = test_bool && !myGame.is_chk_persist( 4, 7, 4, 3 );
-
-
-    if( test_bool ){
-        cout << "chess pawn check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess pawn check persistance assessment test: failed!" << endl;
-    }
-
-    test_bool = true;
-
-    myGame.set_piece_at( 4, 3, emp_pce );
-    myGame.set_piece_at( 4, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.setTurn_cnt(1u);
-
-    test_bool = test_bool && myGame.ply( 6,1, 4,1 );
-    test_bool = test_bool && myGame.getEn_pass_flag();
-    test_bool = test_bool && !myGame.is_chk_persist( 4, 2, 5, 1 );
-    test_bool = test_bool && myGame.ply( 4,2, 5,1 );
-
-    if( test_bool ){
-        cout << "chess pawn en-passant check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess pawn en-passant check persistance assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Knight Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    myGame.set_piece_at( 3, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 5, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 4, 3, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 4, 2 );
-    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 4, 4 );
-    test_bool = test_bool && myGame.is_chk_persist( 4, 3, 2, 3 );
-    test_bool = test_bool && !myGame.is_chk_persist( 4, 3, 5, 3 );
-
-    if( test_bool ){
-        cout << "chess knight check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess knight check persistance assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-// ---------------------------------------------------------------------- >>>>>
-//      Rook Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    // Row case.
-    myGame.set_piece_at( 2, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 5, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 5, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    myGame.set_piece_at( 1, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 7, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    test_bool = test_bool && !myGame.is_chk_persist( 1, 5, 5, 5 );
-    test_bool = test_bool && myGame.is_chk_persist( 1, 1, 5, 1 );
-    test_bool = test_bool && !myGame.is_chk_persist( 7, 2, 5, 3 );
-    test_bool = test_bool && myGame.is_chk_persist( 7, 2, 5, 1 );
-
-    myGame.clearBoard();
-
-    // Row case.
-    myGame.set_piece_at( 0, 2, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 2, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    myGame.set_piece_at( 5, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 1, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 2, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    
-    test_bool = test_bool && !myGame.is_chk_persist( 5, 1, 5, 5 );
-    test_bool = test_bool && myGame.is_chk_persist( 1, 1, 1, 5 );
-    test_bool = test_bool && !myGame.is_chk_persist( 2, 7, 3, 5 );
-    test_bool = test_bool && myGame.is_chk_persist( 2, 7, 1, 5 );
-
-    if( test_bool ){
-        cout << "chess rook check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess rook check persistance assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Bishop Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    // Row case.
-    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-
-    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 3, 6, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 4, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    // Block checking bishop with a bishop.
-    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
-    // Move without entering the check diagonal.
-    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 4 );
-    // Move to a diagonal intersecting the king, but not the attacker.
-    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 6 );
-    // Move onto the checking diagonal, but not in-between the king and the attacker.
-    test_bool = test_bool && myGame.is_chk_persist( 3, 6, 2, 5 );
-    // Move onto the checking diagonal, but not in-between the king and the attacker.
-    test_bool = test_bool && myGame.is_chk_persist( 4, 0, 7, 0 );
-    // Block checking bishop with a rook.
-    test_bool = test_bool && !myGame.is_chk_persist( 4, 0, 4, 3 );
-        
-    // Move the attacking bishop to the immediate vicinity of the attacked king.
-    myGame.set_piece_at( 4, 3, myGame.get_piece_at( 6, 1 ) );
-    myGame.set_piece_at( 6, 1, emp_pce );
-    // Directly taking the attacking bishop.
-    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
-
-    if( test_bool ){
-        cout << "chess bishop check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess bishop check persistance assessment test: failed!" << endl;
-    }
-    
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-// ---------------------------------------------------------------------- >>>>>
-//      Queen Case
-// ---------------------------------------------------------------------- >>>>>
-
-    test_bool = true;
-    myGame.clearBoard();
-
-    // Row case.
-    myGame.set_piece_at( 3, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 7, chess::chs_piece( chess::CHS_PIECE_TYPE::KING,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    
-    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN,
-        chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 6, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 4, 5, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK,
-        chess::CHS_PIECE_COLOR::WHITE ) );
-
-    // Block checking queen with a bishop.
-    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 4, 3 );
-    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 5, 4 );
-    // Block checking queen with a rook.
-    test_bool = test_bool && !myGame.is_chk_persist( 4, 5, 4, 3 );
-    test_bool = test_bool && myGame.is_chk_persist( 4, 5, 4, 4 );
-
-    // Move the attacking queen to the same column of the attacked king.
-    myGame.set_piece_at( 7, 4, myGame.get_piece_at( 6, 1 ) );
-    myGame.set_piece_at( 6, 1, emp_pce );
-    
-    // Block checking queen with a bishop.
-    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 7, 4 );
-    test_bool = test_bool && !myGame.is_chk_persist( 6, 5, 5, 4 );
-    test_bool = test_bool && myGame.is_chk_persist( 6, 5, 4, 3 );
-    // Block checking queen with a rook.
-    test_bool = test_bool && myGame.is_chk_persist( 4, 5, 4, 3 );
-    test_bool = test_bool && !myGame.is_chk_persist( 4, 5, 4, 4 );
-
-    if( test_bool ){
-        cout << "chess queen check persistance assessment test: passed!" << endl;
-    }else{
-        cout << "chess queen check persistance assessment test: failed!" << endl;
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
-}

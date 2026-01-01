@@ -2148,9 +2148,9 @@ bool chess::is_incidental_safe( int i_bef, int j_bef, int i_aft, int j_aft ) con
     // Calculate the distance between the target piece and its king.
     int i_diff = i_bef - king_pos.first;
     int j_diff = j_bef - king_pos.second;
-    // Skip if the piece is the king itself.
+    // King moving is incidental safe by default.
     if( i_diff == 0 && j_diff == 0 ){
-        return false;
+        return true;
     }
     // Calculate the distance between the displaced position and the starting position.
     int i_displ = i_aft - i_bef;
@@ -2780,28 +2780,33 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     bool state_ok = true;
 
-    // Create a temporary game copy.
-    chess tmp_game = *this;
-    // Perform the move in the game copy without updating game state.
-    tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
-    tmp_game.CHS_board[i_aft][j_aft] = tarPce;
-    // Special en-passant attack eliminates pawn on same row and ending column.
-    if( is_en_pass ){
-        tmp_game.CHS_board[i_bef][j_aft].set_as_empty();
+    state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+    if( state_ok ){
+        state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
     }
-    // Update the attack lists of the game copy after the move.
-    tmp_game.force_lists_upd = true;
-    tmp_game.upd_atk_lists();
-    tmp_game.force_lists_upd = false;
-    // Determine check status of both kings.
-    pair<bool,bool> chk_status = tmp_game.is_in_check();
 
-    // Check for state change validity, which involves not having a king remaining
-    // in check state after a play.
-    state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
-    state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
-    // Additional check making sure both kings are not in check simultaneously.
-    state_ok = state_ok && !( chk_status.first && chk_status.second );
+    // // Create a temporary game copy.
+    // chess tmp_game = *this;
+    // // Perform the move in the game copy without updating game state.
+    // tmp_game.CHS_board[i_bef][j_bef].set_as_empty();
+    // tmp_game.CHS_board[i_aft][j_aft] = tarPce;
+    // // Special en-passant attack eliminates pawn on same row and ending column.
+    // if( is_en_pass ){
+    //     tmp_game.CHS_board[i_bef][j_aft].set_as_empty();
+    // }
+    // // Update the attack lists of the game copy after the move.
+    // tmp_game.force_lists_upd = true;
+    // tmp_game.upd_atk_lists();
+    // tmp_game.force_lists_upd = false;
+    // // Determine check status of both kings.
+    // pair<bool,bool> chk_status = tmp_game.is_in_check();
+
+    // // Check for state change validity, which involves not having a king remaining
+    // // in check state after a play.
+    // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::WHITE && chk_status.first );
+    // state_ok = state_ok && !( tarColor == CHS_PIECE_COLOR::BLACK && chk_status.second );
+    // // Additional check making sure both kings are not in check simultaneously.
+    // state_ok = state_ok && !( chk_status.first && chk_status.second );
 
     return state_ok;
 
@@ -4196,7 +4201,9 @@ void chess::upd_all_valid_atks(){
 
         // Obtain current 2D coordinate.
         sub_idx_z = ind2sub(z);
-
+        if( sub_idx_z.first == 4 && sub_idx_z.second == 3 ){
+            int lol = 0;
+        }
         // Obtain all possible attacks (if any) for the piece (if it exists) at the 
         // current coordinate 
         atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
