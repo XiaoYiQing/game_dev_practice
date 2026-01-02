@@ -1172,8 +1172,8 @@ protected:
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_moves_map;
 
     bool is_all_legal_moves_upd;
-    vector<chs_move> all_legal_moves;
-    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > all_legal_moves_alt;
+    // vector<chs_move> all_legal_moves;
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > legal_moves_map;
 
     bool is_valid_atks_upd;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_atks_map;
