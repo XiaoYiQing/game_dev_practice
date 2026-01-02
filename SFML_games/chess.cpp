@@ -1212,12 +1212,6 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    
-    
-    // Record the game before. 
-    // TODO: Instead of using a copy as reserve, just remember the move.
-    chess game_bef = *this;
-
     // Promotion lock check.
     if( promo_lock ){
         if( verbose )
@@ -1378,8 +1372,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     if( this->upd_post_play() ){
 
     }else{
-        *this = game_bef;
-        return false;
+        throw runtime_error( "Chess: A play is made all the way to post play update and the update failed." );
     }   
 
     return true;
@@ -3795,16 +3788,17 @@ bool chess::upd_post_play(){
 
     upd_res = upd_res && ( this->upd_mid_game_state() );
 
-    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    
 
     this->upd_all_valid_moves();
     this->upd_all_valid_atks();
     this->upd_all_legal_moves();
     this->upd_all_legal_atks();
 
-    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    cout << "Game copy create: " << time_AB << endl;
+    // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    // cout << "Game copy create: " << time_AB << endl;
 
     return upd_res;
 
@@ -4015,7 +4009,7 @@ void chess::upd_atk_lists(){
 
 }
 
-// TODO: legal moves are currently saved on a singular vector. Perhaps
+// TODO: legal moves are currently saved on a vector. Perhaps
 // its best to design it the same way valid moves are saved. This will
 // also make updating legal moves far easier.
 void chess::upd_all_legal_moves(){

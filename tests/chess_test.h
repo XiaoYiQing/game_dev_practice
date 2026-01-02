@@ -20,8 +20,12 @@ namespace tests{
 
     void chess_chk_persist_tests();
 
-    void chess_move_tests();
+    void valid_atk_maps_tests();
+    
+    void valid_move_maps_tests();
 
+    void chess_move_tests();
+    
     void chess_atk_check_tests();
 
     void chess_play_tests();
@@ -56,11 +60,7 @@ namespace tests{
 
     void chess_minmaxAB_split_tests();
 
-    void valid_move_maps_tests();
-
-    void valid_atk_maps_tests();
-
-    
+        
 
 }
 
