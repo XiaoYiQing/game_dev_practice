@@ -24,6 +24,8 @@ namespace tests{
     
     void valid_move_maps_tests();
 
+    void legal_move_maps_tests();
+
     void chess_move_tests();
     
     void chess_atk_check_tests();

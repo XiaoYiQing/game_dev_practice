@@ -1220,6 +1220,270 @@ void tests::valid_move_maps_tests(){
 }
 
 
+void tests::legal_move_maps_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+    myGame.resetBoard();
+
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
+
+    vector<int>::iterator iter;
+
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_test;
+    array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > map_ans;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialization.
+    test_bool = true;
+    myGame.resetBoard();
+    myGame.upd_all_legal_moves();
+    map_ans = array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH >();
+
+    // Obtain the map of legal moves.
+    map_test = myGame.get_legal_moves_map();
+
+    // Set up expected white valid moves map.
+    map_ans[1].push_back(16);     map_ans[1].push_back(18);
+    map_ans[6].push_back(21);     map_ans[6].push_back(23);
+    for( unsigned int z = 0; z < chess::BOARDWIDTH; z++ ){
+        unsigned int i_z = 8 + z;
+        map_ans[i_z].push_back( i_z + chess::BOARDWIDTH );
+        map_ans[i_z].push_back( i_z + 2*chess::BOARDWIDTH );
+    }
+    // Compare obtained and expected move maps.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        for( int tmp_int : map_ans[z] ){
+            auto it = std::find( map_test[z].begin(), map_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_test[z].end() );
+        }
+    }
+
+    // Now test the black legal moves if black starts.
+    myGame.setTurn_cnt(1);
+    myGame.upd_all_legal_moves();
+    // Obtain the map of valid moves for both white and black sides.
+    map_test = myGame.get_legal_moves_map();
+
+    // Reset the answer map.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        map_ans[z].clear();
+    }
+
+    // Set up expected black valid moves map.
+    map_ans[57].push_back(40);     map_ans[57].push_back(42);
+    map_ans[62].push_back(45);     map_ans[62].push_back(47);
+    for( unsigned int z = ( chess::BOARDHEIGHT - 2 )*chess::BOARDWIDTH; 
+        z < ( chess::BOARDHEIGHT - 1 )*chess::BOARDWIDTH; z++ ){
+        map_ans[z].push_back( z - 2*chess::BOARDWIDTH );
+        map_ans[z].push_back( z - chess::BOARDWIDTH );
+    }
+    // Compare obtained and expected move maps.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        for( int tmp_int : map_ans[z] ){
+            auto it = std::find( map_test[z].begin(), map_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_test[z].end() );
+        }
+    }
+
+    if( test_bool ){
+        cout << "chess legal move maps standard initial board test: passed!" << endl;
+    }else{
+        cout << "chess legal move maps standard initial board test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board With no Pawns Case
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialization.
+    test_bool = true;
+    // Board Set up.
+    myGame.resetBoard();
+    for( unsigned int z = 0; z < chess::BOARDWIDTH; z++ ){
+        myGame.set_piece_at( 1, z, emp_pce );
+        myGame.set_piece_at( 6, z, emp_pce );
+    }
+    myGame.upd_all_legal_moves();
+    // Reset the answer map.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        map_ans[z].clear();
+    }
+
+    // Obtain the map of legal moves.
+    map_test = myGame.get_legal_moves_map();
+
+    // Set up expected white valid moves map.
+    vector<int> tmp_vec;
+    int i_t = 0;
+    i_t=0;  tmp_vec = { 8, 16, 24, 32, 40, 48 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 11, 16, 18 };   
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 9, 11, 16, 20, 29, 38, 47 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 10, 11, 12, 17, 19, 21, 24, 27, 30, 35, 39, 43, 51 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 12, 13 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 12, 14, 19, 23, 26, 33, 40 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 12, 21, 23 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 15, 23, 31, 39, 47, 55 };
+
+    // Compare obtained and expected move maps.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        for( int tmp_int : map_ans[z] ){
+            auto it = std::find( map_test[z].begin(), map_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_test[z].end() );
+        }
+    }
+
+
+    myGame.setTurn_cnt(1);
+    myGame.upd_all_legal_moves();
+    // Reset the answer map.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        map_ans[z].clear();
+    }
+
+    // Obtain the map of legal moves.
+    map_test = myGame.get_legal_moves_map();
+
+    // Set up expected black valid moves map.
+    i_t=56; tmp_vec = { 8, 16, 24, 32, 40, 48 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 40, 42, 51 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 23, 30, 37, 40, 44, 49, 51 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 11, 19, 27, 31, 32, 35, 38, 41, 43, 45, 50, 51, 52 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 52, 53 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 16, 25, 34, 43, 47, 52, 54 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 45, 47, 52 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    i_t++;  tmp_vec = { 15, 23, 31, 39, 47, 55 };
+    map_ans[i_t].insert( map_ans[i_t].end(), tmp_vec.begin(), tmp_vec.end() );
+    
+    // Compare obtained and expected move maps.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        for( int tmp_int : map_ans[z] ){
+            auto it = std::find( map_test[z].begin(), map_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_test[z].end() );
+        }
+    }
+
+    if( test_bool ){
+        cout << "chess legal move maps no pawn initial board test: passed!" << endl;
+    }else{
+        cout << "chess legal move maps no pawn initial board test: failed!" << endl;
+    }
+
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Check State Valid Moves
+// ---------------------------------------------------------------------- >>>>>
+
+    // Initialization.
+    test_bool = true;
+    // Board Set up.
+    myGame.clearBoard();
+    // Reset the answer map.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        map_ans[z].clear();
+    }
+
+    myGame.set_piece_at( 0, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KING, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.upd_all_legal_moves();
+    map_test = myGame.get_legal_moves_map();
+
+    tmp_vec = { 11, 12, 13 };
+    map_ans[4].insert( map_ans[4].end(), tmp_vec.begin(), tmp_vec.end() );
+    map_ans[49].push_back(1);
+    
+    // Compare obtained and expected move maps.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        for( int tmp_int : map_ans[z] ){
+            auto it = std::find( map_test[z].begin(), map_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_test[z].end() );
+        }
+    }
+
+    myGame.setTurn_cnt(1);
+    // Reset the answer map.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        map_ans[z].clear();
+    }
+
+    myGame.set_piece_at( 0, 0, chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C) );
+    myGame.set_piece_at( 6, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C ) );
+    myGame.set_piece_at( 7, 1, chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, 
+        chess::CHS_PIECE_COLOR::WHITE ) );
+
+    myGame.upd_all_legal_moves();
+    map_test = myGame.get_legal_moves_map();
+
+    tmp_vec = { 51, 52, 53 };
+    map_ans[60].insert( map_ans[60].end(), tmp_vec.begin(), tmp_vec.end() );
+
+    // Compare obtained and expected move maps.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        for( int tmp_int : map_ans[z] ){
+            auto it = std::find( map_test[z].begin(), map_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_test[z].end() );
+        }
+    }
+
+    myGame.set_piece_at( 5, 4, chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, 
+        chess::CHS_PIECE_COLOR::BLACK ) );
+    map_test = myGame.get_legal_moves_map();
+
+    map_ans[44].push_back(59);
+    // Compare obtained and expected move maps.
+    for( unsigned int z = 0; z < map_ans.size(); z++ ){
+        for( int tmp_int : map_ans[z] ){
+            auto it = std::find( map_test[z].begin(), map_test[z].end(), tmp_int );
+            test_bool = test_bool && ( it != map_test[z].end() );
+        }
+    }
+
+    if( test_bool ){
+        cout << "chess legal move maps check state board test: passed!" << endl;
+    }else{
+        cout << "chess legal move maps check state board test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
+
+
 void tests::chess_move_tests(){
 
     chess myGame = chess();

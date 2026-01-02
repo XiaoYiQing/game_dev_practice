@@ -1009,6 +1009,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     bool getIs_all_legal_moves_upd() const;
     vector<chs_move> get_all_legal_moves();
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_legal_moves_map();
 
     bool getIs_valid_moves_upd() const;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_moves_map();
@@ -1146,8 +1147,7 @@ protected:
      */
     void upd_all_psbl_alg_comm();
 
-    bool is_all_legal_moves_upd;
-    vector<chs_move> all_legal_moves;
+    
     
     /**
      * Boolean for indicating whether lists are forced to update when requested
@@ -1171,12 +1171,17 @@ protected:
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_moves_map;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_moves_map;
 
-    bool is_all_legal_atks_upd;
-    vector<chs_move> all_legal_atks;
+    bool is_all_legal_moves_upd;
+    vector<chs_move> all_legal_moves;
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > all_legal_moves_alt;
 
     bool is_valid_atks_upd;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_W_atks_map;
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > valid_B_atks_map;
+
+    bool is_all_legal_atks_upd;
+    vector<chs_move> all_legal_atks;
+    
 
     /**
      * Class static mutex for the purpose of synchronizing use of shared variables.

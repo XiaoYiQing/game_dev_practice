@@ -256,8 +256,12 @@ chess::chess(){
     for( unsigned int z = 0; z < this->valid_W_moves_map.size(); z++ ){
         this->valid_W_moves_map[z].reserve(27);
         this->valid_B_moves_map[z].reserve(27);
+        this->valid_W_atks_map[z].reserve(8);
+        this->valid_B_atks_map[z].reserve(8);
+        this->all_legal_moves_alt[z].reserve(27);
     }
-    
+    this->all_legal_moves.reserve( 200 );
+    this->all_legal_atks.reserve( 200 );
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -3474,40 +3478,6 @@ bool chess::is_check_mate(){
 
         return no_options;
 
-        // // Create a copy of the game.
-        // chess game_copy = *this;
-        // // Force white to play.
-        // game_copy.setTurn_cnt(0);
-        // // Turn verbose to false.
-        // game_copy.setVerbose(false);
-
-        // // Obtain all possible white plays.
-        // vector<chs_move> all_plays = game_copy.get_all_legal_moves();
-        // vector<chs_move> tmp = game_copy.get_all_legal_atks();
-        // all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
-
-        // // Try to play all possibilities and check if the white check state 
-        // // changes.
-        // for( chs_move play_z : all_plays ){
-            
-        //     if( game_copy.play( play_z ) ){
-        //         if( game_copy.getState() == CHS_STATE::WCHK ){
-        //             // If the play did not pull white out of check state, continue trying
-        //             // by resetting the copy to the starting check state.
-        //             game_copy = *this;
-        //             game_copy.setTurn_cnt(0);
-        //             game_copy.setVerbose(false);
-        //         }else{
-        //             // Any move that successfully pulls white out of the check state is proof
-        //             // that the check is not a mate.
-        //             return false;
-        //         }
-        //     }
-
-        // }
-
-        // return true;
-
     }else if( state == CHS_STATE::BCHK || this->state == CHS_STATE::WWIN ){
 
         bool no_options = true;
@@ -3520,38 +3490,6 @@ bool chess::is_check_mate(){
         no_options = no_options && ( this->all_legal_moves.size() == 0 );
 
         return no_options;
-
-        // // Create a copy of the game.
-        // chess game_copy = *this;
-        // // Force black to play.
-        // game_copy.setTurn_cnt(1);
-
-        // // Obtain all possible black plays.
-        // vector<chs_move> all_plays = game_copy.get_all_legal_moves();
-        // vector<chs_move> tmp = game_copy.get_all_legal_atks();
-        // all_plays.insert( all_plays.end(), tmp.begin(), tmp.end() );
-
-        // // Try to play all possibilities and check if the black check state 
-        // // changes.
-        // for( chs_move play_z : all_plays ){
-            
-        //     if( game_copy.play( play_z ) ){
-        //         if( game_copy.getState() == CHS_STATE::BCHK ){
-        //             // If the play did not pull black out of check state, continue trying
-        //             // by resetting the copy to the starting check state.
-        //             game_copy = *this;
-        //             game_copy.setTurn_cnt(0);
-        //             game_copy.setVerbose(false);
-        //         }else{
-        //             // Any move that successfully pulls black out of the check state is proof
-        //             // that the check is not a mate.
-        //             return false;
-        //         }
-        //     }
-
-        // }
-
-        // return true;
 
     }else{
 
@@ -3775,8 +3713,6 @@ bool chess::upd_all(){
 
 
 bool chess::upd_post_play(){
-    
-    
 
     bool upd_res = true;
     
@@ -4023,9 +3959,11 @@ void chess::upd_all_legal_moves(){
 
     // Clear all currently saved possible plays.
     this->all_legal_moves.clear();
+    for( unsigned int z = 0; z < this->all_legal_moves_alt.size(); z++ ){
+        all_legal_moves_alt[z].clear();
+    }
+    
     this->is_all_legal_moves_upd = false;
-
-    all_legal_moves.reserve( 200 );
 
     pair<int,int> sub_idx_z;
     vector< pair<int,int> > move_sq_list_z;
@@ -4041,11 +3979,11 @@ void chess::upd_all_legal_moves(){
         for( pair<int,int> move_v : move_sq_list_z ){
             all_legal_moves.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
                 move_v.first, move_v.second ) );
+            all_legal_moves_alt[z].push_back( sub2ind( move_v ) );
         }
+        
 
     }
-
-    all_legal_moves.shrink_to_fit();
 
     this->is_all_legal_moves_upd = true;
 
@@ -4062,8 +4000,6 @@ void chess::upd_all_legal_atks(){
     // Clear all currently saved possible plays.
     this->all_legal_atks.clear();
     this->is_all_legal_atks_upd = false;
-
-    all_legal_atks.reserve( 200 );
 
     pair<int,int> sub_idx_z;
     vector< pair<int,int> > atk_sq_list_z;
@@ -4083,8 +4019,6 @@ void chess::upd_all_legal_atks(){
         }
 
     }
-
-    all_legal_atks.shrink_to_fit();
 
     this->is_all_legal_atks_upd = true;
 
@@ -4144,9 +4078,7 @@ void chess::upd_all_valid_atks(){
 
     for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
         this->valid_W_atks_map[z].clear();
-        this->valid_W_atks_map[z].reserve(8);
         this->valid_B_atks_map[z].clear();
-        this->valid_B_atks_map[z].reserve(8);
     }
     this->is_valid_atks_upd = false;
 
@@ -4175,8 +4107,6 @@ void chess::upd_all_valid_atks(){
                 this->valid_B_atks_map[z].push_back( chess::sub2ind( atk_v ) );
             }
         }
-        this->valid_W_atks_map[z].shrink_to_fit();
-        this->valid_B_atks_map[z].shrink_to_fit();
         
     }
 
@@ -4806,6 +4736,12 @@ vector<chess::chs_move> chess::get_all_legal_moves(){
         this->upd_all_legal_moves();
     }
     return this->all_legal_moves; 
+}
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_legal_moves_map(){
+    if( !this->is_all_legal_moves_upd ){
+        this->upd_all_legal_moves();
+    }
+    return this->all_legal_moves_alt;
 }
 
 
