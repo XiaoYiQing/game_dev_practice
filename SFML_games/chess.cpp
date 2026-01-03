@@ -1792,7 +1792,7 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    // If list of valid moves up-to-date, just refer to it for answer.
+    // If list of valid moves is up-to-date, just refer to it for answer.
     if( this->is_all_legal_moves_upd ){
         int ij_bef = sub2ind( i_bef, j_bef );
         int ij_aft = sub2ind( i_aft, j_aft );
@@ -3958,9 +3958,7 @@ void chess::upd_atk_lists(){
 
 }
 
-// TODO: legal moves are currently saved on a vector. Perhaps
-// its best to design it the same way valid moves are saved. This will
-// also make updating legal moves far easier.
+
 void chess::upd_all_legal_moves(){
 
 
@@ -3969,37 +3967,39 @@ void chess::upd_all_legal_moves(){
     }
     this->upd_all_valid_moves();
 
+    this->is_all_legal_moves_upd = false;
 
     // Clear all currently saved possible plays.
     for( unsigned int z = 0; z < this->legal_moves_map.size(); z++ ){
         legal_moves_map[z].clear();
     }
     
-    this->is_all_legal_moves_upd = false;
-
-    pair<int,int> sub_idx_z;
-    vector< pair<int,int> > move_sq_list_z;
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        move_sq_list_z = get_all_legal_move_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Add all current piece's possible moves to the batch.
-        for( pair<int,int> move_v : move_sq_list_z ){
-            legal_moves_map[z].push_back( sub2ind( move_v ) );
+    // Scan for legal moves based on current turn.
+    if( this->is_white_turn() ){
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+            for( int move_zz : this->valid_W_moves_map[z] ){
+                if( this->is_move_legal( chess::ind2sub(z), chess::ind2sub(move_zz) ) ){
+                    this->legal_moves_map[z].push_back(move_zz);
+                }
+            }
         }
-        
-
+    }else{
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+            for( int move_zz : this->valid_B_moves_map[z] ){
+                if( this->is_move_legal( chess::ind2sub(z), chess::ind2sub(move_zz) ) ){
+                    this->legal_moves_map[z].push_back(move_zz);
+                }
+            }
+        }
     }
 
     this->is_all_legal_moves_upd = true;
 
 }
 
-
+// TODO: legal attacks are currently saved on a vector. Perhaps
+// its best to design it the same way valid attacks are saved. This will
+// also make updating legal attacks far easier.
 void chess::upd_all_legal_atks(){
 
     if( this->is_all_legal_atks_upd && !this->force_lists_upd ){
@@ -4007,9 +4007,10 @@ void chess::upd_all_legal_atks(){
     }
     this->upd_all_valid_atks();
 
+    this->is_all_legal_atks_upd = false;
     // Clear all currently saved possible plays.
     this->all_legal_atks.clear();
-    this->is_all_legal_atks_upd = false;
+    
 
     pair<int,int> sub_idx_z;
     vector< pair<int,int> > atk_sq_list_z;
