@@ -3533,7 +3533,9 @@ bool chess::is_draw(){
 
     bool no_valid_moves = true;
     // If there is no move possible at all, stalemate.
-    no_valid_moves = no_valid_moves && ( this->get_all_legal_atks().size() == 0 );
+    for( unsigned int z = 0; z < this->legal_atks_map.size(); z++ ){
+        no_valid_moves = no_valid_moves && this->legal_atks_map[z].size() == 0;
+    }
     for( unsigned int z = 0; z < this->legal_moves_map.size(); z++ ){
         no_valid_moves = no_valid_moves && this->legal_moves_map[z].size() == 0;
     }
@@ -3743,16 +3745,19 @@ bool chess::upd_post_play(){
     upd_res = upd_res && ( this->upd_mid_game_state() );
 
     
-
+    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
     this->upd_all_valid_moves();
     this->upd_all_valid_atks();
+    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    cout << "Validity check: " << time_AB << endl;
+
+    start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
     this->upd_all_legal_moves();
     this->upd_all_legal_atks();
-
-    // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
-    // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    // cout << "Game copy create: " << time_AB << endl;
+    end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    cout << "Legality check: " << time_AB << endl;
 
     return upd_res;
 
@@ -4002,9 +4007,7 @@ void chess::upd_all_legal_moves(){
 
 }
 
-// TODO: legal attacks are currently saved on a vector. Perhaps
-// its best to design it the same way valid attacks are saved. This will
-// also make updating legal attacks far easier.
+
 void chess::upd_all_legal_atks(){
 
     if( this->is_all_legal_atks_upd && !this->force_lists_upd ){
@@ -4023,7 +4026,7 @@ void chess::upd_all_legal_atks(){
         for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
             for( int atk_zz : this->valid_W_atks_map[z] ){
                 if( this->is_atk_legal( chess::ind2sub(z), chess::ind2sub(atk_zz) ) ){
-                    this->legal_atks_map[z].push_back(atk_zz);
+                    this->legal_atks_map[z].push_back( atk_zz );
                 }
             }
         }
@@ -4031,7 +4034,7 @@ void chess::upd_all_legal_atks(){
         for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
             for( int atk_zz : this->valid_B_atks_map[z] ){
                 if( this->is_atk_legal( chess::ind2sub(z), chess::ind2sub(atk_zz) ) ){
-                    this->legal_atks_map[z].push_back(atk_zz);
+                    this->legal_atks_map[z].push_back( atk_zz );
                 }
             }
         }
@@ -4827,6 +4830,12 @@ vector<chess::chs_move> chess::get_all_legal_atks(){
     all_legal_atks_tmp.shrink_to_fit();
 
     return all_legal_atks_tmp; 
+}
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_legal_atks_map(){
+    if( !this->is_all_legal_atks_upd ){
+        this->upd_all_legal_atks();
+    }
+    return this->legal_moves_map;
 }
 
 bool chess::getIs_valid_atks_upd() const
