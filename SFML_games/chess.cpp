@@ -3344,7 +3344,6 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
     vector<int> atk_list_fr_ij;
     
     
-    
     // TODO: maybe create a function which specifically returns all atk squares 
     // by target piece?
     if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
@@ -3745,19 +3744,19 @@ bool chess::upd_post_play(){
     upd_res = upd_res && ( this->upd_mid_game_state() );
 
     
-    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
     this->upd_all_valid_moves();
     this->upd_all_valid_atks();
-    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    cout << "Validity check: " << time_AB << endl;
+    // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    // cout << "Validity check: " << time_AB << endl;
 
-    start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    // start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
     this->upd_all_legal_moves();
     this->upd_all_legal_atks();
-    end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    cout << "Legality check: " << time_AB << endl;
+    // end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    // time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    // cout << "Legality check: " << time_AB << endl;
 
     return upd_res;
 
@@ -4061,28 +4060,99 @@ void chess::upd_all_valid_moves(){
     vector<int> move_sq_list_z;
 
     
-    
-    // Parse through each linear coordinate of the board.
+    // // Parse through each linear coordinate of the board.
+    // for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+
+    //     // Obtain current 2D coordinate.
+    //     sub_idx_z = ind2sub(z);
+
+    //     // Obtain all possible moves (if any) for the piece (if it exists) at the 
+    //     // current coordinate 
+    //     move_sq_list_z = get_all_valid_move_sq( z );
+
+    //     // Assign the moves to the correct map (depending on the piece's color).
+    //     if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
+    //         for( int move_v : move_sq_list_z ){
+    //             this->valid_W_moves_map[z].push_back( move_v );
+    //         }
+    //     }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
+    //         for( int move_v : move_sq_list_z ){
+    //             this->valid_B_moves_map[z].push_back( move_v );
+    //         }
+    //     }
+
+    // }
+
+    // Parse through the board and verify all possible moves in the attack lists.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
 
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        move_sq_list_z = get_all_valid_move_sq( z );
-
-        // Assign the moves to the correct map (depending on the piece's color).
-        if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
-            for( int move_v : move_sq_list_z ){
-                this->valid_W_moves_map[z].push_back( move_v );
+        for( int ind_v : this->atk_list_by_W[z] ){
+            if( is_move_valid( ind_v, z ) ){
+                valid_W_moves_map[ind_v].push_back( z );
             }
-        }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
-            for( int move_v : move_sq_list_z ){
-                this->valid_B_moves_map[z].push_back( move_v );
+        }
+        for( int ind_v : this->atk_list_by_B[z] ){
+            if( is_move_valid( ind_v, z ) ){
+                valid_B_moves_map[ind_v].push_back( z );
             }
         }
 
+    }
+
+    int tarIndIdx = -1;
+    int sign_mult = 1;
+    // Parse through the board and look for pawns and the king who have moves that
+    // aren't equivalent to attacks.
+    for( unsigned int i = 0; i < chess::BOARDHEIGHT; i++ ){
+    for( unsigned int j = 0; j < chess::BOARDWIDTH; j++ ){
+        
+        if( this->CHS_board[i][j].type == CHS_PIECE_TYPE::PAWN ){
+            
+            tarIndIdx = sub2ind(i,j);
+            if( this->CHS_board[i][j].color == CHS_PIECE_COLOR::WHITE ){
+                sign_mult = 1;
+                if( this->is_move_valid( tarIndIdx, tarIndIdx + sign_mult * chess::BOARDWIDTH ) ){
+                    valid_W_moves_map[tarIndIdx].push_back( tarIndIdx + sign_mult * chess::BOARDWIDTH );
+                }
+                if( this->is_move_valid( tarIndIdx, tarIndIdx + sign_mult * 2 * chess::BOARDWIDTH ) ){
+                    valid_W_moves_map[tarIndIdx].push_back( tarIndIdx + sign_mult * 2 * chess::BOARDWIDTH );
+                }
+            }else{
+                sign_mult = -1;
+                if( this->is_move_valid( tarIndIdx, tarIndIdx + sign_mult * chess::BOARDWIDTH ) ){
+                    valid_B_moves_map[tarIndIdx].push_back( tarIndIdx + sign_mult * chess::BOARDWIDTH );
+                }
+                if( this->is_move_valid( tarIndIdx, tarIndIdx + sign_mult * 2 * chess::BOARDWIDTH ) ){
+                    valid_B_moves_map[tarIndIdx].push_back( tarIndIdx + sign_mult * 2 * chess::BOARDWIDTH );
+                }
+            }
+
+        }else if( this->CHS_board[i][j].type == CHS_PIECE_TYPE::KING ){
+
+            if( this->CHS_board[i][j].not_moved ){
+                tarIndIdx = sub2ind(i,j);
+
+                if( this->CHS_board[i][j].color == CHS_PIECE_COLOR::WHITE ){
+                    // White right castling.
+                    if( this->is_move_valid( tarIndIdx, tarIndIdx + 2 ) )
+                        valid_W_moves_map[tarIndIdx].push_back( tarIndIdx + 2 );
+                    // White left castling.
+                    if( this->is_move_valid( tarIndIdx, tarIndIdx - 2 ) )
+                        valid_W_moves_map[tarIndIdx].push_back( tarIndIdx - 2 );
+                }else{
+                    // Black right castling.
+                    if( this->is_move_valid( tarIndIdx, tarIndIdx + 2 ) )
+                        valid_B_moves_map[tarIndIdx].push_back( tarIndIdx + 2 );
+                    // Black left castling.
+                    if( this->is_move_valid( tarIndIdx, tarIndIdx - 2 ) )
+                        valid_B_moves_map[tarIndIdx].push_back( tarIndIdx - 2 );
+                }
+                
+            }
+
+        }
+        
+    }
     }
 
     this->is_valid_moves_upd = true;
