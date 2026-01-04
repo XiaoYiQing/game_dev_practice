@@ -259,8 +259,8 @@ chess::chess(){
         this->valid_W_atks_map[z].reserve(8);
         this->valid_B_atks_map[z].reserve(8);
         this->legal_moves_map[z].reserve(27);
+        this->legal_atks_map[z].reserve(8);
     }
-    this->all_legal_atks.reserve( 200 );
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -2556,11 +2556,12 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    // If list of valid moves up-to-date, just refer to it for answer.
+    // If list of valid moves is up-to-date, just refer to it for answer.
     if( this->is_all_legal_atks_upd ){
-        chs_move tmp( i_bef, j_bef, i_aft, j_aft );
-        for( chs_move ref_z : this->all_legal_atks )
-            if( tmp == ref_z )
+        int ij_bef = sub2ind( i_bef, j_bef );
+        int ij_aft = sub2ind( i_aft, j_aft );
+        for( int tmp : this->legal_atks_map[ ij_bef ] )
+            if( tmp == ij_aft )
                 return true;
         return false;
     }
@@ -3473,7 +3474,9 @@ bool chess::is_check_mate(){
         if( !this->is_all_legal_moves_upd )
             { this->upd_all_legal_moves(); }
 
-        no_options = no_options && ( this->all_legal_atks.size() == 0 );
+        for( unsigned int z = 0; z < this->legal_atks_map.size(); z++ ){
+            no_options = no_options && this->legal_atks_map[z].size() == 0;
+        }
         for( unsigned int z = 0; z < this->legal_moves_map.size(); z++ ){
             no_options = no_options && this->legal_moves_map[z].size() == 0;
         }
@@ -3489,7 +3492,9 @@ bool chess::is_check_mate(){
         if( !this->is_all_legal_moves_upd )
             { this->upd_all_legal_moves(); }
 
-        no_options = no_options && ( this->all_legal_atks.size() == 0 );
+        for( unsigned int z = 0; z < this->legal_atks_map.size(); z++ ){
+            no_options = no_options && this->legal_atks_map[z].size() == 0;
+        }
         for( unsigned int z = 0; z < this->legal_moves_map.size(); z++ ){
             no_options = no_options && this->legal_moves_map[z].size() == 0;
         }
@@ -3971,7 +3976,7 @@ void chess::upd_all_legal_moves(){
 
     // Clear all currently saved possible plays.
     for( unsigned int z = 0; z < this->legal_moves_map.size(); z++ ){
-        legal_moves_map[z].clear();
+        this->legal_moves_map[z].clear();
     }
     
     // Scan for legal moves based on current turn.
@@ -4008,27 +4013,28 @@ void chess::upd_all_legal_atks(){
     this->upd_all_valid_atks();
 
     this->is_all_legal_atks_upd = false;
+
     // Clear all currently saved possible plays.
-    this->all_legal_atks.clear();
-    
-
-    pair<int,int> sub_idx_z;
-    vector< pair<int,int> > atk_sq_list_z;
-
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-        // Obtain current 2D coordinate.
-        sub_idx_z = ind2sub(z);
-        // Obtain all possible moves (if any) for the piece (if it exists) at the 
-        // current coordinate 
-        atk_sq_list_z = get_all_legal_atk_sq( sub_idx_z.first, sub_idx_z.second );
-
-        // Add all current piece's possible moves to the batch.
-        for( pair<int,int> move_v : atk_sq_list_z ){
-            all_legal_atks.push_back( chs_move( sub_idx_z.first, sub_idx_z.second, 
-                move_v.first, move_v.second ) );
+    for( unsigned int z = 0; z < this->legal_atks_map.size(); z++ ){
+        this->legal_atks_map[z].clear();
+    }
+    // Scan for legal attack based on current turn.
+    if( this->is_white_turn() ){
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+            for( int atk_zz : this->valid_W_atks_map[z] ){
+                if( this->is_atk_legal( chess::ind2sub(z), chess::ind2sub(atk_zz) ) ){
+                    this->legal_atks_map[z].push_back(atk_zz);
+                }
+            }
         }
-
+    }else{
+        for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+            for( int atk_zz : this->valid_B_atks_map[z] ){
+                if( this->is_atk_legal( chess::ind2sub(z), chess::ind2sub(atk_zz) ) ){
+                    this->legal_atks_map[z].push_back(atk_zz);
+                }
+            }
+        }
     }
 
     this->is_all_legal_atks_upd = true;
@@ -4761,6 +4767,7 @@ vector<chess::chs_move> chess::get_all_legal_moves(){
             }
         }
     }
+    all_legal_moves_tmp.shrink_to_fit();
 
     return all_legal_moves_tmp; 
 }
@@ -4803,7 +4810,23 @@ vector<chess::chs_move> chess::get_all_legal_atks(){
     if( !this->is_all_legal_atks_upd ){
         this->upd_all_legal_atks();
     }
-    return this->all_legal_atks; 
+
+    vector<chess::chs_move> all_legal_atks_tmp;
+    all_legal_atks_tmp.reserve(200);
+    pair<int,int> ij_sub_bef = {-1,-1};
+    pair<int,int> ij_sub_aft = {-1,-1};
+    for( unsigned int z = 0; z < this->legal_atks_map.size(); z++ ){
+        if( legal_atks_map[z].size() > 0 ){
+            ij_sub_bef = chess::ind2sub(z);
+            for( int ij_aft_zz : legal_atks_map[z] ){
+                ij_sub_aft = chess::ind2sub( ij_aft_zz );
+                all_legal_atks_tmp.push_back( chs_move( ij_sub_bef, ij_sub_aft ) );
+            }
+        }
+    }
+    all_legal_atks_tmp.shrink_to_fit();
+
+    return all_legal_atks_tmp; 
 }
 
 bool chess::getIs_valid_atks_upd() const
