@@ -2579,7 +2579,18 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    return this->is_atk_valid( i_bef, j_bef, i_aft, j_aft );
+    bool is_legal = true;
+
+    is_legal = is_legal && ( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) );
+
+    if( is_legal )
+        // Determine if the attack causes own king's check state to end (if it was in check).
+        is_legal = is_legal && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+    if( is_legal )
+        // Determine if the attack causes own king to be exposed to a check.
+        is_legal = is_legal && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
+
+    return is_legal;
 
 }
 
@@ -2767,12 +2778,12 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     // Initialize temporary boolean flag.
     bool state_ok = true;
-    // Determine if the attack causes own king's check state to end (if it was in check).
-    state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
-    if( state_ok ){
-        // Determine if the attack causes own king to be exposed to a check.
-        state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
-    }
+    // // Determine if the attack causes own king's check state to end (if it was in check).
+    // state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+    // if( state_ok ){
+    //     // Determine if the attack causes own king to be exposed to a check.
+    //     state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
+    // }
 
     return state_ok;
 

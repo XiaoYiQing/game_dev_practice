@@ -2226,7 +2226,12 @@ void tests::chess_atk_check_tests(){
         chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK ) );
     valid_atk_vec = myGame.get_all_legal_atk_sq(2,3);
     test_bool = test_bool && ( valid_atk_vec.size() == 2 );
-    test_bool = test_bool && ( valid_atk_vec.at(1).first == 0 && valid_atk_vec.at(1).second == 4 );
+    pair<int,int> ansPair = {0,4};
+    bool tmp_bool = false;
+    for( pair<int,int> pair_z : valid_atk_vec ){
+        tmp_bool = tmp_bool || ansPair == pair_z;
+    }
+    test_bool = test_bool && tmp_bool;
     
     valid_atk_vec = myGame.get_all_legal_atk_sq(4,5);
     test_bool = test_bool && ( valid_atk_vec.size() == 0 );
@@ -2237,13 +2242,26 @@ void tests::chess_atk_check_tests(){
         chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK ) );
     valid_atk_vec = myGame.get_all_legal_atk_sq(3,4);
     test_bool = test_bool && ( valid_atk_vec.size() == 2 );
-    test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 5 );
-    test_bool = test_bool && ( valid_atk_vec.at(1).first == 2 && valid_atk_vec.at(1).second == 3 );
+
+    tmp_bool = false;   ansPair = {4,5};
+    for( pair<int,int> pair_z : valid_atk_vec ){
+        tmp_bool = tmp_bool || ansPair == pair_z;
+    }
+    test_bool = test_bool && tmp_bool;
+    tmp_bool = false;   ansPair = {2,3};
+    for( pair<int,int> pair_z : valid_atk_vec ){
+        tmp_bool = tmp_bool || ansPair == pair_z;
+    }
+    test_bool = test_bool && tmp_bool;
     
     myGame.setTurn_cnt(0);
     valid_atk_vec = myGame.get_all_legal_atk_sq(4,5);
     test_bool = test_bool && ( valid_atk_vec.size() == 1 );
-    test_bool = test_bool && ( valid_atk_vec.at(0).first == 4 && valid_atk_vec.at(0).second == 4 );
+    tmp_bool = false;   ansPair = {4,4};
+    for( pair<int,int> pair_z : valid_atk_vec ){
+        tmp_bool = tmp_bool || ansPair == pair_z;
+    }
+    test_bool = test_bool && tmp_bool;
 
     if( test_bool ){
         cout << "get_all_legal_atk_sq test passed!" << endl;
