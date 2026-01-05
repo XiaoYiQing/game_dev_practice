@@ -1802,7 +1802,20 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    return this->is_move_valid( i_bef, j_bef, i_aft, j_aft );
+    bool is_legal = true;
+
+    is_legal = is_legal && this->is_move_valid( i_bef, j_bef, i_aft, j_aft );
+
+    // Determine if the move causes own king's check state to end (if it was in check).
+    if( is_legal && this->CHS_board[i_bef][j_bef].type != CHS_PIECE_TYPE::KING ){
+        is_legal = is_legal && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+    }
+    if( is_legal && this->CHS_board[i_bef][j_bef].type != CHS_PIECE_TYPE::KING ){
+        // Determine if the move causes own king to be exposed to a check.
+        is_legal = is_legal && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
+    }
+
+    return is_legal;
 
 }
 
@@ -2077,16 +2090,16 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
     /*
     If not castling, check if the game change of state is legal after the move.
     */ 
-    if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
+    // if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
 
-        // Determine if the move causes own king's check state to end (if it was in check).
-        state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
-        if( state_ok ){
-            // Determine if the move causes own king to be exposed to a check.
-            state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
-        }
+    //     // Determine if the move causes own king's check state to end (if it was in check).
+    //     state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+    //     if( state_ok ){
+    //         // Determine if the move causes own king to be exposed to a check.
+    //         state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
+    //     }
 
-    }
+    // }
 
     return state_ok;
 
@@ -3735,22 +3748,34 @@ bool chess::upd_post_play(){
 
     bool upd_res = true;
     
+    // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+
     this->upd_pce_cnt_list();
+
+    // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    // cout << "Piece count: " << time_AB << endl;
+
+    // start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
 
     this->upd_atk_lists();
 
+    // end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    // time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    // cout << "Update atk lists: " << time_AB << endl;
     
 
     upd_res = upd_res && ( this->upd_mid_game_state() );
 
     
-    // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    // start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
 
     this->upd_all_valid_moves();
 
-    // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    // cout << "Valid moves check: " << time_AB << endl;
+    // end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    // time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    // cout << "Update valid moves: " << time_AB << endl;
+    
 
     // start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
 
@@ -3758,7 +3783,7 @@ bool chess::upd_post_play(){
 
     // end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
     // time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    // cout << "Valid atks check: " << time_AB << endl;
+    // cout << "Update valid attacks: " << time_AB << endl;
 
 
     this->upd_all_legal_moves();
@@ -3893,13 +3918,20 @@ void chess::upd_pce_cnt_list(){
 }
 
 
+/*
+TODO: This function must be THE most efficient function in the class.
+The information it updates is fundamental too all other info, and is
+thus one of the most called function.
+It is also the most resource intensive function, as it has no choice but to
+check all pieces on the board.
+*/
 void chess::upd_atk_lists(){
 
     if( this->is_atk_lists_upd && !this->force_lists_upd ){
         return;
     }
 
-    // Emtpy the existing attack list vectors.
+    // Empty the existing attack list vectors.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
         this->atk_list_by_W[z].clear();
         this->atk_list_by_B[z].clear();
@@ -3919,11 +3951,9 @@ void chess::upd_atk_lists(){
 
         coord_z = ind2sub(z);
         // Skip if empty.
-        if( this->is_sq_empty( coord_z.first, coord_z.second ) ){
+        if( this->CHS_board[coord_z.first][coord_z.second].type == CHS_PIECE_TYPE::NO_P ){
             continue;
         }
-        // Obtain the target piece.
-        pce_z = get_piece_at( coord_z.first, coord_z.second );
 
         // Obtain the list of all squares attacked by the current piece.
         // atk_list_z = get_all_atk_sq( coord_z.first, coord_z.second );
@@ -3931,13 +3961,13 @@ void chess::upd_atk_lists(){
         // Translate into linear indexing.
         atk_sub_list_z = sub2ind( atk_list_z );
 
-        if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+        if( this->CHS_board[coord_z.first][coord_z.second].color == CHS_PIECE_COLOR::WHITE ){
 
             for( int sq_lin_idx : atk_sub_list_z ){
                 this->atk_list_by_W[sq_lin_idx].push_back(z);
             }
 
-        }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+        }else if( this->CHS_board[coord_z.first][coord_z.second].color == CHS_PIECE_COLOR::BLACK ){
 
             for( int sq_lin_idx : atk_sub_list_z ){
                 this->atk_list_by_B[sq_lin_idx].push_back(z);
