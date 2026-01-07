@@ -4196,37 +4196,6 @@ void chess::upd_all_valid_atks(){
     }
     this->is_valid_atks_upd = false;
 
-
-
-    // pair<int,int> sub_idx_z;
-    // vector< pair<int,int> > atk_sq_list_z;
-    // // Parse through each linear coordinate of the board.
-    // for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
-
-    //     // Obtain current 2D coordinate.
-    //     sub_idx_z = ind2sub(z);
-    //     if( sub_idx_z.first == 4 && sub_idx_z.second == 3 ){
-    //         int lol = 0;
-    //     }
-    //     // Obtain all possible attacks (if any) for the piece (if it exists) at the 
-    //     // current coordinate 
-    //     atk_sq_list_z = get_all_valid_atk_sq( sub_idx_z.first, sub_idx_z.second );
-
-    //     // Assign the attacks to the correct map (depending on the piece's color).
-    //     if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::WHITE ){
-    //         for( pair<int,int> atk_v : atk_sq_list_z ){
-    //             this->valid_W_atks_map[z].push_back( chess::sub2ind( atk_v ) );
-    //         }
-    //     }else if( this->CHS_board[sub_idx_z.first][sub_idx_z.second].color == CHS_PIECE_COLOR::BLACK ){
-    //         for( pair<int,int> atk_v : atk_sq_list_z ){
-    //             this->valid_B_atks_map[z].push_back( chess::sub2ind( atk_v ) );
-    //         }
-    //     }
-        
-    // }
-
-
-
     // Parse through the board and verify all possible moves in the attack lists.
     for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
 
@@ -4245,6 +4214,166 @@ void chess::upd_all_valid_atks(){
 
 
     this->is_valid_atks_upd = true;
+
+}
+
+
+void chess::upd_pre_legal_plays(){
+
+    if( !this->force_lists_upd && this->is_atk_lists_upd &&
+        this->is_valid_moves_upd && this->is_valid_atks_upd ){
+        return;
+    }
+
+    // Empty the existing vectors.
+    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+        this->atk_list_by_W[z].clear();
+        this->atk_list_by_B[z].clear();
+        this->valid_W_moves_map[z].clear();
+        this->valid_B_moves_map[z].clear();
+        this->valid_W_atks_map[z].clear();
+        this->valid_B_atks_map[z].clear();
+    }
+    this->is_atk_lists_upd = false;
+    this->is_valid_moves_upd = false;
+    this->is_valid_atks_upd = false;
+
+    // Current sub index.
+    pair<int,int> coord_z;
+    int i = -1;     int j = -1;
+    int aim_z = -1;
+    // The piece being investigated.
+    chs_piece pce_z;
+
+    // Knight evaluation scenarios
+    int knight_aims[8] = {0,0,0,0,0,0,0,0};
+    bool knight_bools[8] = {0,0,0,0,0,0,0,0};
+
+    for( unsigned int z = 0; z < BOARDWIDTH*BOARDHEIGHT; z++ ){
+
+        coord_z = ind2sub(z);
+        i = coord_z.first;      j = coord_z.second;
+
+        pce_z = this->CHS_board[i][j];
+
+        // Skip if empty.
+        if( pce_z.type == CHS_PIECE_TYPE::NO_P ){
+            continue;
+        }
+
+// ---------------------------------------------------------------------- >>>>>
+//      Get All Atk Squares
+// ---------------------------------------------------------------------- >>>>>
+
+        /*
+        Compute the distance (number of squares away) of the piece to each of the 
+        board borders.
+        */
+        int top_dist = BOARDHEIGHT - 1 - i;
+        int right_dist = BOARDWIDTH - 1 - j;
+        int bottom_dist = i;
+        int left_dist = j;
+
+        switch( pce_z.type ){
+        case CHS_PIECE_TYPE::PAWN:
+
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+                if( top_dist > 0 ){
+
+                    // Attacks.
+                    aim_z = z + chess::BOARDWIDTH + 1;
+                    atk_list_by_W[ aim_z ].push_back( z );
+                    if( is_atk_valid( z, aim_z ) )
+                        this->valid_W_atks_map[z].push_back( aim_z );
+
+                    aim_z = z + chess::BOARDWIDTH - 1;
+                    atk_list_by_W[ aim_z ].push_back( z );
+                    if( is_atk_valid( z, aim_z ) )
+                        this->valid_W_atks_map[z].push_back( aim_z );
+
+                    // Moves.
+                    aim_z = z + chess::BOARDWIDTH;
+                    if( this->is_move_valid( z, aim_z ) )
+                        valid_W_moves_map[z].push_back( aim_z );
+
+                    if( top_dist > 1 && pce_z.not_moved ){
+                        aim_z = z + 2 * chess::BOARDWIDTH;
+                        if( this->is_move_valid( z, aim_z ) )
+                            valid_W_moves_map[z].push_back( aim_z );
+                    }
+
+                }
+
+                
+
+            }else if( pce_z.color == CHS_PIECE_COLOR::BLACK ){
+
+                if( bottom_dist > 0 ){
+
+                    // Attacks
+                    aim_z = z - BOARDWIDTH - 1;
+                    atk_list_by_B[ aim_z ].push_back( z );
+                    if( is_atk_valid( z, aim_z ) )
+                        this->valid_B_atks_map[z].push_back( aim_z );
+                    aim_z = z - BOARDWIDTH + 1;
+                    atk_list_by_B[ aim_z ].push_back( z );
+                    if( is_atk_valid( z, aim_z ) )
+                        this->valid_B_atks_map[z].push_back( aim_z );
+
+                    // Moves.
+                    aim_z = z - chess::BOARDWIDTH;
+                    if( this->is_move_valid( z, aim_z ) )
+                        valid_B_moves_map[z].push_back( aim_z );
+
+                    if( bottom_dist > 1 && pce_z.not_moved ){
+                        aim_z = z - 2 * chess::BOARDWIDTH;
+                        if( this->is_move_valid( z, aim_z ) )
+                            valid_B_moves_map[z].push_back( aim_z );
+                    }
+
+                }
+
+            }
+
+            break;
+
+        case CHS_PIECE_TYPE::KNIGHT:
+
+            knight_aims[0] = z - 2 * chess::BOARDWIDTH - 1;
+            knight_bools[0] = knight_aims[0] >= 0 && ( j > 1 );
+            knight_aims[1] = z - 2 * chess::BOARDWIDTH + 1;
+            knight_aims[2] = z - chess::BOARDWIDTH - 2;
+            knight_aims[3] = z - chess::BOARDWIDTH + 2;
+            knight_aims[4] = z + chess::BOARDWIDTH - 2;
+            knight_aims[5] = z + chess::BOARDWIDTH + 2;
+            knight_aims[6] = z + 2 * chess::BOARDWIDTH - 1;
+            knight_aims[7] = z + 2 * chess::BOARDWIDTH + 1;
+
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+                aim_z = z - 2 * chess::BOARDWIDTH - 1;
+                if( aim_z >= 0 && j >= 0  ){
+                    atk_list_by_W[ aim_z ].push_back( z );
+                    if( this->is_move_valid( z, aim_z ) )
+                        valid_W_moves_map[z].push_back( aim_z );
+                    else if( this->is_atk_valid( z, aim_z ) )
+                        valid_W_atks_map[z].push_back( aim_z );
+                }
+
+            }else{
+
+            }
+
+            break;
+
+        default:
+        break;
+        }
+
+// ---------------------------------------------------------------------- <<<<<
+
+    }
 
 }
 

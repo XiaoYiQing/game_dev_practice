@@ -768,6 +768,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_all_valid_atks();
 
     /**
+     * Perform updates on the attack lists and the valid moves and attacks all in
+     * one go. 
+     * 
+     * \note The main purpose of this function is the efficiency at which we can update 
+     * all three entitines at the same time rather than separately.
+     */
+    void upd_pre_legal_plays();
+
+    /**
      * \brief Print the state of the board onto the console terminal.
      * 
      * \note This is a debug tool and has no impact on actual game functionalities.
