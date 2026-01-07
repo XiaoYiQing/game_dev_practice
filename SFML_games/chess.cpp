@@ -4253,6 +4253,8 @@ void chess::upd_pre_legal_plays(){
 
     // Bishop evaluation scenarios.
     array< vector<int>, 4 > bishop_aims;
+    // Rook evaluation scenarios.
+    array< vector<int>, 4 > rook_aims;
 
     // Obstruction boolean.
     bool is_obstr = false;
@@ -4406,23 +4408,19 @@ void chess::upd_pre_legal_plays(){
 
             // North-East diagonal squares.
             for( int NE_z = 1; NE_z <= min( top_dist, right_dist ) ; NE_z++ ){
-                aim_z = z + NE_z * chess::BOARDWIDTH + NE_z;
-                bishop_aims[0].push_back( aim_z );
+                bishop_aims[0].push_back( z + NE_z * chess::BOARDWIDTH + NE_z );
             }
             // North-West diagonal squares.
             for( int NW_z = 1; NW_z <= min( top_dist, left_dist ) ; NW_z++ ){
-                aim_z = z + NW_z * chess::BOARDWIDTH - NW_z;
-                bishop_aims[1].push_back( aim_z );
+                bishop_aims[1].push_back( z + NW_z * chess::BOARDWIDTH - NW_z );
             }
             // South-West diagonal squares.
             for( int SW_z = 1; SW_z <= min( bottom_dist, left_dist ) ; SW_z++ ){
-                aim_z = z - SW_z * chess::BOARDWIDTH + SW_z;
-                bishop_aims[2].push_back( aim_z );
+                bishop_aims[2].push_back( z - SW_z * chess::BOARDWIDTH - SW_z );
             }
-            // South-West diagonal squares.
+            // South-East diagonal squares.
             for( int SE_z = 1; SE_z <= min( bottom_dist, right_dist ) ; SE_z++ ){
-                aim_z = z - SE_z * chess::BOARDWIDTH - SE_z;
-                bishop_aims[3].push_back( aim_z );
+                bishop_aims[3].push_back( z - SE_z * chess::BOARDWIDTH + SE_z );
             }
 
 
@@ -4506,6 +4504,105 @@ void chess::upd_pre_legal_plays(){
 
             }
             break;
+
+        case CHS_PIECE_TYPE::ROOK:
+
+            rook_aims;
+            // North sweep.
+            for( int N_z = 1; N_z <= top_dist; N_z++ )
+                rook_aims[0].push_back( z + N_z * chess::BOARDWIDTH );
+            // West sweep.
+            for( int W_z = 1; W_z <= left_dist; W_z++ )
+                rook_aims[1].push_back( z + W_z );
+            // South sweep.
+            for( int S_z = 1; S_z <= bottom_dist; S_z++ )
+                rook_aims[2].push_back( z - S_z * chess::BOARDWIDTH );
+            // East sweep.
+            for( int E_z = 1; E_z <= right_dist; E_z++ )
+                rook_aims[3].push_back( z - E_z );
+
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+                for( unsigned int t = 0; t < rook_aims.size(); t++ ){
+
+                    is_obstr = false;
+                    for( int aim_zt : rook_aims[t] ){
+
+                        pce_tmp = this->get_piece_at( aim_zt );
+                        this->atk_list_by_W[ aim_zt ].push_back( z );
+
+                        // Obstruction check.
+                        if( !( pce_tmp.type == CHS_PIECE_TYPE::NO_P ) ){ 
+
+                            // Add to attack map if valid.
+                            if( !is_obstr && pce_tmp.color == CHS_PIECE_COLOR::BLACK ){
+                                this->valid_W_atks_map[z].push_back( aim_zt );
+                            }
+
+                            // Only break if obstruction is not enemy king.
+                            if( !( pce_tmp.type == CHS_PIECE_TYPE::KING &&
+                            pce_tmp.color != pce_z.color ) )
+                                break;
+                            else{
+                                is_obstr = true;
+                            }
+
+                        }else{
+
+                            // Add to move map if valid.
+                            if( !is_obstr ){
+                                this->valid_W_moves_map[z].push_back( aim_zt );
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }else{
+
+                for( unsigned int t = 0; t < rook_aims.size(); t++ ){
+
+                    is_obstr = false;
+                    for( int aim_zt : rook_aims[t] ){
+
+                        pce_tmp = this->get_piece_at( aim_zt );
+                        this->atk_list_by_B[ aim_zt ].push_back( z );
+
+                        // Obstruction check.
+                        if( !( pce_tmp.type == CHS_PIECE_TYPE::NO_P ) ){ 
+
+                            // Add to attack map if valid.
+                            if( !is_obstr && pce_tmp.color == CHS_PIECE_COLOR::WHITE ){
+                                this->valid_B_atks_map[z].push_back( aim_zt );
+                            }
+
+                            // Only break if obstruction is not enemy king.
+                            if( !( pce_tmp.type == CHS_PIECE_TYPE::KING &&
+                            pce_tmp.color != pce_z.color ) )
+                                break;
+                            else{
+                                is_obstr = true;
+                            }
+
+                        }else{
+
+                            // Add to move map if valid.
+                            if( !is_obstr ){
+                                this->valid_B_moves_map[z].push_back( aim_zt );
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            break;
+
 
         default:
         break;
