@@ -540,6 +540,8 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
     bool is_move_valid( int ind_a, int ind_b ) const;
     
+    
+
     /**
      * \brief Determine if moving the piece at the before position towards 
      *  the after position does not endanger the king sharing the color of

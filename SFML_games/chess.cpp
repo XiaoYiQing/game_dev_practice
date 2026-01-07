@@ -4238,16 +4238,24 @@ void chess::upd_pre_legal_plays(){
     this->is_valid_moves_upd = false;
     this->is_valid_atks_upd = false;
 
+    int tmp_val = 0;
     // Current sub index.
     pair<int,int> coord_z;
     int i = -1;     int j = -1;
     int aim_z = -1;
     // The piece being investigated.
     chs_piece pce_z;
+    chs_piece pce_tmp;
 
-    // Knight evaluation scenarios
+    // Knight evaluation scenarios.
     int knight_aims[8] = {0,0,0,0,0,0,0,0};
     bool knight_bools[8] = {0,0,0,0,0,0,0,0};
+
+    // Bishop evaluation scenarios.
+    array< vector<int>, 4 > bishop_aims;
+
+    // Obstruction boolean.
+    bool is_obstr = false;
 
     for( unsigned int z = 0; z < BOARDWIDTH*BOARDHEIGHT; z++ ){
 
@@ -4273,6 +4281,8 @@ void chess::upd_pre_legal_plays(){
         int right_dist = BOARDWIDTH - 1 - j;
         int bottom_dist = i;
         int left_dist = j;
+
+        
 
         switch( pce_z.type ){
         case CHS_PIECE_TYPE::PAWN:
@@ -4340,31 +4350,161 @@ void chess::upd_pre_legal_plays(){
 
         case CHS_PIECE_TYPE::KNIGHT:
 
+            tmp_val = chess::BOARDHEIGHT*chess::BOARDWIDTH;
+
             knight_aims[0] = z - 2 * chess::BOARDWIDTH - 1;
-            knight_bools[0] = knight_aims[0] >= 0 && ( j > 1 );
+            knight_bools[0] = knight_aims[0] >= 0 && ( j > 0 );
             knight_aims[1] = z - 2 * chess::BOARDWIDTH + 1;
+            knight_bools[1] = knight_aims[1] >= 0 && ( j < BOARDWIDTH - 1 );
             knight_aims[2] = z - chess::BOARDWIDTH - 2;
+            knight_bools[2] = knight_aims[2] >= 0 && ( j > 1 );
             knight_aims[3] = z - chess::BOARDWIDTH + 2;
+            knight_bools[3] = knight_aims[3] >= 0 && ( j < BOARDWIDTH - 2 );
             knight_aims[4] = z + chess::BOARDWIDTH - 2;
+            knight_bools[4] = knight_aims[4] < tmp_val && ( j > 1 );
             knight_aims[5] = z + chess::BOARDWIDTH + 2;
+            knight_bools[5] = knight_aims[5] < tmp_val && ( j < BOARDWIDTH - 2 );
             knight_aims[6] = z + 2 * chess::BOARDWIDTH - 1;
+            knight_bools[6] = knight_aims[6] < tmp_val && ( j > 0 );
             knight_aims[7] = z + 2 * chess::BOARDWIDTH + 1;
+            knight_bools[7] = knight_aims[7] < tmp_val && ( j < BOARDWIDTH - 1 );
+
 
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
 
-                aim_z = z - 2 * chess::BOARDWIDTH - 1;
-                if( aim_z >= 0 && j >= 0  ){
-                    atk_list_by_W[ aim_z ].push_back( z );
-                    if( this->is_move_valid( z, aim_z ) )
-                        valid_W_moves_map[z].push_back( aim_z );
-                    else if( this->is_atk_valid( z, aim_z ) )
-                        valid_W_atks_map[z].push_back( aim_z );
+                for( int t = 0; t < 8; t++ ){
+                    if( knight_bools[t] ){
+                        aim_z = knight_aims[t];
+                        atk_list_by_W[ aim_z ].push_back( z );
+                        if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_W_moves_map[z].push_back( aim_z );
+                        }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::BLACK ){
+                            this->valid_W_atks_map[z].push_back( aim_z );
+                        }
+                    }
                 }
 
             }else{
 
+                for( int t = 0; t < 8; t++ ){
+                    if( knight_bools[t] ){
+                        aim_z = knight_aims[t];
+                        atk_list_by_B[ aim_z ].push_back( z );
+                        if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_B_moves_map[z].push_back( aim_z );
+                        }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::WHITE ){
+                            this->valid_B_atks_map[z].push_back( aim_z );
+                        }
+                    }
+                }
+
             }
 
+            break;
+
+        case CHS_PIECE_TYPE::BISHOP:
+
+            // North-East diagonal squares.
+            for( int NE_z = 1; NE_z <= min( top_dist, right_dist ) ; NE_z++ ){
+                aim_z = z + NE_z * chess::BOARDWIDTH + NE_z;
+                bishop_aims[0].push_back( aim_z );
+            }
+            // North-West diagonal squares.
+            for( int NW_z = 1; NW_z <= min( top_dist, left_dist ) ; NW_z++ ){
+                aim_z = z + NW_z * chess::BOARDWIDTH - NW_z;
+                bishop_aims[1].push_back( aim_z );
+            }
+            // South-West diagonal squares.
+            for( int SW_z = 1; SW_z <= min( bottom_dist, left_dist ) ; SW_z++ ){
+                aim_z = z - SW_z * chess::BOARDWIDTH + SW_z;
+                bishop_aims[2].push_back( aim_z );
+            }
+            // South-West diagonal squares.
+            for( int SE_z = 1; SE_z <= min( bottom_dist, right_dist ) ; SE_z++ ){
+                aim_z = z - SE_z * chess::BOARDWIDTH - SE_z;
+                bishop_aims[3].push_back( aim_z );
+            }
+
+
+            if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
+
+                for( unsigned int t = 0; t < bishop_aims.size(); t++ ){
+
+                    is_obstr = false;
+                    for( int aim_zt : bishop_aims[t] ){
+
+                        pce_tmp = this->get_piece_at( aim_zt );
+                        this->atk_list_by_W[ aim_zt ].push_back( z );
+
+                        // Obstruction check.
+                        if( !( pce_tmp.type == CHS_PIECE_TYPE::NO_P ) ){ 
+
+                            // Add to attack map if valid.
+                            if( !is_obstr && pce_tmp.color == CHS_PIECE_COLOR::BLACK ){
+                                this->valid_W_atks_map[z].push_back( aim_zt );
+                            }
+
+                            // Only break if obstruction is not enemy king.
+                            if( !( pce_tmp.type == CHS_PIECE_TYPE::KING &&
+                            pce_tmp.color != pce_z.color ) )
+                                break;
+                            else{
+                                is_obstr = true;
+                            }
+
+                        }else{
+
+                            // Add to move map if valid.
+                            if( !is_obstr ){
+                                this->valid_W_moves_map[z].push_back( aim_zt );
+                            }
+
+                        }
+
+                    }
+                    
+                }
+
+            }else{
+                
+                for( unsigned int t = 0; t < bishop_aims.size(); t++ ){
+
+                    is_obstr = false;
+                    for( int aim_zt : bishop_aims[t] ){
+
+                        pce_tmp = this->get_piece_at( aim_zt );
+                        this->atk_list_by_B[ aim_zt ].push_back( z );
+
+                        // Obstruction check.
+                        if( !( pce_tmp.type == CHS_PIECE_TYPE::NO_P ) ){ 
+
+                            // Add to attack map if valid.
+                            if( !is_obstr && pce_tmp.color == CHS_PIECE_COLOR::WHITE ){
+                                this->valid_B_atks_map[z].push_back( aim_zt );
+                            }
+
+                            // Only break if obstruction is not enemy king.
+                            if( !( pce_tmp.type == CHS_PIECE_TYPE::KING &&
+                            pce_tmp.color != pce_z.color ) )
+                                break;
+                            else{
+                                is_obstr = true;
+                            }
+
+                        }else{
+
+                            // Add to move map if valid.
+                            if( !is_obstr ){
+                                this->valid_B_moves_map[z].push_back( aim_zt );
+                            }
+
+                        }
+
+                    }
+                    
+                }
+
+            }
             break;
 
         default:
