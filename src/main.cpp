@@ -152,7 +152,7 @@ void do_tests( unsigned int test_id ){
     // tests::valid_move_maps_tests();
     // tests::legal_move_maps_tests();
     // tests::valid_atk_maps_tests();
-    tests::chess_move_tests();
+    // tests::chess_move_tests();
     // tests::chess_atk_check_tests();
     // tests::chess_play_tests();
     // tests::chess_promo_tests();
@@ -165,7 +165,7 @@ void do_tests( unsigned int test_id ){
     // tests::chess_full_game_tests();
     // tests::chess_alg_coord_trans_tests();
     // tests::chess_all_alg_comm_tests();
-
+    tests::chess_upd_pre_legal_tests();
 
 
     // tests::CHS_SFML_eng_tests();

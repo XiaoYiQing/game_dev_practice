@@ -3756,6 +3756,28 @@ void tests::chess_game_manip_tests(){
 }
 
 
+void tests::chess_upd_pre_legal_tests(){
+
+    bool test_bool = true;
+    chess myGame;
+
+// ---------------------------------------------------------------------- >>>>>
+//      Standard Initial Game Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+
+    myGame.setForce_lists_upd(true);
+
+    myGame.upd_pre_legal_plays();
+
+// ---------------------------------------------------------------------- <<<<<
+
+}
+
+
+
 
 void tests::CHS_SFML_eng_tests(){
 

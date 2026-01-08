@@ -48,6 +48,10 @@ namespace tests{
 
     void chess_alg_coord_trans_tests();
 
+    void chess_upd_pre_legal_tests();
+
+
+
     void CHS_SFML_eng_tests();
 
     void chess_all_alg_comm_tests();

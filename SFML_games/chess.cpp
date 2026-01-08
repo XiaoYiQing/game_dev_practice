@@ -4266,6 +4266,8 @@ void chess::upd_pre_legal_plays(){
     bool is_obstr = false;
     // Loop continue flag.
     bool cont_flag = false;
+    // Castling possibility.
+    bool W_cast_posb, B_cast_posb = false;
 
     for( unsigned int z = 0; z < BOARDWIDTH*BOARDHEIGHT; z++ ){
 
@@ -4292,6 +4294,8 @@ void chess::upd_pre_legal_plays(){
         int bottom_dist = i;
         int left_dist = j;
         
+        cont_flag = false;
+
         // Non-line based movement pieces.
         switch( pce_z.type ){
 
@@ -4361,6 +4365,8 @@ void chess::upd_pre_legal_plays(){
 
         case CHS_PIECE_TYPE::KNIGHT:
 
+            // Identifying all 8 jump squares around the knight and whether they are 
+            // on the board.
             kn_aims[0] = z - 2 * chess::BOARDWIDTH - 1;
             kn_bools[0] = ( kn_aims[0] >= 0 ) && ( j > 0 );
             kn_aims[1] = z - 2 * chess::BOARDWIDTH + 1;
@@ -4384,7 +4390,7 @@ void chess::upd_pre_legal_plays(){
                 for( int t = 0; t < 8; t++ ){
                     if( kn_bools[t] ){
                         aim_z = kn_aims[t];
-                        atk_list_by_W[ aim_z ].push_back( z );
+                        this->atk_list_by_W[ aim_z ].push_back( z );
                         if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
                             this->valid_W_moves_map[z].push_back( aim_z );
                         }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::BLACK ){
@@ -4398,7 +4404,7 @@ void chess::upd_pre_legal_plays(){
                 for( int t = 0; t < 8; t++ ){
                     if( kn_bools[t] ){
                         aim_z = kn_aims[t];
-                        atk_list_by_B[ aim_z ].push_back( z );
+                        this->atk_list_by_B[ aim_z ].push_back( z );
                         if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
                             this->valid_B_moves_map[z].push_back( aim_z );
                         }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::WHITE ){
@@ -4414,6 +4420,8 @@ void chess::upd_pre_legal_plays(){
 
         case CHS_PIECE_TYPE::KING:
 
+            // Identifying all 8 squares around the king and whether they are 
+            // on the board.
             kn_aims[0] = z + chess::BOARDWIDTH + 1;
             kn_bools[0] = kn_aims[0] < sq_cnt && ( j < BOARDWIDTH - 1 );
             kn_aims[1] = z + chess::BOARDWIDTH;
@@ -4431,9 +4439,41 @@ void chess::upd_pre_legal_plays(){
             kn_aims[7] = z + 1;
             kn_bools[7] = ( j < BOARDWIDTH - 1 );
 
+            
+
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
 
+                // Update castling possiblity for white.
+                W_cast_posb = pce_z.not_moved && z == 6;
+
+                for( int t = 0; t < 8; t++ ){
+                    if( kn_bools[t] ){
+                        aim_z = kn_aims[t];
+                        this->atk_list_by_W[ aim_z ].push_back( z );
+                        if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_W_moves_map[z].push_back( aim_z );
+                        }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::BLACK ){
+                            this->valid_W_atks_map[z].push_back( aim_z );
+                        }
+                    }
+                }
+
             }else{
+
+                // Update castling possiblity for black.
+                B_cast_posb = pce_z.not_moved && z == 60;
+
+                for( int t = 0; t < 8; t++ ){
+                    if( kn_bools[t] ){
+                        aim_z = kn_aims[t];
+                        this->atk_list_by_B[ aim_z ].push_back( z );
+                        if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_B_moves_map[z].push_back( aim_z );
+                        }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::WHITE ){
+                            this->valid_B_atks_map[z].push_back( aim_z );
+                        }
+                    }
+                }
 
             }
 
@@ -4490,7 +4530,7 @@ void chess::upd_pre_legal_plays(){
             // West sweep.
             line_aims[1].clear();
             for( int W_z = 1; W_z <= left_dist; W_z++ )
-                line_aims[1].push_back( z + W_z );
+                line_aims[1].push_back( z - W_z );
             // South sweep.
             line_aims[2].clear();
             for( int S_z = 1; S_z <= bottom_dist; S_z++ )
@@ -4498,7 +4538,7 @@ void chess::upd_pre_legal_plays(){
             // East sweep.
             line_aims[3].clear();
             for( int E_z = 1; E_z <= right_dist; E_z++ )
-                line_aims[3].push_back( z - E_z );
+                line_aims[3].push_back( z + E_z );
             
             line_aims_cnt = 4;
             break;
@@ -4522,13 +4562,13 @@ void chess::upd_pre_legal_plays(){
                 line_aims[4].push_back( z + N_z * chess::BOARDWIDTH );
             // West sweep.
             for( int W_z = 1; W_z <= left_dist; W_z++ )
-                line_aims[5].push_back( z + W_z );
+                line_aims[5].push_back( z - W_z );
             // South sweep.
             for( int S_z = 1; S_z <= bottom_dist; S_z++ )
                 line_aims[6].push_back( z - S_z * chess::BOARDWIDTH );
             // East sweep.
             for( int E_z = 1; E_z <= right_dist; E_z++ )
-                line_aims[7].push_back( z - E_z );
+                line_aims[7].push_back( z + E_z );
             
             line_aims_cnt = 8;
             break;
@@ -4622,6 +4662,80 @@ void chess::upd_pre_legal_plays(){
 // ---------------------------------------------------------------------- <<<<<
 
     }
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Moves Check
+// ---------------------------------------------------------------------- >>>>>
+
+    // White castling possibility check.
+    if( W_cast_posb ){
+
+        bool cast_poss = true;
+        // Right-side castling check.
+        cast_poss = cast_poss && ( this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK );
+        cast_poss = cast_poss && ( this->CHS_board[0][7].color == CHS_PIECE_COLOR::WHITE );
+        cast_poss = cast_poss && ( this->CHS_board[0][7].not_moved );
+        cast_poss = cast_poss && ( this->CHS_board[0][6].type == CHS_PIECE_TYPE::NO_P );
+        cast_poss = cast_poss && ( this->CHS_board[0][5].type == CHS_PIECE_TYPE::NO_P );
+        // Make sure the entire path is clear from black threats.
+        cast_poss = cast_poss && ( this->atk_list_by_B[4].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_B[5].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_B[6].empty() );
+        if( cast_poss )
+            this->valid_W_moves_map[4].push_back( 6 );
+
+        cast_poss = true;
+        // Right-side castling check.
+        cast_poss = cast_poss && ( this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK );
+        cast_poss = cast_poss && ( this->CHS_board[0][0].color == CHS_PIECE_COLOR::WHITE );
+        cast_poss = cast_poss && ( this->CHS_board[0][0].not_moved );
+        cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P );
+        cast_poss = cast_poss && ( this->CHS_board[0][2].type == CHS_PIECE_TYPE::NO_P );
+        cast_poss = cast_poss && ( this->CHS_board[0][3].type == CHS_PIECE_TYPE::NO_P );
+        // Make sure the entire path is clear from black threats.
+        cast_poss = cast_poss && ( this->atk_list_by_B[4].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_B[3].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_B[2].empty() );
+        if( cast_poss )
+            this->valid_W_moves_map[4].push_back( 2 );
+
+    }
+
+    // Black castling possibility check.
+    if( B_cast_posb ){
+
+        bool cast_poss = true;
+        // Right-side castling check.
+        cast_poss = cast_poss && ( this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK );
+        cast_poss = cast_poss && ( this->CHS_board[7][7].color == CHS_PIECE_COLOR::BLACK );
+        cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
+        cast_poss = cast_poss && ( this->CHS_board[7][6].type == CHS_PIECE_TYPE::NO_P );
+        cast_poss = cast_poss && ( this->CHS_board[7][5].type == CHS_PIECE_TYPE::NO_P );
+        // Make sure the entire path is clear from white threats.
+        cast_poss = cast_poss && ( this->atk_list_by_W[60].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_W[61].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_W[62].empty() );
+        if( cast_poss )
+            this->valid_B_moves_map[60].push_back( 62 );
+
+        cast_poss = true;
+        // Right-side castling check.
+        cast_poss = cast_poss && ( this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK );
+        cast_poss = cast_poss && ( this->CHS_board[7][0].color == CHS_PIECE_COLOR::BLACK );
+        cast_poss = cast_poss && ( this->CHS_board[7][0].not_moved );
+        cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P );
+        cast_poss = cast_poss && ( this->CHS_board[7][2].type == CHS_PIECE_TYPE::NO_P );
+        cast_poss = cast_poss && ( this->CHS_board[7][3].type == CHS_PIECE_TYPE::NO_P );
+        // Make sure the entire path is clear from white threats.
+        cast_poss = cast_poss && ( this->atk_list_by_B[60].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_B[59].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_B[58].empty() );
+        if( cast_poss )
+            this->valid_B_moves_map[60].push_back( 58 );
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
 
