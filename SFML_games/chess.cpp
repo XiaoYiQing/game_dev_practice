@@ -4664,6 +4664,29 @@ void chess::upd_pre_legal_plays(){
 
 
 // ---------------------------------------------------------------------- >>>>>
+//      En-Passant Check
+// ---------------------------------------------------------------------- >>>>>
+    
+    if( this->en_pass_flag ){
+        for( chs_move move_z : this->en_pass_moves ){
+            int str_pt = chess::sub2ind( move_z.pt_a );
+            int atk_pt = chess::sub2ind( move_z.pt_b );
+
+            if( this->CHS_board[move_z.pt_a.first][move_z.pt_a.second].color == 
+                CHS_PIECE_COLOR::WHITE )
+            {
+                this->atk_list_by_W[atk_pt - chess::BOARDWIDTH].push_back(str_pt);
+                this->valid_W_atks_map[str_pt].push_back(atk_pt);
+            }else{
+                this->atk_list_by_B[atk_pt + chess::BOARDWIDTH].push_back(str_pt);
+                this->valid_B_atks_map[str_pt].push_back(atk_pt);
+            }
+        }
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
 //      King Moves and Attacks Check
 // ---------------------------------------------------------------------- >>>>>
 
