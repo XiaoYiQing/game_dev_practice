@@ -3761,6 +3761,9 @@ void tests::chess_upd_pre_legal_tests(){
     bool test_bool = true;
     chess myGame;
 
+    chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C );
+
 // ---------------------------------------------------------------------- >>>>>
 //      Standard Initial Game Test
 // ---------------------------------------------------------------------- >>>>>
@@ -3769,8 +3772,191 @@ void tests::chess_upd_pre_legal_tests(){
     myGame.resetBoard();
 
     myGame.setForce_lists_upd(true);
+    myGame.upd_atk_lists();
+    myGame.upd_all_valid_moves();
+    myGame.upd_all_valid_atks();
+
+    auto atk_list_by_W_bef = myGame.getAtk_list_by_W();
+    auto atk_list_by_B_bef = myGame.getAtk_list_by_B();
+    auto valid_W_moves_map_bef = myGame.get_valid_W_moves_map();
+    auto valid_B_moves_map_bef = myGame.get_valid_B_moves_map();
+    auto valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
+    auto valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
 
     myGame.upd_pre_legal_plays();
+
+    auto atk_list_by_W_aft = myGame.getAtk_list_by_W();
+    auto atk_list_by_B_aft = myGame.getAtk_list_by_B();
+    auto valid_W_moves_map_aft = myGame.get_valid_W_moves_map();
+    auto valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
+    auto valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
+    auto valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    for( unsigned int z = 0; z < atk_list_by_W_bef.size(); z++ ){
+
+        // Compare size of each list sub-array at the current chess board square.
+        test_bool = test_bool && ( atk_list_by_W_bef[z].size() == atk_list_by_W_aft[z].size() );
+        test_bool = test_bool && ( atk_list_by_B_bef[z].size() == atk_list_by_B_aft[z].size() );
+        test_bool = test_bool && ( valid_W_moves_map_bef[z].size() == valid_W_moves_map_aft[z].size() );
+        test_bool = test_bool && ( valid_B_moves_map_bef[z].size() == valid_B_moves_map_aft[z].size() );
+        test_bool = test_bool && ( valid_W_atks_map_bef[z].size() == valid_W_atks_map_aft[z].size() );
+        test_bool = test_bool && ( valid_B_atks_map_bef[z].size() == valid_B_atks_map_aft[z].size() );
+
+        if( !test_bool )
+            break;
+
+        // Compare contents of each list sub-array at the current chess board square.
+        for( unsigned int t = 0; t < atk_list_by_W_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( atk_list_by_W_bef[z].begin(), atk_list_by_W_bef[z].end(), 
+                atk_list_by_W_aft[z].at(t)) != atk_list_by_W_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < atk_list_by_B_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( atk_list_by_B_bef[z].begin(), atk_list_by_B_bef[z].end(), 
+                atk_list_by_B_aft[z].at(t)) != atk_list_by_B_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_W_moves_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_W_moves_map_bef[z].begin(), valid_W_moves_map_bef[z].end(), 
+                valid_W_moves_map_aft[z].at(t)) != valid_W_moves_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_B_moves_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_B_moves_map_bef[z].begin(), valid_B_moves_map_bef[z].end(), 
+                valid_B_moves_map_aft[z].at(t)) != valid_B_moves_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_W_atks_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_W_atks_map_bef[z].begin(), valid_W_atks_map_bef[z].end(), 
+                valid_W_atks_map_aft[z].at(t)) != valid_W_atks_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_B_atks_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_B_atks_map_bef[z].begin(), valid_B_atks_map_bef[z].end(), 
+                valid_B_atks_map_aft[z].at(t)) != valid_B_atks_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+
+    }
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal initial board test: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal initial board test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Board With No Pawn Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.resetBoard();
+    for( unsigned int z = 0; z < chess::BOARDWIDTH; z++ ){
+        myGame.set_piece_at( 1, z, emp_pce );
+        myGame.set_piece_at( 6, z, emp_pce );
+    }
+    myGame.printBoard();
+
+    myGame.setForce_lists_upd(true);
+    myGame.upd_atk_lists();
+    myGame.upd_all_valid_moves();
+    myGame.upd_all_valid_atks();
+
+    atk_list_by_W_bef = myGame.getAtk_list_by_W();
+    atk_list_by_B_bef = myGame.getAtk_list_by_B();
+    valid_W_moves_map_bef = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_bef = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
+
+    myGame.upd_pre_legal_plays();
+
+    atk_list_by_W_aft = myGame.getAtk_list_by_W();
+    atk_list_by_B_aft = myGame.getAtk_list_by_B();
+    valid_W_moves_map_aft = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    for( unsigned int z = 0; z < atk_list_by_W_bef.size(); z++ ){
+
+        test_bool = test_bool && ( atk_list_by_W_bef[z].size() == atk_list_by_W_aft[z].size() );
+        test_bool = test_bool && ( atk_list_by_B_bef[z].size() == atk_list_by_B_aft[z].size() );
+        test_bool = test_bool && ( valid_W_moves_map_bef[z].size() == valid_W_moves_map_aft[z].size() );
+        test_bool = test_bool && ( valid_B_moves_map_bef[z].size() == valid_B_moves_map_aft[z].size() );
+        test_bool = test_bool && ( valid_W_atks_map_bef[z].size() == valid_W_atks_map_aft[z].size() );
+        test_bool = test_bool && ( valid_B_atks_map_bef[z].size() == valid_B_atks_map_aft[z].size() );
+
+        if( !test_bool )
+            break;
+
+        // Compare contents of each list sub-array at the current chess board square.
+        for( unsigned int t = 0; t < atk_list_by_W_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( atk_list_by_W_bef[z].begin(), atk_list_by_W_bef[z].end(), 
+                atk_list_by_W_aft[z].at(t)) != atk_list_by_W_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < atk_list_by_B_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( atk_list_by_B_bef[z].begin(), atk_list_by_B_bef[z].end(), 
+                atk_list_by_B_aft[z].at(t)) != atk_list_by_B_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_W_moves_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_W_moves_map_bef[z].begin(), valid_W_moves_map_bef[z].end(), 
+                valid_W_moves_map_aft[z].at(t)) != valid_W_moves_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_B_moves_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_B_moves_map_bef[z].begin(), valid_B_moves_map_bef[z].end(), 
+                valid_B_moves_map_aft[z].at(t)) != valid_B_moves_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_W_atks_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_W_atks_map_bef[z].begin(), valid_W_atks_map_bef[z].end(), 
+                valid_W_atks_map_aft[z].at(t)) != valid_W_atks_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+        for( unsigned int t = 0; t < valid_B_atks_map_bef[z].size(); t++ ){
+            test_bool = test_bool && 
+            ( std::find( valid_B_atks_map_bef[z].begin(), valid_B_atks_map_bef[z].end(), 
+                valid_B_atks_map_aft[z].at(t)) != valid_B_atks_map_bef[z].end() );
+            if( !test_bool )
+                break;
+        }
+
+    }
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal initial board with no pawn test: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal initial board with no pawn test: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 

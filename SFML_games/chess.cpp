@@ -3368,8 +3368,6 @@ vector< int > chess::get_all_valid_move_sq( int tarIndIdx ) const{
     vector<int> atk_list_fr_ij;
     
     
-    // TODO: maybe create a function which specifically returns all atk squares 
-    // by target piece?
     if( tarPce.color == CHS_PIECE_COLOR::WHITE ){
 
         for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
@@ -4244,6 +4242,8 @@ void chess::upd_pre_legal_plays(){
     pair<int,int> coord_z;
     int i = -1;     int j = -1;
     int aim_z = -1;
+    // The king indices.
+    int W_king_idx = -1;    int B_king_idx = -1;
     // The piece being investigated.
     chs_piece pce_z;
     // The piece currently at the scan location.
@@ -4299,23 +4299,31 @@ void chess::upd_pre_legal_plays(){
         // Non-line based movement pieces.
         switch( pce_z.type ){
 
-            // TODO: you are adding pawn attacks to the attack lists without checking.
+        // TODO: you are adding pawn attacks to the attack lists without checking.
         case CHS_PIECE_TYPE::PAWN:
 
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
 
                 if( top_dist > 0 ){
 
-                    // Attacks.
+                    // Attacks right.
                     aim_z = z + chess::BOARDWIDTH + 1;
-                    this->atk_list_by_W[ aim_z ].push_back( z );
-                    if( is_atk_valid( z, aim_z ) )
-                        this->valid_W_atks_map[z].push_back( aim_z );
+                    if( ( aim_z < sq_cnt ) && ( j < BOARDWIDTH - 1 ) ){
+                        this->atk_list_by_W[ aim_z ].push_back( z );
 
+                        if( is_atk_valid( z, aim_z ) )
+                            this->valid_W_atks_map[z].push_back( aim_z );
+                    }
+
+                    // Attacks left.
                     aim_z = z + chess::BOARDWIDTH - 1;
-                    this->atk_list_by_W[ aim_z ].push_back( z );
-                    if( is_atk_valid( z, aim_z ) )
-                        this->valid_W_atks_map[z].push_back( aim_z );
+                    if( ( aim_z < sq_cnt ) && ( j > 0 ) ){
+                        
+                        this->atk_list_by_W[ aim_z ].push_back( z );
+                        if( is_atk_valid( z, aim_z ) )
+                            this->valid_W_atks_map[z].push_back( aim_z );
+
+                    }
 
                     // Moves.
                     aim_z = z + chess::BOARDWIDTH;
@@ -4331,8 +4339,6 @@ void chess::upd_pre_legal_plays(){
 
                     }
 
-                    
-
                 }
 
                 
@@ -4341,15 +4347,22 @@ void chess::upd_pre_legal_plays(){
 
                 if( bottom_dist > 0 ){
 
-                    // Attacks
+                    // Attacks right.
                     aim_z = z - BOARDWIDTH - 1;
-                    this->atk_list_by_B[ aim_z ].push_back( z );
-                    if( is_atk_valid( z, aim_z ) )
-                        this->valid_B_atks_map[z].push_back( aim_z );
+                    if( ( aim_z >= 0 ) && ( j > 0 ) ){
+                        this->atk_list_by_B[ aim_z ].push_back( z );
+                        if( is_atk_valid( z, aim_z ) )
+                            this->valid_B_atks_map[z].push_back( aim_z );
+                    }
+                                        
+                    // Attacks left.
                     aim_z = z - BOARDWIDTH + 1;
-                    this->atk_list_by_B[ aim_z ].push_back( z );
-                    if( is_atk_valid( z, aim_z ) )
-                        this->valid_B_atks_map[z].push_back( aim_z );
+                    if( ( aim_z >= 0 ) && ( j < BOARDWIDTH - 1 ) ){
+                        this->atk_list_by_B[ aim_z ].push_back( z );
+                        if( is_atk_valid( z, aim_z ) )
+                            this->valid_B_atks_map[z].push_back( aim_z );
+                    }
+                    
 
                     // Moves.
                     aim_z = z - chess::BOARDWIDTH;
@@ -4428,61 +4441,21 @@ void chess::upd_pre_legal_plays(){
             break;
 
         case CHS_PIECE_TYPE::KING:
-
-            // Identifying all 8 squares around the king and whether they are 
-            // on the board.
-            kn_aims[0] = z + chess::BOARDWIDTH + 1;
-            kn_bools[0] = kn_aims[0] < sq_cnt && ( j < BOARDWIDTH - 1 );
-            kn_aims[1] = z + chess::BOARDWIDTH;
-            kn_bools[1] = kn_aims[1] < sq_cnt;
-            kn_aims[2] = z + chess::BOARDWIDTH - 1;
-            kn_bools[2] = kn_aims[2] < sq_cnt && ( j > 0 );
-            kn_aims[3] = z - 1;
-            kn_bools[3] = ( j > 0 );
-            kn_aims[4] = z - chess::BOARDWIDTH - 1;
-            kn_bools[4] = ( kn_aims[4] >= 0 ) && ( j > 0 );
-            kn_aims[5] = z - chess::BOARDWIDTH;
-            kn_bools[5] = ( kn_aims[5] >= 0 );
-            kn_aims[6] = z - chess::BOARDWIDTH + 1;
-            kn_bools[6] = ( kn_aims[6] >= 0 ) && ( j < BOARDWIDTH - 1 );
-            kn_aims[7] = z + 1;
-            kn_bools[7] = ( j < BOARDWIDTH - 1 );
-
-            
+          
 
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
 
+                // Update the white king's index.
+                W_king_idx = z;
                 // Update castling possiblity for white.
-                W_cast_posb = pce_z.not_moved && z == 6;
-
-                for( int t = 0; t < 8; t++ ){
-                    if( kn_bools[t] ){
-                        aim_z = kn_aims[t];
-                        this->atk_list_by_W[ aim_z ].push_back( z );
-                        if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
-                            this->valid_W_moves_map[z].push_back( aim_z );
-                        }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::BLACK ){
-                            this->valid_W_atks_map[z].push_back( aim_z );
-                        }
-                    }
-                }
+                W_cast_posb = pce_z.not_moved && z == 4;
 
             }else{
 
+                // Update the black king's index.
+                B_king_idx = z;
                 // Update castling possiblity for black.
                 B_cast_posb = pce_z.not_moved && z == 60;
-
-                for( int t = 0; t < 8; t++ ){
-                    if( kn_bools[t] ){
-                        aim_z = kn_aims[t];
-                        this->atk_list_by_B[ aim_z ].push_back( z );
-                        if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
-                            this->valid_B_moves_map[z].push_back( aim_z );
-                        }else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::WHITE ){
-                            this->valid_B_atks_map[z].push_back( aim_z );
-                        }
-                    }
-                }
 
             }
 
@@ -4672,9 +4645,107 @@ void chess::upd_pre_legal_plays(){
 
     }
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      King Moves and Attacks Check
+// ---------------------------------------------------------------------- >>>>>
+
+    // Obtain the columsn of the kings.
+    int wj = chess::ind2sub( W_king_idx ).second;
+    int bj = chess::ind2sub( B_king_idx ).second;
+
+    // Initialize arrays representing the reach of the kings.
+    int WK_aims[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    bool WK_bools[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    int BK_aims[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    bool BK_bools[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+    // Identifying all 8 squares around the white king and whether they are 
+    // on the board.
+    WK_aims[0] = W_king_idx + chess::BOARDWIDTH + 1;
+    WK_bools[0] = WK_aims[0] < sq_cnt && ( wj < BOARDWIDTH - 1 );
+    WK_aims[1] = W_king_idx + chess::BOARDWIDTH;
+    WK_bools[1] = WK_aims[1] < sq_cnt;
+    WK_aims[2] = W_king_idx + chess::BOARDWIDTH - 1;
+    WK_bools[2] = WK_aims[2] < sq_cnt && ( wj > 0 );
+    WK_aims[3] = W_king_idx - 1;
+    WK_bools[3] = ( wj > 0 );
+    WK_aims[4] = W_king_idx - chess::BOARDWIDTH - 1;
+    WK_bools[4] = ( WK_aims[4] >= 0 ) && ( wj > 0 );
+    WK_aims[5] = W_king_idx - chess::BOARDWIDTH;
+    WK_bools[5] = ( WK_aims[5] >= 0 );
+    WK_aims[6] = W_king_idx - chess::BOARDWIDTH + 1;
+    WK_bools[6] = ( WK_aims[6] >= 0 ) && ( wj < BOARDWIDTH - 1 );
+    WK_aims[7] = W_king_idx + 1;
+    WK_bools[7] = ( wj < BOARDWIDTH - 1 );
+
+    // Identifying all 8 squares around the black king and whether they are 
+    // on the board.
+    BK_aims[0] = B_king_idx + chess::BOARDWIDTH + 1;
+    BK_bools[0] = BK_aims[0] < sq_cnt && ( bj < BOARDWIDTH - 1 );
+    BK_aims[1] = B_king_idx + chess::BOARDWIDTH;
+    BK_bools[1] = BK_aims[1] < sq_cnt;
+    BK_aims[2] = B_king_idx + chess::BOARDWIDTH - 1;
+    BK_bools[2] = BK_aims[2] < sq_cnt && ( bj > 0 );
+    BK_aims[3] = B_king_idx - 1;
+    BK_bools[3] = ( bj > 0 );
+    BK_aims[4] = B_king_idx - chess::BOARDWIDTH - 1;
+    BK_bools[4] = ( BK_aims[4] >= 0 ) && ( bj > 0 );
+    BK_aims[5] = B_king_idx - chess::BOARDWIDTH;
+    BK_bools[5] = ( BK_aims[5] >= 0 );
+    BK_aims[6] = B_king_idx - chess::BOARDWIDTH + 1;
+    BK_bools[6] = ( BK_aims[6] >= 0 ) && ( bj < BOARDWIDTH - 1 );
+    BK_aims[7] = B_king_idx + 1;
+    BK_bools[7] = ( bj < BOARDWIDTH - 1 );
+
+
+    // Update the reach of the white king.
+	for( int t = 0; t < 8; t++ )
+		if( WK_bools[t] ){
+			this->atk_list_by_W[ WK_aims[t] ].push_back( W_king_idx );
+		}
+    // Update the reach of the black king.
+    for( int t = 0; t < 8; t++ )
+		if( BK_bools[t] ){
+			this->atk_list_by_B[ BK_aims[t] ].push_back( B_king_idx );
+		}
+    
+    // Update the valid plays for the white king.
+    for( int t = 0; t < 8; t++ ){
+		if( WK_bools[t] ){
+            aim_z = WK_aims[t];
+            if( this->atk_list_by_B[aim_z].size() != 0 )
+                continue;
+            if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
+				this->valid_W_moves_map[ W_king_idx ].push_back( aim_z );
+			}else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::BLACK ){
+				this->valid_W_atks_map[ W_king_idx ].push_back( aim_z );
+			}
+        }
+    }
+    // Update the valid plays for the black king.
+    for( int t = 0; t < 8; t++ ){
+		if( BK_bools[t] ){
+			aim_z = BK_aims[t];
+            if( this->atk_list_by_W[aim_z].size() != 0 )
+                continue;
+            if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
+				this->valid_B_moves_map[ B_king_idx ].push_back( aim_z );
+			}else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::WHITE ){
+				this->valid_B_atks_map[ B_king_idx ].push_back( aim_z );
+			}
+        }
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
 // ---------------------------------------------------------------------- >>>>>
 //      Castling Moves Check
 // ---------------------------------------------------------------------- >>>>>
+
+    // White king danger moves/atks check
+    
 
     // White castling possibility check.
     if( W_cast_posb ){
@@ -4745,6 +4816,10 @@ void chess::upd_pre_legal_plays(){
     }
 
 // ---------------------------------------------------------------------- <<<<<
+
+    this->is_atk_lists_upd = true;
+    this->is_valid_moves_upd = true;
+    this->is_valid_atks_upd = true;
 
 }
 
