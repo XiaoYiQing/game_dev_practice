@@ -4309,10 +4309,14 @@ void chess::upd_pre_legal_plays(){
                     // Attacks right.
                     aim_z = z + chess::BOARDWIDTH + 1;
                     if( ( aim_z < sq_cnt ) && ( j < BOARDWIDTH - 1 ) ){
+
                         this->atk_list_by_W[ aim_z ].push_back( z );
 
-                        if( is_atk_valid( z, aim_z ) )
+                        if( top_dist > 0 && right_dist > 0 &&
+                            this->CHS_board[i+1][j+1].type != CHS_PIECE_TYPE::NO_P &&
+                            this->CHS_board[i+1][j+1].color != pce_z.color )
                             this->valid_W_atks_map[z].push_back( aim_z );
+
                     }
 
                     // Attacks left.
@@ -4320,7 +4324,10 @@ void chess::upd_pre_legal_plays(){
                     if( ( aim_z < sq_cnt ) && ( j > 0 ) ){
                         
                         this->atk_list_by_W[ aim_z ].push_back( z );
-                        if( is_atk_valid( z, aim_z ) )
+
+                        if( top_dist > 0 && left_dist > 0 &&
+                            this->CHS_board[i+1][j-1].type != CHS_PIECE_TYPE::NO_P &&
+                            this->CHS_board[i+1][j-1].color != pce_z.color )
                             this->valid_W_atks_map[z].push_back( aim_z );
 
                     }
@@ -4347,20 +4354,30 @@ void chess::upd_pre_legal_plays(){
 
                 if( bottom_dist > 0 ){
 
-                    // Attacks right.
+                    // Attacks right (black POV).
                     aim_z = z - BOARDWIDTH - 1;
                     if( ( aim_z >= 0 ) && ( j > 0 ) ){
+
                         this->atk_list_by_B[ aim_z ].push_back( z );
-                        if( is_atk_valid( z, aim_z ) )
+
+                        if( bottom_dist > 0 && left_dist > 0 &&
+                            this->CHS_board[i-1][j-1].type != CHS_PIECE_TYPE::NO_P &&
+                            this->CHS_board[i-1][j-1].color != pce_z.color )
                             this->valid_B_atks_map[z].push_back( aim_z );
+
                     }
                                         
-                    // Attacks left.
+                    // Attacks left (black POV).
                     aim_z = z - BOARDWIDTH + 1;
                     if( ( aim_z >= 0 ) && ( j < BOARDWIDTH - 1 ) ){
+
                         this->atk_list_by_B[ aim_z ].push_back( z );
-                        if( is_atk_valid( z, aim_z ) )
+   
+                        if( bottom_dist > 0 && right_dist > 0 &&
+                            this->CHS_board[i-1][j+1].type != CHS_PIECE_TYPE::NO_P &&
+                            this->CHS_board[i-1][j+1].color != pce_z.color )
                             this->valid_B_atks_map[z].push_back( aim_z );
+
                     }
                     
 

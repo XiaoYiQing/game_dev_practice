@@ -3772,9 +3772,14 @@ void tests::chess_upd_pre_legal_tests(){
     myGame.resetBoard();
 
     myGame.setForce_lists_upd(true);
+
+    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
     myGame.upd_atk_lists();
     myGame.upd_all_valid_moves();
     myGame.upd_all_valid_atks();
+    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    cout << "Original Update: " << time_AB << endl;
 
     auto atk_list_by_W_bef = myGame.getAtk_list_by_W();
     auto atk_list_by_B_bef = myGame.getAtk_list_by_B();
@@ -3783,7 +3788,11 @@ void tests::chess_upd_pre_legal_tests(){
     auto valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
     auto valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
 
+    start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
     myGame.upd_pre_legal_plays();
+    end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    cout << "Newer Update: " << time_AB << endl;
 
     auto atk_list_by_W_aft = myGame.getAtk_list_by_W();
     auto atk_list_by_B_aft = myGame.getAtk_list_by_B();
