@@ -4299,6 +4299,7 @@ void chess::upd_pre_legal_plays(){
         // Non-line based movement pieces.
         switch( pce_z.type ){
 
+            // TODO: you are adding pawn attacks to the attack lists without checking.
         case CHS_PIECE_TYPE::PAWN:
 
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
@@ -4307,25 +4308,30 @@ void chess::upd_pre_legal_plays(){
 
                     // Attacks.
                     aim_z = z + chess::BOARDWIDTH + 1;
-                    atk_list_by_W[ aim_z ].push_back( z );
+                    this->atk_list_by_W[ aim_z ].push_back( z );
                     if( is_atk_valid( z, aim_z ) )
                         this->valid_W_atks_map[z].push_back( aim_z );
 
                     aim_z = z + chess::BOARDWIDTH - 1;
-                    atk_list_by_W[ aim_z ].push_back( z );
+                    this->atk_list_by_W[ aim_z ].push_back( z );
                     if( is_atk_valid( z, aim_z ) )
                         this->valid_W_atks_map[z].push_back( aim_z );
 
                     // Moves.
                     aim_z = z + chess::BOARDWIDTH;
-                    if( this->is_move_valid( z, aim_z ) )
+                    if( top_dist > 0 && this->CHS_board[i+1][j].type == CHS_PIECE_TYPE::NO_P ){
                         valid_W_moves_map[z].push_back( aim_z );
 
-                    if( top_dist > 1 && pce_z.not_moved ){
-                        aim_z = z + 2 * chess::BOARDWIDTH;
-                        if( this->is_move_valid( z, aim_z ) )
-                            valid_W_moves_map[z].push_back( aim_z );
+                        // Double jump.
+                        if( pce_z.not_moved && top_dist > 1 &&
+                            this->CHS_board[i+2][j].type == CHS_PIECE_TYPE::NO_P )
+                        {
+                            valid_W_moves_map[z].push_back( z + 2 * chess::BOARDWIDTH );
+                        }
+
                     }
+
+                    
 
                 }
 
@@ -4337,23 +4343,26 @@ void chess::upd_pre_legal_plays(){
 
                     // Attacks
                     aim_z = z - BOARDWIDTH - 1;
-                    atk_list_by_B[ aim_z ].push_back( z );
+                    this->atk_list_by_B[ aim_z ].push_back( z );
                     if( is_atk_valid( z, aim_z ) )
                         this->valid_B_atks_map[z].push_back( aim_z );
                     aim_z = z - BOARDWIDTH + 1;
-                    atk_list_by_B[ aim_z ].push_back( z );
+                    this->atk_list_by_B[ aim_z ].push_back( z );
                     if( is_atk_valid( z, aim_z ) )
                         this->valid_B_atks_map[z].push_back( aim_z );
 
                     // Moves.
                     aim_z = z - chess::BOARDWIDTH;
-                    if( this->is_move_valid( z, aim_z ) )
+                    if( bottom_dist > 0 && this->CHS_board[i-1][j].type == CHS_PIECE_TYPE::NO_P ){
                         valid_B_moves_map[z].push_back( aim_z );
 
-                    if( bottom_dist > 1 && pce_z.not_moved ){
-                        aim_z = z - 2 * chess::BOARDWIDTH;
-                        if( this->is_move_valid( z, aim_z ) )
-                            valid_B_moves_map[z].push_back( aim_z );
+                        // Double jump.
+                        if( pce_z.not_moved && bottom_dist > 1 &&
+                            this->CHS_board[i-2][j].type == CHS_PIECE_TYPE::NO_P )
+                        {
+                            valid_B_moves_map[z].push_back( z - 2 * chess::BOARDWIDTH );
+                        }
+
                     }
 
                 }
