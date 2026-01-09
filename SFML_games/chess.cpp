@@ -1733,7 +1733,8 @@ bool chess::ply( chs_move tarMove ){
 bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
-    
+    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+
     bool play_success = false;
     if( this->is_move_legal( i_bef, j_bef, i_aft, j_aft ) ||
         this->is_atk_legal( i_bef, j_bef, i_aft, j_aft ) )
@@ -1748,6 +1749,10 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
         this->upd_end_game_state();
     }
 
+    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    cout << "Piece count: " << time_AB << endl;
+    
     return play_success;
 
 }
@@ -1778,14 +1783,6 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
         unsigned int i_aft, unsigned int j_aft ) const
 {
 
-    // Obtain the color of the current piece.
-    CHS_PIECE_COLOR tarColor = this->get_piece_at( i_bef, j_bef ).color;
-    // Turn check.
-    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
-        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
-        return false;
-    }
-
     // If list of valid moves is up-to-date, just refer to it for answer.
     if( this->is_all_legal_moves_upd ){
         int ij_bef = sub2ind( i_bef, j_bef );
@@ -1795,6 +1792,15 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
                 return true;
         return false;
     }
+
+    // Obtain the color of the current piece.
+    CHS_PIECE_COLOR tarColor = this->CHS_board[i_bef][j_bef].color;
+    // Turn check.
+    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
+        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
+        return false;
+    }
+    
 
     bool is_legal = true;
 
@@ -2555,14 +2561,6 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
     unsigned int i_aft, unsigned int j_aft  ) const
 {
 
-    // Obtain the color of the current piece.
-    CHS_PIECE_COLOR tarColor = this->CHS_board[i_bef][j_bef].color;
-    // Turn check.
-    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
-        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
-        return false;
-    }
-
     // If list of valid moves is up-to-date, just refer to it for answer.
     if( this->is_all_legal_atks_upd ){
         int ij_bef = sub2ind( i_bef, j_bef );
@@ -2570,6 +2568,14 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
         for( int tmp : this->legal_atks_map[ ij_bef ] )
             if( tmp == ij_aft )
                 return true;
+        return false;
+    }
+
+    // Obtain the color of the current piece.
+    CHS_PIECE_COLOR tarColor = this->CHS_board[i_bef][j_bef].color;
+    // Turn check.
+    if( this->turn_cnt % 2 == 0 && tarColor != CHS_PIECE_COLOR::WHITE ||
+        this->turn_cnt % 2 == 1 && tarColor != CHS_PIECE_COLOR::BLACK ){
         return false;
     }
 
@@ -3751,19 +3757,12 @@ bool chess::upd_post_play(){
 
     bool upd_res = true;
     
-    // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    
 
     this->upd_pce_cnt_list();
 
-    // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    // cout << "Piece count: " << time_AB << endl;
-
-
     // this->upd_atk_lists();
-
     // this->upd_all_valid_moves();
-
     // this->upd_all_valid_atks();
 
     this->upd_pre_legal_plays();
@@ -3994,7 +3993,9 @@ void chess::upd_all_legal_moves(){
     if( this->is_all_legal_moves_upd && !this->force_lists_upd ){
         return;
     }
-    this->upd_all_valid_moves();
+    if( !this->is_valid_moves_upd || this->force_lists_upd ){
+        this->upd_all_valid_moves();
+    }
 
     this->is_all_legal_moves_upd = false;
 
@@ -4032,7 +4033,9 @@ void chess::upd_all_legal_atks(){
     if( this->is_all_legal_atks_upd && !this->force_lists_upd ){
         return;
     }
-    this->upd_all_valid_atks();
+    if( !this->is_valid_atks_upd || this->force_lists_upd ){
+        this->upd_all_valid_atks();
+    }
 
     this->is_all_legal_atks_upd = false;
 
