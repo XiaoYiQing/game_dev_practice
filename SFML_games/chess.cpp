@@ -4666,7 +4666,9 @@ void chess::upd_pre_legal_plays(){
 // ---------------------------------------------------------------------- >>>>>
 //      En-Passant Check
 // ---------------------------------------------------------------------- >>>>>
-    
+
+    // TODO: Please test this.
+
     if( this->en_pass_flag ){
         for( chs_move move_z : this->en_pass_moves ){
             int str_pt = chess::sub2ind( move_z.pt_a );
@@ -4825,7 +4827,7 @@ void chess::upd_pre_legal_plays(){
     if( B_cast_posb ){
 
         bool cast_poss = true;
-        // Right-side castling check.
+        // Left-side castling check.
         cast_poss = cast_poss && ( this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK );
         cast_poss = cast_poss && ( this->CHS_board[7][7].color == CHS_PIECE_COLOR::BLACK );
         cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
@@ -4847,9 +4849,9 @@ void chess::upd_pre_legal_plays(){
         cast_poss = cast_poss && ( this->CHS_board[7][2].type == CHS_PIECE_TYPE::NO_P );
         cast_poss = cast_poss && ( this->CHS_board[7][3].type == CHS_PIECE_TYPE::NO_P );
         // Make sure the entire path is clear from white threats.
-        cast_poss = cast_poss && ( this->atk_list_by_B[60].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_B[59].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_B[58].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_W[60].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_W[59].empty() );
+        cast_poss = cast_poss && ( this->atk_list_by_W[58].empty() );
         if( cast_poss )
             this->valid_B_moves_map[60].push_back( 58 );
 
