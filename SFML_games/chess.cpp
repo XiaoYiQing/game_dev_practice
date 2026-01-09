@@ -1733,9 +1733,6 @@ bool chess::ply( chs_move tarMove ){
 bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
-
-    
-    
     
     bool play_success = false;
     if( this->is_move_legal( i_bef, j_bef, i_aft, j_aft ) ||
@@ -1746,13 +1743,10 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
-    
-
     // Check if the play induces an endgame state.
     if( play_success ){
         this->upd_end_game_state();
     }
-    
 
     return play_success;
 
@@ -3765,35 +3759,16 @@ bool chess::upd_post_play(){
     // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
     // cout << "Piece count: " << time_AB << endl;
 
-    // start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
 
-    this->upd_atk_lists();
+    // this->upd_atk_lists();
 
-    // end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    // time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    // cout << "Update atk lists: " << time_AB << endl;
-    
+    // this->upd_all_valid_moves();
+
+    // this->upd_all_valid_atks();
+
+    this->upd_pre_legal_plays();
 
     upd_res = upd_res && ( this->upd_mid_game_state() );
-
-    
-    // start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
-
-    this->upd_all_valid_moves();
-
-    // end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    // time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    // cout << "Update valid moves: " << time_AB << endl;
-    
-
-    // start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
-
-    this->upd_all_valid_atks();
-
-    // end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    // time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    // cout << "Update valid attacks: " << time_AB << endl;
-
 
     this->upd_all_legal_moves();
     this->upd_all_legal_atks();
@@ -4224,7 +4199,7 @@ void chess::upd_pre_legal_plays(){
     }
 
     // Empty the existing vectors.
-    for( unsigned int z = 0; z < BOARDHEIGHT*BOARDWIDTH; z++ ){
+    for( unsigned int z = 0; z < chess::BOARDHEIGHT*chess::BOARDWIDTH; z++ ){
         this->atk_list_by_W[z].clear();
         this->atk_list_by_B[z].clear();
         this->valid_W_moves_map[z].clear();
@@ -4240,10 +4215,10 @@ void chess::upd_pre_legal_plays(){
     int sq_cnt = chess::BOARDHEIGHT * chess::BOARDWIDTH;
     // Current sub index.
     pair<int,int> coord_z;
-    int i = -1;     int j = -1;
-    int aim_z = -1;
+    int i = 0;     int j = 0;
+    int aim_z = 0;
     // The king indices.
-    int W_king_idx = -1;    int B_king_idx = -1;
+    unsigned int W_king_idx = 0;    unsigned int B_king_idx = 0;
     // The piece being investigated.
     chs_piece pce_z;
     // The piece currently at the scan location.
@@ -4267,11 +4242,12 @@ void chess::upd_pre_legal_plays(){
     // Loop continue flag.
     bool cont_flag = false;
     // Castling possibility.
-    bool W_cast_posb, B_cast_posb = false;
+    bool W_cast_posb = false;
+    bool B_cast_posb = false;
 
-    for( unsigned int z = 0; z < BOARDWIDTH*BOARDHEIGHT; z++ ){
+    for( int z = 0; z < sq_cnt; z++ ){
 
-        coord_z = ind2sub(z);
+        coord_z = chess::ind2sub(z);
         i = coord_z.first;      j = coord_z.second;
 
         pce_z = this->CHS_board[i][j];
@@ -4299,7 +4275,6 @@ void chess::upd_pre_legal_plays(){
         // Non-line based movement pieces.
         switch( pce_z.type ){
 
-        // TODO: you are adding pawn attacks to the attack lists without checking.
         case CHS_PIECE_TYPE::PAWN:
 
             if( pce_z.color == CHS_PIECE_COLOR::WHITE ){
@@ -4308,7 +4283,7 @@ void chess::upd_pre_legal_plays(){
 
                     // Attacks right.
                     aim_z = z + chess::BOARDWIDTH + 1;
-                    if( ( aim_z < sq_cnt ) && ( j < BOARDWIDTH - 1 ) ){
+                    if( ( aim_z < sq_cnt ) && ( j < chess::BOARDWIDTH - 1 ) ){
 
                         this->atk_list_by_W[ aim_z ].push_back( z );
 
@@ -4355,7 +4330,7 @@ void chess::upd_pre_legal_plays(){
                 if( bottom_dist > 0 ){
 
                     // Attacks right (black POV).
-                    aim_z = z - BOARDWIDTH - 1;
+                    aim_z = z - chess::BOARDWIDTH - 1;
                     if( ( aim_z >= 0 ) && ( j > 0 ) ){
 
                         this->atk_list_by_B[ aim_z ].push_back( z );
@@ -4368,8 +4343,8 @@ void chess::upd_pre_legal_plays(){
                     }
                                         
                     // Attacks left (black POV).
-                    aim_z = z - BOARDWIDTH + 1;
-                    if( ( aim_z >= 0 ) && ( j < BOARDWIDTH - 1 ) ){
+                    aim_z = z - chess::BOARDWIDTH + 1;
+                    if( ( aim_z >= 0 ) && ( j < chess::BOARDWIDTH - 1 ) ){
 
                         this->atk_list_by_B[ aim_z ].push_back( z );
    
@@ -4482,6 +4457,7 @@ void chess::upd_pre_legal_plays(){
         default:
             break;
         }
+
         // Conitnue to next square if job already done.
         if( cont_flag )
             continue;
@@ -4658,7 +4634,7 @@ void chess::upd_pre_legal_plays(){
 
         }
 
-// ---------------------------------------------------------------------- <<<<<
+// // ---------------------------------------------------------------------- <<<<<
 
     }
 
@@ -4666,8 +4642,6 @@ void chess::upd_pre_legal_plays(){
 // ---------------------------------------------------------------------- >>>>>
 //      En-Passant Check
 // ---------------------------------------------------------------------- >>>>>
-
-    // TODO: Please test this.
 
     if( this->en_pass_flag ){
         for( chs_move move_z : this->en_pass_moves ){
@@ -4693,19 +4667,19 @@ void chess::upd_pre_legal_plays(){
 // ---------------------------------------------------------------------- >>>>>
 
     // Obtain the columsn of the kings.
-    int wj = chess::ind2sub( W_king_idx ).second;
-    int bj = chess::ind2sub( B_king_idx ).second;
+    int wj = ( chess::ind2sub( W_king_idx ) ).second;
+    int bj = ( chess::ind2sub( B_king_idx ) ).second;
 
     // Initialize arrays representing the reach of the kings.
     int WK_aims[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    bool WK_bools[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    bool WK_bools[8] = { false, false, false, false, false, false, false, false };
     int BK_aims[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    bool BK_bools[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    bool BK_bools[8] = { false, false, false, false, false, false, false, false };
 
     // Identifying all 8 squares around the white king and whether they are 
     // on the board.
     WK_aims[0] = W_king_idx + chess::BOARDWIDTH + 1;
-    WK_bools[0] = WK_aims[0] < sq_cnt && ( wj < BOARDWIDTH - 1 );
+    WK_bools[0] = WK_aims[0] < sq_cnt && ( wj < chess::BOARDWIDTH - 1 );
     WK_aims[1] = W_king_idx + chess::BOARDWIDTH;
     WK_bools[1] = WK_aims[1] < sq_cnt;
     WK_aims[2] = W_king_idx + chess::BOARDWIDTH - 1;
@@ -4717,14 +4691,14 @@ void chess::upd_pre_legal_plays(){
     WK_aims[5] = W_king_idx - chess::BOARDWIDTH;
     WK_bools[5] = ( WK_aims[5] >= 0 );
     WK_aims[6] = W_king_idx - chess::BOARDWIDTH + 1;
-    WK_bools[6] = ( WK_aims[6] >= 0 ) && ( wj < BOARDWIDTH - 1 );
+    WK_bools[6] = ( WK_aims[6] >= 0 ) && ( wj < chess::BOARDWIDTH - 1 );
     WK_aims[7] = W_king_idx + 1;
-    WK_bools[7] = ( wj < BOARDWIDTH - 1 );
+    WK_bools[7] = ( wj < chess::BOARDWIDTH - 1 );
 
     // Identifying all 8 squares around the black king and whether they are 
     // on the board.
     BK_aims[0] = B_king_idx + chess::BOARDWIDTH + 1;
-    BK_bools[0] = BK_aims[0] < sq_cnt && ( bj < BOARDWIDTH - 1 );
+    BK_bools[0] = BK_aims[0] < sq_cnt && ( bj < chess::BOARDWIDTH - 1 );
     BK_aims[1] = B_king_idx + chess::BOARDWIDTH;
     BK_bools[1] = BK_aims[1] < sq_cnt;
     BK_aims[2] = B_king_idx + chess::BOARDWIDTH - 1;
@@ -4736,21 +4710,25 @@ void chess::upd_pre_legal_plays(){
     BK_aims[5] = B_king_idx - chess::BOARDWIDTH;
     BK_bools[5] = ( BK_aims[5] >= 0 );
     BK_aims[6] = B_king_idx - chess::BOARDWIDTH + 1;
-    BK_bools[6] = ( BK_aims[6] >= 0 ) && ( bj < BOARDWIDTH - 1 );
+    BK_bools[6] = ( BK_aims[6] >= 0 ) && ( bj < chess::BOARDWIDTH - 1 );
     BK_aims[7] = B_king_idx + 1;
-    BK_bools[7] = ( bj < BOARDWIDTH - 1 );
+    BK_bools[7] = ( bj < chess::BOARDWIDTH - 1 );
 
 
     // Update the reach of the white king.
-	for( int t = 0; t < 8; t++ )
-		if( WK_bools[t] ){
-			this->atk_list_by_W[ WK_aims[t] ].push_back( W_king_idx );
+	for( unsigned int zz = 0; zz < 8u; zz++ ){
+		if( WK_bools[zz] ){
+            aim_z = WK_aims[zz];
+			this->atk_list_by_W[ aim_z ].push_back( W_king_idx );
 		}
+    }
     // Update the reach of the black king.
-    for( int t = 0; t < 8; t++ )
+    for( unsigned int t = 0; t < 8u; t++ ){
 		if( BK_bools[t] ){
-			this->atk_list_by_B[ BK_aims[t] ].push_back( B_king_idx );
+            aim_z = BK_aims[t];
+			this->atk_list_by_B[ aim_z ].push_back( B_king_idx );
 		}
+    }
     
     // Update the valid plays for the white king.
     for( int t = 0; t < 8; t++ ){
