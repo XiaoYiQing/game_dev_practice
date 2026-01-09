@@ -1733,7 +1733,7 @@ bool chess::ply( chs_move tarMove ){
 bool chess::ply( unsigned int i_bef, unsigned int j_bef, 
     unsigned int i_aft, unsigned int j_aft )
 {
-    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    
 
     bool play_success = false;
     if( this->is_move_legal( i_bef, j_bef, i_aft, j_aft ) ||
@@ -1749,10 +1749,11 @@ bool chess::ply( unsigned int i_bef, unsigned int j_bef,
         this->upd_end_game_state();
     }
 
-    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
-    auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
-    cout << "Piece count: " << time_AB << endl;
-    
+    // auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    // auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    // auto time_AB = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    // cout << "Piece count: " << time_AB << endl;
+
     return play_success;
 
 }
@@ -3755,15 +3756,9 @@ bool chess::upd_all(){
 
 bool chess::upd_post_play(){
 
-    bool upd_res = true;
-    
-    
+    bool upd_res = true;    
 
     this->upd_pce_cnt_list();
-
-    // this->upd_atk_lists();
-    // this->upd_all_valid_moves();
-    // this->upd_all_valid_atks();
 
     this->upd_pre_legal_plays();
 

@@ -278,6 +278,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
          */
         std::pair<int,int> get_vec();
         
+        chess::CHS_PIECE_TYPE promo_type = chess::CHS_PIECE_TYPE::QUEEN;
 
     };
 
