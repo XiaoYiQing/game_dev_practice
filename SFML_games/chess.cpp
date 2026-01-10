@@ -4842,6 +4842,203 @@ void chess::upd_pre_legal_plays(){
 }
 
 
+void chess::upd_pre_legal_plays( chs_move tar_play ){
+
+    int i_a = tar_play.pt_a.first;
+    int j_a = tar_play.pt_a.second;
+    int ind_a = chess::sub2ind( i_a, j_a );
+    int i_b = tar_play.pt_b.first;
+    int j_b = tar_play.pt_b.second;
+    int ind_b = chess::sub2ind( i_b, j_b );
+
+    // The move must have been made.
+    if( this->CHS_board[i_a][j_a].type != CHS_PIECE_TYPE::NO_P ||
+        this->CHS_board[i_b][j_b].type == CHS_PIECE_TYPE::NO_P ){
+        throw invalid_argument( "Starting square is not empty." );
+    }
+
+    this->is_atk_lists_upd = false;
+    this->is_valid_moves_upd = false;
+    this->is_valid_atks_upd = false;
+
+    // this->atk_list_by_W;
+    // this->atk_list_by_B;
+    // this->valid_W_moves_map;
+    // this->valid_B_moves_map;
+    // this->valid_W_atks_map;
+    // this->valid_B_atks_map;
+
+    int sq_cnt = chess::BOARDHEIGHT * chess::BOARDWIDTH;
+    int u_dist = BOARDHEIGHT - 1 - i_a;
+    int r_dist = BOARDWIDTH - 1 - j_a;
+    int d_dist = i_a;
+    int l_dist = j_a;
+    
+    chs_piece tar_pce = this->CHS_board[i_b][j_b];
+    // Create a boolean indicating whether the piece is white.
+    bool is_white = tar_pce.color == CHS_PIECE_COLOR::WHITE;
+
+    int ind_tmp = 0;
+    int tmp_arr_lim = 0;
+    // Initialize potential list of plays.
+    int tmp_ind_arr[28];
+
+    // Knight and king evaluation scenarios.
+    int kn_aims[8];
+    bool kn_bools[8];
+
+// ---------------------------------------------------------------------- >>>>>
+//      Points Affected by Target Piece
+// ---------------------------------------------------------------------- >>>>>
+
+    if( is_white ){
+
+        switch( tar_pce.type ){
+        
+        case CHS_PIECE_TYPE::PAWN:
+            
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Attacks
+// ---------------------------------------------------------------------- >>>>>
+
+            tmp_arr_lim = 0;
+            // Left-side and right-side diagonal attacks.
+            if( ind_a < 56 ){
+                if( j_a > 0 ){
+                    tmp_ind_arr[tmp_arr_lim++] = ind_a + chess::BOARDWIDTH - 1;
+                }
+                if( j_a < chess::BOARDWIDTH - 1 ){
+                    tmp_ind_arr[tmp_arr_lim++] = ind_a + chess::BOARDWIDTH + 1;
+                }
+            }
+            // Possible en-passant attacks on the left.
+            if( j_a > 0 && this->CHS_board[i_a][j_a-1].type == CHS_PIECE_TYPE::PAWN &&
+                this->CHS_board[i_a][j_a-1].color != tar_pce.color ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_a - 1;
+            }
+            // Possible en-passant attacks on the right.
+            if( j_a < chess::BOARDWIDTH - 1 && this->CHS_board[i_a][j_a+1].type == CHS_PIECE_TYPE::PAWN &&
+                this->CHS_board[i_a][j_a+1].color != tar_pce.color ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_a + 1;
+            }
+
+            // Remove starting point's potential attacks.
+            for( int z = 0; z < tmp_arr_lim; z++ ){
+                ind_tmp = tmp_ind_arr[z];
+                this->atk_list_by_W[ ind_tmp ].erase(
+                    std::remove(this->atk_list_by_W[ ind_tmp ].begin(), 
+                    this->atk_list_by_W[ ind_tmp ].end(), ind_a ), 
+                    this->atk_list_by_W[ ind_tmp ].end() );
+                this->valid_W_atks_map[ ind_a ].erase(
+                    std::remove(this->atk_list_by_W[ ind_a ].begin(), 
+                    this->atk_list_by_W[ ind_a ].end(), ind_tmp ), 
+                    this->atk_list_by_W[ ind_a ].end() );
+            }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Moves
+// ---------------------------------------------------------------------- >>>>>
+
+            tmp_arr_lim = 0;
+            // Forward pushes.
+            if( ind_a < 56 ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_a + chess::BOARDWIDTH;
+                tmp_ind_arr[tmp_arr_lim++] = ind_a + chess::BOARDWIDTH;
+                if( ind_a < 48 ){
+                    tmp_ind_arr[tmp_arr_lim++] = ind_a + 2*chess::BOARDWIDTH;
+                    tmp_ind_arr[tmp_arr_lim++] = ind_a + 2*chess::BOARDWIDTH;
+                }
+            }
+
+            // Remove starting point's potential moves.
+            for( int z = 0; z < tmp_arr_lim; z++ ){
+                ind_tmp = tmp_ind_arr[z];
+                this->valid_W_moves_map[ind_a].erase( 
+                    remove( this->valid_W_moves_map[ind_a].begin(), 
+                    this->valid_W_moves_map[ind_a].end(), ind_tmp ), 
+                    this->valid_W_moves_map[ind_a].end() );
+            }
+
+// ---------------------------------------------------------------------- <<<<<
+
+            break;
+
+        case CHS_PIECE_TYPE::KNIGHT:
+
+            // Collect all potential moves/attacks of the knight at its start 
+            // position.
+            tmp_arr_lim = 0;
+            ind_tmp = ind_a - 2 * chess::BOARDWIDTH - 1; 
+            if( ( ind_tmp >= 0 ) && ( j_a > 0 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+            ind_tmp = ind_a - 2 * chess::BOARDWIDTH + 1;
+            if( ( ind_tmp >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+            ind_tmp = ind_a - chess::BOARDWIDTH - 2;
+            if( ( ind_tmp >= 0 ) && ( j_a > 1 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+            ind_tmp = ind_a - chess::BOARDWIDTH + 2;
+            if( ( ind_tmp >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+            ind_tmp = ind_a + chess::BOARDWIDTH - 2;
+            if( ind_tmp < sq_cnt && ( j_a > 1 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+            ind_tmp = ind_a + chess::BOARDWIDTH + 2;
+            if( ind_tmp < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+            ind_tmp = ind_a + 2 * chess::BOARDWIDTH - 1;
+            if( ind_tmp < sq_cnt && ( j_a > 0 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+            ind_tmp = ind_a + 2 * chess::BOARDWIDTH + 1;
+            if( ind_tmp < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
+                tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+
+            // Remove starting point's potential moves.
+            for( int z = 0; z < tmp_arr_lim; z++ ){
+                ind_tmp = tmp_ind_arr[z];
+                this->atk_list_by_W[ ind_tmp ].erase(
+                    std::remove(this->atk_list_by_W[ ind_tmp ].begin(), 
+                    this->atk_list_by_W[ ind_tmp ].end(), ind_a ), 
+                    this->atk_list_by_W[ ind_tmp ].end() );
+                this->valid_W_moves_map[ind_a].erase( 
+                    remove( this->valid_W_moves_map[ind_a].begin(), 
+                    this->valid_W_moves_map[ind_a].end(), ind_tmp ), 
+                    this->valid_W_moves_map[ind_a].end() );
+                this->valid_W_atks_map[ ind_a ].erase(
+                    std::remove(this->atk_list_by_W[ ind_a ].begin(), 
+                    this->atk_list_by_W[ ind_a ].end(), ind_tmp ), 
+                    this->atk_list_by_W[ ind_a ].end() );
+            }
+
+            break;
+
+        case CHS_PIECE_TYPE::BISHOP:
+
+            
+            break;
+
+        case CHS_PIECE_TYPE::ROOK:
+            break;
+        case CHS_PIECE_TYPE::QUEEN:
+            break;
+        case CHS_PIECE_TYPE::KING:
+
+            break;
+        default:
+            break;
+        }
+
+    }else{
+        
+    }
+// ---------------------------------------------------------------------- <<<<<
+
+}
+
+
+
 void chess::printBoard() const{
 
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
