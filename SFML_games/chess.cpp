@@ -1784,12 +1784,14 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
         unsigned int i_aft, unsigned int j_aft ) const
 {
 
-    // If list of valid moves is up-to-date, just refer to it for answer.
+    int ind_bef = sub2ind( i_bef, j_bef );
+    int ind_aft = sub2ind( i_aft, j_aft );
+
+    // If list of legal moves is up-to-date, just refer to it for answer.
     if( this->is_all_legal_moves_upd ){
-        int ij_bef = sub2ind( i_bef, j_bef );
-        int ij_aft = sub2ind( i_aft, j_aft );
-        for( int tmp : this->legal_moves_map[ ij_bef ] )
-            if( tmp == ij_aft )
+        
+        for( int tmp : this->legal_moves_map[ ind_bef ] )
+            if( tmp == ind_aft )
                 return true;
         return false;
     }
@@ -1806,6 +1808,24 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
     bool is_legal = true;
 
     is_legal = is_legal && this->is_move_valid( i_bef, j_bef, i_aft, j_aft );
+
+    if( this->CHS_board[i_bef][j_bef].type == CHS_PIECE_TYPE::KING ){
+
+        bool castling = true;
+        if( this->CHS_board[i_bef][j_bef].not_moved ){
+
+        }else{
+            castling = false;
+        }
+
+        // Check for threat at destination square.
+        if( tarColor == CHS_PIECE_COLOR::WHITE  ){
+            return atk_list_by_B[ ind_aft ].empty();
+        }else{
+            return atk_list_by_W[ ind_aft ].empty();
+        }
+
+    }
 
     // Determine if the move causes own king's check state to end (if it was in check).
     if( is_legal && this->CHS_board[i_bef][j_bef].type != CHS_PIECE_TYPE::KING ){
@@ -2086,23 +2106,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
-    // Initialize temporary boolean flag.
-    bool state_ok = true;
-    /*
-    If not castling, check if the game change of state is legal after the move.
-    */ 
-    // if( !cast_poss && tarType != CHS_PIECE_TYPE::KING ){
-
-    //     // Determine if the move causes own king's check state to end (if it was in check).
-    //     state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
-    //     if( state_ok ){
-    //         // Determine if the move causes own king to be exposed to a check.
-    //         state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
-    //     }
-
-    // }
-
-    return state_ok;
+    return true;
 
 }
 
@@ -4850,7 +4854,6 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
     int i_b = tar_play.pt_b.first;
     int j_b = tar_play.pt_b.second;
     int ind_b = chess::sub2ind( i_b, j_b );
-    
 
     // The move must have been made.
     if( this->CHS_board[i_a][j_a].type != CHS_PIECE_TYPE::NO_P ||
