@@ -2600,12 +2600,13 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
     unsigned int i_aft, unsigned int j_aft  ) const
 {
 
+    int ind_bef = sub2ind( i_bef, j_bef );
+    int ind_aft = sub2ind( i_aft, j_aft );
+
     // If list of valid moves is up-to-date, just refer to it for answer.
     if( this->is_all_legal_atks_upd ){
-        int ij_bef = sub2ind( i_bef, j_bef );
-        int ij_aft = sub2ind( i_aft, j_aft );
-        for( int tmp : this->legal_atks_map[ ij_bef ] )
-            if( tmp == ij_aft )
+        for( int tmp : this->legal_atks_map[ ind_bef ] )
+            if( tmp == ind_aft )
                 return true;
         return false;
     }
@@ -2618,16 +2619,31 @@ bool chess::is_atk_legal( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
 
+    // Initialize legality boolean.
     bool is_legal = true;
 
+    // A legal attack must at least be valid.
     is_legal = is_legal && ( this->is_atk_valid( i_bef, j_bef, i_aft, j_aft ) );
 
-    if( is_legal )
-        // Determine if the attack causes own king's check state to end (if it was in check).
-        is_legal = is_legal && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
-    if( is_legal )
-        // Determine if the attack causes own king to be exposed to a check.
-        is_legal = is_legal && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
+    // King attack must check for threats.
+    if( this->CHS_board[i_bef][j_bef].type == CHS_PIECE_TYPE::KING ){
+        
+        if( tarColor == CHS_PIECE_COLOR::WHITE ){
+            is_legal = is_legal && atk_list_by_B[ ind_aft ].empty();
+        }else{
+            is_legal = is_legal && atk_list_by_W[ ind_aft ].empty();
+        }
+
+    }else{
+
+        if( is_legal )
+            // Determine if the attack causes own king's check state to end (if it was in check).
+            is_legal = is_legal && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+        if( is_legal )
+            // Determine if the attack causes own king to be exposed to a check.
+            is_legal = is_legal && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
+
+    }
 
     return is_legal;
 
@@ -2769,15 +2785,9 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
         // Standard king move.
         if( abs( moveVec.first ) <= 1 && abs( moveVec.second ) <= 1 ){
 
-            auto tmp = atk_list_by_B[ sub2ind( i_aft, j_aft ) ];
-
-            // Check for threat at destination square.
-            if( tarColor == CHS_PIECE_COLOR::WHITE && !atk_list_by_B[ sub2ind( i_aft, j_aft ) ].empty() ||
-                tarColor == CHS_PIECE_COLOR::BLACK && !atk_list_by_W[ sub2ind( i_aft, j_aft ) ].empty() )
-            {
-                return false;
-            }
-
+        }else{
+            // The king's move is against the rule.
+            return false;
         }
         
         break;
@@ -2815,16 +2825,7 @@ bool chess::is_atk_valid( unsigned int i_bef, unsigned int j_bef,
 
     }
 
-    // Initialize temporary boolean flag.
-    bool state_ok = true;
-    // // Determine if the attack causes own king's check state to end (if it was in check).
-    // state_ok = state_ok && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
-    // if( state_ok ){
-    //     // Determine if the attack causes own king to be exposed to a check.
-    //     state_ok = state_ok && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
-    // }
-
-    return state_ok;
+    return true;
 
 }
 
@@ -5063,7 +5064,7 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
             tmp_arr_lim = 0;
 
             // Left-side and right-side diagonal attacks.
-            if( ind_a < sq_cnt - chess::BOARDWIDTH ){
+            if( ind_a < sq_cnt - (int) chess::BOARDWIDTH ){
                 if( j_a > 0 ){
                     tmp_ind_arr[tmp_arr_lim++] = ind_a + chess::BOARDWIDTH - 1;
                 }
