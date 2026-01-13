@@ -1846,45 +1846,45 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
 
                 return cast_poss;
 
-            }else{
-                
-                // Check for unique castling move.
-                if( this->CHS_board[i_bef][j_bef].not_moved && is_legal && 
-                    ind_bef == 60 && ( ind_aft == 62 || ind_aft == 58 ) )
-                {
-
-                    bool cast_poss = true;
-
-                    // Right-castling.
-                    if( ind_aft == 62 ){
-
-                        // Make sure the entire path is clear from black threats.
-                        cast_poss = cast_poss && ( atk_list_by_W[60].empty() );
-                        cast_poss = cast_poss && ( atk_list_by_W[61].empty() );
-                        // Destination square [62] already checked for threats.
-
-                    }else if( ind_aft == 58 ){
-
-                        // Make sure the entire path is clear from black threats.
-                        cast_poss = cast_poss && ( atk_list_by_W[60].empty() );
-                        cast_poss = cast_poss && ( atk_list_by_W[59].empty() );
-                        // Destination square [58] already checked for threats.
-
-                    }else{
-                        // Impossible scenario.
-                        throw runtime_error( "Unexpected path reached in black castling legality check." );
-                    }
-
-                    return cast_poss;
-
-                }
             }
 
 
         }else{
 
+            // Check for threat at destination square.
             is_legal = is_legal && atk_list_by_W[ ind_aft ].empty();
 
+            // Check for unique castling move.
+            if( this->CHS_board[i_bef][j_bef].not_moved && is_legal && 
+                ind_bef == 60 && ( ind_aft == 62 || ind_aft == 58 ) )
+            {
+
+                bool cast_poss = true;
+
+                // Right-castling.
+                if( ind_aft == 62 ){
+
+                    // Make sure the entire path is clear from black threats.
+                    cast_poss = cast_poss && ( atk_list_by_W[60].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_W[61].empty() );
+                    // Destination square [62] already checked for threats.
+
+                }else if( ind_aft == 58 ){
+
+                    // Make sure the entire path is clear from black threats.
+                    cast_poss = cast_poss && ( atk_list_by_W[60].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_W[59].empty() );
+                    // Destination square [58] already checked for threats.
+
+                }else{
+                    // Impossible scenario.
+                    throw runtime_error( "Unexpected path reached in black castling legality check." );
+                }
+
+                return cast_poss;
+
+            }
+            
         }
 
     // If not king, check for persistence in check state and incidental check state.
@@ -2022,6 +2022,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         break;
 
     case CHS_PIECE_TYPE::QUEEN:
+
         if( abs( moveVec.first ) != abs( moveVec.second ) &&
             ( moveVec.first != 0 && moveVec.second != 0 ) ){
             return false;
@@ -2033,12 +2034,6 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
         // Standard king move.
         if( abs( moveVec.first ) <= 1 && abs( moveVec.second ) <= 1 ){
             
-            // Check for threat at destination square.
-            if( tarColor == CHS_PIECE_COLOR::WHITE && !atk_list_by_B[ sub2ind( i_aft, j_aft ) ].empty() ||
-                tarColor == CHS_PIECE_COLOR::BLACK && !atk_list_by_W[ sub2ind( i_aft, j_aft ) ].empty() )
-            {
-                return false;
-            }
             break;
 
         // Check for castling possibility.
@@ -2057,12 +2052,6 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                     cast_poss = cast_poss && ( this->CHS_board[0][7].not_moved );
                     if( !cast_poss ){ return false; }
 
-                    // Make sure the entire path is clear from black threats.
-                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,4)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,5)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,6)].empty() );
-                    if( !cast_poss ){ return false; }
-
                 // Left-side castling.
                 }else if( i_bef == 0 && j_bef == 4 && i_aft == 0 && j_aft == 2 ){
 
@@ -2071,14 +2060,7 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                     cast_poss = cast_poss && ( this->CHS_board[0][0].color == CHS_PIECE_COLOR::WHITE );
                     cast_poss = cast_poss && ( this->CHS_board[0][0].not_moved );
                     // The left-side knight initial square must be cleared.
-                    cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P &&
-                        this->CHS_board[0][1].color == CHS_PIECE_COLOR::NO_C );
-                    if( !cast_poss ){ return false; }
-
-                    // Make sure the entire path is clear from black threats.
-                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,4)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,3)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_B[sub2ind(0,2)].empty() );
+                    cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P );
                     if( !cast_poss ){ return false; }
 
                 // Not castling, and thus illegal
@@ -2097,28 +2079,15 @@ bool chess::is_move_valid( unsigned int i_bef, unsigned int j_bef,
                     cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
                     if( !cast_poss ){ return false; }
 
-                    // Make sure the entire path is clear from white threats.
-                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,4)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,5)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,6)].empty() );
-                    if( !cast_poss ){ return false; }
-
                 // Left-side castling.
                 }else if( i_bef == 7 && j_bef == 4 && i_aft == 7 && j_aft == 2 ){
 
                     // The left-side rook must have not moved yet.
-                    bool cast_poss = this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK;
+                    cast_poss = cast_poss && ( this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK );
                     cast_poss = cast_poss && ( this->CHS_board[7][0].color == CHS_PIECE_COLOR::BLACK );
                     cast_poss = cast_poss && ( this->CHS_board[7][0].not_moved );
                     // The left-side knight initial square must be cleared.
-                    cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P &&
-                        this->CHS_board[7][1].color == CHS_PIECE_COLOR::NO_C );
-                    if( !cast_poss ){ return false; }
-
-                    // Make sure the entire path is clear from white threats.
-                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,4)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,3)].empty() );
-                    cast_poss = cast_poss && ( atk_list_by_W[sub2ind(7,2)].empty() );
+                    cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P );
                     if( !cast_poss ){ return false; }
 
                 // Not castling, and thus illegal
