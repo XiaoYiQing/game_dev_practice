@@ -4771,8 +4771,6 @@ void chess::upd_pre_legal_plays(){
     for( int t = 0; t < 8; t++ ){
 		if( WK_bools[t] ){
             aim_z = WK_aims[t];
-            if( this->atk_list_by_B[aim_z].size() != 0 )
-                continue;
             if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
 				this->valid_W_moves_map[ W_king_idx ].push_back( aim_z );
 			}else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::BLACK ){
@@ -4784,8 +4782,6 @@ void chess::upd_pre_legal_plays(){
     for( int t = 0; t < 8; t++ ){
 		if( BK_bools[t] ){
 			aim_z = BK_aims[t];
-            if( this->atk_list_by_W[aim_z].size() != 0 )
-                continue;
             if( this->get_piece_at( aim_z ).type == CHS_PIECE_TYPE::NO_P ){
 				this->valid_B_moves_map[ B_king_idx ].push_back( aim_z );
 			}else if( this->get_piece_at( aim_z ).color == CHS_PIECE_COLOR::WHITE ){
@@ -4801,9 +4797,6 @@ void chess::upd_pre_legal_plays(){
 //      Castling Moves Check
 // ---------------------------------------------------------------------- >>>>>
 
-    // White king danger moves/atks check
-    
-
     // White castling possibility check.
     if( W_cast_posb ){
 
@@ -4814,10 +4807,6 @@ void chess::upd_pre_legal_plays(){
         cast_poss = cast_poss && ( this->CHS_board[0][7].not_moved );
         cast_poss = cast_poss && ( this->CHS_board[0][6].type == CHS_PIECE_TYPE::NO_P );
         cast_poss = cast_poss && ( this->CHS_board[0][5].type == CHS_PIECE_TYPE::NO_P );
-        // Make sure the entire path is clear from black threats.
-        cast_poss = cast_poss && ( this->atk_list_by_B[4].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_B[5].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_B[6].empty() );
         if( cast_poss )
             this->valid_W_moves_map[4].push_back( 6 );
 
@@ -4829,10 +4818,6 @@ void chess::upd_pre_legal_plays(){
         cast_poss = cast_poss && ( this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P );
         cast_poss = cast_poss && ( this->CHS_board[0][2].type == CHS_PIECE_TYPE::NO_P );
         cast_poss = cast_poss && ( this->CHS_board[0][3].type == CHS_PIECE_TYPE::NO_P );
-        // Make sure the entire path is clear from black threats.
-        cast_poss = cast_poss && ( this->atk_list_by_B[4].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_B[3].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_B[2].empty() );
         if( cast_poss )
             this->valid_W_moves_map[4].push_back( 2 );
 
@@ -4848,10 +4833,6 @@ void chess::upd_pre_legal_plays(){
         cast_poss = cast_poss && ( this->CHS_board[7][7].not_moved );
         cast_poss = cast_poss && ( this->CHS_board[7][6].type == CHS_PIECE_TYPE::NO_P );
         cast_poss = cast_poss && ( this->CHS_board[7][5].type == CHS_PIECE_TYPE::NO_P );
-        // Make sure the entire path is clear from white threats.
-        cast_poss = cast_poss && ( this->atk_list_by_W[60].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_W[61].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_W[62].empty() );
         if( cast_poss )
             this->valid_B_moves_map[60].push_back( 62 );
 
@@ -4863,10 +4844,6 @@ void chess::upd_pre_legal_plays(){
         cast_poss = cast_poss && ( this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P );
         cast_poss = cast_poss && ( this->CHS_board[7][2].type == CHS_PIECE_TYPE::NO_P );
         cast_poss = cast_poss && ( this->CHS_board[7][3].type == CHS_PIECE_TYPE::NO_P );
-        // Make sure the entire path is clear from white threats.
-        cast_poss = cast_poss && ( this->atk_list_by_W[60].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_W[59].empty() );
-        cast_poss = cast_poss && ( this->atk_list_by_W[58].empty() );
         if( cast_poss )
             this->valid_B_moves_map[60].push_back( 58 );
 
