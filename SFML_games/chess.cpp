@@ -1804,36 +1804,101 @@ bool chess::is_move_legal( unsigned int i_bef, unsigned int j_bef,
         return false;
     }
     
-
+    // Initialize legality boolean.
     bool is_legal = true;
-
+    // A move cannot be legal if not at least valid.
     is_legal = is_legal && this->is_move_valid( i_bef, j_bef, i_aft, j_aft );
 
+    // Special legality check for king.
     if( this->CHS_board[i_bef][j_bef].type == CHS_PIECE_TYPE::KING ){
 
-        bool castling = true;
-        if( this->CHS_board[i_bef][j_bef].not_moved ){
+        if( tarColor == CHS_PIECE_COLOR::WHITE ){
+
+            // Check for threat at destination square.
+            is_legal = is_legal && atk_list_by_B[ ind_aft ].empty();
+
+            // Check for unique castling move.
+            if( this->CHS_board[i_bef][j_bef].not_moved && is_legal && 
+                ind_bef == 4 && ( ind_aft == 6 || ind_aft == 2 ) )
+            {
+                bool cast_poss = true;
+
+                // Right-castling.
+                if( ind_aft == 6 ){
+
+                    // Make sure the entire path is clear from black threats.
+                    cast_poss = cast_poss && ( atk_list_by_B[4].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_B[5].empty() );
+                    // Destination square [6] already checked for threats.
+                
+                // Left-castling.
+                }else if( ind_aft == 2 ){
+
+                    // Make sure the entire path is clear from black threats.
+                    cast_poss = cast_poss && ( atk_list_by_B[4].empty() );
+                    cast_poss = cast_poss && ( atk_list_by_B[3].empty() );
+                    // Destination square [2] already checked for threats.
+
+                }else{
+                    // Impossible scenario.
+                    throw runtime_error( "Unexpected path reached in white castling legality check." );
+                }
+
+                return cast_poss;
+
+            }else{
+                
+                // Check for unique castling move.
+                if( this->CHS_board[i_bef][j_bef].not_moved && is_legal && 
+                    ind_bef == 60 && ( ind_aft == 62 || ind_aft == 58 ) )
+                {
+
+                    bool cast_poss = true;
+
+                    // Right-castling.
+                    if( ind_aft == 62 ){
+
+                        // Make sure the entire path is clear from black threats.
+                        cast_poss = cast_poss && ( atk_list_by_W[60].empty() );
+                        cast_poss = cast_poss && ( atk_list_by_W[61].empty() );
+                        // Destination square [62] already checked for threats.
+
+                    }else if( ind_aft == 58 ){
+
+                        // Make sure the entire path is clear from black threats.
+                        cast_poss = cast_poss && ( atk_list_by_W[60].empty() );
+                        cast_poss = cast_poss && ( atk_list_by_W[59].empty() );
+                        // Destination square [58] already checked for threats.
+
+                    }else{
+                        // Impossible scenario.
+                        throw runtime_error( "Unexpected path reached in black castling legality check." );
+                    }
+
+                    return cast_poss;
+
+                }
+            }
+
 
         }else{
-            castling = false;
+
+            is_legal = is_legal && atk_list_by_W[ ind_aft ].empty();
+
         }
 
-        // Check for threat at destination square.
-        if( tarColor == CHS_PIECE_COLOR::WHITE  ){
-            return atk_list_by_B[ ind_aft ].empty();
-        }else{
-            return atk_list_by_W[ ind_aft ].empty();
+    // If not king, check for persistence in check state and incidental check state.
+    }else{
+
+        // Determine if the move causes own king's check state to end (if it was in check).
+        if( is_legal ){
+            is_legal = is_legal && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
+        }
+        if( is_legal ){
+            // Determine if the move causes own king to be exposed to a check.
+            is_legal = is_legal && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
         }
 
-    }
-
-    // Determine if the move causes own king's check state to end (if it was in check).
-    if( is_legal && this->CHS_board[i_bef][j_bef].type != CHS_PIECE_TYPE::KING ){
-        is_legal = is_legal && !( this->is_chk_persist( i_bef, j_bef, i_aft, j_aft ) );
-    }
-    if( is_legal && this->CHS_board[i_bef][j_bef].type != CHS_PIECE_TYPE::KING ){
-        // Determine if the move causes own king to be exposed to a check.
-        is_legal = is_legal && ( this->is_incidental_safe( i_bef, j_bef, i_aft, j_aft ) );
     }
 
     return is_legal;
