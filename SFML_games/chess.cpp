@@ -4892,6 +4892,8 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
     
     // The piece that performed the play.
     chs_piece tar_pce = this->CHS_board[i_b][j_b];
+    // Temporary chess piece variable.
+    chs_piece pce_t;
     // Create a boolean indicating whether the piece is white.
     bool is_white = tar_pce.color == CHS_PIECE_COLOR::WHITE;
 
@@ -5213,29 +5215,23 @@ that may need their list of possible plays updated with this newly liberated squ
 //      Starting Position POV Update (North Sweep)
 // ---------------------------------------------------------------------- >>>>>
 
+    tmp_arr_lim = 0;
     // North sweep.
     for( int N_z = 1; N_z <= u_dist; N_z++ )
         tmp_ind_arr[tmp_arr_lim++] = ind_a + N_z * chess::BOARDWIDTH;
 
-    // TODO: DELETE THE FOLLOWING USELESS BLOCK.
-    this->atk_list_by_W;
-    this->atk_list_by_B;
-    this->valid_W_moves_map;
-    this->valid_B_moves_map;
-    this->valid_W_atks_map;
-    this->valid_B_atks_map;
-
-
+    // North sweep scan.
     for( int z = 0; z < tmp_arr_lim; z++ ){
 
         ind_tmp = tmp_ind_arr[z];
         ij_tmp = chess::ind2sub( ind_tmp );
         
+        // Skip if no piece.
         if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::NO_P ){
             continue;
         }
 
-        // Adjascent square check.
+        // Adjacent square check.
         if( z == 0 ){
 
             // Pawn case.
@@ -5285,7 +5281,7 @@ that may need their list of possible plays updated with this newly liberated squ
 
             }
 
-        // Special pawn double jump possibility.
+        // Special pawn double jump possibility two squares away.
         }else if( z == 1 ){
 
             // Pawn case.
@@ -5299,18 +5295,93 @@ that may need their list of possible plays updated with this newly liberated squ
 
         }
 
-        // General case.
-        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::PAWN ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KNIGHT ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::BISHOP ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KING )
+        // General case where only queens and rooks may need update.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK )
         {
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
 
-        // Only the rook or queen needs reverse scan.
-        }else{
+                    // Remove potential attack from white to original piece.
+                    this->valid_W_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_W_atks_map[ ind_tmp ].begin(), 
+                        this->valid_W_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_W_atks_map[ ind_tmp ].end() );
 
+                }
+                // Add new free space as valid move.
+                this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                
+                // Scan remaining column.
+                for( int t = ind_a - chess::BOARDWIDTH; t >= 0; t = t - chess::BOARDWIDTH ){
 
+                    pce_t = this->get_piece_at(t);
 
+                    // Regardless of what's on the scanned square, it is added to attacks 
+                    // by white list.
+                    this->atk_list_by_W[t].push_back( ind_tmp );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        
+                        // Free space means accessible by current scanned piece.
+                        this->valid_W_moves_map[ ind_tmp ].push_back( t );
+
+                    }else{
+
+                        if( pce_t.color == CHS_PIECE_COLOR::BLACK ){
+                            // Black piece means can be attacked by current scanned white piece.
+                            this->valid_W_atks_map[ ind_tmp ].push_back( t );
+                        }
+                        // Stop scanning on first non-empty contact.
+                        break;
+                    }
+
+                }
+
+            // Is a black rook or queen.
+            }else{
+
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                    // Remove potential attack from white to original piece.
+                    this->valid_B_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_tmp ].begin(), 
+                        this->valid_B_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_tmp ].end() );
+
+                }
+                // Add new free space as valid move.
+                this->valid_B_moves_map[ ind_tmp ].push_back( ind_a );
+
+                // Scan remaining column.
+                for( int t = ind_a - chess::BOARDWIDTH; t >= 0; t = t - chess::BOARDWIDTH ){
+
+                    pce_t = this->get_piece_at(t);
+
+                    // Regardless of what's on the scanned square, it is added to attacks 
+                    // by white list.
+                    this->atk_list_by_B[t].push_back( ind_tmp );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        
+                        // Free space means accessible by current scanned piece.
+                        this->valid_B_moves_map[ ind_tmp ].push_back( t );
+
+                    }else{
+
+                        if( pce_t.color == CHS_PIECE_COLOR::WHITE ){
+                            // White piece means can be attacked by current scanned black piece.
+                            this->valid_B_atks_map[ ind_tmp ].push_back( t );
+                        }
+                        // Stop scanning on first non-empty contact.
+                        break;
+
+                    }
+                }
+
+            }
+
+            
         }
         
         // No need to scan further after first piece contact.
@@ -5319,6 +5390,200 @@ that may need their list of possible plays updated with this newly liberated squ
     }
 
 // ---------------------------------------------------------------------- <<<<<
+
+// ---------------------------------------------------------------------- >>>>>
+//      Starting Position POV Update (South Sweep)
+// ---------------------------------------------------------------------- >>>>>
+
+    tmp_arr_lim = 0;
+    // South sweep.
+    for( int S_z = 1; S_z <= d_dist; S_z++ )
+        tmp_ind_arr[tmp_arr_lim++] =  ind_a - S_z * chess::BOARDWIDTH;
+
+    // South sweep scan.
+    for( int z = 0; z < tmp_arr_lim; z++ ){
+
+        ind_tmp = tmp_ind_arr[z];
+        ij_tmp = chess::ind2sub( ind_tmp );
+
+        // Skip if no piece.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::NO_P ){
+            continue;
+        }
+
+        // Adjacent square check.
+        if( z == 0 ){
+
+            // Pawn case.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::PAWN ){
+
+                if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+                    this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                    // Double square pawn jump possibility.
+                    if( this->CHS_board[ij_tmp.first][ij_tmp.second].not_moved ){
+                        this->valid_W_moves_map[ ind_tmp ].push_back( ind_a - chess::BOARDWIDTH );
+                    }
+                }
+
+                // No need to scan further after first piece contact.
+                break;
+
+            // King case.
+            }else if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KING ){
+
+                // Black king right below.
+                if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::BLACK ){
+
+                    // Add freed square as a possible move.
+                    this->valid_B_moves_map[ ind_tmp ].push_back( ind_a );
+                    // Remove attack possibility of the new square, if it was white.
+                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                        this->valid_B_atks_map[ ind_tmp ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_tmp ].begin(), 
+                            this->valid_B_atks_map[ ind_tmp ].end(), ind_a ), 
+                            this->valid_B_atks_map[ ind_tmp ].end() );
+                    }
+
+                // White king right above.
+                }else{
+                    this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                    // Remove attack possibility of the new square, if it was black.
+                    if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                        this->valid_W_atks_map[ ind_tmp ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_tmp ].begin(), 
+                            this->valid_W_atks_map[ ind_tmp ].end(), ind_a ), 
+                            this->valid_W_atks_map[ ind_tmp ].end() );
+                    }
+                }
+
+                // No need to scan further after first piece contact.
+                break;
+
+            }
+
+        // Special pawn double jump possibility two squares away.
+        }else if( z == 1 ){
+
+            // Pawn case.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::PAWN &&
+                this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE &&
+                this->CHS_board[ij_tmp.first][ij_tmp.second].not_moved )
+            {
+                this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                break;
+            }
+
+        }
+
+        // General case where only queens and rooks may need update.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK )
+        {
+
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+
+                    // Remove potential attack from white to original piece.
+                    this->valid_W_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_W_atks_map[ ind_tmp ].begin(), 
+                        this->valid_W_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_W_atks_map[ ind_tmp ].end() );
+
+                }
+                // Add new free space as valid move.
+                this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                
+                // Scan remaining column.
+                for( int t = ind_a - chess::BOARDWIDTH; t >= 0; t = t - chess::BOARDWIDTH ){
+
+                    pce_t = this->get_piece_at(t);
+
+                    // Regardless of what's on the scanned square, it is added to attacks 
+                    // by white list.
+                    this->atk_list_by_W[t].push_back( ind_tmp );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        
+                        // Free space means accessible by current scanned piece.
+                        this->valid_W_moves_map[ ind_tmp ].push_back( t );
+
+                    }else{
+
+                        if( pce_t.color == CHS_PIECE_COLOR::BLACK ){
+                            // Black piece means can be attacked by current scanned white piece.
+                            this->valid_W_atks_map[ ind_tmp ].push_back( t );
+                        }
+                        // Stop scanning on first non-empty contact.
+                        break;
+                    }
+
+                }
+
+            // Is a black rook or queen.
+            }else{
+
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                    // Remove potential attack from white to original piece.
+                    this->valid_B_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_tmp ].begin(), 
+                        this->valid_B_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_tmp ].end() );
+
+                }
+                // Add new free space as valid move.
+                this->valid_B_moves_map[ ind_tmp ].push_back( ind_a );
+
+                // Scan remaining column.
+                for( int t = ind_a - chess::BOARDWIDTH; t >= 0; t = t - chess::BOARDWIDTH ){
+
+                    pce_t = this->get_piece_at(t);
+
+                    // Regardless of what's on the scanned square, it is added to attacks 
+                    // by white list.
+                    this->atk_list_by_B[t].push_back( ind_tmp );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        
+                        // Free space means accessible by current scanned piece.
+                        this->valid_B_moves_map[ ind_tmp ].push_back( t );
+
+                    }else{
+
+                        if( pce_t.color == CHS_PIECE_COLOR::WHITE ){
+                            // White piece means can be attacked by current scanned black piece.
+                            this->valid_B_atks_map[ ind_tmp ].push_back( t );
+                        }
+                        // Stop scanning on first non-empty contact.
+                        break;
+
+                    }
+                }
+
+            }
+
+        }
+
+        // No need to scan further after first piece contact.
+        break;
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Starting Position POV Update (Horizontal Sweep)
+// ---------------------------------------------------------------------- >>>>>
+
+    // TODO: DELETE THE FOLLOWING USELESS BLOCK.
+    this->atk_list_by_W;
+    this->atk_list_by_B;
+    this->valid_W_moves_map;
+    this->valid_B_moves_map;
+    this->valid_W_atks_map;
+    this->valid_B_atks_map;
+
 
 }
 
