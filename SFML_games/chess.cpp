@@ -4753,9 +4753,9 @@ void chess::upd_pre_legal_plays(){
 
 
     // Update the reach of the white king.
-	for( unsigned int zz = 0; zz < 8u; zz++ ){
-		if( WK_bools[zz] ){
-            aim_z = WK_aims[zz];
+	for( unsigned int t = 0; t < 8u; t++ ){
+		if( WK_bools[t] ){
+            aim_z = WK_aims[t];
 			this->atk_list_by_W[ aim_z ].push_back( W_king_idx );
 		}
     }
@@ -4860,6 +4860,7 @@ void chess::upd_pre_legal_plays(){
 
 void chess::upd_pre_legal_plays( chs_move tar_play ){
 
+    // 2D and linear indexing prep.
     int i_a = tar_play.pt_a.first;
     int j_a = tar_play.pt_a.second;
     int ind_a = chess::sub2ind( i_a, j_a );
@@ -4873,10 +4874,13 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
         throw invalid_argument( "Starting square is not empty." );
     }
 
+    // Set attack list and valid plays lists flags to false.
     this->is_atk_lists_upd = false;
     this->is_valid_moves_upd = false;
     this->is_valid_atks_upd = false;
 
+
+    
     int sq_cnt = chess::BOARDHEIGHT * chess::BOARDWIDTH;
     int u_dist = BOARDHEIGHT - 1 - i_a;
     int r_dist = BOARDWIDTH - 1 - j_a;
@@ -4886,11 +4890,13 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
     int di = i_b - i_a;
     int dj = j_b - j_a;
     
+    // The piece that performed the play.
     chs_piece tar_pce = this->CHS_board[i_b][j_b];
     // Create a boolean indicating whether the piece is white.
     bool is_white = tar_pce.color == CHS_PIECE_COLOR::WHITE;
 
     int ind_tmp = 0;
+    pair<int,int> ij_tmp = {0,0};
     int tmp_arr_lim = 0;
     // Initialize potential list of plays.
     int tmp_ind_arr[28];
@@ -4910,8 +4916,9 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
 //      Removal of Points Affected by Target Piece
 // ---------------------------------------------------------------------- >>>>>
 
-    // Determine the squares attacked by the current piece.
+    // Reset number of plays counter.
     tmp_arr_lim = 0;
+
     if( tar_pce.type == CHS_PIECE_TYPE::KNIGHT ){
 
         // Collect all potential moves/attacks of the knight at its start 
@@ -5029,6 +5036,7 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
 
     }
 
+    // Remove plays from white lists.
     if( is_white ){
         
         // Clear the valid attacks and moves at target square.
@@ -5062,7 +5070,6 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
 
         }
 
-
         // Remove starting point's potential attack points.
         for( int z = 0; z < tmp_arr_lim; z++ ){
             ind_tmp = tmp_ind_arr[z];
@@ -5072,7 +5079,7 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
                 this->atk_list_by_W[ ind_tmp ].end() );
         }
     
-    // Black piece case.
+    // Remove plays from black lists.
     }else{
 
         // Clear the valid attacks and moves at target square.
@@ -5114,7 +5121,98 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
                 this->atk_list_by_B[ ind_tmp ].end(), ind_a ), 
                 this->atk_list_by_B[ ind_tmp ].end() );
         }
+
     }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Starting Position POV Update (KNGIHT)
+// ---------------------------------------------------------------------- >>>>>
+/*
+Given the starting position is empty now, update all potential knights
+that may need their list of possible plays updated with this newly liberated square.
+*/
+
+    // Reset number of plays counter.
+    tmp_arr_lim = 0;
+    // Collect all potential positions from which a knight may move to the starting
+    // location
+    ind_tmp = ind_a - 2 * chess::BOARDWIDTH - 1; 
+    if( ( ind_tmp >= 0 ) && ( j_a > 0 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+    ind_tmp = ind_a - 2 * chess::BOARDWIDTH + 1;
+    if( ( ind_tmp >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+    ind_tmp = ind_a - chess::BOARDWIDTH - 2;
+    if( ( ind_tmp >= 0 ) && ( j_a > 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+    ind_tmp = ind_a - chess::BOARDWIDTH + 2;
+    if( ( ind_tmp >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+    ind_tmp = ind_a + chess::BOARDWIDTH - 2;
+    if( ind_tmp < sq_cnt && ( j_a > 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+    ind_tmp = ind_a + chess::BOARDWIDTH + 2;
+    if( ind_tmp < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+    ind_tmp = ind_a + 2 * chess::BOARDWIDTH - 1;
+    if( ind_tmp < sq_cnt && ( j_a > 0 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+    ind_tmp = ind_a + 2 * chess::BOARDWIDTH + 1;
+    if( ind_tmp < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_tmp;
+
+    // Parse through all posible knights positions around the starting position.
+    for( int z = 0; z < tmp_arr_lim; z++ ){
+        ind_tmp = tmp_ind_arr[z];
+        ij_tmp = chess::ind2sub( ind_tmp );
+
+        // Check if current potential position has a knight.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KNIGHT ){
+
+            // Scanning piece is white knight.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+
+                // Starting point becomes valid white knight move destination.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                    this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                // Valid white knight attack of starting point becomes valid move destination.
+                }else{
+                    this->valid_W_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_W_atks_map[ ind_tmp ].begin(), 
+                        this->valid_W_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_W_atks_map[ ind_tmp ].end() );
+                    this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                }
+            
+            // Scanning piece is black knight.
+            }else{
+
+                // Starting point becomes valid black knight move destination.
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                    this->valid_B_moves_map[ ind_tmp ].push_back( ind_a );
+                // Valid black knight attack of starting point becomes valid move destination.
+                }else{
+                    this->valid_B_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_tmp ].begin(), 
+                        this->valid_B_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_tmp ].end() );
+                    this->valid_B_moves_map[ ind_tmp ].push_back( ind_a );
+                }
+
+            }
+        }
+    }
+
+    // TODO: DELETE THE FOLLOWING USELESS BLOCK.
+    this->atk_list_by_W;
+    this->atk_list_by_B;
+    this->valid_W_moves_map;
+    this->valid_B_moves_map;
+    this->valid_W_atks_map;
+    this->valid_B_atks_map;
 
 // ---------------------------------------------------------------------- <<<<<
 

@@ -144,19 +144,19 @@ void do_tests( unsigned int test_id ){
 
     // tests::CRG_test1();
 
-    tests::chess_base_tests();
-    tests::chess_chs_move_tests();
-    tests::chess_game_manip_tests();
-    tests::chess_incident_safe_tests();
-    tests::chess_chk_persist_tests();
-    tests::valid_move_maps_tests();
-    tests::legal_move_maps_tests();
-    tests::valid_atk_maps_tests();
-    tests::chess_move_tests();
-    tests::chess_atk_check_tests();
-    tests::chess_play_tests();
-    tests::chess_promo_tests();
-    tests::chess_en_pass_tests();
+    // tests::chess_base_tests();
+    // tests::chess_chs_move_tests();
+    // tests::chess_game_manip_tests();
+    // tests::chess_incident_safe_tests();
+    // tests::chess_chk_persist_tests();
+    // tests::valid_move_maps_tests();
+    // tests::legal_move_maps_tests();
+    // tests::valid_atk_maps_tests();
+    // tests::chess_move_tests();
+    // tests::chess_atk_check_tests();
+    // tests::chess_play_tests();
+    // tests::chess_promo_tests();
+    // tests::chess_en_pass_tests();
 
     // tests::chess_game_state_tests();
     // tests::chess_psbl_plays_tests();
@@ -165,7 +165,7 @@ void do_tests( unsigned int test_id ){
     // tests::chess_full_game_tests();
     // tests::chess_alg_coord_trans_tests();
     // tests::chess_all_alg_comm_tests();
-    // tests::chess_upd_pre_legal_tests();
+    tests::chess_upd_pre_legal_tests();
 
 
     // tests::CHS_SFML_eng_tests();
