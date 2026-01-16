@@ -4911,9 +4911,6 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
     }
     int line_aims_cnt = 0;
     
-    // Knight and king evaluation scenarios.
-    int kn_aims[8];
-    bool kn_bools[8];
 
 // ---------------------------------------------------------------------- >>>>>
 //      Removal of Points Affected by Target Piece

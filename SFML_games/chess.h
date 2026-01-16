@@ -788,6 +788,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_pre_legal_plays( chs_move tar_play );
 
     /**
+     * Perform updates on the on the attack lists and the valid moves and attacks all in
+     * one go in a precise manner given the target square of specified coordinate was 
+     * emptied as part of the immediate lastest play performed on the board.
+     */
+    void upd_pre_legal_plays_emp( int emp_ind );
+
+    /**
      * \brief Print the state of the board onto the console terminal.
      * 
      * \note This is a debug tool and has no impact on actual game functionalities.
