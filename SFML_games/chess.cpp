@@ -5939,7 +5939,203 @@ that may need their list of possible plays updated with this newly liberated squ
     for( int NE_z = 1; NE_z <= min( u_dist, r_dist ) ; NE_z++ )
         tmp_ind_arr[tmp_arr_lim++] = ind_a + NE_z * chess::BOARDWIDTH + NE_z;
 
-    // West sweep scan.
+    // North-East sweep scan.
+    for( int z = 0; z < tmp_arr_lim; z++ ){
+
+        ind_tmp = tmp_ind_arr[z];
+        ij_tmp = chess::ind2sub( ind_tmp );
+
+        // Skip if no piece.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::NO_P ){
+            continue;
+        }
+
+        // Adjacent square check.
+        if( z == 0 ){
+
+            // Neighrbor is a pawn.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::PAWN ){
+                // The pawn is black AND the displaced piece was white.
+                if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::BLACK &&
+                    tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                    // Remove black pawn valid attack option now that the start position is empty.
+                    this->valid_B_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_tmp ].begin(), 
+                        this->valid_B_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_tmp ].end() );
+
+                }
+
+                // Line scan stops at first contact.
+                break;
+
+            // The neighbor is a king.
+            }else if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KING ){
+
+                // The king is black.
+                if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::BLACK ){
+                    
+                    // Add freed square as a possible move.
+                    this->valid_B_moves_map[ ind_tmp ].push_back( ind_a );
+                    // Displaced piece is white.
+                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                        // Remove valid attack option now that the start position is empty.
+                        this->valid_B_atks_map[ ind_tmp ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_tmp ].begin(), 
+                            this->valid_B_atks_map[ ind_tmp ].end(), ind_a ), 
+                            this->valid_B_atks_map[ ind_tmp ].end() );
+                    }
+
+                // The king is white.
+                }else{
+
+                    // Add freed square as a possible move.
+                    this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+                    // Displaced piece is black.
+                    if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                        // Remove valid attack option now that the start position is empty.
+                        this->valid_W_atks_map[ ind_tmp ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_tmp ].begin(), 
+                            this->valid_W_atks_map[ ind_tmp ].end(), ind_a ), 
+                            this->valid_W_atks_map[ ind_tmp ].end() );
+                    }
+
+                }
+
+                // Line scan stops at first contact.
+                break;
+
+            }
+
+        }
+
+        // General case where only queens and bishops may need update.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::BISHOP )
+        {
+
+            // The current scan piece is white.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+
+                // The displaced piece is black.
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+
+                    // Remove valid attack option now that the start position is empty.
+                    this->valid_W_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_W_atks_map[ ind_tmp ].begin(), 
+                        this->valid_W_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_W_atks_map[ ind_tmp ].end() );
+
+                }
+                // Add empty space as valid move destination.
+                this->valid_W_moves_map[ ind_tmp ].push_back( ind_a );
+
+                // Reverse scan remaining diagonal.
+                for( int t = 1; t <= min( l_dist, d_dist ); t++ ){
+
+                    // Compute next square linear index on the reverse scan diagonal.
+                    ind_t = ind_a + t * chess::BOARDWIDTH + t;
+
+                    // Obtain piece at coordinate.
+                    pce_t = this->get_piece_at(ind_t);
+
+                    // Regardless of what's on the reverse scanned square, it is added to attacks 
+                    // by white list.
+                    this->atk_list_by_W[ind_t].push_back( ind_tmp );
+
+                    // Current reverse scan target is an empty square.
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        // Free space means accessible by current reverse scan source.
+                        this->valid_W_moves_map[ ind_tmp ].push_back( ind_t );
+
+                    // Current reverse scan target is not empty.
+                    }else{
+
+                        // Current reverse scan target is black.
+                        if( pce_t.color == CHS_PIECE_COLOR::BLACK ){
+                            // Black piece means can be attacked by current reverse scan source.
+                            this->valid_W_atks_map[ ind_tmp ].push_back( ind_t );
+                        }
+
+                        // Reverse scan first contact stop.
+                        break;
+
+                    }
+
+                }
+
+            // The current scan piece is black.
+            }else{
+
+                // The displaced piece is white.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                    // Remove valid attack option now that the start position is empty.
+                    this->valid_B_atks_map[ ind_tmp ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_tmp ].begin(), 
+                        this->valid_B_atks_map[ ind_tmp ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_tmp ].end() );
+
+                }
+                // Add empty space as valid move destination.
+                this->valid_B_moves_map[ ind_tmp ].push_back( ind_a );
+                
+                // Reverse scan remaining diagonal.
+                for( int t = 1; t <= min( l_dist, d_dist ); t++ ){
+
+                    // Compute next square linear index on the reverse scan diagonal.
+                    ind_t = ind_a + t * chess::BOARDWIDTH + t;
+
+                    // Obtain piece at coordinate.
+                    pce_t = this->get_piece_at(ind_t);
+
+                    // Regardless of what's on the reverse scanned square, it is added to attacks 
+                    // by black list.
+                    this->atk_list_by_B[ind_t].push_back( ind_tmp );
+
+                    // Current reverse scan target is an empty square.
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        // Free space means accessible by current reverse scan source.
+                        this->valid_B_moves_map[ ind_tmp ].push_back( ind_t );
+
+                    // Current reverse scan target is not empty.
+                    }else{
+
+                        // Current reverse scan target is white.
+                        if( pce_t.color == CHS_PIECE_COLOR::WHITE ){
+                            // White piece means can be attacked by current reverse scan source.
+                            this->valid_B_atks_map[ ind_tmp ].push_back( ind_t );
+                        }
+
+                        // Reverse scan first contact stop.
+                        break;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        // Line scan stops at first contact.
+        break;
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Starting Position POV Update (North-West Sweep)
+// ---------------------------------------------------------------------- >>>>>
+
+    // North-West diagonal squares.
+    for( int NW_z = 1; NW_z <= min( u_dist, l_dist ) ; NW_z++ )
+        tmp_ind_arr[tmp_arr_lim++] = ind_a + NW_z * chess::BOARDWIDTH - NW_z;
+
+    // North-West sweep scan.
     for( int z = 0; z < tmp_arr_lim; z++ ){
 
         ind_tmp = tmp_ind_arr[z];
@@ -6035,7 +6231,7 @@ that may need their list of possible plays updated with this newly liberated squ
                 for( int t = 1; t <= min( l_dist, d_dist ); t++ ){
                     
                     // Compute next square linear index on the reverse scan diagonal.
-                    ind_t = ind_a - t * chess::BOARDWIDTH - t;
+                    ind_t = ind_a + t * chess::BOARDWIDTH - t;
 
                     // Obtain piece at coordinate.
                     pce_t = this->get_piece_at(ind_t);
@@ -6085,7 +6281,7 @@ that may need their list of possible plays updated with this newly liberated squ
                 for( int t = 1; t <= min( l_dist, d_dist ); t++ ){
 
                     // Compute next square linear index on the reverse scan diagonal.
-                    ind_t = ind_a - t * chess::BOARDWIDTH - t;
+                    ind_t = ind_a + t * chess::BOARDWIDTH - t;
 
                     // Obtain piece at coordinate.
                     pce_t = this->get_piece_at(ind_t);
@@ -6123,7 +6319,7 @@ that may need their list of possible plays updated with this newly liberated squ
         break;
 
     }
-
+        
 // ---------------------------------------------------------------------- <<<<<
 
 }
