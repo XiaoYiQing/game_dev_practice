@@ -4196,6 +4196,40 @@ void tests::chess_upd_pre_legal_tests(){
 
 
 
+void tests::chess_upd_pre_legal_tests_spec(){
+
+    bool test_bool = true;
+    chess myGame;
+
+    chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C );
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    
+    myGame.set_piece_at( 0, 4, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 7, 4, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 3, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
+    myGame.set_piece_at( 3, 2, chess::chs_piece( 
+        chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    
+    myGame.printBoard();
+
+    myGame.setForce_lists_upd(true);
+    
+
+// ---------------------------------------------------------------------- <<<<<
+
+}
+
+
 
 void tests::CHS_SFML_eng_tests(){
 

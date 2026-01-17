@@ -356,6 +356,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * \warning Does not update the turn count.
      */
     void set_piece_at( const unsigned int i, const unsigned int j, const chs_piece inPce );
+
+    /**
+     * Forcibly set piece at target location without updating the state of the board.
+     * THIS FUNCTION IS MEANT FOR TESTING. AVOID USING IT IN THE OFFICIAL GAME LOGIC FLOW.
+     */
+    void set_piece_at_NO_UPD( const unsigned int i, const unsigned int j, const chs_piece inPce );
+
     /**
      * \brief Set the piece at the target algebraic coordinate as the target piece.
      * 

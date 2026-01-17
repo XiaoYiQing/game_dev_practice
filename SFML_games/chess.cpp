@@ -407,6 +407,13 @@ void chess::set_piece_at( const unsigned int i, const unsigned int j, const chs_
     this->game_tracking_signal();
     this->upd_all();
 }
+void chess::set_piece_at_NO_UPD( const unsigned int i, const unsigned int j, const chs_piece inPce ){
+    if( i >= BOARDHEIGHT || j >= BOARDWIDTH ){
+        throw out_of_range( "set_piece_at: the specified coordinate is out of bound." );
+    }
+    this->CHS_board[i][j] = inPce;
+}
+
 void chess::set_piece_at_ag_coord( const char c, const unsigned int n, const chs_piece inPce ){
     set_piece_at( n - 1, c - 'a', inPce );
 }
