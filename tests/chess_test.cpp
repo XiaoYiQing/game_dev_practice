@@ -4203,6 +4203,8 @@ void tests::chess_upd_pre_legal_tests_spec(){
 
     chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
         chess::CHS_PIECE_COLOR::NO_C );
+    chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
 
 // ---------------------------------------------------------------------- >>>>>
 //      Castling Test
@@ -4215,15 +4217,21 @@ void tests::chess_upd_pre_legal_tests_spec(){
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
     myGame.set_piece_at( 7, 4, chess::chs_piece( 
         chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
-    myGame.set_piece_at( 1, 3, chess::chs_piece( 
-        chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 3, 2, chess::chs_piece( 
-        chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 1, 3, w_pawn );
+    myGame.set_piece_at( 3, 2, b_knight );
     
     myGame.printBoard();
 
     myGame.setForce_lists_upd(true);
-    
+
+    // Perform a "manual" play by displacing the pawn without updating.
+    myGame.set_piece_at_NO_UPD( 1, 3, emp_pce );
+    myGame.set_piece_at_NO_UPD( 2, 3, w_pawn );
+
+    myGame.printBoard();
+
+    myGame.upd_pre_legal_plays_emp( chess::sub2ind( 1, 3 ), w_pawn );
+
 
 // ---------------------------------------------------------------------- <<<<<
 
