@@ -791,8 +791,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * Perform updates on the on the attack lists and the valid moves and attacks all in
      * one go in a precise manner given the target square of specified coordinate was 
      * emptied as part of the immediate lastest play performed on the board.
+     * 
+     * \param ind_a The linear index coordinate of the recently liberated square.
+     * \param tar_pce The chess piece that vacated from said liberated square.
      */
-    void upd_pre_legal_plays_emp( int emp_ind );
+    void upd_pre_legal_plays_emp( int ind_a, chs_piece tar_pce );
 
     /**
      * \brief Print the state of the board onto the console terminal.
