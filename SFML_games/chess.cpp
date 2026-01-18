@@ -5282,13 +5282,15 @@ that may need their list of possible plays updated with this newly liberated squ
         // Adjacent square check.
         if( z == 0 ){
 
-            // Pawn case.
+            // Adjacent piece is a pawn.
             if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::PAWN ){
 
+                // Pawn is black.
                 if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::BLACK ){
                     this->valid_B_moves_map[ ind_z ].push_back( ind_a );
                     // Double square pawn jump possibility.
-                    if( this->CHS_board[ij_tmp.first][ij_tmp.second].not_moved ){
+                    if( this->CHS_board[ij_tmp.first][ij_tmp.second].not_moved &&
+                        this->CHS_board[ij_tmp.first - 1 ][ij_tmp.second].type == CHS_PIECE_TYPE::NO_P ){
                         this->valid_B_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
                     }
                 }
@@ -5462,13 +5464,15 @@ that may need their list of possible plays updated with this newly liberated squ
         // Adjacent square check.
         if( z == 0 ){
 
-            // Pawn case.
+            // Adjacent piece is a pawn.
             if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::PAWN ){
 
+                // Pawn is white.
                 if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
                     this->valid_W_moves_map[ ind_z ].push_back( ind_a );
                     // Double square pawn jump possibility.
-                    if( this->CHS_board[ij_tmp.first][ij_tmp.second].not_moved ){
+                    if( this->CHS_board[ij_tmp.first][ij_tmp.second].not_moved &&
+                        this->CHS_board[ij_tmp.first + 1 ][ij_tmp.second].type == CHS_PIECE_TYPE::NO_P ){
                         this->valid_W_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
                     }
                 }

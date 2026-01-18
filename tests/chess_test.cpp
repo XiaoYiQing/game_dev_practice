@@ -4205,6 +4205,7 @@ void tests::chess_upd_pre_legal_tests_spec(){
         chess::CHS_PIECE_COLOR::NO_C );
     chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
     chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece tmp_pce;
 
 // ---------------------------------------------------------------------- >>>>>
 //      Move Pawn Simple Test
@@ -4232,7 +4233,8 @@ void tests::chess_upd_pre_legal_tests_spec(){
     myGame.setForce_lists_upd(true);
     // Perform a "manual" play by displacing the pawn without updating.
     myGame.set_piece_at_NO_UPD( 1, 3, emp_pce );
-    myGame.set_piece_at_NO_UPD( 2, 3, w_pawn );
+    tmp_pce = w_pawn;    tmp_pce.not_moved = false;
+    myGame.set_piece_at_NO_UPD( 2, 3, tmp_pce );
 
     myGame.printBoard();
     myGame.upd_pre_legal_plays_emp( chess::sub2ind( 1, 3 ), w_pawn );
@@ -4246,7 +4248,29 @@ void tests::chess_upd_pre_legal_tests_spec(){
     auto valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
     auto valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
 
-    
+    // Pawn initial position attack points change check.
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 18, atk_list_by_W_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 11, 18, atk_list_by_W_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 20, atk_list_by_W_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 11, 20, atk_list_by_W_aft ) );
+    // Pawn initial position move points change check.
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 19, 11, valid_W_moves_map_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 19, 11, valid_W_moves_map_aft );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_aft );
+
+    // Black knight list changes check.
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 11, atk_list_by_B_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 11, atk_list_by_B_aft );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 11, 26, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 26, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 26, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 11, 26, valid_B_atks_map_aft );
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays_emp pawn test: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays_emp pawn test: failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -5585,7 +5609,7 @@ void tests::chess_minmaxAB_split_tests(){
 
 
 bool tests_chess::is_int_at_tar_vec( int tar, int vecIdx, 
-    const array<vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH>& tarArr )
+    array<vector<int>, 64>& tarArr )
 {
     for( int z : tarArr[vecIdx] ){
         if( z == tar )
