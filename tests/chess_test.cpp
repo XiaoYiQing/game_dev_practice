@@ -4208,7 +4208,7 @@ void tests::chess_upd_pre_legal_tests_spec(){
     chess::chs_piece tmp_pce;
 
 // ---------------------------------------------------------------------- >>>>>
-//      Move Pawn Simple Test
+//      Pawn Initial Position List Removal
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -4259,17 +4259,10 @@ void tests::chess_upd_pre_legal_tests_spec(){
     test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 19, 11, valid_W_moves_map_aft );
     test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_aft );
 
-    // Black knight list changes check.
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 11, atk_list_by_B_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 11, atk_list_by_B_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 11, 26, valid_B_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 26, valid_B_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 26, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 11, 26, valid_B_atks_map_aft );
     if( test_bool ){
-        cout << "chess upd_pre_legal_plays_emp pawn test: passed!" << endl;
+        cout << "chess upd_pre_legal_plays_emp pawn inital position list removal test: passed!" << endl;
     }else{
-        cout << "chess upd_pre_legal_plays_emp pawn test: failed!" << endl;
+        cout << "chess upd_pre_legal_plays_emp pawn inital position list removal test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<

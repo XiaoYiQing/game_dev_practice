@@ -4951,6 +4951,7 @@ void chess::upd_pre_legal_plays_emp( int ind_a, chs_piece tar_pce ){
 
     // Temporary variable to be resued in multiple instances.
     int ind_z, ind_t;
+    pair<int,int> sub_z;
     // Temporary int pair variable to be resued in multiple instances.
     pair<int,int> ij_tmp;
     // Temporary chess piece variable to be reused in multiple instances.
@@ -5258,6 +5259,188 @@ that may need their list of possible plays updated with this newly liberated squ
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Starting Position POV Update (Line Directions)
+// ---------------------------------------------------------------------- >>>>>
+
+    // TODO: The en-passant needs to be updated as special isolated case.
+
+    /*
+    Array containing the distance of first contact along each of the 8 directions
+    starting from the newly emptied starting position ( i_a, j_a ).
+
+    The directional indices:
+    0 = N,  1 = S,  2 = W,  3 = E,
+    4 = NE, 5 = NW, 6 = SW, 7 = SE
+    */
+    int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    // Linear index coordinate of first contact along each direction.
+    pair<int,int> contact_ind_arr[8];
+
+    // North direction first contact search.
+    for( int z = 1; z <= u_dist; z++ ){
+        if( CHS_board[i_a + z][j_a].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[0] = z;
+            contact_ind_arr[0] = { i_a + z, j_a };
+            break;
+        }
+    }
+    // South direction first contact search.
+    for( int z = 1; z <= d_dist; z++ ){
+        if( CHS_board[i_a - z][j_a].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[1] = z;
+            contact_ind_arr[1] = { i_a - z, j_a };
+            break;
+        }
+    }
+    // West direction first contact search.
+    for( int z = 1; z <= l_dist; z++ ){
+        if( CHS_board[i_a][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[2] = z;
+            contact_ind_arr[2] = { i_a, j_a - z };
+            break;
+        }
+    }
+    // East direction first contact search.
+    for( int z = 1; z <= r_dist; z++ ){
+        if( CHS_board[i_a][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[3] = z;
+            contact_ind_arr[3] = { i_a, j_a + z };
+            break;
+        }
+    }
+    // North-East
+    for( int z = 1; z <= min( u_dist, r_dist ); z++ ){
+        if( CHS_board[i_a + z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[4] = z;
+            contact_ind_arr[4] = { i_a + z, j_a };
+            break;
+        }
+    }
+    // North-West
+    for( int z = 1; z <= min( u_dist, l_dist ); z++ ){
+        if( CHS_board[i_a + z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[5] = z;
+            contact_ind_arr[5] = { i_a + z, j_a - z };
+            break;
+        }
+    }
+    // South-West
+    for( int z = 1; z <= min( d_dist, l_dist ); z++ ){
+        if( CHS_board[i_a - z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[6] = z;
+            contact_ind_arr[6] = { i_a - z, j_a - z };
+            break;
+        }
+    }
+    // South-East
+    for( int z = 1; z <= min( d_dist, r_dist ); z++ ){
+        if( CHS_board[i_a - z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[7] = z;
+            contact_ind_arr[7] = { i_a - z, j_a + z };
+            break;
+        }
+    }
+
+
+    // Check all 8 directional potential first contacts.
+    for( int dir_z = 0; dir_z < 8; dir_z++ ){
+
+        // No contact case.
+        if( contact_dist_arr[dir_z] == 0 )
+            continue;
+        
+        // Obtain the 2D coordinate of the current contact.
+        sub_z = contact_ind_arr[ dir_z ];
+        ind_z = chess::sub2ind( sub_z );
+
+        // Immediate neighbor case (Check pawn and king cases).
+        if( contact_dist_arr[dir_z] == 1 ){
+
+            // Neighbor piece is a pawn.
+            if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN ){
+
+                // Northern neighbor.
+                if( dir_z == 0 ){
+
+                    // Pawn is black.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
+                        this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                        // Double square pawn jump possibility.
+                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                            this->CHS_board[sub_z.first - 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_B_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
+                        }
+                    }
+
+                // Southern neighbor.
+                }else if( dir_z == 1 ){
+
+                    // Pawn is white.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+                        this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                        // Double square pawn jump possibility.
+                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                            this->CHS_board[sub_z.first + 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_W_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
+                        }
+                    }
+
+                // Western neighbor.
+                }
+                
+                // Current direction scan complete.
+                continue;
+
+            }
+
+            // Immediate neighbor piece is a king.
+            if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::KING ){
+
+                // King is black.
+                if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
+
+                    // Add freed square as a possible move.
+                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                    // Remove attack possibility of the new square, if it was white.
+                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                        this->valid_B_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                            this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_B_atks_map[ ind_z ].end() );
+                    }
+
+                // King is white.
+                }else{
+
+                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                    // Remove attack possibility of the new square, if it was black.
+                    if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                        this->valid_W_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                            this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_W_atks_map[ ind_z ].end() );
+                    }
+
+                }
+
+                // Current direction scan complete.
+                continue;
+
+            }
+
+        }
+
+        // Special pawn and king moves cases.
+        if( contact_dist_arr[dir_z] == 2 ){
+
+        }
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
 
 // ---------------------------------------------------------------------- >>>>>
 //      Starting Position POV Update (North Sweep)
