@@ -4207,7 +4207,7 @@ void tests::chess_upd_pre_legal_tests_spec(){
     chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
 
 // ---------------------------------------------------------------------- >>>>>
-//      Castling Test
+//      Move Pawn Simple Test
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -4220,18 +4220,33 @@ void tests::chess_upd_pre_legal_tests_spec(){
     myGame.set_piece_at( 1, 3, w_pawn );
     myGame.set_piece_at( 3, 2, b_knight );
     
-    myGame.printBoard();
-
+    // Obtain the pre-legal play lists before update.
+    auto atk_list_by_W_bef = myGame.getAtk_list_by_W();
+    auto atk_list_by_B_bef = myGame.getAtk_list_by_B();
+    auto valid_W_moves_map_bef = myGame.get_valid_W_moves_map();
+    auto valid_B_moves_map_bef = myGame.get_valid_B_moves_map();
+    auto valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
+    auto valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
+    
+    // Set the update flag to always.
     myGame.setForce_lists_upd(true);
-
     // Perform a "manual" play by displacing the pawn without updating.
     myGame.set_piece_at_NO_UPD( 1, 3, emp_pce );
     myGame.set_piece_at_NO_UPD( 2, 3, w_pawn );
 
     myGame.printBoard();
-
     myGame.upd_pre_legal_plays_emp( chess::sub2ind( 1, 3 ), w_pawn );
 
+    
+    // Obtain the pre-legal play lists after update.
+    auto atk_list_by_W_aft = myGame.getAtk_list_by_W();
+    auto atk_list_by_B_aft = myGame.getAtk_list_by_B();
+    auto valid_W_moves_map_aft = myGame.get_valid_W_moves_map();
+    auto valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
+    auto valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
+    auto valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -5569,4 +5584,13 @@ void tests::chess_minmaxAB_split_tests(){
 
 
 
+bool tests_chess::is_int_at_tar_vec( int tar, int vecIdx, 
+    const array<vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH>& tarArr )
+{
+    for( int z : tarArr[vecIdx] ){
+        if( z == tar )
+            return true;
+    }
+    return false;
+}
 

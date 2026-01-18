@@ -67,8 +67,18 @@ namespace tests{
     void chess_minmaxAB_bestMove_tests();
 
     void chess_minmaxAB_split_tests();
+    
+}
 
-        
+
+namespace tests_chess{
+
+    /**
+     * Specialized helper function for determining if an integer is in the target
+     * vector<int> of index "vecIdx" within the array of vector<int> "tarArr".
+     */
+    bool is_int_at_tar_vec( int tar, int vecIdx, 
+        const std::array<vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH>& tarArr );
 
 }
 
