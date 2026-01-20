@@ -5500,9 +5500,29 @@ that may need their list of possible plays updated with this newly liberated squ
             dir_z < 4 )
         {
 
-            tmp_arr_lim = 0;
-
-            tmp_ind_arr;
+            // Reverse scan linear index increment amount and count.
+            int rev_incrm = 0;  int rev_inc_cnt = 0;
+            // Reverse scan helper variables determination.
+            switch( dir_z ){
+            case 0:     // North scan -> South reverse scan.
+                rev_incrm = -chess::BOARDWIDTH;
+                rev_inc_cnt = contact_dist_arr[1];
+                break;
+            case 1:     // South scan -> North reverse scan.
+                rev_incrm = chess::BOARDWIDTH;
+                rev_inc_cnt = contact_dist_arr[0];
+                break;
+            case 2:     // West scan -> East reverse scan.
+                rev_incrm = 1;
+                rev_inc_cnt = contact_dist_arr[3];
+                break;
+            case 3:     // East scan -> West reverse scan.
+                rev_incrm = -1;
+                rev_inc_cnt = contact_dist_arr[2];
+                break;
+            default:
+                break;
+            }
 
             // Scan piece is a white queen or rook.
             if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
@@ -5520,17 +5540,75 @@ that may need their list of possible plays updated with this newly liberated squ
                 // Add new free space as valid white queen/rook move.
                 this->valid_W_moves_map[ ind_z ].push_back( ind_a );
 
+                // Initialize reverse scan linear index.
+                int ind_t = ind_a;
                 // Reverse scan remaining line.
-                for( int t = ind_a - chess::BOARDWIDTH; t >= 0; t = t - chess::BOARDWIDTH ){
+                for( int t = 1; t <= rev_inc_cnt; t++ ){
+
+                    ind_t += rev_incrm;
+                    pce_t = this->get_piece_at( ind_t );
+
+                    // Regardless of what's on the reverse scan square, it is added to attacks 
+                    // by white list.
+                    this->atk_list_by_W[ind_t].push_back( ind_z );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        // Free space means accessible by current reverse scan root.
+                        this->valid_W_moves_map[ ind_z ].push_back( ind_t );
+                    }else{
+                        if( pce_t.color == CHS_PIECE_COLOR::BLACK ){
+                            // Black piece means can be attacked by current reverse scan root.
+                            this->valid_W_atks_map[ ind_z ].push_back( ind_t );
+                        }
+                    }
 
                 }
 
             // Scan piece is a black queen or rook.
             }else{
 
+                // Displaced piece is white, so no longer attacked at starting position.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
+                    // Remove valid attack from black queen/rook to starting position.
+                    this->valid_B_atks_map[ ind_z ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                        this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_z ].end() );
+
+                }
+                // Add new free space as valid black queen/rook move.
+                this->valid_B_atks_map[ ind_z ].push_back( ind_a );
+
+                // Initialize reverse scan linear index.
+                int ind_t = ind_a;
+                // Reverse scan remaining line.
+                for( int t = 1; t <= rev_inc_cnt; t++ ){
+
+                    ind_t += rev_incrm;
+                    pce_t = this->get_piece_at( ind_t );
+
+                    // Regardless of what's on the reverse scan square, it is added to attacks 
+                    // by black list.
+                    this->atk_list_by_B[ind_t].push_back( ind_z );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        // Free space means accessible by current reverse scan root.
+                        this->valid_B_moves_map[ ind_z ].push_back( ind_t );
+                    }else{
+                        if( pce_t.color == CHS_PIECE_COLOR::WHITE ){
+                            // White piece means can be attacked by current reverse scan root.
+                            this->valid_B_atks_map[ ind_z ].push_back( ind_t );
+                        }
+                    }
+
+                }
 
             }
+
+            // Current scan is complete.
+            continue;
+
         }
 
     }
