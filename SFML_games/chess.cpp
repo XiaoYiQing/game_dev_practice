@@ -5494,15 +5494,15 @@ that may need their list of possible plays updated with this newly liberated squ
         }
 
 
-        // Horizontal and vertical line move pieces scan.
-        if( ( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK ) &&
-            dir_z < 4 )
+        // Line move pieces scan.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::BISHOP )
         {
 
             // Reverse scan linear index increment amount and count.
             int rev_incrm = 0;  int rev_inc_cnt = 0;
-            // Reverse scan helper variables determination.
+            // Reverse scan helper variables definition.
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
                 rev_incrm = -chess::BOARDWIDTH;
@@ -5520,24 +5520,40 @@ that may need their list of possible plays updated with this newly liberated squ
                 rev_incrm = -1;
                 rev_inc_cnt = contact_dist_arr[2];
                 break;
+            case 4:     // NE -> SW reverse scan.
+                rev_incrm = chess::BOARDWIDTH + 1;
+                rev_inc_cnt = contact_dist_arr[6];
+                break; 
+            case 5:     // NW -> SE reverse scan.
+                rev_incrm = chess::BOARDWIDTH - 1;
+                rev_inc_cnt = contact_dist_arr[7];
+                break;
+            case 6:     // SW -> NE reverse scan.
+                rev_incrm = - chess::BOARDWIDTH - 1;
+                rev_inc_cnt = contact_dist_arr[4];
+                break;
+            case 7:     // SE -> NW reverse scan.
+                rev_incrm = - chess::BOARDWIDTH + 1;
+                rev_inc_cnt = contact_dist_arr[5];
+                break;
             default:
                 break;
             }
 
-            // Scan piece is a white queen or rook.
+            // Scan piece is a white.
             if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
 
                 // Displaced piece is black, so no longer attacked at starting position.
                 if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
 
-                    // Remove valid attack from white queen/rook to starting position.
+                    // Remove valid attack from white scan piece to starting position.
                     this->valid_W_atks_map[ ind_z ].erase(
                         std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
                         this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
                         this->valid_W_atks_map[ ind_z ].end() );
 
                 }
-                // Add new free space as valid white queen/rook move.
+                // Add new free space as valid white scan piece move.
                 this->valid_W_moves_map[ ind_z ].push_back( ind_a );
 
                 // Initialize reverse scan linear index.
@@ -5564,20 +5580,20 @@ that may need their list of possible plays updated with this newly liberated squ
 
                 }
 
-            // Scan piece is a black queen or rook.
+            // Scan piece is a black.
             }else{
 
                 // Displaced piece is white, so no longer attacked at starting position.
                 if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
-                    // Remove valid attack from black queen/rook to starting position.
+                    // Remove valid attack from black scan piece to starting position.
                     this->valid_B_atks_map[ ind_z ].erase(
                         std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
                         this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
                         this->valid_B_atks_map[ ind_z ].end() );
 
                 }
-                // Add new free space as valid black queen/rook move.
+                // Add new free space as valid black scan piece move.
                 this->valid_B_atks_map[ ind_z ].push_back( ind_a );
 
                 // Initialize reverse scan linear index.
@@ -5610,6 +5626,7 @@ that may need their list of possible plays updated with this newly liberated squ
             continue;
 
         }
+
 
     }
 
