@@ -5279,7 +5279,7 @@ that may need their list of possible plays updated with this newly liberated squ
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
 
-    // North direction first contact search.
+    // North first contact scan.
     for( int z = 1; z <= u_dist; z++ ){
         if( CHS_board[i_a + z][j_a].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[0] = z;
@@ -5287,7 +5287,7 @@ that may need their list of possible plays updated with this newly liberated squ
             break;
         }
     }
-    // South direction first contact search.
+    // South first contact scan.
     for( int z = 1; z <= d_dist; z++ ){
         if( CHS_board[i_a - z][j_a].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[1] = z;
@@ -5295,7 +5295,7 @@ that may need their list of possible plays updated with this newly liberated squ
             break;
         }
     }
-    // West direction first contact search.
+    // West first contact scan.
     for( int z = 1; z <= l_dist; z++ ){
         if( CHS_board[i_a][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[2] = z;
@@ -5303,7 +5303,7 @@ that may need their list of possible plays updated with this newly liberated squ
             break;
         }
     }
-    // East direction first contact search.
+    // East first contact scan.
     for( int z = 1; z <= r_dist; z++ ){
         if( CHS_board[i_a][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[3] = z;
@@ -5311,7 +5311,7 @@ that may need their list of possible plays updated with this newly liberated squ
             break;
         }
     }
-    // North-East
+    // North-East first contact scan.
     for( int z = 1; z <= min( u_dist, r_dist ); z++ ){
         if( CHS_board[i_a + z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[4] = z;
@@ -5319,7 +5319,7 @@ that may need their list of possible plays updated with this newly liberated squ
             break;
         }
     }
-    // North-West
+    // North-West first contact scan.
     for( int z = 1; z <= min( u_dist, l_dist ); z++ ){
         if( CHS_board[i_a + z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[5] = z;
@@ -5327,7 +5327,7 @@ that may need their list of possible plays updated with this newly liberated squ
             break;
         }
     }
-    // South-West
+    // South-West first contact scan.
     for( int z = 1; z <= min( d_dist, l_dist ); z++ ){
         if( CHS_board[i_a - z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[6] = z;
@@ -5335,7 +5335,7 @@ that may need their list of possible plays updated with this newly liberated squ
             break;
         }
     }
-    // South-East
+    // South-East first contact scan.
     for( int z = 1; z <= min( d_dist, r_dist ); z++ ){
         if( CHS_board[i_a - z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[7] = z;
@@ -5345,7 +5345,12 @@ that may need their list of possible plays updated with this newly liberated squ
     }
 
 
-    // Check all 8 directional potential first contacts.
+    /* 
+    Check all 8 directional potential first contacts.
+    The directional indices:
+    0 = N,  1 = S,  2 = W,  3 = E,
+    4 = NE, 5 = NW, 6 = SW, 7 = SE
+    */
     for( int dir_z = 0; dir_z < 8; dir_z++ ){
 
         // No contact case.
@@ -5354,6 +5359,7 @@ that may need their list of possible plays updated with this newly liberated squ
         
         // Obtain the 2D coordinate of the current contact.
         sub_z = contact_ind_arr[ dir_z ];
+        // Obtain linear coordinate of the current contact.
         ind_z = chess::sub2ind( sub_z );
 
         // Immediate neighbor case (Check pawn and king cases).
@@ -5362,7 +5368,7 @@ that may need their list of possible plays updated with this newly liberated squ
             // Neighbor piece is a pawn.
             if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN ){
 
-                // Northern neighbor.
+                // Pawn is immediately North.
                 if( dir_z == 0 ){
 
                     // Pawn is black.
@@ -5375,7 +5381,7 @@ that may need their list of possible plays updated with this newly liberated squ
                         }
                     }
 
-                // Southern neighbor.
+                // Pawn is immediately South.
                 }else if( dir_z == 1 ){
 
                     // Pawn is white.
@@ -5388,7 +5394,32 @@ that may need their list of possible plays updated with this newly liberated squ
                         }
                     }
 
-                // Western neighbor.
+                // The pawn is on immediate North-East or North-West diagonal.
+                }else if( dir_z == 4 || dir_z == 5 ){
+
+                    // The pawn is black AND the displaced piece was white.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK &&
+                        tar_pce.color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        // Remove black pawn valid attack option now that the start position is empty.
+                        this->valid_B_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                            this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_B_atks_map[ ind_z ].end() );
+                    }
+                
+                // The pawn is on immediate South-West or South-East diagonal.
+                }else if( dir_z == 6 || dir_z == 7 ){
+                    // The pawn is black AND the displaced piece was white.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE &&
+                        tar_pce.color == CHS_PIECE_COLOR::BLACK )
+                    {
+                        // Remove black pawn valid attack option now that the start position is empty.
+                        this->valid_W_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                            this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_W_atks_map[ ind_z ].end() );   
+                    }
                 }
                 
                 // Current direction scan complete.
@@ -5433,9 +5464,73 @@ that may need their list of possible plays updated with this newly liberated squ
 
         }
 
-        // Special pawn and king moves cases.
+        // Pawn double jump case.
         if( contact_dist_arr[dir_z] == 2 ){
 
+            // Scan piece is two square North.
+            if( dir_z == 0 ){
+                
+                // Scan piece is an unmoved pawn (which can only be black if rules are respected).
+                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                {
+                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                    continue;
+                }
+
+            // Scan piece is two square South.
+            }else if( dir_z == 1 ){
+
+                // Scan piece is an unmoved pawn (which can only be white if rules are respected).
+                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                {
+                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                    continue;
+                }
+            
+            }
+
+        }
+
+
+        // Horizontal and vertical line move pieces scan.
+        if( ( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK ) &&
+            dir_z < 4 )
+        {
+
+            tmp_arr_lim = 0;
+
+            tmp_ind_arr;
+
+            // Scan piece is a white queen or rook.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+
+                // Displaced piece is black, so no longer attacked at starting position.
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+
+                    // Remove valid attack from white queen/rook to starting position.
+                    this->valid_W_atks_map[ ind_z ].erase(
+                        std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                        this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
+                        this->valid_W_atks_map[ ind_z ].end() );
+
+                }
+                // Add new free space as valid white queen/rook move.
+                this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+
+                // Reverse scan remaining line.
+                for( int t = ind_a - chess::BOARDWIDTH; t >= 0; t = t - chess::BOARDWIDTH ){
+
+                }
+
+            // Scan piece is a black queen or rook.
+            }else{
+
+
+
+            }
         }
 
     }
