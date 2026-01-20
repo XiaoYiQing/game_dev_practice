@@ -5635,9 +5635,138 @@ that may need their list of possible plays updated with this newly liberated squ
 // ---------------------------------------------------------------------- <<<<<
 
 
-
 }
 
+
+void chess::upd_pre_legal_plays_occ( int ind_b ){
+
+    pair<int,int> ij_b = chess::ind2sub( ind_b );
+    int i_b = ij_b.first;
+    int j_b = ij_b.second;
+
+    chs_piece tar_pce = this->CHS_board[i_b][j_b];
+
+    // Check for valid target square.
+    if( tar_pce.type == CHS_PIECE_TYPE::NO_P ){
+        throw invalid_argument( "Target square that is assumed non-empty is empty." );
+    }
+
+    // Compute metric w.r.t. board dimensions.
+    int sq_cnt = chess::BOARDHEIGHT * chess::BOARDWIDTH;
+    int u_dist = BOARDHEIGHT - 1 - i_b;
+    int r_dist = BOARDWIDTH - 1 - j_b;
+    int d_dist = i_b;
+    int l_dist = j_b;
+
+    // Temporary variable to be resued in multiple instances.
+    int ind_z, ind_t;
+    pair<int,int> sub_z;
+    // Temporary int pair variable to be resued in multiple instances.
+    pair<int,int> ij_tmp;
+    // Temporary chess piece variable to be reused in multiple instances.
+    chs_piece pce_t;
+    // Create a boolean indicating whether the piece is white.
+    bool is_white = tar_pce.color == CHS_PIECE_COLOR::WHITE;
+
+    // Potential play list count var.
+    int tmp_arr_lim = 0;
+    // Initialize potential list of plays.
+    int tmp_ind_arr[28];
+
+// ---------------------------------------------------------------------- >>>>>
+//      Addition of Points Affected by Target Piece
+// ---------------------------------------------------------------------- >>>>>
+
+    // TODO: make use of your standard pre-legal update function.
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Ending Position POV Update (Knights)
+// ---------------------------------------------------------------------- >>>>>
+/*
+Given the ending position is occupied now, update all potential knights
+that may need their list of possible plays updated with this newly occupied square.
+*/
+
+    // Reset number of plays counter.
+    tmp_arr_lim = 0;
+    // Collect all potential positions from which a knight may move to the starting location.
+    ind_z = ind_b - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
+    if( ( ind_z >= 0 ) && ( j_b > 0 ) )     
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_b - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
+    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_b - chess::BOARDWIDTH - 2;                  // West-South jump.
+    if( ( ind_z >= 0 ) && ( j_b > 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_b - chess::BOARDWIDTH + 2;                  // East-South jump.
+    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 2 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_b + chess::BOARDWIDTH - 2;                  // West-North jump.
+    if( ind_z < sq_cnt && ( j_b > 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_b + chess::BOARDWIDTH + 2;                  // East-North jump.
+    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 2 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_b + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
+    if( ind_z < sq_cnt && ( j_b > 0 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_b + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
+    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+
+    // Parse through all posible knights positions around the occupied position.
+    for( int z = 0; z < tmp_arr_lim; z++ ){
+
+        ind_z = tmp_ind_arr[z];
+        ij_tmp = chess::ind2sub( ind_z );
+
+        // Check if current potential position has a knight.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KNIGHT ){
+
+            // Scanning piece is white knight.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+
+                // Occupied square is not longer a free to move in square.
+                this->valid_W_moves_map[ ind_z ].erase(
+                    std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                    this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
+                    this->valid_W_moves_map[ ind_z ].end() );
+                
+                // Occupied square is valid target of attack if the current scan piece is white
+                // and the occupying piece is black.
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                    this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+                }
+            
+            // Scanning piece is black knight.
+            }else{
+
+                // Occupied square is not longer a free to move in square.
+                this->valid_B_moves_map[ ind_z ].erase(
+                    std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                    this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
+                    this->valid_B_moves_map[ ind_z ].end() );
+                
+                // Occupied square is valid target of attack if the current scan piece is black
+                // and the occupying piece is white.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                    this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+                }
+
+            }
+        }
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
 
 void chess::printBoard() const{
 
