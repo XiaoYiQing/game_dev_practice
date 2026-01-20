@@ -5638,7 +5638,7 @@ that may need their list of possible plays updated with this newly liberated squ
 }
 
 
-void chess::upd_pre_legal_plays_occ( int ind_b ){
+void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
 
     pair<int,int> ij_b = chess::ind2sub( ind_b );
     int i_b = ij_b.first;

@@ -809,7 +809,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * one go in a precise manner given the target previously empty square of specified 
      * coordinate was occupied as part of the immediate lastest play performed on the board.
      */
-    void upd_pre_legal_plays_occ( int ind_b);
+    void upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce );
 
     /**
      * \brief Print the state of the board onto the console terminal.
