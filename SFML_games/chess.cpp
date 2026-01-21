@@ -5673,6 +5673,225 @@ void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
     // Initialize potential list of plays.
     int tmp_ind_arr[28];
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Removal of Points Affected by Previous Piece
+// ---------------------------------------------------------------------- >>>>>
+
+    // Reset number of plays counter.
+    tmp_arr_lim = 0;
+
+    if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
+        // Do nothing.
+    }else if( tar_pce.type == CHS_PIECE_TYPE::KNIGHT ){
+
+        // Collect all potential moves/attacks of the knight at its start 
+        // position.
+        ind_z = ind_b - 2 * chess::BOARDWIDTH - 1; 
+        if( ( ind_z >= 0 ) && ( j_b > 0 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b - 2 * chess::BOARDWIDTH + 1;
+        if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 1 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b - chess::BOARDWIDTH - 2;
+        if( ( ind_z >= 0 ) && ( j_b > 1 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b - chess::BOARDWIDTH + 2;
+        if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 2 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b + chess::BOARDWIDTH - 2;
+        if( ind_z < sq_cnt && ( j_b > 1 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b + chess::BOARDWIDTH + 2;
+        if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 2 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b + 2 * chess::BOARDWIDTH - 1;
+        if( ind_z < sq_cnt && ( j_b > 0 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b + 2 * chess::BOARDWIDTH + 1;
+        if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+
+    }else if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
+
+        // North-East diagonal squares.
+        for( int NE_z = 1; NE_z <= min( u_dist, r_dist ) ; NE_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
+        // North-West diagonal squares.
+        for( int NW_z = 1; NW_z <= min( u_dist, l_dist ) ; NW_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
+        // South-West diagonal squares.
+        for( int SW_z = 1; SW_z <= min( d_dist, l_dist ) ; SW_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
+        // South-East diagonal squares.
+        for( int SE_z = 1; SE_z <= min( d_dist, r_dist ) ; SE_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
+        
+    }else if( tar_pce.type == CHS_PIECE_TYPE::ROOK ){
+
+        // North sweep.
+        for( int N_z = 1; N_z <= u_dist; N_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
+        // West sweep.
+        for( int W_z = 1; W_z <= l_dist; W_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
+        // South sweep.
+        for( int S_z = 1; S_z <= d_dist; S_z++ )
+            tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
+        // East sweep.
+        for( int E_z = 1; E_z <= r_dist; E_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z;            
+
+    }else if( tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
+        
+        // North-East diagonal squares.
+        for( int NE_z = 1; NE_z <= min( u_dist, r_dist ) ; NE_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
+        // North-West diagonal squares.
+        for( int NW_z = 1; NW_z <= min( u_dist, l_dist ) ; NW_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
+        // South-West diagonal squares.
+        for( int SW_z = 1; SW_z <= min( d_dist, l_dist ) ; SW_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
+        // South-East diagonal squares.
+        for( int SE_z = 1; SE_z <= min( d_dist, r_dist ) ; SE_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
+        // North sweep.
+        for( int N_z = 1; N_z <= u_dist; N_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
+        // West sweep.
+        for( int W_z = 1; W_z <= l_dist; W_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
+        // South sweep.
+        for( int S_z = 1; S_z <= d_dist; S_z++ )
+            tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
+        // East sweep.
+        for( int E_z = 1; E_z <= r_dist; E_z++ )
+            tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z; 
+
+    // NOTE: This possibility should not exist since there is no such a thing as
+    // capturing a king in chess, but I leave it here for completeness sake.
+    }else if( tar_pce.type == CHS_PIECE_TYPE::KING ){
+
+        // Identifying all 8 squares around the white king and whether they are 
+        // on the board.
+        ind_z = ind_b + chess::BOARDWIDTH + 1;
+        if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b + chess::BOARDWIDTH;
+        if( ind_z < sq_cnt )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b + chess::BOARDWIDTH - 1;
+        if( ind_z < sq_cnt && ( j_b > 0 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b - 1;
+        if( j_b > 0 )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b - chess::BOARDWIDTH - 1;
+        if( ( ind_z >= 0 ) && ( j_b > 0 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b - chess::BOARDWIDTH;
+        if( ind_z >= 0 )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b - chess::BOARDWIDTH + 1;
+        if( ( ind_z >= 0 ) && ( j_b < chess::BOARDWIDTH - 1 ) )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        ind_z = ind_b + 1;
+        if( j_b < chess::BOARDWIDTH - 1 )
+            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+
+    }
+
+    // Remove plays from white lists.
+    if( is_white ){
+        
+        // Clear the valid attacks and moves at target square.
+        this->valid_W_moves_map[ ind_b ].clear();
+        this->valid_W_atks_map[ ind_b ].clear();
+
+        // Pawn case.
+        if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+
+            tmp_arr_lim = 0;
+
+            // Left-side and right-side diagonal attacks.
+            if( ind_b < sq_cnt - (int) chess::BOARDWIDTH ){
+                if( j_b > 0 ){
+                    tmp_ind_arr[tmp_arr_lim++] = ind_b + chess::BOARDWIDTH - 1;
+                }
+                if( j_b < chess::BOARDWIDTH - 1 ){
+                    tmp_ind_arr[tmp_arr_lim++] = ind_b + chess::BOARDWIDTH + 1;
+                }
+            }
+            // Possible en-passant attacks on the left.
+            if( j_b > 0 && this->CHS_board[i_b][j_b-1].type == CHS_PIECE_TYPE::PAWN &&
+                this->CHS_board[i_b][j_b-1].color != tar_pce.color ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_b - 1;
+            }
+            // Possible en-passant attacks on the right.
+            if( j_b < chess::BOARDWIDTH - 1 && this->CHS_board[i_b][j_b+1].type == CHS_PIECE_TYPE::PAWN &&
+                this->CHS_board[i_b][j_b+1].color != tar_pce.color ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_b + 1;
+            }
+
+        }
+
+        // Remove starting point's potential attack points.
+        for( int z = 0; z < tmp_arr_lim; z++ ){
+            ind_z = tmp_ind_arr[z];
+            this->atk_list_by_W[ ind_z ].erase(
+                std::remove(this->atk_list_by_W[ ind_z ].begin(), 
+                this->atk_list_by_W[ ind_z ].end(), ind_b ), 
+                this->atk_list_by_W[ ind_z ].end() );
+        }
+    
+    // Remove plays from black lists.
+    }else{
+
+        // Clear the valid attacks and moves at target square.
+        this->valid_B_moves_map[ ind_b ].clear();
+        this->valid_B_atks_map[ ind_b ].clear();
+
+        // Pawn case.
+        if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+
+            tmp_arr_lim = 0;
+
+            // Left-side and right-side diagonal attacks.
+            if( ind_b > 0 ){
+                if( j_b > 0 ){
+                    tmp_ind_arr[tmp_arr_lim++] = ind_b - chess::BOARDWIDTH - 1;
+                }
+                if( j_b < chess::BOARDWIDTH - 1 ){
+                    tmp_ind_arr[tmp_arr_lim++] = ind_b - chess::BOARDWIDTH + 1;
+                }
+            }
+            // Possible en-passant attacks on the left.
+            if( j_b > 0 && this->CHS_board[i_b][j_b-1].type == CHS_PIECE_TYPE::PAWN &&
+                this->CHS_board[i_b][j_b-1].color != tar_pce.color ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_b - 1;
+            }
+            // Possible en-passant attacks on the right.
+            if( j_b < chess::BOARDWIDTH - 1 && this->CHS_board[i_b][j_b+1].type == CHS_PIECE_TYPE::PAWN &&
+                this->CHS_board[i_b][j_b+1].color != tar_pce.color ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_b + 1;
+            }
+            
+        }
+        
+        // Remove starting point's potential attack points.
+        for( int z = 0; z < tmp_arr_lim; z++ ){
+            ind_z = tmp_ind_arr[z];
+            this->atk_list_by_B[ ind_z ].erase(
+                std::remove(this->atk_list_by_B[ ind_z ].begin(), 
+                this->atk_list_by_B[ ind_z ].end(), ind_b ), 
+                this->atk_list_by_B[ ind_z ].end() );
+        }
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 // ---------------------------------------------------------------------- >>>>>
 //      Addition of Points Affected by Target Piece
 // ---------------------------------------------------------------------- >>>>>
