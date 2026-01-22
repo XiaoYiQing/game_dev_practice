@@ -6143,21 +6143,27 @@ that may need their list of possible plays updated with this newly occupied squa
                     // Pawn is black.
                     if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
                         
-                        // Remove black pawn valid move option now that the square is occupied.
-                        this->valid_B_moves_map[ ind_z ].erase(
-                            std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
-                            this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
-                            this->valid_B_moves_map[ ind_z ].end() );
-                        // Double square pawn jump possibility.
-                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                            this->CHS_board[sub_z.first - 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
-                        {
-                            // Remove black pawn double jump possibility.
+                        // No previous occupant.
+                        if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
+
+                            // Remove black pawn valid move option now that the square is occupied.
                             this->valid_B_moves_map[ ind_z ].erase(
                                 std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
-                                this->valid_B_moves_map[ ind_z ].end(), ind_b - chess::BOARDWIDTH ), 
+                                this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
                                 this->valid_B_moves_map[ ind_z ].end() );
-                        }
+
+                            // Double square pawn jump possibility.
+                            if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                                this->CHS_board[sub_z.first - 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
+                            {
+                                // Remove black pawn double jump possibility.
+                                this->valid_B_moves_map[ ind_z ].erase(
+                                    std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                                    this->valid_B_moves_map[ ind_z ].end(), ind_b - chess::BOARDWIDTH ), 
+                                    this->valid_B_moves_map[ ind_z ].end() );
+                            }
+
+                        }                        
 
                     }
 
@@ -6167,43 +6173,88 @@ that may need their list of possible plays updated with this newly occupied squa
                     // Pawn is white.
                     if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
                         
-                        // Remove white pawn valid move option now that the square is occupied.
+                        // No previous occupant.
+                        if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
+
+                            // Remove white pawn valid move option now that the square is occupied.
+                            this->valid_W_moves_map[ ind_z ].erase(
+                                std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                                this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
+                                this->valid_W_moves_map[ ind_z ].end() );
+                            // Double square pawn jump possibility.
+                            if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                                this->CHS_board[sub_z.first + 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
+                            {
+                                // Remove white pawn double jump possibility.
+                                this->valid_W_moves_map[ ind_z ].erase(
+                                    std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                                    this->valid_W_moves_map[ ind_z ].end(), ind_b - chess::BOARDWIDTH ), 
+                                    this->valid_W_moves_map[ ind_z ].end() );
+                            }
+
+                        }
+
+                    }
+
+                // The pawn is on immediate North-East or North-West diagonal and is black.
+                }else if( ( dir_z == 4 || dir_z == 5 ) && 
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK )
+                {
+
+                    // If no previous occupant.
+                    if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
+
+                        // Add the occupied square as black pawn valid attack option if occupant is white.
+                        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                            this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+                        }
+
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::BLACK ){
+                        
+                        // Add the occupied square as black pawn valid attack since previous
+                        // black occupant was captured.
+                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                        // Remove black pawn previous attack possibility since its captured.
+                        this->valid_B_moves_map[ ind_z ].erase(
+                            std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                            this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
+                            this->valid_B_moves_map[ ind_z ].end() );
+
+                    }
+
+                
+                // The pawn is on immediate South-West or South-East diagonal.
+                }else if( ( dir_z == 6 || dir_z == 7 ) && 
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE )
+                {
+
+                    // If no previous occupant.
+                    if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
+
+                        // Add the occupied square as white pawn valid attack option if occupant is black.
+                        if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                            this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+                        }
+
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::WHITE ){
+                        
+                        // Add the occupied square as white pawn valid attack since previous
+                        // white occupant was captured.
+                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::BLACK ){
+
+                        // Remove white pawn previous attack possibility since its captured.
                         this->valid_W_moves_map[ ind_z ].erase(
                             std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
                             this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
                             this->valid_W_moves_map[ ind_z ].end() );
-                        // Double square pawn jump possibility.
-                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                            this->CHS_board[sub_z.first + 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
-                        {
-                            // Remove white pawn double jump possibility.
-                            this->valid_W_moves_map[ ind_z ].erase(
-                                std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
-                                this->valid_W_moves_map[ ind_z ].end(), ind_b - chess::BOARDWIDTH ), 
-                                this->valid_W_moves_map[ ind_z ].end() );
-                        }
+
                     }
 
-                // The pawn is on immediate North-East or North-West diagonal.
-                }else if( dir_z == 4 || dir_z == 5 ){
-
-                    // The pawn is black AND the occupying piece is white.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK &&
-                        prev_pce.color == CHS_PIECE_COLOR::WHITE )
-                    {
-                        // Add the occupied square as black pawn valid attack option.
-                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
-                    }
-                
-                // The pawn is on immediate South-West or South-East diagonal.
-                }else if( dir_z == 6 || dir_z == 7 ){
-                    // The pawn is white AND the occupying piece is black.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE &&
-                        tar_pce.color == CHS_PIECE_COLOR::BLACK )
-                    {
-                        // Add the occupied square as white pawn valid attack option.
-                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
-                    }
                 }
                 
                 // Current direction scan complete.
