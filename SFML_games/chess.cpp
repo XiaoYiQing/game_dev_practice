@@ -6268,20 +6268,68 @@ that may need their list of possible plays updated with this newly occupied squa
                 // King is black.
                 if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
 
-                    // Remove move possibility for the king to occupied square.
-                    this->valid_B_moves_map[ ind_z ].erase(
-                        std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
-                        this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
-                        this->valid_B_moves_map[ ind_z ].end() );
-                    // Remove attack possibility of the new square, if it was white.
-                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                    // No previous occupant.
+                    if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
 
-                    }
+                        // Remove possibility of move.
+                        this->valid_B_moves_map[ ind_z ].erase(
+                            std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                            this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
+                            this->valid_B_moves_map[ ind_z ].end() );
+                        // Add possibility of attack if new occupant is white.
+                        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                            this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+                        }
+                        
+                    // Previous occupant was white.
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                        // Remove possibility of attack.
+                        this->valid_B_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                            this->valid_B_atks_map[ ind_z ].end(), ind_b ), 
+                            this->valid_B_atks_map[ ind_z ].end() );
+
+                    // Previous occupant was black.
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::BLACK ){
+
+                        // Add possibility of attack.
+                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+
+                    }                
 
                 // King is white.
                 }else{
 
-                    
+                    // No previous occupant.
+                    if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
+
+                        // Remove possibility of move.
+                        this->valid_W_moves_map[ ind_z ].erase(
+                            std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                            this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
+                            this->valid_W_moves_map[ ind_z ].end() );
+                        // Add possibility of attack if new occupant is black.
+                        if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                            this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+                        }
+                        
+                    // Previous occupant was white.
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                        // Add possibility of attack.
+                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+
+                    // Previous occupant was black.
+                    }else if( prev_pce.color == CHS_PIECE_COLOR::BLACK ){
+
+                        // Remove possibility of attack.
+                        this->valid_W_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                            this->valid_W_atks_map[ ind_z ].end(), ind_b ), 
+                            this->valid_W_atks_map[ ind_z ].end() );
+
+                    } 
 
                 }
 
