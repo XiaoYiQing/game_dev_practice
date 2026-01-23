@@ -6340,6 +6340,41 @@ that may need their list of possible plays updated with this newly occupied squa
 
         }
 
+        // Two squares away, when target square was empty before occupation (double jump check).
+        if( contact_dist_arr[dir_z] == 2 && prev_pce.type == CHS_PIECE_TYPE::NO_P ){
+            
+            // Scan piece is two square North.
+            if( dir_z == 0 ){
+                
+                // Scan piece is an unmoved pawn (which can only be black if rules are respected).
+                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                {   
+                    // Remove double jump possibility now the square is occupied.
+                    this->valid_W_moves_map[ ind_z ].erase(
+                        std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                        this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
+                        this->valid_W_moves_map[ ind_z ].end() );
+                }
+
+            // Scan piece is two square South.
+            }else if( dir_z == 1 ){
+
+                // Scan piece is an unmoved pawn (which can only be white if rules are respected).
+                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                {  
+                    // Remove double jump possibility now the square is occupied.
+                    this->valid_B_moves_map[ ind_z ].erase(
+                        std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                        this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
+                        this->valid_B_moves_map[ ind_z ].end() );
+                }
+
+            }
+
+        }
+
     }
 
 // ---------------------------------------------------------------------- <<<<<
