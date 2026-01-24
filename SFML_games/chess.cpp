@@ -6355,6 +6355,8 @@ that may need their list of possible plays updated with this newly occupied squa
                         std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
                         this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
                         this->valid_W_moves_map[ ind_z ].end() );
+                    // Current direction scan complete.
+                    continue;
                 }
 
             // Scan piece is two square South.
@@ -6369,7 +6371,68 @@ that may need their list of possible plays updated with this newly occupied squa
                         std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
                         this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
                         this->valid_B_moves_map[ ind_z ].end() );
+                    // Current direction scan complete.
+                    continue;
                 }
+
+            }
+
+        }
+
+        // Line move pieces scan.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK ||
+            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::BISHOP )
+        {
+            
+            // If occupied square was NOT empty before.
+            if( prev_pce.type != CHS_PIECE_TYPE::NO_P ){
+
+                // Previously black piece is now overtaken by the white piece.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                    // Scan piece is white, prev piece was black, new occupant is white.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+                        
+                        // Remove white attack option since black target is overtaken by white.
+                        this->valid_W_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                            this->valid_W_atks_map[ ind_z ].end(), ind_b ), 
+                            this->valid_W_atks_map[ ind_z ].end() );
+
+                    // Scan piece is black, prev piece was black, new occupant is white.
+                    }else{
+
+                        // Add black attack option now that black target is overtaken by white.
+                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+
+                    }
+
+                }else{
+                    
+                    // Scan piece is white, prev piece was white, new occupant is black.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+                        
+                        // Add white attack option now that white target is overtaken by black.
+                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+                    
+                    // Scan piece is black, prev piece was white, new occupant is black.
+                    }else{
+
+                        // Remove black attack option since white target is overtaken by black.
+                        this->valid_B_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                            this->valid_B_atks_map[ ind_z ].end(), ind_b ), 
+                            this->valid_B_atks_map[ ind_z ].end() );
+
+                    }
+
+                }
+
+            // If occupied square was empty before.
+            }else{
+
+
 
             }
 
