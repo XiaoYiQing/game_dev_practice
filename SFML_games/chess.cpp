@@ -6380,9 +6380,9 @@ that may need their list of possible plays updated with this newly occupied squa
         }
 
         // Line move pieces scan.
-        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::BISHOP )
+        if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP )
         {
             
             // If occupied square was NOT empty before.
@@ -6391,7 +6391,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 // Previously black piece is now overtaken by the white piece.
                 if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
-                    // Scan piece is white, prev piece was black, new occupant is white.
+                    // Prev piece was black, new occupant is white, scan piece is white.
                     if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
                         
                         // Remove white attack option since black target is overtaken by white.
@@ -6400,7 +6400,7 @@ that may need their list of possible plays updated with this newly occupied squa
                             this->valid_W_atks_map[ ind_z ].end(), ind_b ), 
                             this->valid_W_atks_map[ ind_z ].end() );
 
-                    // Scan piece is black, prev piece was black, new occupant is white.
+                    // Prev piece was black, new occupant is white, scan piece is black.
                     }else{
 
                         // Add black attack option now that black target is overtaken by white.
@@ -6410,13 +6410,13 @@ that may need their list of possible plays updated with this newly occupied squa
 
                 }else{
                     
-                    // Scan piece is white, prev piece was white, new occupant is black.
+                    // Prev piece was white, new occupant is black, scan piece is white.
                     if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
                         
                         // Add white attack option now that white target is overtaken by black.
                         this->valid_W_atks_map[ ind_z ].push_back( ind_b );
                     
-                    // Scan piece is black, prev piece was white, new occupant is black.
+                    // Prev piece was white, new occupant is black, scan piece is black.
                     }else{
 
                         // Remove black attack option since white target is overtaken by black.
@@ -6429,71 +6429,154 @@ that may need their list of possible plays updated with this newly occupied squa
 
                 }
 
-            // If occupied square was empty before.
+                // Move to next line scan without reverse scan (Since a piece was 
+                // block the lane beforehand).
+                continue;
+
+            }
+
+            // From this point on, we are in the scenario where the occupied square was 
+            // empty before the new occupant arrived.
+
+            // New occupant is white.
+            if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                // Target square was empty, new occupant is white, scan piece is black.
+                if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
+                    // Add black attack option of new white occupant.
+                    this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+                }
+            
+            // New occupant is black.
             }else{
 
-                // New occupant is white.
-                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-
-                    // Scan piece is black, new occupant is white.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
-                        // Add black attack option of new white occupant.
-                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
-                    }
-                
-                // New occupant is black.
-                }else{
-
-                    // Scan piece is white, new occupant is black.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
-                        // Add white attack option of new black occupant.
-                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
-                    }
-
-                }
-
-                // Reverse scan linear index increment amount and count.
-                int rev_incrm = 0;  int rev_inc_cnt = 0;
-                // Reverse scan helper variables definition.
-                switch( dir_z ){
-                case 0:     // North scan -> South reverse scan.
-                    rev_incrm = -chess::BOARDWIDTH;
-                    rev_inc_cnt = contact_dist_arr[1];
-                    break;
-                case 1:     // South scan -> North reverse scan.
-                    rev_incrm = chess::BOARDWIDTH;
-                    rev_inc_cnt = contact_dist_arr[0];
-                    break;
-                case 2:     // West scan -> East reverse scan.
-                    rev_incrm = 1;
-                    rev_inc_cnt = contact_dist_arr[3];
-                    break;
-                case 3:     // East scan -> West reverse scan.
-                    rev_incrm = -1;
-                    rev_inc_cnt = contact_dist_arr[2];
-                    break;
-                case 4:     // NE -> SW reverse scan.
-                    rev_incrm = chess::BOARDWIDTH + 1;
-                    rev_inc_cnt = contact_dist_arr[6];
-                    break; 
-                case 5:     // NW -> SE reverse scan.
-                    rev_incrm = chess::BOARDWIDTH - 1;
-                    rev_inc_cnt = contact_dist_arr[7];
-                    break;
-                case 6:     // SW -> NE reverse scan.
-                    rev_incrm = - chess::BOARDWIDTH - 1;
-                    rev_inc_cnt = contact_dist_arr[4];
-                    break;
-                case 7:     // SE -> NW reverse scan.
-                    rev_incrm = - chess::BOARDWIDTH + 1;
-                    rev_inc_cnt = contact_dist_arr[5];
-                    break;
-                default:
-                    break;
+                // Target square was empty, new occupant is black, scan piece is white.
+                if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+                    // Add white attack option of new black occupant.
+                    this->valid_W_atks_map[ ind_z ].push_back( ind_b );
                 }
 
             }
 
+            // Reverse scan linear index increment amount and count.
+            int rev_incrm = 0;  int rev_inc_cnt = 0;
+            // Reverse scan helper variables definition.
+            switch( dir_z ){
+            case 0:     // North scan -> South reverse scan.
+                rev_incrm = -chess::BOARDWIDTH;
+                rev_inc_cnt = contact_dist_arr[1];
+                break;
+            case 1:     // South scan -> North reverse scan.
+                rev_incrm = chess::BOARDWIDTH;
+                rev_inc_cnt = contact_dist_arr[0];
+                break;
+            case 2:     // West scan -> East reverse scan.
+                rev_incrm = 1;
+                rev_inc_cnt = contact_dist_arr[3];
+                break;
+            case 3:     // East scan -> West reverse scan.
+                rev_incrm = -1;
+                rev_inc_cnt = contact_dist_arr[2];
+                break;
+            case 4:     // NE -> SW reverse scan.
+                rev_incrm = chess::BOARDWIDTH + 1;
+                rev_inc_cnt = contact_dist_arr[6];
+                break; 
+            case 5:     // NW -> SE reverse scan.
+                rev_incrm = chess::BOARDWIDTH - 1;
+                rev_inc_cnt = contact_dist_arr[7];
+                break;
+            case 6:     // SW -> NE reverse scan.
+                rev_incrm = - chess::BOARDWIDTH - 1;
+                rev_inc_cnt = contact_dist_arr[4];
+                break;
+            case 7:     // SE -> NW reverse scan.
+                rev_incrm = - chess::BOARDWIDTH + 1;
+                rev_inc_cnt = contact_dist_arr[5];
+                break;
+            default:
+                break;
+            }
+
+            // Scan piece is white.
+            if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+
+                // Initialize reverse scan linear index.
+                int ind_t = ind_b;
+                // Reverse scan remaining line.
+                for( int t = 1; t <= rev_inc_cnt; t++ ){
+
+                    // Obtain next reverse scan target.
+                    ind_t += rev_incrm;
+                    pce_t = this->get_piece_at( ind_t );
+
+                    // Erase attack by current white scan target at the current
+                    // reverse scan square.
+                    this->atk_list_by_W[ ind_t ].erase(
+                        std::remove(this->atk_list_by_W[ ind_t ].begin(), 
+                        this->atk_list_by_W[ ind_t ].end(), ind_z ), 
+                        this->atk_list_by_W[ ind_t ].end() );
+
+                    // Erase valid move from the current white scan target to the current
+                    // reverse scan square.
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        this->valid_W_moves_map[ ind_z ].erase(
+                            std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                            this->valid_W_moves_map[ ind_z ].end(), ind_t ), 
+                            this->valid_W_moves_map[ ind_z ].end() );
+
+                    // Erase valid attack from the current white scan target to the current
+                    // reverse scan square occupied by black.
+                    }else if( pce_t.color == CHS_PIECE_COLOR::BLACK ){
+                        this->valid_W_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                            this->valid_W_atks_map[ ind_z ].end(), ind_t ), 
+                            this->valid_W_atks_map[ ind_z ].end() );
+                    }
+
+                }
+
+            // Scan piece is black.
+            }else{
+
+                // Initialize reverse scan linear index.
+                int ind_t = ind_b;
+                // Reverse scan remaining line.
+                for( int t = 1; t <= rev_inc_cnt; t++ ){
+                    
+                    // Obtain next reverse scan target.
+                    ind_t += rev_incrm;
+                    pce_t = this->get_piece_at( ind_t );
+
+                    // Erase attack by current black scan target at the current
+                    // reverse scan square.
+                    this->atk_list_by_B[ ind_t ].erase(
+                        std::remove(this->atk_list_by_B[ ind_t ].begin(), 
+                        this->atk_list_by_B[ ind_t ].end(), ind_z ), 
+                        this->atk_list_by_B[ ind_t ].end() );
+                    
+                    // Erase valid move from the current black scan target to the current
+                    // reverse scan square.
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        this->valid_B_moves_map[ ind_z ].erase(
+                            std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                            this->valid_B_moves_map[ ind_z ].end(), ind_t ), 
+                            this->valid_B_moves_map[ ind_z ].end() );
+
+                    // Erase valid attack from the current black scan target to the current
+                    // reverse scan square occupied by white.
+                    }else if( pce_t.color == CHS_PIECE_COLOR::WHITE){
+                        this->valid_B_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                            this->valid_B_atks_map[ ind_z ].end(), ind_t ), 
+                            this->valid_B_atks_map[ ind_z ].end() );
+                    }
+                }
+            }
+
+            // Current scan is complete.
+            continue;
+            
         }
 
     }
