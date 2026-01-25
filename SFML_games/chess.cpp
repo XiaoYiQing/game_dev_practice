@@ -6432,7 +6432,65 @@ that may need their list of possible plays updated with this newly occupied squa
             // If occupied square was empty before.
             }else{
 
+                // New occupant is white.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
+                    // Scan piece is black, new occupant is white.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
+                        // Add black attack option of new white occupant.
+                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+                    }
+                
+                // New occupant is black.
+                }else{
+
+                    // Scan piece is white, new occupant is black.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+                        // Add white attack option of new black occupant.
+                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+                    }
+
+                }
+
+                // Reverse scan linear index increment amount and count.
+                int rev_incrm = 0;  int rev_inc_cnt = 0;
+                // Reverse scan helper variables definition.
+                switch( dir_z ){
+                case 0:     // North scan -> South reverse scan.
+                    rev_incrm = -chess::BOARDWIDTH;
+                    rev_inc_cnt = contact_dist_arr[1];
+                    break;
+                case 1:     // South scan -> North reverse scan.
+                    rev_incrm = chess::BOARDWIDTH;
+                    rev_inc_cnt = contact_dist_arr[0];
+                    break;
+                case 2:     // West scan -> East reverse scan.
+                    rev_incrm = 1;
+                    rev_inc_cnt = contact_dist_arr[3];
+                    break;
+                case 3:     // East scan -> West reverse scan.
+                    rev_incrm = -1;
+                    rev_inc_cnt = contact_dist_arr[2];
+                    break;
+                case 4:     // NE -> SW reverse scan.
+                    rev_incrm = chess::BOARDWIDTH + 1;
+                    rev_inc_cnt = contact_dist_arr[6];
+                    break; 
+                case 5:     // NW -> SE reverse scan.
+                    rev_incrm = chess::BOARDWIDTH - 1;
+                    rev_inc_cnt = contact_dist_arr[7];
+                    break;
+                case 6:     // SW -> NE reverse scan.
+                    rev_incrm = - chess::BOARDWIDTH - 1;
+                    rev_inc_cnt = contact_dist_arr[4];
+                    break;
+                case 7:     // SE -> NW reverse scan.
+                    rev_incrm = - chess::BOARDWIDTH + 1;
+                    rev_inc_cnt = contact_dist_arr[5];
+                    break;
+                default:
+                    break;
+                }
 
             }
 
