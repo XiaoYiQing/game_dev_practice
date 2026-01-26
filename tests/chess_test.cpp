@@ -4203,9 +4203,21 @@ void tests::chess_upd_pre_legal_tests_spec(){
 
     chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
         chess::CHS_PIECE_COLOR::NO_C );
-    chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
-    chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
     chess::chs_piece tmp_pce;
+
+    chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
+
 
 // ---------------------------------------------------------------------- >>>>>
 //      Pawn Initial Position List Removal
@@ -4214,12 +4226,11 @@ void tests::chess_upd_pre_legal_tests_spec(){
     test_bool = true;
     myGame.clearBoard();
     
-    myGame.set_piece_at( 0, 4, chess::chs_piece( 
-        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE ) );
-    myGame.set_piece_at( 7, 4, chess::chs_piece( 
-        chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK ) );
+    myGame.set_piece_at( 0, 4, w_king );
+    myGame.set_piece_at( 7, 4, b_king );
     myGame.set_piece_at( 1, 3, w_pawn );
     myGame.set_piece_at( 3, 2, b_knight );
+    myGame.set_piece_at( 2, 4, b_bishop );
     
     // Obtain the pre-legal play lists before update.
     auto atk_list_by_W_bef = myGame.getAtk_list_by_W();
@@ -4236,7 +4247,6 @@ void tests::chess_upd_pre_legal_tests_spec(){
     tmp_pce = w_pawn;    tmp_pce.not_moved = false;
     myGame.set_piece_at_NO_UPD( 2, 3, tmp_pce );
 
-    myGame.printBoard();
     myGame.upd_pre_legal_plays_emp( chess::sub2ind( 1, 3 ), w_pawn );
 
     
@@ -4253,16 +4263,108 @@ void tests::chess_upd_pre_legal_tests_spec(){
     test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 11, 18, atk_list_by_W_aft ) );
     test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 20, atk_list_by_W_bef );
     test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 11, 20, atk_list_by_W_aft ) );
-    // Pawn initial position move points change check.
+    // Pawn initial position valid move points change check.
     test_bool = test_bool && tests_chess::is_int_at_tar_vec( 19, 11, valid_W_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_bef );
     test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 19, 11, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_bef );
     test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_aft );
+    // Pawn initial position valid attack points change check.
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 20, 11, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 20, 11, valid_W_atks_map_aft );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays_emp pawn inital position list removal test: passed!" << endl;
     }else{
         cout << "chess upd_pre_legal_plays_emp pawn inital position list removal test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Knight Initial Position List Removal
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    
+    myGame.setTurn_cnt(1);
+    myGame.set_piece_at( 0, 4, w_king );
+    myGame.set_piece_at( 7, 4, b_king );
+    myGame.set_piece_at( 3, 3, b_knight );
+    myGame.set_piece_at( 1, 2, w_pawn );
+
+    myGame.upd_all();
+    
+
+    // Obtain the pre-legal play lists before update.
+    atk_list_by_W_bef = myGame.getAtk_list_by_W();
+    atk_list_by_B_bef = myGame.getAtk_list_by_B();
+    valid_W_moves_map_bef = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_bef = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
+
+    // Set the update flag to always.
+    myGame.setForce_lists_upd(true);
+    // Perform a "manual" play by displacing the pawn without updating.
+    myGame.set_piece_at_NO_UPD( 3, 3, emp_pce );
+    myGame.set_piece_at_NO_UPD( 4, 1, b_knight );
+
+    myGame.printBoard();
+
+    myGame.upd_pre_legal_plays_emp( chess::sub2ind( 3, 3 ), b_knight );
+
+    // Obtain the pre-legal play lists after update.
+    atk_list_by_W_aft = myGame.getAtk_list_by_W();
+    atk_list_by_B_aft = myGame.getAtk_list_by_B();
+    valid_W_moves_map_aft = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    // Knight initial position attack points change check.
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 10, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 10, atk_list_by_B_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 12, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 12, atk_list_by_B_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 17, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 17, atk_list_by_B_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 21, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 21, atk_list_by_B_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 33, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 33, atk_list_by_B_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 37, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 37, atk_list_by_B_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 42, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 42, atk_list_by_B_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 44, atk_list_by_B_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 27, 44, atk_list_by_B_aft ) );
+    // Knight initial position valid move points change check.
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 10, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 12, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 12, 27, valid_B_moves_map_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 17, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 17, 27, valid_B_moves_map_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 21, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 21, 27, valid_B_moves_map_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 33, 27, valid_B_moves_map_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 37, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 37, 27, valid_B_moves_map_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 42, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 42, 27, valid_B_moves_map_aft ) );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 44, 27, valid_B_moves_map_aft ) );
+    // Knight initial position valid attacks points change check.
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 10, 27, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 10, 27, valid_B_atks_map_aft );
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays_emp knight list removal test: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays_emp knight list removal test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<

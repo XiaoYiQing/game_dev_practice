@@ -4905,12 +4905,10 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
     bool is_white = tar_pce.color == CHS_PIECE_COLOR::WHITE;
 
     // Temporary integer variables to be resued at multiple points.
-    int ind_z, ind_t = 0;
+    int ind_t = 0;
     // Temporary integer pair variable to be resued at multiple points.
     pair<int,int> ij_tmp = {0,0};
     int tmp_arr_lim = 0;
-    // Initialize potential list of plays.
-    int tmp_ind_arr[28];
 
     // Line evaluation scenarios.
     array< vector<int>, 8 > line_aims;
@@ -4922,10 +4920,6 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
 
 
     this->upd_pre_legal_plays_emp( ind_a, tar_pce );
-
-
-
-
 
 }
 
@@ -5507,7 +5501,7 @@ that may need their list of possible plays updated with this newly liberated squ
             // Reverse scan helper variables definition.
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
-                rev_incrm = -chess::BOARDWIDTH;
+                rev_incrm = -1 * (int) chess::BOARDWIDTH;
                 rev_inc_cnt = contact_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
@@ -5531,11 +5525,11 @@ that may need their list of possible plays updated with this newly liberated squ
                 rev_inc_cnt = contact_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
-                rev_incrm = - chess::BOARDWIDTH - 1;
+                rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
                 rev_inc_cnt = contact_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
-                rev_incrm = - chess::BOARDWIDTH + 1;
+                rev_incrm = -1 * (int) chess::BOARDWIDTH + 1;
                 rev_inc_cnt = contact_dist_arr[5];
                 break;
             default:
@@ -5559,7 +5553,7 @@ that may need their list of possible plays updated with this newly liberated squ
                 this->valid_W_moves_map[ ind_z ].push_back( ind_a );
 
                 // Initialize reverse scan linear index.
-                int ind_t = ind_a;
+                ind_t = ind_a;
                 // Reverse scan remaining line.
                 for( int t = 1; t <= rev_inc_cnt; t++ ){
 
@@ -6463,7 +6457,7 @@ that may need their list of possible plays updated with this newly occupied squa
             // Reverse scan helper variables definition.
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
-                rev_incrm = -chess::BOARDWIDTH;
+                rev_incrm = -1 * (int) chess::BOARDWIDTH;
                 rev_inc_cnt = contact_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
@@ -6487,11 +6481,11 @@ that may need their list of possible plays updated with this newly occupied squa
                 rev_inc_cnt = contact_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
-                rev_incrm = - chess::BOARDWIDTH - 1;
+                rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
                 rev_inc_cnt = contact_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
-                rev_incrm = - chess::BOARDWIDTH + 1;
+                rev_incrm = - (int) chess::BOARDWIDTH + 1;
                 rev_inc_cnt = contact_dist_arr[5];
                 break;
             default:
@@ -6502,7 +6496,7 @@ that may need their list of possible plays updated with this newly occupied squa
             if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
 
                 // Initialize reverse scan linear index.
-                int ind_t = ind_b;
+                ind_t = ind_b;
                 // Reverse scan remaining line.
                 for( int t = 1; t <= rev_inc_cnt; t++ ){
 
@@ -6540,7 +6534,7 @@ that may need their list of possible plays updated with this newly occupied squa
             }else{
 
                 // Initialize reverse scan linear index.
-                int ind_t = ind_b;
+                ind_t = ind_b;
                 // Reverse scan remaining line.
                 for( int t = 1; t <= rev_inc_cnt; t++ ){
                     
@@ -6576,7 +6570,7 @@ that may need their list of possible plays updated with this newly occupied squa
 
             // Current scan is complete.
             continue;
-            
+
         }
 
     }
