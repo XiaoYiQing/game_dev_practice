@@ -4621,6 +4621,89 @@ void tests::chess_upd_pre_legal_tests_spec(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Position POV Updates
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    
+    myGame.setTurn_cnt(0);
+    myGame.set_piece_at( 0, 7, w_king );
+    myGame.set_piece_at( 3, 3, b_king );
+    myGame.set_piece_at( 4, 3, w_pawn );
+    myGame.set_piece_at( 6, 2, b_knight );
+    myGame.set_piece_at( 5, 4, b_bishop );
+    myGame.set_piece_at( 4, 6, b_rook );
+    myGame.set_piece_at( 3, 4, b_queen );
+    myGame.set_piece_at( 6, 3, b_pawn );
+    
+    // Obtain the pre-legal play lists before update.
+    atk_list_by_W_bef = myGame.getAtk_list_by_W();
+    atk_list_by_B_bef = myGame.getAtk_list_by_B();
+    valid_W_moves_map_bef = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_bef = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
+
+    // Set the update flag to always.
+    myGame.setForce_lists_upd(true);
+    // Perform a "manual" play by displacing the pawn without updating.
+    myGame.set_piece_at_NO_UPD( 4, 3, emp_pce );
+    myGame.printBoard();
+
+    myGame.upd_pre_legal_plays_emp( chess::sub2ind( 4, 3 ), w_pawn );
+    myGame.set_piece_at_NO_UPD( 5, 3, w_pawn );
+
+    // Obtain the pre-legal play lists after update.
+    atk_list_by_W_aft = myGame.getAtk_list_by_W();
+    atk_list_by_B_aft = myGame.getAtk_list_by_B();
+    valid_W_moves_map_aft = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    // Black pawn POV check (Lin ind pos: 51).
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 51, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 51, valid_B_moves_map_aft );
+
+    // Black knight POV check (Lin ind pos: 50).
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 50, 35, atk_list_by_B_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 50, 35, atk_list_by_B_aft );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 50, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 50, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 50, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 50, valid_B_atks_map_aft );
+
+    // Black bishop POV check (Lin ind pos: 44).
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 35, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 26, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 17, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 8, atk_list_by_B_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 35, atk_list_by_B_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 26, atk_list_by_B_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 17, atk_list_by_B_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 8, atk_list_by_B_aft );
+
+    // Black rook POV check (Lin ind pos: 38).
+
+    // Black queen POV check (Lin ind pos: 28).
+
+    // Black king POV check (Lin ind pos: 27).
+
+
+    
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays_emp POV knight update test: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays_emp POV knight update test: failed!" << endl;
+    }
+
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 

@@ -5272,11 +5272,13 @@ that may need their list of possible plays updated with this newly liberated squ
     4 = NE, 5 = NW, 6 = SW, 7 = SE
     */
     int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
 
     // North first contact scan.
     for( int z = 1; z <= u_dist; z++ ){
+        rev_scan_dist_arr[0]++;
         if( CHS_board[i_a + z][j_a].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[0] = z;
             contact_ind_arr[0] = { i_a + z, j_a };
@@ -5285,6 +5287,7 @@ that may need their list of possible plays updated with this newly liberated squ
     }
     // South first contact scan.
     for( int z = 1; z <= d_dist; z++ ){
+        rev_scan_dist_arr[1]++;
         if( CHS_board[i_a - z][j_a].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[1] = z;
             contact_ind_arr[1] = { i_a - z, j_a };
@@ -5293,6 +5296,7 @@ that may need their list of possible plays updated with this newly liberated squ
     }
     // West first contact scan.
     for( int z = 1; z <= l_dist; z++ ){
+        rev_scan_dist_arr[2]++;
         if( CHS_board[i_a][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[2] = z;
             contact_ind_arr[2] = { i_a, j_a - z };
@@ -5301,6 +5305,7 @@ that may need their list of possible plays updated with this newly liberated squ
     }
     // East first contact scan.
     for( int z = 1; z <= r_dist; z++ ){
+        rev_scan_dist_arr[3]++;
         if( CHS_board[i_a][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[3] = z;
             contact_ind_arr[3] = { i_a, j_a + z };
@@ -5309,14 +5314,16 @@ that may need their list of possible plays updated with this newly liberated squ
     }
     // North-East first contact scan.
     for( int z = 1; z <= min( u_dist, r_dist ); z++ ){
+        rev_scan_dist_arr[4]++;
         if( CHS_board[i_a + z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[4] = z;
-            contact_ind_arr[4] = { i_a + z, j_a };
+            contact_ind_arr[4] = { i_a + z, j_a + z };
             break;
         }
     }
     // North-West first contact scan.
     for( int z = 1; z <= min( u_dist, l_dist ); z++ ){
+        rev_scan_dist_arr[5]++;
         if( CHS_board[i_a + z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[5] = z;
             contact_ind_arr[5] = { i_a + z, j_a - z };
@@ -5325,6 +5332,7 @@ that may need their list of possible plays updated with this newly liberated squ
     }
     // South-West first contact scan.
     for( int z = 1; z <= min( d_dist, l_dist ); z++ ){
+        rev_scan_dist_arr[6]++;
         if( CHS_board[i_a - z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[6] = z;
             contact_ind_arr[6] = { i_a - z, j_a - z };
@@ -5333,6 +5341,7 @@ that may need their list of possible plays updated with this newly liberated squ
     }
     // South-East first contact scan.
     for( int z = 1; z <= min( d_dist, r_dist ); z++ ){
+        rev_scan_dist_arr[7]++;
         if( CHS_board[i_a - z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[7] = z;
             contact_ind_arr[7] = { i_a - z, j_a + z };
@@ -5491,9 +5500,9 @@ that may need their list of possible plays updated with this newly liberated squ
 
 
         // Line move pieces scan.
-        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::QUEEN ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::ROOK ||
-            this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::BISHOP )
+        if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP )
         {
 
             // Reverse scan linear index increment amount and count.
@@ -5502,42 +5511,42 @@ that may need their list of possible plays updated with this newly liberated squ
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
                 rev_incrm = -1 * (int) chess::BOARDWIDTH;
-                rev_inc_cnt = contact_dist_arr[1];
+                rev_inc_cnt = rev_scan_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
                 rev_incrm = chess::BOARDWIDTH;
-                rev_inc_cnt = contact_dist_arr[0];
+                rev_inc_cnt = rev_scan_dist_arr[0];
                 break;
             case 2:     // West scan -> East reverse scan.
                 rev_incrm = 1;
-                rev_inc_cnt = contact_dist_arr[3];
+                rev_inc_cnt = rev_scan_dist_arr[3];
                 break;
             case 3:     // East scan -> West reverse scan.
                 rev_incrm = -1;
-                rev_inc_cnt = contact_dist_arr[2];
+                rev_inc_cnt = rev_scan_dist_arr[2];
                 break;
             case 4:     // NE -> SW reverse scan.
-                rev_incrm = chess::BOARDWIDTH + 1;
-                rev_inc_cnt = contact_dist_arr[6];
+                rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
+                rev_inc_cnt = rev_scan_dist_arr[6];
                 break; 
             case 5:     // NW -> SE reverse scan.
-                rev_incrm = chess::BOARDWIDTH - 1;
-                rev_inc_cnt = contact_dist_arr[7];
+                rev_incrm = -1 * (int) chess::BOARDWIDTH + 1;
+                rev_inc_cnt = rev_scan_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
-                rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
-                rev_inc_cnt = contact_dist_arr[4];
+                rev_incrm = chess::BOARDWIDTH + 1;
+                rev_inc_cnt = rev_scan_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
-                rev_incrm = -1 * (int) chess::BOARDWIDTH + 1;
-                rev_inc_cnt = contact_dist_arr[5];
+                rev_incrm = chess::BOARDWIDTH - 1;
+                rev_inc_cnt = rev_scan_dist_arr[5];
                 break;
             default:
                 break;
             }
 
             // Scan piece is a white.
-            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+            if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
 
                 // Displaced piece is black, so no longer attacked at starting position.
                 if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
@@ -6040,11 +6049,13 @@ that may need their list of possible plays updated with this newly occupied squa
     4 = NE, 5 = NW, 6 = SW, 7 = SE
     */
     int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
 
     // North first contact scan.
     for( int z = 1; z <= u_dist; z++ ){
+        rev_scan_dist_arr[0]++;
         if( CHS_board[i_b + z][j_b].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[0] = z;
             contact_ind_arr[0] = { i_b + z, j_b };
@@ -6053,6 +6064,7 @@ that may need their list of possible plays updated with this newly occupied squa
     }
     // South first contact scan.
     for( int z = 1; z <= d_dist; z++ ){
+        rev_scan_dist_arr[1]++;
         if( CHS_board[i_b - z][j_b].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[1] = z;
             contact_ind_arr[1] = { i_b - z, j_b };
@@ -6061,6 +6073,7 @@ that may need their list of possible plays updated with this newly occupied squa
     }
     // West first contact scan.
     for( int z = 1; z <= l_dist; z++ ){
+        rev_scan_dist_arr[2]++;
         if( CHS_board[i_b][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[2] = z;
             contact_ind_arr[2] = { i_b, j_b - z };
@@ -6069,6 +6082,7 @@ that may need their list of possible plays updated with this newly occupied squa
     }
     // East first contact scan.
     for( int z = 1; z <= r_dist; z++ ){
+        rev_scan_dist_arr[3]++;
         if( CHS_board[i_b][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[3] = z;
             contact_ind_arr[3] = { i_b, j_b + z };
@@ -6077,14 +6091,16 @@ that may need their list of possible plays updated with this newly occupied squa
     }
     // North-East first contact scan.
     for( int z = 1; z <= min( u_dist, r_dist ); z++ ){
+        rev_scan_dist_arr[4]++;
         if( CHS_board[i_b + z][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[4] = z;
-            contact_ind_arr[4] = { i_b + z, j_b };
+            contact_ind_arr[4] = { i_b + z, j_b + z };
             break;
         }
     }
     // North-West first contact scan.
     for( int z = 1; z <= min( u_dist, l_dist ); z++ ){
+        rev_scan_dist_arr[5]++;
         if( CHS_board[i_b + z][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[5] = z;
             contact_ind_arr[5] = { i_b + z, j_b - z };
@@ -6093,6 +6109,7 @@ that may need their list of possible plays updated with this newly occupied squa
     }
     // South-West first contact scan.
     for( int z = 1; z <= min( d_dist, l_dist ); z++ ){
+        rev_scan_dist_arr[6]++;
         if( CHS_board[i_b - z][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[6] = z;
             contact_ind_arr[6] = { i_b - z, j_b - z };
@@ -6101,6 +6118,7 @@ that may need their list of possible plays updated with this newly occupied squa
     }
     // South-East first contact scan.
     for( int z = 1; z <= min( d_dist, r_dist ); z++ ){
+        rev_scan_dist_arr[7]++;
         if( CHS_board[i_b - z][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[7] = z;
             contact_ind_arr[7] = { i_b - z, j_b + z };
@@ -6458,35 +6476,35 @@ that may need their list of possible plays updated with this newly occupied squa
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
                 rev_incrm = -1 * (int) chess::BOARDWIDTH;
-                rev_inc_cnt = contact_dist_arr[1];
+                rev_inc_cnt = rev_scan_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
                 rev_incrm = chess::BOARDWIDTH;
-                rev_inc_cnt = contact_dist_arr[0];
+                rev_inc_cnt = rev_scan_dist_arr[0];
                 break;
             case 2:     // West scan -> East reverse scan.
                 rev_incrm = 1;
-                rev_inc_cnt = contact_dist_arr[3];
+                rev_inc_cnt = rev_scan_dist_arr[3];
                 break;
             case 3:     // East scan -> West reverse scan.
                 rev_incrm = -1;
-                rev_inc_cnt = contact_dist_arr[2];
+                rev_inc_cnt = rev_scan_dist_arr[2];
                 break;
             case 4:     // NE -> SW reverse scan.
                 rev_incrm = chess::BOARDWIDTH + 1;
-                rev_inc_cnt = contact_dist_arr[6];
+                rev_inc_cnt = rev_scan_dist_arr[6];
                 break; 
             case 5:     // NW -> SE reverse scan.
                 rev_incrm = chess::BOARDWIDTH - 1;
-                rev_inc_cnt = contact_dist_arr[7];
+                rev_inc_cnt = rev_scan_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
                 rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
-                rev_inc_cnt = contact_dist_arr[4];
+                rev_inc_cnt = rev_scan_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
                 rev_incrm = - (int) chess::BOARDWIDTH + 1;
-                rev_inc_cnt = contact_dist_arr[5];
+                rev_inc_cnt = rev_scan_dist_arr[5];
                 break;
             default:
                 break;
