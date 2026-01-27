@@ -4686,6 +4686,18 @@ void tests::chess_upd_pre_legal_tests_spec(){
     test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 17, atk_list_by_B_aft );
     test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 8, atk_list_by_B_aft );
 
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 26, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 8, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 44, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 44, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 17, 44, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 8, 44, valid_B_moves_map_aft );
+
+    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 44, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 44, valid_B_atks_map_aft );
+
     // Black rook POV check (Lin ind pos: 38).
 
     // Black queen POV check (Lin ind pos: 28).

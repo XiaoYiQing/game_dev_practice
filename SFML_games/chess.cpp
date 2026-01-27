@@ -5599,7 +5599,7 @@ that may need their list of possible plays updated with this newly liberated squ
 
                 }
                 // Add new free space as valid black scan piece move.
-                this->valid_B_atks_map[ ind_z ].push_back( ind_a );
+                this->valid_B_moves_map[ ind_z ].push_back( ind_a );
 
                 // Initialize reverse scan linear index.
                 int ind_t = ind_a;
