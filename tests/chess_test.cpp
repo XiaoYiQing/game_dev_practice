@@ -4196,7 +4196,7 @@ void tests::chess_upd_pre_legal_tests(){
 
 
 
-void tests::chess_upd_pre_legal_tests_spec(){
+void tests::chess_upd_pre_legal_tests_emp(){
 
     bool test_bool = true;
     chess myGame;

@@ -50,8 +50,7 @@ namespace tests{
 
     void chess_upd_pre_legal_tests();
 
-    void chess_upd_pre_legal_tests_spec();
-
+    void chess_upd_pre_legal_tests_emp();
 
 
     void CHS_SFML_eng_tests();
