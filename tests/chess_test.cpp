@@ -4837,10 +4837,85 @@ void tests::chess_upd_pre_legal_tests_emp(){
 //      Initial Position Pawn POV Special Updates
 // ---------------------------------------------------------------------- >>>>>
 
+    
+
 // ---------------------------------------------------------------------- <<<<<
 
 }
 
+
+void tests::chess_upd_pre_legal_tests_occ(){
+
+    bool test_bool = true;
+    chess myGame;
+
+    chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C );
+    chess::chs_piece tmp_pce;
+
+    chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Initial Position List Removal
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    
+    myGame.set_piece_at( 0, 0, w_king );
+    myGame.set_piece_at( 7, 0, b_king );
+    myGame.set_piece_at( 2, 4, b_queen );
+    
+    // Obtain the pre-legal play lists before update.
+    auto atk_list_by_W_bef = myGame.getAtk_list_by_W();
+    auto atk_list_by_B_bef = myGame.getAtk_list_by_B();
+    auto valid_W_moves_map_bef = myGame.get_valid_W_moves_map();
+    auto valid_B_moves_map_bef = myGame.get_valid_B_moves_map();
+    auto valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
+    auto valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
+
+    myGame.printBoard();
+
+    // Set the update flag to always.
+    myGame.setForce_lists_upd(true);
+    // Perform a "manual" play by displacing the pawn without updating.
+    myGame.set_piece_at_NO_UPD( 2, 4, w_knight );
+
+    myGame.upd_pre_legal_plays_occ( chess::sub2ind( 2, 4 ), b_queen );
+
+    myGame.printBoard();
+    
+    // Obtain the pre-legal play lists after update.
+    auto atk_list_by_W_aft = myGame.getAtk_list_by_W();
+    auto atk_list_by_B_aft = myGame.getAtk_list_by_B();
+    auto valid_W_moves_map_aft = myGame.get_valid_W_moves_map();
+    auto valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
+    auto valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
+    auto valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays_occ previous piece influence deletion test: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays_occ previous piece influence deletion test: failed!" << endl;
+    }
+
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
 
 
 void tests::CHS_SFML_eng_tests(){

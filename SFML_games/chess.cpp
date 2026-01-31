@@ -5259,7 +5259,6 @@ that may need their list of possible plays updated with this newly liberated squ
 //      Starting Position POV Update (Line Directions)
 // ---------------------------------------------------------------------- >>>>>
 
-    // TODO: The en-passant needs to be updated as special isolated case.
     // TODO: King special case, where the moved piece is the king, in which case
     //  attacked by evaluations are handled differently.
 
