@@ -795,7 +795,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_pre_legal_plays( chs_move tar_play );
 
     /**
-     * Perform updates on the on the attack lists and the valid moves and attacks all in
+     * Perform updates on the attack lists and the valid moves and attacks all in
      * one go in a precise manner given the target square of specified coordinate was 
      * emptied.
      * 

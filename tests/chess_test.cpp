@@ -4868,7 +4868,7 @@ void tests::chess_upd_pre_legal_tests_occ(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Pawn Initial Position List Removal
+//      Previous Queen Position List Removal
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -4877,6 +4877,9 @@ void tests::chess_upd_pre_legal_tests_occ(){
     myGame.set_piece_at( 0, 0, w_king );
     myGame.set_piece_at( 7, 0, b_king );
     myGame.set_piece_at( 2, 4, b_queen );
+
+    myGame.set_piece_at( 2, 6, b_pawn );
+    myGame.set_piece_at( 4, 2, w_knight );
     
     // Obtain the pre-legal play lists before update.
     auto atk_list_by_W_bef = myGame.getAtk_list_by_W();
@@ -4886,16 +4889,12 @@ void tests::chess_upd_pre_legal_tests_occ(){
     auto valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
     auto valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
 
-    myGame.printBoard();
-
     // Set the update flag to always.
     myGame.setForce_lists_upd(true);
     // Perform a "manual" play by displacing the pawn without updating.
     myGame.set_piece_at_NO_UPD( 2, 4, w_knight );
 
     myGame.upd_pre_legal_plays_occ( chess::sub2ind( 2, 4 ), b_queen );
-
-    myGame.printBoard();
     
     // Obtain the pre-legal play lists after update.
     auto atk_list_by_W_aft = myGame.getAtk_list_by_W();
@@ -4904,6 +4903,28 @@ void tests::chess_upd_pre_legal_tests_occ(){
     auto valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
     auto valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
     auto valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    // King initial position attack points change check.
+    vector<int> atk_pts = { 29, 38, 47, 27, 11, 2, 13, 6, 28, 36, 44, 52, 60, 19, 
+        18, 17, 16, 12, 4, 21, 34, 22 };
+    for( int z : atk_pts ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 20, z, atk_list_by_B_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 20, z, atk_list_by_B_aft );
+    }
+
+    // King initial position valid move points change check.
+    vector<int> valid_move_pts = { 29, 38, 47, 27, 11, 2, 13, 6, 28, 36, 44, 52, 60, 19, 18, 17, 16, 12, 4, 21 };
+    for( int z : valid_move_pts ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 20, valid_B_moves_map_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 20, valid_B_moves_map_aft );
+    }
+
+    // King initial position valid attack points change check.
+    vector<int> valid_atks_pts = { 34 };
+    for( int z : valid_atks_pts ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 20, valid_B_atks_map_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 20, valid_B_atks_map_aft );
+    }
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays_occ previous piece influence deletion test: passed!" << endl;
@@ -4914,6 +4935,12 @@ void tests::chess_upd_pre_legal_tests_occ(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Previous Knight Position List Removal
+// ---------------------------------------------------------------------- >>>>>
+
+// ---------------------------------------------------------------------- <<<<<
 
 }
 
