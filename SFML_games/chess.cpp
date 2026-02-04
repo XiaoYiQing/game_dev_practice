@@ -6184,9 +6184,10 @@ that may need their list of possible plays updated with this newly occupied squa
 
     if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
 
+        // New occupant is white pawn.
         if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
-            // Valid movement add.
+            // Valid pawn movement add.
             if( u_dist > 0 && ( contact_dist_arr[0] > 1 || contact_dist_arr[0] == 0 ) ){
                 this->valid_W_moves_map[ind_b].push_back( ind_b + chess::BOARDWIDTH );
                 // Double pawn jump scenario.
@@ -6195,40 +6196,85 @@ that may need their list of possible plays updated with this newly occupied squa
                 }
             }
 
-            // Attack lists update.
+            // Not on last row.
             if( u_dist > 0 ){
 
+                // Not on last row and not on leftmost column.
                 if( l_dist > 0 ){
 
+                    // North-West square is influenced by current white pawn.
                     this->atk_list_by_W[ ind_b + chess::BOARDWIDTH - 1 ].push_back( ind_b );
 
-                    if( contact_dist_arr[5] == 1 ){
-
-
+                    // Immediate contact on North-West diagonal is black.
+                    if( contact_dist_arr[5] == 1 &&
+                        this->CHS_board[i_b+1][j_b-1].color == CHS_PIECE_COLOR::BLACK )
+                    {
+                        this->valid_W_atks_map[ ind_b ].push_back( ind_b + chess::BOARDWIDTH - 1 );
                     }
 
                 }
 
+                // Not on last row and not on rightmost column.
                 if( r_dist > 0 ){
 
+                    // North-East square is influenced by current white pawn.
                     this->atk_list_by_W[ ind_b + chess::BOARDWIDTH + 1 ].push_back( ind_b );
 
-                    if( contact_dist_arr[4] == 1 ){
-
+                    // Immediate contact on North-East diagonal is black.
+                    if( contact_dist_arr[4] == 1 && 
+                        this->CHS_board[i_b+1][j_b+1].color == CHS_PIECE_COLOR::BLACK )
+                    {    
+                        this->valid_W_atks_map[ ind_b ].push_back( ind_b + chess::BOARDWIDTH + 1 );
                     }
 
                 }
 
             }
 
+        // New occupant is black pawn.
         }else{
 
-            // Valid movement add.
+            // Valid pawn movement add.
             if( d_dist > 0 && ( contact_dist_arr[1] > 1 || contact_dist_arr[1] == 0 ) ){
                 this->valid_B_moves_map[ind_b].push_back( ind_b - chess::BOARDWIDTH );
                 // Double pawn jump scenario.
                 if( tar_pce.not_moved && ( contact_dist_arr[1] > 2 || contact_dist_arr[1] == 0 ) ){
                     this->valid_B_moves_map[ind_b].push_back( ind_b - 2*chess::BOARDWIDTH );
+                }
+
+            }
+
+            // Not on first row.
+            if( d_dist > 0 ){
+
+                // Not on first row, not on leftmost column.
+                if( l_dist > 0 ){
+
+                    // South-West square is influenced by current black pawn.
+                    this->atk_list_by_B[ ind_b - chess::BOARDWIDTH - 1 ].push_back( ind_b );
+
+                    // Immediate contact on South-West diagonal is white.
+                    if( contact_dist_arr[5] == 1 &&
+                        this->CHS_board[i_b-1][j_b-1].color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH - 1 );
+                    }
+
+                }
+
+                // Not on first row and not on rightmost column.
+                if( r_dist > 0 ){
+
+                    // South-East square is influenced by current black pawn.
+                    this->atk_list_by_B[ ind_b - chess::BOARDWIDTH + 1 ].push_back( ind_b );
+
+                    // Immediate contact on South-East diagonal is white.
+                    if( contact_dist_arr[5] == 1 &&
+                        this->CHS_board[i_b-1][j_b+1].color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH + 1 );
+                    }
+
                 }
 
             }
