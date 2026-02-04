@@ -6363,14 +6363,28 @@ that may need their list of possible plays updated with this newly occupied squa
 
     }
 
+    rev_scan_dist_arr;
+    direc_unit_step;
+    contact_dist_arr;
+    contact_ind_arr;
+    if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::ROOK || 
+        tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
 
-    if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
+        int t_min = 0;  int t_max = 0;
+        if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
+            t_min = 4;  t_max = 8;
+        }else if( tar_pce.type == CHS_PIECE_TYPE::ROOK ){
+            t_min = 0;  t_max = 4;
+        }else{
+            t_min = 0;  t_max = 8;
+        }
+
 
         // New occupant is white bishop/queen.
         if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
             // Parse through each of the diagonal directions.
-            for( unsigned int t = 4; t < 8; t++ ){
+            for( unsigned int t = t_min; t < t_max; t++ ){
 
                 // Offset for number of free squares till contact.
                 int offset = 0;
@@ -6389,6 +6403,7 @@ that may need their list of possible plays updated with this newly occupied squa
                     {
                         this->valid_W_atks_map[ ind_b ].push_back( tmp_int );
                     }
+
                 }
 
                 // Initialize scanning linear index.
@@ -6406,7 +6421,7 @@ that may need their list of possible plays updated with this newly occupied squa
         }else{
 
             // Parse through each of the diagonal directions.
-            for( unsigned int t = 4; t < 8; t++ ){
+            for( unsigned int t = t_min; t < t_max; t++ ){
 
                 // Offset for number of free squares till contact.
                 int offset = 0;
@@ -6441,15 +6456,6 @@ that may need their list of possible plays updated with this newly occupied squa
         }
 
     }
-
-    rev_scan_dist_arr;
-    direc_unit_step;
-    contact_dist_arr;
-    contact_ind_arr;
-    if( tar_pce.type == CHS_PIECE_TYPE::ROOK || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
-
-    }
-
 
 
 // ---------------------------------------------------------------------- <<<<<
