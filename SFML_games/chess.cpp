@@ -6086,12 +6086,12 @@ that may need their list of possible plays updated with this newly occupied squa
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Ending Position POV Update (Line Directions)
+//      Line Contacts Delimiting
 // ---------------------------------------------------------------------- >>>>>
 
     /*
     Array containing the distance of first contact along each of the 8 directions
-    starting from the newly emptied starting position ( i_a, j_a ).
+    starting from the newly occupied position ( i_b, j_b ).
 
     The directional indices:
     0 = N,  1 = S,  2 = W,  3 = E,
@@ -6174,6 +6174,89 @@ that may need their list of possible plays updated with this newly occupied squa
             break;
         }
     }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Line Based New Occupant Influence Update
+// ---------------------------------------------------------------------- >>>>>
+
+    if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+
+        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+            // Valid movement add.
+            if( u_dist > 0 && ( contact_dist_arr[0] > 1 || contact_dist_arr[0] == 0 ) ){
+                this->valid_W_moves_map[ind_b].push_back( ind_b + chess::BOARDWIDTH );
+                // Double pawn jump scenario.
+                if( tar_pce.not_moved && ( contact_dist_arr[0] > 2 || contact_dist_arr[0] == 0 ) ){
+                    this->valid_W_moves_map[ind_b].push_back( ind_b + 2*chess::BOARDWIDTH );
+                }
+            }
+
+            // Attack lists update.
+            if( u_dist > 0 ){
+
+                if( l_dist > 0 ){
+
+                    this->atk_list_by_W[ ind_b + chess::BOARDWIDTH - 1 ].push_back( ind_b );
+
+                    if( contact_dist_arr[5] == 1 ){
+
+
+                    }
+
+                }
+
+                if( r_dist > 0 ){
+
+                    this->atk_list_by_W[ ind_b + chess::BOARDWIDTH + 1 ].push_back( ind_b );
+
+                    if( contact_dist_arr[4] == 1 ){
+
+                    }
+
+                }
+
+            }
+
+        }else{
+
+            // Valid movement add.
+            if( d_dist > 0 && ( contact_dist_arr[1] > 1 || contact_dist_arr[1] == 0 ) ){
+                this->valid_B_moves_map[ind_b].push_back( ind_b - chess::BOARDWIDTH );
+                // Double pawn jump scenario.
+                if( tar_pce.not_moved && ( contact_dist_arr[1] > 2 || contact_dist_arr[1] == 0 ) ){
+                    this->valid_B_moves_map[ind_b].push_back( ind_b - 2*chess::BOARDWIDTH );
+                }
+
+            }
+
+        }
+
+    }
+
+    if( tar_pce.type == CHS_PIECE_TYPE::KING ){
+
+    }
+
+    if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
+
+    }
+
+    if( tar_pce.type == CHS_PIECE_TYPE::ROOK || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
+
+    }
+
+
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Ending Position POV Update (Line Directions)
+// ---------------------------------------------------------------------- >>>>>
 
     /* 
     Check all 8 directional potential first contacts.
@@ -6491,7 +6574,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 }
 
                 // Move to next line scan without reverse scan (Since a piece was 
-                // block the lane beforehand).
+                // blocking the lane beforehand).
                 continue;
 
             }
