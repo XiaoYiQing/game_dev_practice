@@ -6098,7 +6098,19 @@ that may need their list of possible plays updated with this newly occupied squa
     4 = NE, 5 = NW, 6 = SW, 7 = SE
     */
     int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
     int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    /*
+    Linear index step equivalent along each of the cardinal directions.
+
+    The directional indices:
+    0 = N,  1 = S,  2 = W,  3 = E,
+    4 = NE, 5 = NW, 6 = SW, 7 = SE
+    */
+    int direc_unit_step[8] = {
+        chess::BOARDWIDTH, -chess::BOARDWIDTH, -1, 1,
+        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, - chess::BOARDWIDTH - 1, -chess::BOARDWIDTH + 1
+    };
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
 
@@ -6282,11 +6294,80 @@ that may need their list of possible plays updated with this newly occupied squa
         }
 
     }
-
+    
     if( tar_pce.type == CHS_PIECE_TYPE::KING ){
+
+        // New occupant is white king.
+        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+            
+            // Parse through each of the eight directions.
+            for( unsigned int t = 0; t < 8; t++ ){
+
+                // Not at end of current direction.
+                if( rev_scan_dist_arr[t] > 0 ){
+
+                    // Immediate neighbor square along current direction is under king influence.
+                    this->atk_list_by_W[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+
+                    // Immediate contact along current direction.
+                    if( contact_dist_arr[t] == 1 ){
+                        
+                        // Immediate contact is black.
+                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                            CHS_PIECE_COLOR::BLACK )
+                        {
+                            this->valid_W_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                        }
+
+                    // No-immediate contact along current direction.
+                    }else{
+                        this->valid_W_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                    }
+
+                }
+
+            }
+
+        // New occupant is black king.
+        }else{
+
+            // Parse through each of the eight directions.
+            for( unsigned int t = 0; t < 8; t++ ){
+
+                // Not at end of current direction.
+                if( rev_scan_dist_arr[t] > 0 ){
+
+                    // Immediate neighbor square along current direction is under king influence.
+                    this->atk_list_by_B[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+
+                    // Immediate contact along current direction.
+                    if( contact_dist_arr[t] == 1 ){
+
+                        // Immediate contact is white.
+                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                            CHS_PIECE_COLOR::WHITE )
+                        {
+                            this->valid_B_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                        }
+
+                    // No-immediate contact along current direction.
+                    }else{
+                        this->valid_B_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                    }
+
+                }
+
+            }
+
+        }
 
     }
 
+    rev_scan_dist_arr;
+    direc_unit_step;
+    contact_dist_arr;
+    contact_ind_arr;
+    
     if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
 
     }
