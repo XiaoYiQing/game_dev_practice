@@ -5661,7 +5661,7 @@ void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
     int l_dist = j_b;
 
     // Temporary variable to be resued in multiple instances.
-    int ind_z, ind_t;
+    int tmp_int, ind_z, ind_t;
     pair<int,int> sub_z;
     // Temporary int pair variable to be resued in multiple instances.
     pair<int,int> ij_tmp;
@@ -6363,15 +6363,89 @@ that may need their list of possible plays updated with this newly occupied squa
 
     }
 
+
+    if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
+
+        // New occupant is white bishop/queen.
+        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+            // Parse through each of the diagonal directions.
+            for( unsigned int t = 4; t < 8; t++ ){
+
+                // Offset for number of free squares till contact.
+                int offset = 0;
+
+                // First contact point parse.
+                if( contact_dist_arr[t] != 0 ){
+                    
+                    // Offset increment.
+                    offset++;
+                    // Linear index coordinate of first contact.
+                    tmp_int = chess::sub2ind( contact_ind_arr[t] );
+                    // Contact point influence by occupant update.
+                    this->atk_list_by_W[ tmp_int ].push_back( ind_b );
+                    if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                        CHS_PIECE_COLOR::BLACK )
+                    {
+                        this->valid_W_atks_map[ ind_b ].push_back( tmp_int );
+                    }
+                }
+
+                // Initialize scanning linear index.
+                tmp_int = ind_b;
+                // Parse through remaining free squares till first contact of board end.
+                for( unsigned int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
+                    tmp_int += direc_unit_step[t];
+                    this->atk_list_by_W[ tmp_int ].push_back( ind_b );
+                    this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
+                }
+
+            }
+
+        // New occupant is black bishop/queen.
+        }else{
+
+            // Parse through each of the diagonal directions.
+            for( unsigned int t = 4; t < 8; t++ ){
+
+                // Offset for number of free squares till contact.
+                int offset = 0;
+
+                // First contact point parse.
+                if( contact_dist_arr[t] != 0 ){
+                    
+                    // Offset increment.
+                    offset++;
+                    // Linear index coordinate of first contact.
+                    tmp_int = chess::sub2ind( contact_ind_arr[t] );
+                    // Contact point influence by occupant update.
+                    this->atk_list_by_B[ tmp_int ].push_back( ind_b );
+                    if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                        CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ ind_b ].push_back( tmp_int );
+                    }
+                }
+
+                // Initialize scanning linear index.
+                tmp_int = ind_b;
+                // Parse through remaining free squares till first contact of board end.
+                for( unsigned int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
+                    tmp_int += direc_unit_step[t];
+                    this->atk_list_by_B[ tmp_int ].push_back( ind_b );
+                    this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
+                }
+
+            }
+
+        }
+
+    }
+
     rev_scan_dist_arr;
     direc_unit_step;
     contact_dist_arr;
     contact_ind_arr;
-    
-    if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
-
-    }
-
     if( tar_pce.type == CHS_PIECE_TYPE::ROOK || tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
 
     }
