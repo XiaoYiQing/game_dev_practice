@@ -6183,276 +6183,7 @@ that may need their list of possible plays updated with this newly occupied squa
 // ---------------------------------------------------------------------- <<<<<
 
 
-// TODO: Please test this
-// ---------------------------------------------------------------------- >>>>>
-//      Line Based New Occupant Influence Update
-// ---------------------------------------------------------------------- >>>>>
 
-    if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
-
-        // New occupant is white pawn.
-        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-
-            // Valid pawn movement add.
-            if( u_dist > 0 && ( contact_dist_arr[0] > 1 || contact_dist_arr[0] == 0 ) ){
-                this->valid_W_moves_map[ind_b].push_back( ind_b + chess::BOARDWIDTH );
-                // Double pawn jump scenario.
-                if( tar_pce.not_moved && ( contact_dist_arr[0] > 2 || contact_dist_arr[0] == 0 ) ){
-                    this->valid_W_moves_map[ind_b].push_back( ind_b + 2*chess::BOARDWIDTH );
-                }
-            }
-
-            // Not on last row.
-            if( u_dist > 0 ){
-
-                // Not on last row and not on leftmost column.
-                if( l_dist > 0 ){
-
-                    // North-West square is influenced by current white pawn.
-                    this->atk_list_by_W[ ind_b + chess::BOARDWIDTH - 1 ].push_back( ind_b );
-
-                    // Immediate contact on North-West diagonal is black.
-                    if( contact_dist_arr[5] == 1 &&
-                        this->CHS_board[i_b+1][j_b-1].color == CHS_PIECE_COLOR::BLACK )
-                    {
-                        this->valid_W_atks_map[ ind_b ].push_back( ind_b + chess::BOARDWIDTH - 1 );
-                    }
-
-                }
-
-                // Not on last row and not on rightmost column.
-                if( r_dist > 0 ){
-
-                    // North-East square is influenced by current white pawn.
-                    this->atk_list_by_W[ ind_b + chess::BOARDWIDTH + 1 ].push_back( ind_b );
-
-                    // Immediate contact on North-East diagonal is black.
-                    if( contact_dist_arr[4] == 1 && 
-                        this->CHS_board[i_b+1][j_b+1].color == CHS_PIECE_COLOR::BLACK )
-                    {    
-                        this->valid_W_atks_map[ ind_b ].push_back( ind_b + chess::BOARDWIDTH + 1 );
-                    }
-
-                }
-
-            }
-
-        // New occupant is black pawn.
-        }else{
-
-            // Valid pawn movement add.
-            if( d_dist > 0 && ( contact_dist_arr[1] > 1 || contact_dist_arr[1] == 0 ) ){
-                this->valid_B_moves_map[ind_b].push_back( ind_b - chess::BOARDWIDTH );
-                // Double pawn jump scenario.
-                if( tar_pce.not_moved && ( contact_dist_arr[1] > 2 || contact_dist_arr[1] == 0 ) ){
-                    this->valid_B_moves_map[ind_b].push_back( ind_b - 2*chess::BOARDWIDTH );
-                }
-
-            }
-
-            // Not on first row.
-            if( d_dist > 0 ){
-
-                // Not on first row, not on leftmost column.
-                if( l_dist > 0 ){
-
-                    // South-West square is influenced by current black pawn.
-                    this->atk_list_by_B[ ind_b - chess::BOARDWIDTH - 1 ].push_back( ind_b );
-
-                    // Immediate contact on South-West diagonal is white.
-                    if( contact_dist_arr[5] == 1 &&
-                        this->CHS_board[i_b-1][j_b-1].color == CHS_PIECE_COLOR::WHITE )
-                    {
-                        this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH - 1 );
-                    }
-
-                }
-
-                // Not on first row and not on rightmost column.
-                if( r_dist > 0 ){
-
-                    // South-East square is influenced by current black pawn.
-                    this->atk_list_by_B[ ind_b - chess::BOARDWIDTH + 1 ].push_back( ind_b );
-
-                    // Immediate contact on South-East diagonal is white.
-                    if( contact_dist_arr[5] == 1 &&
-                        this->CHS_board[i_b-1][j_b+1].color == CHS_PIECE_COLOR::WHITE )
-                    {
-                        this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH + 1 );
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-    
-    if( tar_pce.type == CHS_PIECE_TYPE::KING ){
-
-        // New occupant is white king.
-        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-            
-            // Parse through each of the eight directions.
-            for( unsigned int t = 0; t < 8; t++ ){
-
-                // Not at end of current direction.
-                if( rev_scan_dist_arr[t] > 0 ){
-
-                    // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_W[ ind_b + direc_unit_step[t] ].push_back( ind_b );
-
-                    // Immediate contact along current direction.
-                    if( contact_dist_arr[t] == 1 ){
-                        
-                        // Immediate contact is black.
-                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                            CHS_PIECE_COLOR::BLACK )
-                        {
-                            this->valid_W_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
-                        }
-
-                    // No-immediate contact along current direction.
-                    }else{
-                        this->valid_W_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
-                    }
-
-                }
-
-            }
-
-        // New occupant is black king.
-        }else{
-
-            // Parse through each of the eight directions.
-            for( unsigned int t = 0; t < 8; t++ ){
-
-                // Not at end of current direction.
-                if( rev_scan_dist_arr[t] > 0 ){
-
-                    // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_B[ ind_b + direc_unit_step[t] ].push_back( ind_b );
-
-                    // Immediate contact along current direction.
-                    if( contact_dist_arr[t] == 1 ){
-
-                        // Immediate contact is white.
-                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                            CHS_PIECE_COLOR::WHITE )
-                        {
-                            this->valid_B_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
-                        }
-
-                    // No-immediate contact along current direction.
-                    }else{
-                        this->valid_B_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-    rev_scan_dist_arr;
-    direc_unit_step;
-    contact_dist_arr;
-    contact_ind_arr;
-    if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::ROOK || 
-        tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
-
-        unsigned int t_min = 0;  unsigned int t_max = 0;
-        if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
-            t_min = 4;  t_max = 8;
-        }else if( tar_pce.type == CHS_PIECE_TYPE::ROOK ){
-            t_min = 0;  t_max = 4;
-        }else{
-            t_min = 0;  t_max = 8;
-        }
-
-
-        // New occupant is white bishop/queen.
-        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-
-            // Parse through each of the diagonal directions.
-            for( unsigned int t = t_min; t < t_max; t++ ){
-
-                // Offset for number of free squares till contact.
-                int offset = 0;
-
-                // First contact point parse.
-                if( contact_dist_arr[t] != 0 ){
-                    
-                    // Offset increment.
-                    offset++;
-                    // Linear index coordinate of first contact.
-                    tmp_int = chess::sub2ind( contact_ind_arr[t] );
-                    // Contact point influence by occupant update.
-                    this->atk_list_by_W[ tmp_int ].push_back( ind_b );
-                    if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                        CHS_PIECE_COLOR::BLACK )
-                    {
-                        this->valid_W_atks_map[ ind_b ].push_back( tmp_int );
-                    }
-
-                }
-
-                // Initialize scanning linear index.
-                tmp_int = ind_b;
-                // Parse through remaining free squares till first contact of board end.
-                for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
-                    tmp_int += direc_unit_step[t];
-                    this->atk_list_by_W[ tmp_int ].push_back( ind_b );
-                    this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
-                }
-
-            }
-
-        // New occupant is black bishop/queen.
-        }else{
-
-            // Parse through each of the diagonal directions.
-            for( unsigned int t = t_min; t < t_max; t++ ){
-
-                // Offset for number of free squares till contact.
-                int offset = 0;
-
-                // First contact point parse.
-                if( contact_dist_arr[t] != 0 ){
-                    
-                    // Offset increment.
-                    offset++;
-                    // Linear index coordinate of first contact.
-                    tmp_int = chess::sub2ind( contact_ind_arr[t] );
-                    // Contact point influence by occupant update.
-                    this->atk_list_by_B[ tmp_int ].push_back( ind_b );
-                    if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                        CHS_PIECE_COLOR::WHITE )
-                    {
-                        this->valid_B_atks_map[ ind_b ].push_back( tmp_int );
-                    }
-                }
-
-                // Initialize scanning linear index.
-                tmp_int = ind_b;
-                // Parse through remaining free squares till first contact of board end.
-                for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
-                    tmp_int += direc_unit_step[t];
-                    this->atk_list_by_B[ tmp_int ].push_back( ind_b );
-                    this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
-                }
-
-            }
-
-        }
-
-    }
-
-
-// ---------------------------------------------------------------------- <<<<<
 
 
 // ---------------------------------------------------------------------- >>>>>
@@ -6925,6 +6656,273 @@ that may need their list of possible plays updated with this newly occupied squa
         }
 
     }
+
+// ---------------------------------------------------------------------- <<<<<
+
+// TODO: Please test this
+// ---------------------------------------------------------------------- >>>>>
+//      Line Based New Occupant Influence Update
+// ---------------------------------------------------------------------- >>>>>
+
+    if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+
+        // New occupant is white pawn.
+        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+            // Valid pawn movement add.
+            if( u_dist > 0 && ( contact_dist_arr[0] > 1 || contact_dist_arr[0] == 0 ) ){
+                this->valid_W_moves_map[ind_b].push_back( ind_b + chess::BOARDWIDTH );
+                // Double pawn jump scenario.
+                if( tar_pce.not_moved && ( contact_dist_arr[0] > 2 || contact_dist_arr[0] == 0 ) ){
+                    this->valid_W_moves_map[ind_b].push_back( ind_b + 2*chess::BOARDWIDTH );
+                }
+            }
+
+            // Not on last row.
+            if( u_dist > 0 ){
+
+                // Not on last row and not on leftmost column.
+                if( l_dist > 0 ){
+
+                    // North-West square is influenced by current white pawn.
+                    this->atk_list_by_W[ ind_b + chess::BOARDWIDTH - 1 ].push_back( ind_b );
+
+                    // Immediate contact on North-West diagonal is black.
+                    if( contact_dist_arr[5] == 1 &&
+                        this->CHS_board[i_b+1][j_b-1].color == CHS_PIECE_COLOR::BLACK )
+                    {
+                        this->valid_W_atks_map[ ind_b ].push_back( ind_b + chess::BOARDWIDTH - 1 );
+                    }
+
+                }
+
+                // Not on last row and not on rightmost column.
+                if( r_dist > 0 ){
+
+                    // North-East square is influenced by current white pawn.
+                    this->atk_list_by_W[ ind_b + chess::BOARDWIDTH + 1 ].push_back( ind_b );
+
+                    // Immediate contact on North-East diagonal is black.
+                    if( contact_dist_arr[4] == 1 && 
+                        this->CHS_board[i_b+1][j_b+1].color == CHS_PIECE_COLOR::BLACK )
+                    {    
+                        this->valid_W_atks_map[ ind_b ].push_back( ind_b + chess::BOARDWIDTH + 1 );
+                    }
+
+                }
+
+            }
+
+        // New occupant is black pawn.
+        }else{
+
+            // Valid pawn movement add.
+            if( d_dist > 0 && ( contact_dist_arr[1] > 1 || contact_dist_arr[1] == 0 ) ){
+                this->valid_B_moves_map[ind_b].push_back( ind_b - chess::BOARDWIDTH );
+                // Double pawn jump scenario.
+                if( tar_pce.not_moved && ( contact_dist_arr[1] > 2 || contact_dist_arr[1] == 0 ) ){
+                    this->valid_B_moves_map[ind_b].push_back( ind_b - 2*chess::BOARDWIDTH );
+                }
+
+            }
+
+            // Not on first row.
+            if( d_dist > 0 ){
+
+                // Not on first row, not on leftmost column.
+                if( l_dist > 0 ){
+
+                    // South-West square is influenced by current black pawn.
+                    this->atk_list_by_B[ ind_b - chess::BOARDWIDTH - 1 ].push_back( ind_b );
+
+                    // Immediate contact on South-West diagonal is white.
+                    if( contact_dist_arr[5] == 1 &&
+                        this->CHS_board[i_b-1][j_b-1].color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH - 1 );
+                    }
+
+                }
+
+                // Not on first row and not on rightmost column.
+                if( r_dist > 0 ){
+
+                    // South-East square is influenced by current black pawn.
+                    this->atk_list_by_B[ ind_b - chess::BOARDWIDTH + 1 ].push_back( ind_b );
+
+                    // Immediate contact on South-East diagonal is white.
+                    if( contact_dist_arr[5] == 1 &&
+                        this->CHS_board[i_b-1][j_b+1].color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH + 1 );
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+    
+    if( tar_pce.type == CHS_PIECE_TYPE::KING ){
+
+        // New occupant is white king.
+        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+            
+            // Parse through each of the eight directions.
+            for( unsigned int t = 0; t < 8; t++ ){
+
+                // Not at end of current direction.
+                if( rev_scan_dist_arr[t] > 0 ){
+
+                    // Immediate neighbor square along current direction is under king influence.
+                    this->atk_list_by_W[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+
+                    // Immediate contact along current direction.
+                    if( contact_dist_arr[t] == 1 ){
+                        
+                        // Immediate contact is black.
+                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                            CHS_PIECE_COLOR::BLACK )
+                        {
+                            this->valid_W_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                        }
+
+                    // No-immediate contact along current direction.
+                    }else{
+                        this->valid_W_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                    }
+
+                }
+
+            }
+
+        // New occupant is black king.
+        }else{
+
+            // Parse through each of the eight directions.
+            for( unsigned int t = 0; t < 8; t++ ){
+
+                // Not at end of current direction.
+                if( rev_scan_dist_arr[t] > 0 ){
+
+                    // Immediate neighbor square along current direction is under king influence.
+                    this->atk_list_by_B[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+
+                    // Immediate contact along current direction.
+                    if( contact_dist_arr[t] == 1 ){
+
+                        // Immediate contact is white.
+                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                            CHS_PIECE_COLOR::WHITE )
+                        {
+                            this->valid_B_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                        }
+
+                    // No-immediate contact along current direction.
+                    }else{
+                        this->valid_B_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::ROOK || 
+        tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
+
+        unsigned int t_min = 0;  unsigned int t_max = 0;
+        if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
+            t_min = 4;  t_max = 8;
+        }else if( tar_pce.type == CHS_PIECE_TYPE::ROOK ){
+            t_min = 0;  t_max = 4;
+        }else{
+            t_min = 0;  t_max = 8;
+        }
+
+
+        // New occupant is white bishop/queen.
+        if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+            // Parse through each of the diagonal directions.
+            for( unsigned int t = t_min; t < t_max; t++ ){
+
+                // Offset for number of free squares till contact.
+                int offset = 0;
+
+                // First contact point parse.
+                if( contact_dist_arr[t] != 0 ){
+                    
+                    // Offset increment.
+                    offset++;
+                    // Linear index coordinate of first contact.
+                    tmp_int = chess::sub2ind( contact_ind_arr[t] );
+                    // Contact point influence by occupant update.
+                    this->atk_list_by_W[ tmp_int ].push_back( ind_b );
+                    if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                        CHS_PIECE_COLOR::BLACK )
+                    {
+                        this->valid_W_atks_map[ ind_b ].push_back( tmp_int );
+                    }
+
+                }
+
+                // Initialize scanning linear index.
+                tmp_int = ind_b;
+                // Parse through remaining free squares till first contact of board end.
+                for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
+                    tmp_int += direc_unit_step[t];
+                    this->atk_list_by_W[ tmp_int ].push_back( ind_b );
+                    this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
+                }
+
+            }
+
+        // New occupant is black bishop/queen.
+        }else{
+
+            // Parse through each of the diagonal directions.
+            for( unsigned int t = t_min; t < t_max; t++ ){
+
+                // Offset for number of free squares till contact.
+                int offset = 0;
+
+                // First contact point parse.
+                if( contact_dist_arr[t] != 0 ){
+                    
+                    // Offset increment.
+                    offset++;
+                    // Linear index coordinate of first contact.
+                    tmp_int = chess::sub2ind( contact_ind_arr[t] );
+                    // Contact point influence by occupant update.
+                    this->atk_list_by_B[ tmp_int ].push_back( ind_b );
+                    if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
+                        CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ ind_b ].push_back( tmp_int );
+                    }
+                }
+
+                // Initialize scanning linear index.
+                tmp_int = ind_b;
+                // Parse through remaining free squares till first contact of board end.
+                for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
+                    tmp_int += direc_unit_step[t];
+                    this->atk_list_by_B[ tmp_int ].push_back( ind_b );
+                    this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
+                }
+
+            }
+
+        }
+
+    }
+
 
 // ---------------------------------------------------------------------- <<<<<
 
