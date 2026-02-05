@@ -6460,7 +6460,7 @@ that may need their list of possible plays updated with this newly occupied squa
             this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ||
             this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP )
         {
-            
+
             // If occupied square was NOT empty before.
             if( prev_pce.type != CHS_PIECE_TYPE::NO_P ){
 
@@ -6514,20 +6514,32 @@ that may need their list of possible plays updated with this newly occupied squa
             // From this point on, we are in the scenario where the occupied square was 
             // empty before the new occupant arrived.
 
-            // New occupant is white.
-            if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+            // Target square was empty, scan piece is black.
+            if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
 
-                // Target square was empty, new occupant is white, scan piece is black.
-                if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
+                // Remove valid black move to previously empty square.
+                this->valid_B_moves_map[ ind_z ].erase(
+                    std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                    this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
+                    this->valid_B_moves_map[ ind_z ].end() );
+
+                // Target square was empty, scan piece is black, new occupant is white.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
                     // Add black attack option of new white occupant.
                     this->valid_B_atks_map[ ind_z ].push_back( ind_b );
                 }
-            
-            // New occupant is black.
+
+            // Target square was empty, scan piece is white.
             }else{
 
-                // Target square was empty, new occupant is black, scan piece is white.
-                if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+                // Remove valid white move to previously empty square.
+                this->valid_W_moves_map[ ind_z ].erase(
+                    std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                    this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
+                    this->valid_W_moves_map[ ind_z ].end() );
+
+                // Target square was empty, scan piece is white, new occupant is black.
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
                     // Add white attack option of new black occupant.
                     this->valid_W_atks_map[ ind_z ].push_back( ind_b );
                 }
@@ -6555,19 +6567,19 @@ that may need their list of possible plays updated with this newly occupied squa
                 rev_inc_cnt = rev_scan_dist_arr[2];
                 break;
             case 4:     // NE -> SW reverse scan.
-                rev_incrm = chess::BOARDWIDTH + 1;
+                rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
                 rev_inc_cnt = rev_scan_dist_arr[6];
                 break; 
             case 5:     // NW -> SE reverse scan.
-                rev_incrm = chess::BOARDWIDTH - 1;
+                rev_incrm = -1 * (int) chess::BOARDWIDTH + 1;
                 rev_inc_cnt = rev_scan_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
-                rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
+                rev_incrm = chess::BOARDWIDTH + 1;
                 rev_inc_cnt = rev_scan_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
-                rev_incrm = - (int) chess::BOARDWIDTH + 1;
+                rev_incrm = chess::BOARDWIDTH - 1;
                 rev_inc_cnt = rev_scan_dist_arr[5];
                 break;
             default:
@@ -6649,6 +6661,8 @@ that may need their list of possible plays updated with this newly occupied squa
                     }
                 }
             }
+
+            
 
             // Current scan is complete.
             continue;

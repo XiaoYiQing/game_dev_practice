@@ -5091,6 +5091,8 @@ void tests::chess_upd_pre_legal_tests_occ(){
             valid_W_moves_map_aft );
     }
 
+    POV_valid_b_moves = {  };
+
     if( test_bool ){
         cout << "chess upd_pre_legal_plays_occ new piece POV influence changes test: passed!" << endl;
     }else{
