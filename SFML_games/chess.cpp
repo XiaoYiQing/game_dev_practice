@@ -5894,14 +5894,6 @@ void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
 
 // ---------------------------------------------------------------------- <<<<<
 
-// ---------------------------------------------------------------------- >>>>>
-//      Addition of Points Affected by Target Piece
-// ---------------------------------------------------------------------- >>>>>
-
-    // TODO: make use of your standard pre-legal update function.
-
-// ---------------------------------------------------------------------- <<<<<
-
 
 
 // ---------------------------------------------------------------------- >>>>>
@@ -6108,8 +6100,9 @@ that may need their list of possible plays updated with this newly occupied squa
     4 = NE, 5 = NW, 6 = SW, 7 = SE
     */
     int direc_unit_step[8] = {
-        chess::BOARDWIDTH, -chess::BOARDWIDTH, -1, 1,
-        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, - chess::BOARDWIDTH - 1, -chess::BOARDWIDTH + 1
+        chess::BOARDWIDTH, -1 * (int) chess::BOARDWIDTH, -1, 1,
+        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, -1 * (int) chess::BOARDWIDTH - 1, 
+        -1 * (int) chess::BOARDWIDTH + 1
     };
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
@@ -6190,6 +6183,7 @@ that may need their list of possible plays updated with this newly occupied squa
 // ---------------------------------------------------------------------- <<<<<
 
 
+// TODO: Please test this
 // ---------------------------------------------------------------------- >>>>>
 //      Line Based New Occupant Influence Update
 // ---------------------------------------------------------------------- >>>>>
@@ -6370,7 +6364,7 @@ that may need their list of possible plays updated with this newly occupied squa
     if( tar_pce.type == CHS_PIECE_TYPE::BISHOP || tar_pce.type == CHS_PIECE_TYPE::ROOK || 
         tar_pce.type == CHS_PIECE_TYPE::QUEEN ){
 
-        int t_min = 0;  int t_max = 0;
+        unsigned int t_min = 0;  unsigned int t_max = 0;
         if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
             t_min = 4;  t_max = 8;
         }else if( tar_pce.type == CHS_PIECE_TYPE::ROOK ){
@@ -6409,7 +6403,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 // Initialize scanning linear index.
                 tmp_int = ind_b;
                 // Parse through remaining free squares till first contact of board end.
-                for( unsigned int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
+                for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
                     tmp_int += direc_unit_step[t];
                     this->atk_list_by_W[ tmp_int ].push_back( ind_b );
                     this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
@@ -6445,7 +6439,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 // Initialize scanning linear index.
                 tmp_int = ind_b;
                 // Parse through remaining free squares till first contact of board end.
-                for( unsigned int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
+                for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
                     tmp_int += direc_unit_step[t];
                     this->atk_list_by_B[ tmp_int ].push_back( ind_b );
                     this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
