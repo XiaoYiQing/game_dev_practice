@@ -5017,7 +5017,7 @@ void tests::chess_upd_pre_legal_tests_occ(){
 
 
 // ---------------------------------------------------------------------- >>>>>
-//      Initial Empty Square Occupancy Test
+//      Initially Empty Square Occupancy Test (Recto)
 // ---------------------------------------------------------------------- >>>>>
 
     test_bool = true;
@@ -5048,7 +5048,6 @@ void tests::chess_upd_pre_legal_tests_occ(){
 
     myGame.upd_pre_legal_plays_occ( chess::sub2ind( 2, 4 ), emp_pce );
     
-    myGame.printBoard();
 
     // Obtain the pre-legal play lists after update.
     atk_list_by_W_aft = myGame.getAtk_list_by_W();
@@ -5057,14 +5056,6 @@ void tests::chess_upd_pre_legal_tests_occ(){
     valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
     valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
     valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
-
-
-    POV_atk_by_w_moves;
-    POV_atk_by_b_moves;
-    POV_valid_w_moves;
-    POV_valid_b_moves;
-    POV_valid_w_atks;
-    POV_valid_b_atks;
 
     // Identical attacks by w.
     POV_atk_by_w_moves = { {11,20}, {34,20}, {44,20} };
@@ -5108,7 +5099,7 @@ void tests::chess_upd_pre_legal_tests_occ(){
         test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
             valid_W_atks_map_aft );
     }
-    POV_valid_b_atks = { {19,20}, {30,20}, {47,20} };
+    POV_valid_b_atks = { {19,20}, {22,20}, {30,20}, {47,20} };
     for( pair<int,int> b_atk_z : POV_valid_b_atks ){
         test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
             valid_B_atks_map_bef );
@@ -5132,9 +5123,123 @@ void tests::chess_upd_pre_legal_tests_occ(){
     }
 
     if( test_bool ){
-        cout << "chess upd_pre_legal_plays_occ new piece POV influence changes test: passed!" << endl;
+        cout << "chess upd_pre_legal_plays_occ new piece POV influence changes (Recto) test: passed!" << endl;
     }else{
-        cout << "chess upd_pre_legal_plays_occ new piece POV influence changes test: failed!" << endl;
+        cout << "chess upd_pre_legal_plays_occ new piece POV influence changes (Recto) test: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initially Empty Square Occupancy Test (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame.clearBoard();
+    
+    myGame.set_piece_at( 0, 0, b_king );
+    myGame.set_piece_at( 2, 3, w_king );
+
+    myGame.set_piece_at( 2, 6, w_rook );
+    myGame.set_piece_at( 3, 6, w_knight );
+    myGame.set_piece_at( 4, 2, b_bishop );
+    myGame.set_piece_at( 5, 4, b_rook );
+    myGame.set_piece_at( 5, 7, w_queen );
+
+    // Obtain the pre-legal play lists before update.
+    atk_list_by_W_bef = myGame.getAtk_list_by_W();
+    atk_list_by_B_bef = myGame.getAtk_list_by_B();
+    valid_W_moves_map_bef = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_bef = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
+    
+    // Set the update flag to always.
+    myGame.setForce_lists_upd(true);
+    // Perform a "manual" play by displacing the pawn without updating.
+    myGame.set_piece_at_NO_UPD( 2, 4, b_knight );
+
+    myGame.upd_pre_legal_plays_occ( chess::sub2ind( 2, 4 ), emp_pce );
+    
+    myGame.printBoard();
+
+    // Obtain the pre-legal play lists after update.
+    atk_list_by_W_aft = myGame.getAtk_list_by_W();
+    atk_list_by_B_aft = myGame.getAtk_list_by_B();
+    valid_W_moves_map_aft = myGame.get_valid_W_moves_map();
+    valid_B_moves_map_aft = myGame.get_valid_B_moves_map();
+    valid_W_atks_map_aft = myGame.get_valid_W_atks_map();
+    valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
+
+    // Identical attacks by b.
+    POV_atk_by_b_moves = { {34,20}, {44,20} };
+    for( pair<int,int> b_atk_z : POV_atk_by_b_moves ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+            atk_list_by_B_bef );
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+            atk_list_by_B_aft );
+    }
+    // Blocked attacks by b.
+    POV_atk_by_b_moves = { {34,13}, {34,6}, {44,12}, {44,4} };
+    for( pair<int,int> b_atk_z : POV_atk_by_b_moves ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+            atk_list_by_B_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+            atk_list_by_B_aft );
+    }
+
+    // Identical attacks by w.
+    POV_atk_by_w_moves = { {19,20}, {30,20}, {47,20} };
+    for( pair<int,int> w_atk_z : POV_atk_by_w_moves ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+            atk_list_by_W_bef );
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+            atk_list_by_W_aft );
+    }
+    // Blocked attacks by w.
+    POV_atk_by_w_moves = { {22,19}, {47,11}, {47,2} };
+    for( pair<int,int> w_atk_z : POV_atk_by_w_moves ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+            atk_list_by_W_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+            atk_list_by_W_aft );
+    }
+
+    POV_valid_b_atks = { {34,20}, {44,20} };
+    for( pair<int,int> b_atk_z : POV_valid_b_atks ){
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+            valid_B_atks_map_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+            valid_B_atks_map_aft );
+    }
+    POV_valid_w_atks = { {19,20}, {22,20}, {30,20}, {47,20} };
+    for( pair<int,int> w_atk_z : POV_valid_w_atks ){
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+            valid_W_atks_map_bef );
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+            valid_W_atks_map_aft );
+    }
+
+    POV_valid_b_moves = { {34,20}, {34,13}, {34,6}, {44,20}, {44,12}, {44,4} };
+    for( pair<int,int> b_move_z : POV_valid_b_moves ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
+            valid_B_moves_map_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
+            valid_B_moves_map_aft );
+    }
+    POV_valid_w_moves = { {19,20}, {22,20}, {30,20}, {47,20}, {47,11}, {47,2} };
+    for( pair<int,int> w_move_z : POV_valid_w_moves ){
+        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
+            valid_W_moves_map_bef );
+        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
+            valid_W_moves_map_aft );
+    }
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays_occ new piece POV influence changes (Verso) test: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays_occ new piece POV influence changes (Verso) test: failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
