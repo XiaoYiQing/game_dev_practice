@@ -4240,6 +4240,8 @@ void tests::chess_upd_pre_legal_tests_emp(){
     auto valid_W_atks_map_bef = myGame.get_valid_W_atks_map();
     auto valid_B_atks_map_bef = myGame.get_valid_B_atks_map();
     
+    myGame.printBoard();
+
     // Set the update flag to always.
     myGame.setForce_lists_upd(true);
     // Perform a "manual" play by displacing the pawn without updating.
@@ -4248,6 +4250,7 @@ void tests::chess_upd_pre_legal_tests_emp(){
 
     myGame.upd_pre_legal_plays_emp( chess::sub2ind( 1, 3 ), w_pawn );
 
+    myGame.printBoard();
     
     // Obtain the pre-legal play lists after update.
     auto atk_list_by_W_aft = myGame.getAtk_list_by_W();
@@ -4833,13 +4836,6 @@ void tests::chess_upd_pre_legal_tests_emp(){
 // ---------------------------------------------------------------------- <<<<<
 
 
-// ---------------------------------------------------------------------- >>>>>
-//      Initial Position Pawn POV Special Updates
-// ---------------------------------------------------------------------- >>>>>
-
-    
-
-// ---------------------------------------------------------------------- <<<<<
 
 }
 

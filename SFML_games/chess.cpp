@@ -5104,16 +5104,16 @@ void chess::upd_pre_legal_plays_emp( int ind_a, chs_piece tar_pce ){
                     tmp_ind_arr[tmp_arr_lim++] = ind_a + chess::BOARDWIDTH + 1;
                 }
             }
-            // Possible en-passant attacks on the left.
-            if( j_a > 0 && this->CHS_board[i_a][j_a-1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_a][j_a-1].color != tar_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_a - 1;
-            }
-            // Possible en-passant attacks on the right.
-            if( j_a < chess::BOARDWIDTH - 1 && this->CHS_board[i_a][j_a+1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_a][j_a+1].color != tar_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_a + 1;
-            }
+            // // Possible en-passant attacks on the left.
+            // if( j_a > 0 && this->CHS_board[i_a][j_a-1].type == CHS_PIECE_TYPE::PAWN &&
+            //     this->CHS_board[i_a][j_a-1].color != tar_pce.color ){
+            //     tmp_ind_arr[tmp_arr_lim++] = ind_a - 1;
+            // }
+            // // Possible en-passant attacks on the right.
+            // if( j_a < chess::BOARDWIDTH - 1 && this->CHS_board[i_a][j_a+1].type == CHS_PIECE_TYPE::PAWN &&
+            //     this->CHS_board[i_a][j_a+1].color != tar_pce.color ){
+            //     tmp_ind_arr[tmp_arr_lim++] = ind_a + 1;
+            // }
 
         }
 
