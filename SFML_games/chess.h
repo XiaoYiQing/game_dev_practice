@@ -793,7 +793,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \note The given play is not validated.
      */
-    void play_and_pre_legal_upds( chs_move tar_play );
+    bool play_and_pre_legal_upds( int i_bef, int j_bef, int i_aft, int j_aft );
 
     /**
      * Perform updates on the attack lists and the valid moves and attacks all in
