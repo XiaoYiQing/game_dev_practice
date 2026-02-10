@@ -787,12 +787,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_pre_legal_plays();
     
     /**
-     * Perform updates on the attack lists and the valid moves and attacks all in
-     * one go in a precise manner given what is the change that occured on the board.
+     * Perform a play WHILE performing updates on the attack lists and the valid moves 
+     * and attacks all in one go in a precise manner given what is the change that 
+     * occured on the board.
      * 
      * \note The given play is not validated.
      */
-    void upd_pre_legal_plays( chs_move tar_play );
+    void play_and_pre_legal_upds( chs_move tar_play );
 
     /**
      * Perform updates on the attack lists and the valid moves and attacks all in

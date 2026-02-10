@@ -4865,7 +4865,7 @@ void chess::upd_pre_legal_plays(){
 }
 
 
-void chess::upd_pre_legal_plays( chs_move tar_play ){
+void chess::play_and_pre_legal_upds( chs_move tar_play ){
 
     // 2D and linear indexing prep.
     int i_a = tar_play.pt_a.first;
@@ -4886,7 +4886,6 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
     this->is_valid_moves_upd = false;
     this->is_valid_atks_upd = false;
 
-
     
     int sq_cnt = chess::BOARDHEIGHT * chess::BOARDWIDTH;
     int u_dist = BOARDHEIGHT - 1 - i_a;
@@ -4904,22 +4903,21 @@ void chess::upd_pre_legal_plays( chs_move tar_play ){
     // Create a boolean indicating whether the piece is white.
     bool is_white = tar_pce.color == CHS_PIECE_COLOR::WHITE;
 
-    // Temporary integer variables to be resued at multiple points.
-    int ind_t = 0;
-    // Temporary integer pair variable to be resued at multiple points.
-    pair<int,int> ij_tmp = {0,0};
-    int tmp_arr_lim = 0;
-
-    // Line evaluation scenarios.
-    array< vector<int>, 8 > line_aims;
-    for( unsigned int z = 0; z < line_aims.size(); z++ ){
-        line_aims[z].reserve(7);
-    }
-    int line_aims_cnt = 0;
     
 
 
     this->upd_pre_legal_plays_emp( ind_a, tar_pce );
+
+    this->upd_pre_legal_plays_occ( ind_b, tar_pce );
+
+    // En-passant possibility check.
+
+    // Castling possibility check.
+
+    // Set attack list and valid plays lists flags to true.
+    this->is_atk_lists_upd = true;
+    this->is_valid_moves_upd = true;
+    this->is_valid_atks_upd = true;
 
 }
 
