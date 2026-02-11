@@ -821,6 +821,12 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce );
 
     /**
+     * Perform updates on the on the attack lists and the valid moves and attacks all in
+     * one go in a precise manner given the target displacement/attack performed.
+     */
+    void upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce );
+
+    /**
      * \brief Print the state of the board onto the console terminal.
      * 
      * \note This is a debug tool and has no impact on actual game functionalities.
