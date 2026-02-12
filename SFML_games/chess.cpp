@@ -8109,10 +8109,10 @@ that may need their list of possible plays updated with this newly occupied squa
 
         // Determine if target contact can perform correct line scan.
         bool line_rev_scan = false;
-        line_rev_scan = line_rev_scan && ( ( dir_z >= 0 && dir_z < 4 ) && 
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 0 && dir_z < 4 ) && 
             ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
             this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ) );
-        line_rev_scan = line_rev_scan && ( ( dir_z >= 4 && dir_z < 8 ) && 
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 4 && dir_z < 8 ) && 
             ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
             this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP ) );
         
@@ -8289,7 +8289,7 @@ that may need their list of possible plays updated with this newly occupied squa
         tmp_ind_arr[tmp_arr_lim++] = ind_z;
 
     // Boolean indicating whether the target occupant matches the current POV update type.
-    bool tar_POV_valid = tar_pce.type == CHS_PIECE_TYPE::KNIGHT;
+    tar_POV_valid = tar_pce.type == CHS_PIECE_TYPE::KNIGHT;
     // Parse through all posible knights positions around the occupied position.
     for( int z = 0; z < tmp_arr_lim; z++ ){
 
@@ -8798,10 +8798,10 @@ that may need their list of possible plays updated with this newly occupied squa
 
         // Determine if target contact can perform correct line scan.
         bool line_rev_scan = false;
-        line_rev_scan = line_rev_scan && ( ( dir_z >= 0 && dir_z < 4 ) && 
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 0 && dir_z < 4 ) && 
             ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
             this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ) );
-        line_rev_scan = line_rev_scan && ( ( dir_z >= 4 && dir_z < 8 ) && 
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 4 && dir_z < 8 ) && 
             ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
             this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP ) );
 

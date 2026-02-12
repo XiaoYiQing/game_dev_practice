@@ -53,6 +53,8 @@ namespace tests{
     void chess_upd_pre_legal_tests_emp();
 
     void chess_upd_pre_legal_tests_occ();
+
+    void chess_upd_pre_legal_v2_tests();
     
 
 
@@ -73,14 +75,23 @@ namespace tests{
 }
 
 
-namespace tests_chess{
+namespace tests_tools{
 
     /**
      * Specialized helper function for determining if an integer is in the target
      * vector<int> of index "vecIdx" within the array of vector<int> "tarArr".
+     * The array is expected to be size 64 for chess purpose.
      */
     bool is_int_at_tar_vec( int tar, int vecIdx, 
         std::array<vector<int>, 64>& tarArr );
+    
+    /**
+     * Specialized helper function for determining if two int vector arrays are
+     * matched.
+     * The arrays are expected to be size 64 for chess purpose.
+     */
+    bool are_int_vector_arr_eq( std::array<vector<int>, 64>& arr1, 
+        std::array<vector<int>, 64>& arr2 );
 
 }
 

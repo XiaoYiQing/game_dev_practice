@@ -4257,18 +4257,18 @@ void tests::chess_upd_pre_legal_tests_emp(){
     auto valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
 
     // Pawn initial position attack points change check.
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 18, atk_list_by_W_bef );
-    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 11, 18, atk_list_by_W_aft ) );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 11, 20, atk_list_by_W_bef );
-    test_bool = test_bool && !( tests_chess::is_int_at_tar_vec( 11, 20, atk_list_by_W_aft ) );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 11, 18, atk_list_by_W_bef );
+    test_bool = test_bool && !( tests_tools::is_int_at_tar_vec( 11, 18, atk_list_by_W_aft ) );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 11, 20, atk_list_by_W_bef );
+    test_bool = test_bool && !( tests_tools::is_int_at_tar_vec( 11, 20, atk_list_by_W_aft ) );
     // Pawn initial position valid move points change check.
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 19, 11, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 19, 11, valid_W_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, 11, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 19, 11, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 19, 11, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, 11, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 27, 11, valid_W_moves_map_aft );
     // Pawn initial position valid attack points change check.
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 20, 11, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 20, 11, valid_W_atks_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 20, 11, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 20, 11, valid_W_atks_map_aft );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays_emp pawn inital position list removal test: passed!" << endl;
@@ -4318,22 +4318,22 @@ void tests::chess_upd_pre_legal_tests_emp(){
     // Knight initial position attack points change check.
     vector<int> atk_pts = { 10, 12, 17, 21, 33, 37, 42, 44 };
     for( int z : atk_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_B_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_B_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_B_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_B_aft );
     }
 
     // Knight initial position valid move points change check.
     vector<int> valid_move_pts = { 12, 17, 21, 33, 37, 42, 44 };
     for( int z : valid_move_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_B_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_B_moves_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_B_moves_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_B_moves_map_aft );
     }
 
     // Knight initial position valid attacks points change check.
     vector<int> valid_atks_pts = { 10 };
     for( int z : valid_atks_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_B_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_B_atks_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_B_atks_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_B_atks_map_aft );
     }
 
     if( test_bool ){
@@ -4384,22 +4384,22 @@ void tests::chess_upd_pre_legal_tests_emp(){
     // Bishop initial position attack points change check.
     atk_pts = { 18, 20, 13, 34, 36, 41, 45, 48, 54, 63 };
     for( int z : atk_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_W_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_W_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_W_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_W_aft );
     }
 
     // Bishop initial position valid move points change check.
     valid_move_pts = { 20, 34, 36, 41, 45, 48, 54, 63 };
     for( int z : valid_move_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_W_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_W_moves_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_W_moves_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_W_moves_map_aft );
     }
 
     // Bishop initial position valid attack points change check.
     valid_atks_pts = { 18 };
     for( int z : valid_atks_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_W_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_W_atks_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_W_atks_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_W_atks_map_aft );
     }
 
     if( test_bool ){
@@ -4451,22 +4451,22 @@ void tests::chess_upd_pre_legal_tests_emp(){
     // Rook initial position attack points change check.
     atk_pts = { 11, 19, 25, 26, 28, 29, 35, 43, 51, 59 };
     for( int z : atk_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_B_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_B_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_B_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_B_aft );
     }
 
     // Rook initial position valid move points change check.
     valid_move_pts = { 19, 26, 28, 35, 43, 51, 59 };
     for( int z : valid_move_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_B_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_B_moves_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_B_moves_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_B_moves_map_aft );
     }
 
     // Rook initial position valid attack points change check.
     valid_atks_pts = { 11 };
     for( int z : valid_atks_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_B_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_B_atks_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_B_atks_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_B_atks_map_aft );
     }
 
     if( test_bool ){
@@ -4521,22 +4521,22 @@ void tests::chess_upd_pre_legal_tests_emp(){
     atk_pts = { 0, 6, 9, 11, 13, 18, 19, 20, 25, 26, 28, 29, 34, 35, 36, 
         41, 43, 45, 48, 51, 54, 59 };
     for( int z : atk_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_W_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_W_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_W_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_W_aft );
     }
 
     // Queen initial position valid move points change check.
     valid_move_pts = { 0, 6, 9, 13, 18, 19, 20, 26, 28, 34, 35, 36, 41, 43, 45, 51, 59 };
     for( int z : valid_move_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_W_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_W_moves_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_W_moves_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_W_moves_map_aft );
     }
 
     // Queen initial position valid attack points change check.
     valid_atks_pts = { 25, 54 };
     for( int z : valid_atks_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_W_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_W_atks_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_W_atks_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_W_atks_map_aft );
     }
 
     if( test_bool ){
@@ -4588,22 +4588,22 @@ void tests::chess_upd_pre_legal_tests_emp(){
     // King initial position attack points change check.
     atk_pts = { 18, 19, 20, 26, 28, 34, 35, 36 };
     for( int z : atk_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_B_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 27, z, atk_list_by_B_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_B_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 27, z, atk_list_by_B_aft );
     }
 
     // King initial position valid move points change check.
     valid_move_pts = { 18, 20, 26, 28, 35, 36 };
     for( int z : valid_move_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_B_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_B_moves_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_B_moves_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_B_moves_map_aft );
     }
 
     // King initial position valid attack points change check.
     valid_atks_pts = { 19 };
     for( int z : valid_atks_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 27, valid_B_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 27, valid_B_atks_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 27, valid_B_atks_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 27, valid_B_atks_map_aft );
     }
 
     if( test_bool ){
@@ -4659,168 +4659,168 @@ void tests::chess_upd_pre_legal_tests_emp(){
     valid_B_atks_map_aft = myGame.get_valid_B_atks_map();
 
     // Black pawn POV check (Lin ind pos: 51).
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 51, valid_B_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 51, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 51, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 51, valid_B_moves_map_aft );
 
     // Black knight POV check (Lin ind pos: 50).
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 50, 35, atk_list_by_B_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 50, 35, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 50, 35, atk_list_by_B_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 50, 35, atk_list_by_B_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 50, valid_B_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 50, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 50, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 50, valid_B_moves_map_aft );
     // #####
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 50, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 50, valid_B_atks_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 50, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 50, valid_B_atks_map_aft );
 
     // Black bishop POV check (Lin ind pos: 44).
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 35, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 26, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 17, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 8, atk_list_by_B_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 35, atk_list_by_B_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 26, atk_list_by_B_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 44, 17, atk_list_by_B_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 8, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 44, 35, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 26, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 17, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 8, atk_list_by_B_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 44, 35, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 44, 26, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 44, 17, atk_list_by_B_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 8, atk_list_by_B_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 44, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 26, 44, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 44, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 8, 44, valid_B_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 44, valid_B_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 44, valid_B_moves_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 44, valid_B_moves_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 8, 44, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 26, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 17, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 8, 44, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 44, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 26, 44, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 17, 44, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 8, 44, valid_B_moves_map_aft );
     // #####
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 44, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 26, 44, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 44, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 44, valid_B_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 26, 44, valid_B_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 44, valid_B_atks_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 44, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 26, 44, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 17, 44, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 44, valid_B_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 26, 44, valid_B_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 17, 44, valid_B_atks_map_aft );
 
     // Black queen POV check (Lin ind pos: 17).
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 17, 26, atk_list_by_B_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 17, 35, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 44, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 53, atk_list_by_B_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 17, 26, atk_list_by_B_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 17, 35, atk_list_by_B_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 17, 44, atk_list_by_B_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 17, 53, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 17, 26, atk_list_by_B_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 17, 35, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 17, 44, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 17, 53, atk_list_by_B_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 17, 26, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 17, 35, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 17, 44, atk_list_by_B_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 17, 53, atk_list_by_B_aft );
     // #####
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 17, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 17, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 17, valid_B_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 26, 17, valid_B_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 17, valid_B_moves_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 17, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 26, 17, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 17, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 17, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 26, 17, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 17, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 17, valid_B_moves_map_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 26, 17, valid_B_atks_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 17, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 17, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 26, 17, valid_B_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 17, valid_B_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 44, 17, valid_B_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 26, 17, valid_B_atks_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 17, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 17, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 26, 17, valid_B_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 17, valid_B_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 44, 17, valid_B_atks_map_aft );
 
     // Black rook POV check (Lin ind pos: 38).
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 38, 35, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 38, 34, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 38, 33, atk_list_by_B_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 38, 32, atk_list_by_B_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 38, 35, atk_list_by_B_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 38, 34, atk_list_by_B_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 38, 33, atk_list_by_B_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 38, 32, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 38, 35, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 38, 34, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 38, 33, atk_list_by_B_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 38, 32, atk_list_by_B_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 38, 35, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 38, 34, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 38, 33, atk_list_by_B_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 38, 32, atk_list_by_B_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 38, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 34, 38, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 38, valid_B_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 32, 38, valid_B_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 38, valid_B_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 34, 38, valid_B_moves_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 38, valid_B_moves_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 32, 38, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 38, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 34, 38, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 38, valid_B_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 32, 38, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 38, valid_B_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 34, 38, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 38, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 32, 38, valid_B_moves_map_aft );
     // #####
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 38, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 34, 38, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 38, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 32, 38, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 38, valid_B_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 34, 38, valid_B_atks_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 38, valid_B_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 32, 38, valid_B_atks_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 38, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 34, 38, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 38, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 32, 38, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 38, valid_B_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 34, 38, valid_B_atks_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 38, valid_B_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 32, 38, valid_B_atks_map_aft );
 
     // White rook POV check (Lin ind pos: 33).
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 34, atk_list_by_W_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 35, atk_list_by_W_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 36, atk_list_by_W_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 37, atk_list_by_W_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 38, atk_list_by_W_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 39, atk_list_by_W_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 34, atk_list_by_W_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 35, atk_list_by_W_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 36, atk_list_by_W_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 37, atk_list_by_W_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 33, 38, atk_list_by_W_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 33, 39, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 34, atk_list_by_W_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 35, atk_list_by_W_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 36, atk_list_by_W_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 37, atk_list_by_W_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 38, atk_list_by_W_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 39, atk_list_by_W_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 34, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 35, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 36, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 37, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 33, 38, atk_list_by_W_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 33, 39, atk_list_by_W_aft );
     // #####
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 34, 33, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 33, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 36, 33, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 37, 33, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 38, 33, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 39, 33, valid_W_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 34, 33, valid_W_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 33, valid_W_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 36, 33, valid_W_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 37, 33, valid_W_moves_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 38, 33, valid_W_moves_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 39, 33, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 34, 33, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 33, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 36, 33, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 37, 33, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 38, 33, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 39, 33, valid_W_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 34, 33, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 33, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 36, 33, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 37, 33, valid_W_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 38, 33, valid_W_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 39, 33, valid_W_moves_map_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 34, 33, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 33, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 36, 33, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 37, 33, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 38, 33, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 39, 33, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 34, 33, valid_W_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 33, valid_W_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 36, 33, valid_W_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 37, 33, valid_W_atks_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 38, 33, valid_W_atks_map_aft );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 39, 33, valid_W_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 34, 33, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 33, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 36, 33, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 37, 33, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 38, 33, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 39, 33, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 34, 33, valid_W_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 33, valid_W_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 36, 33, valid_W_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 37, 33, valid_W_atks_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 38, 33, valid_W_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 39, 33, valid_W_atks_map_aft );
 
     // Black queen POV check (Lin ind pos: 28).
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 28, 35, atk_list_by_W_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 28, 42, atk_list_by_W_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 28, 49, atk_list_by_W_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 28, 56, atk_list_by_W_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 28, 35, atk_list_by_W_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 28, 42, atk_list_by_W_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 28, 49, atk_list_by_W_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 28, 56, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 28, 35, atk_list_by_W_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 28, 42, atk_list_by_W_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 28, 49, atk_list_by_W_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 28, 56, atk_list_by_W_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 28, 35, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 28, 42, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 28, 49, atk_list_by_W_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 28, 56, atk_list_by_W_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 28, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 42, 28, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 49, 28, valid_W_moves_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 56, 28, valid_W_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 28, valid_W_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 42, 28, valid_W_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 49, 28, valid_W_moves_map_aft );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 56, 28, valid_W_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 28, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 42, 28, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 49, 28, valid_W_moves_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 56, 28, valid_W_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 28, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 42, 28, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 49, 28, valid_W_moves_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 56, 28, valid_W_moves_map_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 28, valid_W_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 28, valid_W_atks_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 28, valid_W_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 28, valid_W_atks_map_aft );
     
     // Black king POV check (Lin ind pos: 27).
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 35, atk_list_by_B_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 27, 35, atk_list_by_B_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, 35, atk_list_by_B_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 27, 35, atk_list_by_B_aft );
     // #####
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 27, valid_B_moves_map_bef );
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 27, valid_B_moves_map_aft );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 27, valid_B_moves_map_bef );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 27, valid_B_moves_map_aft );
     // #####
-    test_bool = test_bool && tests_chess::is_int_at_tar_vec( 35, 27, valid_B_atks_map_bef );
-    test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 35, 27, valid_B_atks_map_aft );
+    test_bool = test_bool && tests_tools::is_int_at_tar_vec( 35, 27, valid_B_atks_map_bef );
+    test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 35, 27, valid_B_atks_map_aft );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays_emp POV update test: passed!" << endl;
@@ -4928,22 +4928,22 @@ void tests::chess_upd_pre_legal_tests_occ(){
     atk_pts = { 29, 38, 47, 27, 11, 2, 13, 6, 28, 36, 44, 19, 
         18, 17, 16, 12, 4, 21, 34, 22 };
     for( int z : atk_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 20, z, atk_list_by_B_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 20, z, atk_list_by_B_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( 20, z, atk_list_by_B_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 20, z, atk_list_by_B_aft );
     }
 
     // Occupation position valid move points change check.
     valid_move_pts = { 29, 38, 47, 27, 11, 2, 13, 6, 28, 36, 19, 18, 17, 16, 12, 4, 21 };
     for( int z : valid_move_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 20, valid_B_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 20, valid_B_moves_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 20, valid_B_moves_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 20, valid_B_moves_map_aft );
     }
 
     // Occupation position valid attack points change check.
     valid_atks_pts = { 34, 44 };
     for( int z : valid_atks_pts ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 20, valid_B_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 20, valid_B_atks_map_aft );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 20, valid_B_atks_map_bef );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 20, valid_B_atks_map_aft );
     }
 
     if( test_bool ){
@@ -4957,22 +4957,22 @@ void tests::chess_upd_pre_legal_tests_occ(){
     // Occupation new piece influence check.
     atk_pts = { 3, 5, 10, 14, 26, 30, 35, 37 };
     for( int z : atk_pts ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( 20, z, atk_list_by_W_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( 20, z, atk_list_by_W_aft );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( 20, z, atk_list_by_W_bef );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( 20, z, atk_list_by_W_aft );
     }
 
     // Occupation new piece valid moves check.
     valid_move_pts = { 3, 5, 10, 14, 26, 35, 37 };
     for( int z : valid_move_pts ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 20, valid_W_moves_map_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 20, valid_W_moves_map_aft );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 20, valid_W_moves_map_bef );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 20, valid_W_moves_map_aft );
     }
 
     // Occupation new piece valid attacks check.
     valid_atks_pts = { 30 };
     for( int z : valid_atks_pts ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( z, 20, valid_W_atks_map_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( z, 20, valid_W_atks_map_aft );
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( z, 20, valid_W_atks_map_bef );
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( z, 20, valid_W_atks_map_aft );
     }
 
     if( test_bool ){
@@ -4985,17 +4985,17 @@ void tests::chess_upd_pre_legal_tests_occ(){
 
     POV_valid_w_atks = { {44,20} };
     for( pair<int,int> w_atk_z : POV_valid_w_atks ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
             valid_W_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
             valid_W_atks_map_aft );
     }
 
     POV_valid_b_atks = { {30,20} };
     for( pair<int,int> b_atk_z : POV_valid_b_atks ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
             valid_B_atks_map_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
             valid_B_atks_map_aft );
     }
 
@@ -5052,65 +5052,65 @@ void tests::chess_upd_pre_legal_tests_occ(){
     // Identical attacks by w.
     POV_atk_by_w_moves = { {11,20}, {34,20}, {44,20} };
     for( pair<int,int> w_atk_z : POV_atk_by_w_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_aft );
     }
     // Blocked attacks by w.
     POV_atk_by_w_moves = { {34,13}, {34,6}, {44,12}, {44,4} };
     for( pair<int,int> w_atk_z : POV_atk_by_w_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_aft );
     }
 
     // Identical attacks by b.
     POV_atk_by_b_moves = { {19,20}, {30,20}, {47,20} };
     for( pair<int,int> b_atk_z : POV_atk_by_b_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_aft );
     }
     // Blocked attacks by b.
     POV_atk_by_b_moves = { {22,19} };
     for( pair<int,int> b_atk_z : POV_atk_by_b_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_aft );
     }
 
 
     POV_valid_w_atks = { {11,20}, {34,20}, {44,20} };
     for( pair<int,int> w_atk_z : POV_valid_w_atks ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
             valid_W_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
             valid_W_atks_map_aft );
     }
     POV_valid_b_atks = { {19,20}, {22,20}, {30,20}, {47,20} };
     for( pair<int,int> b_atk_z : POV_valid_b_atks ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
             valid_B_atks_map_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
             valid_B_atks_map_aft );
     }
 
     POV_valid_w_moves = { {34,20}, {34,13}, {34,6}, {44,20}, {44,12}, {44,4} };
     for( pair<int,int> w_move_z : POV_valid_w_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
             valid_W_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
             valid_W_moves_map_aft );
     }
     POV_valid_b_moves = { {19,20}, {22,20}, {30,20}, {47,20} };
     for( pair<int,int> b_move_z : POV_valid_b_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
             valid_B_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
             valid_B_moves_map_aft );
     }
 
@@ -5167,64 +5167,64 @@ void tests::chess_upd_pre_legal_tests_occ(){
     // Identical attacks by b.
     POV_atk_by_b_moves = { {34,20}, {44,20} };
     for( pair<int,int> b_atk_z : POV_atk_by_b_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_aft );
     }
     // Blocked attacks by b.
     POV_atk_by_b_moves = { {34,13}, {34,6}, {44,12}, {44,4} };
     for( pair<int,int> b_atk_z : POV_atk_by_b_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_atk_z.first, b_atk_z.second, 
             atk_list_by_B_aft );
     }
 
     // Identical attacks by w.
     POV_atk_by_w_moves = { {19,20}, {30,20}, {47,20} };
     for( pair<int,int> w_atk_z : POV_atk_by_w_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_aft );
     }
     // Blocked attacks by w.
     POV_atk_by_w_moves = { {22,19}, {47,11}, {47,2} };
     for( pair<int,int> w_atk_z : POV_atk_by_w_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_atk_z.first, w_atk_z.second, 
             atk_list_by_W_aft );
     }
 
     POV_valid_b_atks = { {34,20}, {44,20} };
     for( pair<int,int> b_atk_z : POV_valid_b_atks ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
             valid_B_atks_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_atk_z.second, b_atk_z.first, 
             valid_B_atks_map_aft );
     }
     POV_valid_w_atks = { {19,20}, {22,20}, {30,20}, {47,20} };
     for( pair<int,int> w_atk_z : POV_valid_w_atks ){
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
             valid_W_atks_map_bef );
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_atk_z.second, w_atk_z.first, 
             valid_W_atks_map_aft );
     }
 
     POV_valid_b_moves = { {34,20}, {34,13}, {34,6}, {44,20}, {44,12}, {44,4} };
     for( pair<int,int> b_move_z : POV_valid_b_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
             valid_B_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( b_move_z.second, b_move_z.first, 
             valid_B_moves_map_aft );
     }
     POV_valid_w_moves = { {19,20}, {22,20}, {30,20}, {47,20}, {47,11}, {47,2} };
     for( pair<int,int> w_move_z : POV_valid_w_moves ){
-        test_bool = test_bool && tests_chess::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
+        test_bool = test_bool && tests_tools::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
             valid_W_moves_map_bef );
-        test_bool = test_bool && !tests_chess::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
+        test_bool = test_bool && !tests_tools::is_int_at_tar_vec( w_move_z.second, w_move_z.first, 
             valid_W_moves_map_aft );
     }
 
@@ -5237,6 +5237,96 @@ void tests::chess_upd_pre_legal_tests_occ(){
 // ---------------------------------------------------------------------- <<<<<
 
 }
+
+
+void tests::chess_upd_pre_legal_v2_tests(){
+
+    bool test_bool = true;
+    chess myGame1;
+    chess myGame2;
+
+    chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C );
+    chess::chs_piece tmp_pce;
+
+    chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
+
+// ---------------------------------------------------------------------- >>>>>
+//      Pawn Move Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    
+    myGame1.set_piece_at( 0, 4, w_king );
+    myGame1.set_piece_at( 7, 4, b_king );
+    myGame1.set_piece_at( 1, 3, w_pawn );
+    myGame1.set_piece_at( 3, 2, b_knight );
+    myGame1.set_piece_at( 2, 4, b_bishop );
+    myGame1.set_piece_at( 1, 0, w_rook );
+    
+    myGame2 = myGame1;
+
+    // Perform the play normally.
+    myGame1.ply( 1, 3, 2, 3 );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play by displacing the pawn without updating.
+    myGame2.set_piece_at_NO_UPD( 1, 3, emp_pce );
+    tmp_pce = w_pawn;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 2, 3, tmp_pce );
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 11, 19, emp_pce );
+    
+
+    myGame1.printBoard();
+
+    // Obtain the standard results.
+    auto atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    auto atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    auto atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    auto valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    auto valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    auto valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    auto valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays pawn move test 1: passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays pawn move test 1: failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+}
+
 
 
 void tests::CHS_SFML_eng_tests(){
@@ -6569,7 +6659,7 @@ void tests::chess_minmaxAB_split_tests(){
 
 
 
-bool tests_chess::is_int_at_tar_vec( int tar, int vecIdx, 
+bool tests_tools::is_int_at_tar_vec( int tar, int vecIdx, 
     array<vector<int>, 64>& tarArr )
 {
     for( int z : tarArr[vecIdx] ){
@@ -6577,5 +6667,33 @@ bool tests_chess::is_int_at_tar_vec( int tar, int vecIdx,
             return true;
     }
     return false;
+}
+
+bool tests_tools::are_int_vector_arr_eq( std::array<vector<int>, 64>& arr1, 
+    std::array<vector<int>, 64>& arr2 )
+{
+
+    // Individual vector size matching.
+    for( unsigned int z = 0; z < 64; z++ ){
+        if( arr1[z].size() != arr2[z].size() ){
+            return false;
+        }
+    }
+
+    bool tmp_bool = true;
+
+    for( unsigned int z = 0; z < 64; z++ ){
+
+        for( int t : arr1[z] ){
+            tmp_bool = tmp_bool && is_int_at_tar_vec( t, z, arr2 );
+        }
+        if( !tmp_bool ){
+            return false;
+        }
+
+    }
+
+    return tmp_bool;
+
 }
 
