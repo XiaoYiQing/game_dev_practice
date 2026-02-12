@@ -8251,188 +8251,6 @@ that may need their list of possible plays updated with this newly occupied squa
 
 // ---------------------------------------------------------------------- <<<<<
 
-
-// ---------------------------------------------------------------------- >>>>>
-//      Point B POV Update (Knights)
-// ---------------------------------------------------------------------- >>>>>
-/*
-Given the ending position is occupied now, update all potential knights
-that may need their list of possible plays updated with this newly occupied square.
-*/
-
-    // Reset number of plays counter.
-    tmp_arr_lim = 0;
-    // Collect all potential positions from which a knight may move to the starting location.
-    ind_z = ind_b - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
-    if( ( ind_z >= 0 ) && ( j_b > 0 ) )     
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
-    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - chess::BOARDWIDTH - 2;                  // West-South jump.
-    if( ( ind_z >= 0 ) && ( j_b > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - chess::BOARDWIDTH + 2;                  // East-South jump.
-    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + chess::BOARDWIDTH - 2;                  // West-North jump.
-    if( ind_z < sq_cnt && ( j_b > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + chess::BOARDWIDTH + 2;                  // East-North jump.
-    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
-    if( ind_z < sq_cnt && ( j_b > 0 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
-    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-
-    // Boolean indicating whether the target occupant matches the current POV update type.
-    tar_POV_valid = tar_pce.type == CHS_PIECE_TYPE::KNIGHT;
-    // Parse through all posible knights positions around the occupied position.
-    for( int z = 0; z < tmp_arr_lim; z++ ){
-
-        ind_z = tmp_ind_arr[z];
-        ij_tmp = chess::ind2sub( ind_z );
-
-        // Scanning square is empty.
-        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::NO_P ){
-            // Scanning square is empty and new occupant is a knight.
-            if( tar_POV_valid ){
-                // Scanning square is empty and new occupant is a white knight.
-                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                    this->atk_list_by_W[ ind_z ].push_back( ind_b );
-                    this->valid_W_moves_map[ ind_b ].push_back( ind_z );
-                // Scanning square is empty and new occupant is a black knight.
-                }else{
-                    this->atk_list_by_B[ ind_z ].push_back( ind_b );
-                    this->valid_B_moves_map[ ind_b ].push_back( ind_z );
-                }
-            }
-            // No knight at scanned square, so move on.
-            continue;
-        }
-
-        // Scanning piece is white.
-        if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
-
-            // Scanning piece is white and new occupant is a knight.
-            if( tar_POV_valid ){
-                // Scanning piece is white and new occupant is a white knight.
-                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                    this->atk_list_by_W[ ind_z ].push_back( ind_b );
-                // Scanning piece is white and new occupant is a black knight.
-                }else{
-                    this->atk_list_by_B[ ind_z ].push_back( ind_b );
-                    this->valid_B_atks_map[ ind_b ].push_back( ind_z );
-                }
-            }
-
-            // Scanning piece is a white knight.
-            if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KNIGHT ){
-
-                // Scanning piece is a white knight and no previous occupant.
-                if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
-
-                    // Occupied square is no longer a free to move in square.
-                    this->valid_W_moves_map[ ind_z ].erase(
-                        std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
-                        this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
-                        this->valid_W_moves_map[ ind_z ].end() );
-                    // Occupied square is valid target of attack if the current scan piece is 
-                    // white and the occupying piece is black.
-                    if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
-                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
-                    }
-
-                // Scanning piece is a white knight and target square was occupied.
-                }else{
-
-                    // Scanning piece is a white knight and occupant turned from black to white.
-                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                        
-                        // Previous occupant was black and is no longer a valid attack target.
-                        this->valid_W_atks_map[ ind_z ].erase(
-                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
-                            this->valid_W_atks_map[ ind_z ].end(), ind_b ), 
-                            this->valid_W_atks_map[ ind_z ].end() );
-
-                    // Scanning piece is a white knight and occupant turned from white to black.
-                    }else{
-
-                        // New occupant becomes new valid attack target.
-                        this->valid_W_atks_map[ ind_z ].push_back( ind_b );
-
-                    }
-
-                }
-
-            }
-
-        // Scanning piece is black.
-        }else{
-
-            // Scanning piece is black and new occupant is a knight.
-            if( tar_POV_valid ){
-                // Scanning piece is black and new occupant is a white knight.
-                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                    this->atk_list_by_W[ ind_z ].push_back( ind_b );
-                    this->valid_W_atks_map[ ind_b ].push_back( ind_z );
-                // Scanning piece is black and new occupant is a black knight.
-                }else{
-                    this->atk_list_by_B[ ind_z ].push_back( ind_b );
-                }
-            }
-
-            // Scanning piece is a black knight.
-            if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KNIGHT ){
-
-                // Scanning piece is a black knight and no previous occupant.
-                if( prev_pce.type == CHS_PIECE_TYPE::NO_P ){
-
-                    // Occupied square is no longer a free to move in square.
-                    this->valid_B_moves_map[ ind_z ].erase(
-                        std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
-                        this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
-                        this->valid_B_moves_map[ ind_z ].end() );
-                    // Occupied square is valid target of attack if the current scan piece is 
-                    // black and the occupying piece is white.
-                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
-                    }
-
-                // Scanning piece is a black knight and target square was occupied.
-                }else{
-
-                    // Scanning piece is a black knight and occupant turned from black to white.
-                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                        
-                        // New occupant becomes new valid attack target.
-                        this->valid_B_atks_map[ ind_z ].push_back( ind_b );
-
-                    // Scanning piece is a black knight and occupant turned from white to black.
-                    }else{
-
-                        // Previous occupant was white and is no longer a valid attack target.
-                        this->valid_B_atks_map[ ind_z ].erase(
-                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
-                            this->valid_B_atks_map[ ind_z ].end(), ind_b ), 
-                            this->valid_B_atks_map[ ind_z ].end() );
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
 // ---------------------------------------------------------------------- >>>>>
 //      Point B POV Line Contacts Delimiting
 // ---------------------------------------------------------------------- >>>>>
@@ -8571,7 +8389,8 @@ that may need their list of possible plays updated with this newly occupied squa
 
                             // Double square pawn jump possibility.
                             if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                                this->CHS_board[sub_z.first - 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
+                                ( d_dist_b > 0 ) &&
+                                this->CHS_board[sub_z.first - 2 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
                             {
                                 // Remove black pawn double jump possibility.
                                 this->valid_B_moves_map[ ind_z ].erase(
@@ -8600,12 +8419,13 @@ that may need their list of possible plays updated with this newly occupied squa
                                 this->valid_W_moves_map[ ind_z ].end() );
                             // Double square pawn jump possibility.
                             if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                                this->CHS_board[sub_z.first + 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
+                                ( u_dist_b > 0 ) &&
+                                this->CHS_board[sub_z.first + 2 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
                             {
                                 // Remove white pawn double jump possibility.
                                 this->valid_W_moves_map[ ind_z ].erase(
                                     std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
-                                    this->valid_W_moves_map[ ind_z ].end(), ind_b - chess::BOARDWIDTH ), 
+                                    this->valid_W_moves_map[ ind_z ].end(), ind_b + chess::BOARDWIDTH ), 
                                     this->valid_W_moves_map[ ind_z ].end() );
                             }
 
