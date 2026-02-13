@@ -5662,7 +5662,8 @@ that may need their list of possible plays updated with this newly liberated squ
                 
                 // Scan piece is an unmoved pawn (which can only be black if rules are respected).
                 if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK )
                 {
                     this->valid_B_moves_map[ ind_z ].push_back( ind_a );
                     continue;
@@ -5673,7 +5674,8 @@ that may need their list of possible plays updated with this newly liberated squ
 
                 // Scan piece is an unmoved pawn (which can only be white if rules are respected).
                 if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE )
                 {
                     this->valid_W_moves_map[ ind_z ].push_back( ind_a );
                     continue;
@@ -6611,13 +6613,14 @@ that may need their list of possible plays updated with this newly occupied squa
                 
                 // Scan piece is an unmoved pawn (which can only be black if rules are respected).
                 if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK )
                 {   
                     // Remove double jump possibility now the square is occupied.
-                    this->valid_W_moves_map[ ind_z ].erase(
-                        std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
-                        this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
-                        this->valid_W_moves_map[ ind_z ].end() );
+                    this->valid_B_moves_map[ ind_z ].erase(
+                        std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                        this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
+                        this->valid_B_moves_map[ ind_z ].end() );
                     // Current direction scan complete.
                     continue;
                 }
@@ -6627,13 +6630,14 @@ that may need their list of possible plays updated with this newly occupied squa
 
                 // Scan piece is an unmoved pawn (which can only be white if rules are respected).
                 if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE )
                 {  
                     // Remove double jump possibility now the square is occupied.
-                    this->valid_B_moves_map[ ind_z ].erase(
-                        std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
-                        this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
-                        this->valid_B_moves_map[ ind_z ].end() );
+                    this->valid_W_moves_map[ ind_z ].erase(
+                        std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                        this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
+                        this->valid_W_moves_map[ ind_z ].end() );
                     // Current direction scan complete.
                     continue;
                 }
@@ -7174,6 +7178,10 @@ void chess::upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce ){
     // Initialize potential list of plays.
     int tmp_ind_arr[28];
 
+
+    // Reset the destination square to its previous occupant for scanning.
+    this->CHS_board[i_b][j_b] = prev_pce;
+
 // ---------------------------------------------------------------------- >>>>>
 //      Removal of Point A Influence
 // ---------------------------------------------------------------------- >>>>>
@@ -7380,6 +7388,503 @@ void chess::upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce ){
 
 
 // ---------------------------------------------------------------------- >>>>>
+//      Point A POV Update (Knights)
+// ---------------------------------------------------------------------- >>>>>
+/*
+Given the starting position is empty now, update all potential knights
+that may need their list of possible plays updated with this newly liberated square.
+*/
+
+    // Reset number of plays counter.
+    tmp_arr_lim = 0;
+    // Collect all potential positions from which a knight may move to the starting location.
+    ind_z = ind_a - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
+    if( ( ind_z >= 0 ) && ( j_a > 0 ) )     
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_a - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
+    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_a - chess::BOARDWIDTH - 2;                  // West-South jump.
+    if( ( ind_z >= 0 ) && ( j_a > 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_a - chess::BOARDWIDTH + 2;                  // East-South jump.
+    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_a + chess::BOARDWIDTH - 2;                  // West-North jump.
+    if( ind_z < sq_cnt && ( j_a > 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_a + chess::BOARDWIDTH + 2;                  // East-North jump.
+    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_a + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
+    if( ind_z < sq_cnt && ( j_a > 0 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    ind_z = ind_a + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
+    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
+        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+
+    // Parse through all possible knights positions around the starting position.
+    for( int z = 0; z < tmp_arr_lim; z++ ){
+        ind_z = tmp_ind_arr[z];
+
+        // Don't perform POV update of the very piece that performed the play.
+        if( ind_b == ind_z ){
+            continue;
+        }
+
+        ij_tmp = chess::ind2sub( ind_z );
+
+        // Check if current potential position has a knight.
+        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KNIGHT ){
+
+            // Scanning piece is white knight.
+            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
+
+                // Starting point becomes valid white knight move destination.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                // Valid white knight attack of starting point becomes valid move destination.
+                }else{
+                    this->valid_W_atks_map[ ind_z ].erase(
+                        std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                        this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
+                        this->valid_W_atks_map[ ind_z ].end() );
+                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                }
+            
+            // Scanning piece is black knight.
+            }else{
+
+                // Starting point becomes valid black knight move destination.
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                // Valid black knight attack of starting point becomes valid move destination.
+                }else{
+                    this->valid_B_atks_map[ ind_z ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                        this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_z ].end() );
+                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                }
+
+            }
+        }
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Point A POV Update (Line Directions)
+// ---------------------------------------------------------------------- >>>>>
+
+    // TODO: King special case, where the moved piece is the king, in which case
+    //  attacked by evaluations are handled differently.
+
+    /*
+    Array containing the distance of first contact along each of the 8 directions
+    starting from the newly emptied starting position ( i_a, j_a ).
+
+    The directional indices:
+    0 = N,  1 = S,  2 = W,  3 = E,
+    4 = NE, 5 = NW, 6 = SW, 7 = SE
+    */
+    int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+    /*
+    Linear index step equivalent along each of the cardinal directions.
+
+    The directional indices:
+    0 = N,  1 = S,  2 = W,  3 = E,
+    4 = NE, 5 = NW, 6 = SW, 7 = SE
+    */
+    int direc_unit_step[8] = {
+        chess::BOARDWIDTH, -1 * (int) chess::BOARDWIDTH, -1, 1,
+        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, -1 * (int) chess::BOARDWIDTH - 1, 
+        -1 * (int) chess::BOARDWIDTH + 1
+    };
+
+    // Linear index coordinate of first contact along each direction.
+    pair<int,int> contact_ind_arr[8];
+
+    // North first contact scan.
+    for( int z = 1; z <= u_dist_a; z++ ){
+        rev_scan_dist_arr[0]++;
+        if( CHS_board[i_a + z][j_a].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[0] = z;
+            contact_ind_arr[0] = { i_a + z, j_a };
+            break;
+        }
+    }
+    // South first contact scan.
+    for( int z = 1; z <= d_dist_a; z++ ){
+        rev_scan_dist_arr[1]++;
+        if( CHS_board[i_a - z][j_a].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[1] = z;
+            contact_ind_arr[1] = { i_a - z, j_a };
+            break;
+        }
+    }
+    // West first contact scan.
+    for( int z = 1; z <= l_dist_a; z++ ){
+        rev_scan_dist_arr[2]++;
+        if( CHS_board[i_a][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[2] = z;
+            contact_ind_arr[2] = { i_a, j_a - z };
+            break;
+        }
+    }
+    // East first contact scan.
+    for( int z = 1; z <= r_dist_a; z++ ){
+        rev_scan_dist_arr[3]++;
+        if( CHS_board[i_a][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[3] = z;
+            contact_ind_arr[3] = { i_a, j_a + z };
+            break;
+        }
+    }
+    // North-East first contact scan.
+    for( int z = 1; z <= min( u_dist_a, r_dist_a ); z++ ){
+        rev_scan_dist_arr[4]++;
+        if( CHS_board[i_a + z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[4] = z;
+            contact_ind_arr[4] = { i_a + z, j_a + z };
+            break;
+        }
+    }
+    // North-West first contact scan.
+    for( int z = 1; z <= min( u_dist_a, l_dist_a ); z++ ){
+        rev_scan_dist_arr[5]++;
+        if( CHS_board[i_a + z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[5] = z;
+            contact_ind_arr[5] = { i_a + z, j_a - z };
+            break;
+        }
+    }
+    // South-West first contact scan.
+    for( int z = 1; z <= min( d_dist_a, l_dist_a ); z++ ){
+        rev_scan_dist_arr[6]++;
+        if( CHS_board[i_a - z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[6] = z;
+            contact_ind_arr[6] = { i_a - z, j_a - z };
+            break;
+        }
+    }
+    // South-East first contact scan.
+    for( int z = 1; z <= min( d_dist_a, r_dist_a ); z++ ){
+        rev_scan_dist_arr[7]++;
+        if( CHS_board[i_a - z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
+            contact_dist_arr[7] = z;
+            contact_ind_arr[7] = { i_a - z, j_a + z };
+            break;
+        }
+    }
+
+    /* 
+    Check all 8 directional potential first contacts.
+    The directional indices:
+    0 = N,  1 = S,  2 = W,  3 = E,
+    4 = NE, 5 = NW, 6 = SW, 7 = SE
+    */
+    for( int dir_z = 0; dir_z < 8; dir_z++ ){
+
+        // No contact case.
+        if( contact_dist_arr[dir_z] == 0 )
+            continue;
+        
+        // Obtain the 2D coordinate of the current contact.
+        sub_z = contact_ind_arr[ dir_z ];
+        // Obtain linear coordinate of the current contact.
+        ind_z = chess::sub2ind( sub_z );
+
+        // If current scan piece is the very piece that performed the play, skip.
+        if( ind_b == ind_z ){
+            continue;
+        }
+
+        // Immediate neighbor case (Check pawn and king cases).
+        if( contact_dist_arr[dir_z] == 1 ){
+
+            // Neighbor piece is a pawn.
+            if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN ){
+
+                // Pawn is immediately North.
+                if( dir_z == 0 ){
+
+                    // Pawn is black.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
+                        this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                        // Double square pawn jump possibility.
+                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                            this->CHS_board[sub_z.first - 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_B_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
+                        }
+                    }
+
+                // Pawn is immediately South.
+                }else if( dir_z == 1 ){
+
+                    // Pawn is white.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+                        this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                        // Double square pawn jump possibility.
+                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                            this->CHS_board[sub_z.first + 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P ){
+                            this->valid_W_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
+                        }
+                    }
+
+                // The pawn is on immediate North-East or North-West diagonal.
+                }else if( dir_z == 4 || dir_z == 5 ){
+
+                    // The pawn is black AND the displaced piece was white.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK &&
+                        tar_pce.color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        // Remove black pawn valid attack option now that the start position is empty.
+                        this->valid_B_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                            this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_B_atks_map[ ind_z ].end() );
+                    }
+                
+                // The pawn is on immediate South-West or South-East diagonal.
+                }else if( dir_z == 6 || dir_z == 7 ){
+                    // The pawn is white AND the displaced piece was black.
+                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE &&
+                        tar_pce.color == CHS_PIECE_COLOR::BLACK )
+                    {
+                        // Remove black pawn valid attack option now that the start position is empty.
+                        this->valid_W_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                            this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_W_atks_map[ ind_z ].end() );   
+                    }
+                }
+                
+                // Current direction scan complete.
+                continue;
+
+            }
+
+            // Immediate neighbor piece is a king.
+            if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::KING ){
+
+                // King is black.
+                if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
+
+                    // Add freed square as a possible move.
+                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                    // Remove attack possibility of the new square, if it was white.
+                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+                        this->valid_B_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                            this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_B_atks_map[ ind_z ].end() );
+                    }
+
+                // King is white.
+                }else{
+
+                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                    // Remove attack possibility of the new square, if it was black.
+                    if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+                        this->valid_W_atks_map[ ind_z ].erase(
+                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                            this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
+                            this->valid_W_atks_map[ ind_z ].end() );
+                    }
+
+                }
+
+                // Current direction scan complete.
+                continue;
+
+            }
+
+        }
+
+        // Pawn double jump case.
+        if( contact_dist_arr[dir_z] == 2 ){
+
+            // Scan piece is two square North.
+            if( dir_z == 0 ){
+                
+                // Scan piece is an unmoved pawn (which can only be black if rules are respected).
+                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK )
+                {
+                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                    continue;
+                }
+
+            // Scan piece is two square South.
+            }else if( dir_z == 1 ){
+
+                // Scan piece is an unmoved pawn (which can only be white if rules are respected).
+                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE )
+                {
+                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                    continue;
+                }
+            
+            }
+
+        }
+
+        // Determine if target contact can perform correct line scan.
+        bool line_rev_scan = false;
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 0 && dir_z < 4 ) && 
+            ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ) );
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 4 && dir_z < 8 ) && 
+            ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP ) );
+        
+        // Line move pieces scan.
+        if( line_rev_scan ){
+
+            // Reverse scan linear index increment amount and count.
+            int rev_incrm = 0;  int rev_inc_cnt = 0;
+            // Reverse scan helper variables definition.
+            switch( dir_z ){
+            case 0:     // North scan -> South reverse scan.
+                rev_incrm = direc_unit_step[1];
+                rev_inc_cnt = rev_scan_dist_arr[1];
+                break;
+            case 1:     // South scan -> North reverse scan.
+                rev_incrm = direc_unit_step[0];
+                rev_inc_cnt = rev_scan_dist_arr[0];
+                break;
+            case 2:     // West scan -> East reverse scan.
+                rev_incrm = direc_unit_step[3];
+                rev_inc_cnt = rev_scan_dist_arr[3];
+                break;
+            case 3:     // East scan -> West reverse scan.
+                rev_incrm = direc_unit_step[2];
+                rev_inc_cnt = rev_scan_dist_arr[2];
+                break;
+            case 4:     // NE -> SW reverse scan.
+                rev_incrm = direc_unit_step[6];
+                rev_inc_cnt = rev_scan_dist_arr[6];
+                break; 
+            case 5:     // NW -> SE reverse scan.
+                rev_incrm = direc_unit_step[7];
+                rev_inc_cnt = rev_scan_dist_arr[7];
+                break;
+            case 6:     // SW -> NE reverse scan.
+                rev_incrm = direc_unit_step[4];
+                rev_inc_cnt = rev_scan_dist_arr[4];
+                break;
+            case 7:     // SE -> NW reverse scan.
+                rev_incrm = direc_unit_step[5];
+                rev_inc_cnt = rev_scan_dist_arr[5];
+                break;
+            default:
+                break;
+            }
+
+            // Scan piece is a white.
+            if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
+
+                // Displaced piece is black, so no longer attacked at starting position.
+                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
+
+                    // Remove valid attack from white scan piece to starting position.
+                    this->valid_W_atks_map[ ind_z ].erase(
+                        std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
+                        this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
+                        this->valid_W_atks_map[ ind_z ].end() );
+
+                }
+                // Add new free space as valid white scan piece move.
+                this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+
+                // Initialize reverse scan linear index.
+                ind_t = ind_a;
+                // Reverse scan remaining line.
+                for( int t = 1; t <= rev_inc_cnt; t++ ){
+
+                    ind_t += rev_incrm;
+                    pce_t = this->get_piece_at( ind_t );
+
+                    // Regardless of what's on the reverse scan square, it is added to attacks 
+                    // by white list.
+                    this->atk_list_by_W[ind_t].push_back( ind_z );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        // Free space means accessible by current reverse scan root.
+                        this->valid_W_moves_map[ ind_z ].push_back( ind_t );
+                    }else{
+                        if( pce_t.color == CHS_PIECE_COLOR::BLACK ){
+                            // Black piece means can be attacked by current reverse scan root.
+                            this->valid_W_atks_map[ ind_z ].push_back( ind_t );
+                        }
+                    }
+
+                }
+
+            // Scan piece is a black.
+            }else{
+
+                // Displaced piece is white, so no longer attacked at starting position.
+                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
+
+                    // Remove valid attack from black scan piece to starting position.
+                    this->valid_B_atks_map[ ind_z ].erase(
+                        std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
+                        this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
+                        this->valid_B_atks_map[ ind_z ].end() );
+
+                }
+                // Add new free space as valid black scan piece move.
+                this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+
+                // Initialize reverse scan linear index.
+                int ind_t = ind_a;
+                // Reverse scan remaining line.
+                for( int t = 1; t <= rev_inc_cnt; t++ ){
+
+                    ind_t += rev_incrm;
+                    pce_t = this->get_piece_at( ind_t );
+
+                    // Regardless of what's on the reverse scan square, it is added to attacks 
+                    // by black list.
+                    this->atk_list_by_B[ind_t].push_back( ind_z );
+
+                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
+                        // Free space means accessible by current reverse scan root.
+                        this->valid_B_moves_map[ ind_z ].push_back( ind_t );
+                    }else{
+                        if( pce_t.color == CHS_PIECE_COLOR::WHITE ){
+                            // White piece means can be attacked by current reverse scan root.
+                            this->valid_B_atks_map[ ind_z ].push_back( ind_t );
+                        }
+                    }
+
+                }
+
+            }
+
+            // Current scan is complete.
+            continue;
+
+        }
+
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+    // Return the destination square to its the new occupant.
+    this->CHS_board[i_b][j_b] = tar_pce;
+
+// ---------------------------------------------------------------------- >>>>>
 //      Removal of Point B Previous Piece Influence
 // ---------------------------------------------------------------------- >>>>>
 
@@ -7578,94 +8083,6 @@ void chess::upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce ){
 // ---------------------------------------------------------------------- <<<<<
 
 
-
-// ---------------------------------------------------------------------- >>>>>
-//      Point A POV Update (Knights)
-// ---------------------------------------------------------------------- >>>>>
-/*
-Given the starting position is empty now, update all potential knights
-that may need their list of possible plays updated with this newly liberated square.
-*/
-
-    // Reset number of plays counter.
-    tmp_arr_lim = 0;
-    // Collect all potential positions from which a knight may move to the starting location.
-    ind_z = ind_a - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
-    if( ( ind_z >= 0 ) && ( j_a > 0 ) )     
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
-    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - chess::BOARDWIDTH - 2;                  // West-South jump.
-    if( ( ind_z >= 0 ) && ( j_a > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - chess::BOARDWIDTH + 2;                  // East-South jump.
-    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + chess::BOARDWIDTH - 2;                  // West-North jump.
-    if( ind_z < sq_cnt && ( j_a > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + chess::BOARDWIDTH + 2;                  // East-North jump.
-    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
-    if( ind_z < sq_cnt && ( j_a > 0 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
-    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-
-    // Parse through all possible knights positions around the starting position.
-    for( int z = 0; z < tmp_arr_lim; z++ ){
-        ind_z = tmp_ind_arr[z];
-
-        // Don't perform POV update of the very piece that performed the play.
-        if( ind_b == ind_z ){
-            continue;
-        }
-
-        ij_tmp = chess::ind2sub( ind_z );
-
-        // Check if current potential position has a knight.
-        if( this->CHS_board[ij_tmp.first][ij_tmp.second].type == CHS_PIECE_TYPE::KNIGHT ){
-
-            // Scanning piece is white knight.
-            if( this->CHS_board[ij_tmp.first][ij_tmp.second].color == CHS_PIECE_COLOR::WHITE ){
-
-                // Starting point becomes valid white knight move destination.
-                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
-                // Valid white knight attack of starting point becomes valid move destination.
-                }else{
-                    this->valid_W_atks_map[ ind_z ].erase(
-                        std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
-                        this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
-                        this->valid_W_atks_map[ ind_z ].end() );
-                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
-                }
-            
-            // Scanning piece is black knight.
-            }else{
-
-                // Starting point becomes valid black knight move destination.
-                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
-                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
-                // Valid black knight attack of starting point becomes valid move destination.
-                }else{
-                    this->valid_B_atks_map[ ind_z ].erase(
-                        std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
-                        this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
-                        this->valid_B_atks_map[ ind_z ].end() );
-                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
-                }
-
-            }
-        }
-    }
-
-// ---------------------------------------------------------------------- <<<<<
-
-
 // ---------------------------------------------------------------------- >>>>>
 //      Point B POV Update (Knights)
 // ---------------------------------------------------------------------- >>>>>
@@ -7846,410 +8263,6 @@ that may need their list of possible plays updated with this newly occupied squa
 
 // ---------------------------------------------------------------------- <<<<<
 
-
-// ---------------------------------------------------------------------- >>>>>
-//      Point A POV Update (Line Directions)
-// ---------------------------------------------------------------------- >>>>>
-
-    // TODO: King special case, where the moved piece is the king, in which case
-    //  attacked by evaluations are handled differently.
-
-    /*
-    Array containing the distance of first contact along each of the 8 directions
-    starting from the newly emptied starting position ( i_a, j_a ).
-
-    The directional indices:
-    0 = N,  1 = S,  2 = W,  3 = E,
-    4 = NE, 5 = NW, 6 = SW, 7 = SE
-    */
-    int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    /*
-    Linear index step equivalent along each of the cardinal directions.
-
-    The directional indices:
-    0 = N,  1 = S,  2 = W,  3 = E,
-    4 = NE, 5 = NW, 6 = SW, 7 = SE
-    */
-    int direc_unit_step[8] = {
-        chess::BOARDWIDTH, -1 * (int) chess::BOARDWIDTH, -1, 1,
-        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, -1 * (int) chess::BOARDWIDTH - 1, 
-        -1 * (int) chess::BOARDWIDTH + 1
-    };
-
-    // Linear index coordinate of first contact along each direction.
-    pair<int,int> contact_ind_arr[8];
-
-    // North first contact scan.
-    for( int z = 1; z <= u_dist_a; z++ ){
-        rev_scan_dist_arr[0]++;
-        if( CHS_board[i_a + z][j_a].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[0] = z;
-            contact_ind_arr[0] = { i_a + z, j_a };
-            break;
-        }
-    }
-    // South first contact scan.
-    for( int z = 1; z <= d_dist_a; z++ ){
-        rev_scan_dist_arr[1]++;
-        if( CHS_board[i_a - z][j_a].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[1] = z;
-            contact_ind_arr[1] = { i_a - z, j_a };
-            break;
-        }
-    }
-    // West first contact scan.
-    for( int z = 1; z <= l_dist_a; z++ ){
-        rev_scan_dist_arr[2]++;
-        if( CHS_board[i_a][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[2] = z;
-            contact_ind_arr[2] = { i_a, j_a - z };
-            break;
-        }
-    }
-    // East first contact scan.
-    for( int z = 1; z <= r_dist_a; z++ ){
-        rev_scan_dist_arr[3]++;
-        if( CHS_board[i_a][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[3] = z;
-            contact_ind_arr[3] = { i_a, j_a + z };
-            break;
-        }
-    }
-    // North-East first contact scan.
-    for( int z = 1; z <= min( u_dist_a, r_dist_a ); z++ ){
-        rev_scan_dist_arr[4]++;
-        if( CHS_board[i_a + z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[4] = z;
-            contact_ind_arr[4] = { i_a + z, j_a + z };
-            break;
-        }
-    }
-    // North-West first contact scan.
-    for( int z = 1; z <= min( u_dist_a, l_dist_a ); z++ ){
-        rev_scan_dist_arr[5]++;
-        if( CHS_board[i_a + z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[5] = z;
-            contact_ind_arr[5] = { i_a + z, j_a - z };
-            break;
-        }
-    }
-    // South-West first contact scan.
-    for( int z = 1; z <= min( d_dist_a, l_dist_a ); z++ ){
-        rev_scan_dist_arr[6]++;
-        if( CHS_board[i_a - z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[6] = z;
-            contact_ind_arr[6] = { i_a - z, j_a - z };
-            break;
-        }
-    }
-    // South-East first contact scan.
-    for( int z = 1; z <= min( d_dist_a, r_dist_a ); z++ ){
-        rev_scan_dist_arr[7]++;
-        if( CHS_board[i_a - z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
-            contact_dist_arr[7] = z;
-            contact_ind_arr[7] = { i_a - z, j_a + z };
-            break;
-        }
-    }
-
-    /* 
-    Check all 8 directional potential first contacts.
-    The directional indices:
-    0 = N,  1 = S,  2 = W,  3 = E,
-    4 = NE, 5 = NW, 6 = SW, 7 = SE
-    */
-    for( int dir_z = 0; dir_z < 8; dir_z++ ){
-
-        // No contact case.
-        if( contact_dist_arr[dir_z] == 0 )
-            continue;
-        
-        // Obtain the 2D coordinate of the current contact.
-        sub_z = contact_ind_arr[ dir_z ];
-        // Obtain linear coordinate of the current contact.
-        ind_z = chess::sub2ind( sub_z );
-
-        // If current scan piece is the very piece that performed the play, skip.
-        if( ind_z == ind_b ){
-            continue;
-        }
-
-        // Immediate neighbor case (Check pawn and king cases).
-        if( contact_dist_arr[dir_z] == 1 ){
-
-            // Neighbor piece is a pawn.
-            if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN ){
-
-                // Pawn is immediately North.
-                if( dir_z == 0 ){
-
-                    // Pawn is black.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
-                        this->valid_B_moves_map[ ind_z ].push_back( ind_a );
-                        // Double square pawn jump possibility.
-                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                            this->CHS_board[sub_z.first - 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P ){
-                            this->valid_B_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
-                        }
-                    }
-
-                // Pawn is immediately South.
-                }else if( dir_z == 1 ){
-
-                    // Pawn is white.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
-                        this->valid_W_moves_map[ ind_z ].push_back( ind_a );
-                        // Double square pawn jump possibility.
-                        if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                            this->CHS_board[sub_z.first + 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P ){
-                            this->valid_W_moves_map[ ind_z ].push_back( ind_a - chess::BOARDWIDTH );
-                        }
-                    }
-
-                // The pawn is on immediate North-East or North-West diagonal.
-                }else if( dir_z == 4 || dir_z == 5 ){
-
-                    // The pawn is black AND the displaced piece was white.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK &&
-                        tar_pce.color == CHS_PIECE_COLOR::WHITE )
-                    {
-                        // Remove black pawn valid attack option now that the start position is empty.
-                        this->valid_B_atks_map[ ind_z ].erase(
-                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
-                            this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
-                            this->valid_B_atks_map[ ind_z ].end() );
-                    }
-                
-                // The pawn is on immediate South-West or South-East diagonal.
-                }else if( dir_z == 6 || dir_z == 7 ){
-                    // The pawn is white AND the displaced piece was black.
-                    if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE &&
-                        tar_pce.color == CHS_PIECE_COLOR::BLACK )
-                    {
-                        // Remove black pawn valid attack option now that the start position is empty.
-                        this->valid_W_atks_map[ ind_z ].erase(
-                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
-                            this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
-                            this->valid_W_atks_map[ ind_z ].end() );   
-                    }
-                }
-                
-                // Current direction scan complete.
-                continue;
-
-            }
-
-            // Immediate neighbor piece is a king.
-            if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::KING ){
-
-                // King is black.
-                if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK ){
-
-                    // Add freed square as a possible move.
-                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
-                    // Remove attack possibility of the new square, if it was white.
-                    if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-                        this->valid_B_atks_map[ ind_z ].erase(
-                            std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
-                            this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
-                            this->valid_B_atks_map[ ind_z ].end() );
-                    }
-
-                // King is white.
-                }else{
-
-                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
-                    // Remove attack possibility of the new square, if it was black.
-                    if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
-                        this->valid_W_atks_map[ ind_z ].erase(
-                            std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
-                            this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
-                            this->valid_W_atks_map[ ind_z ].end() );
-                    }
-
-                }
-
-                // Current direction scan complete.
-                continue;
-
-            }
-
-        }
-
-        // Pawn double jump case.
-        if( contact_dist_arr[dir_z] == 2 ){
-
-            // Scan piece is two square North.
-            if( dir_z == 0 ){
-                
-                // Scan piece is an unmoved pawn (which can only be black if rules are respected).
-                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
-                {
-                    this->valid_B_moves_map[ ind_z ].push_back( ind_a );
-                    continue;
-                }
-
-            // Scan piece is two square South.
-            }else if( dir_z == 1 ){
-
-                // Scan piece is an unmoved pawn (which can only be white if rules are respected).
-                if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
-                {
-                    this->valid_W_moves_map[ ind_z ].push_back( ind_a );
-                    continue;
-                }
-            
-            }
-
-        }
-
-        // Determine if target contact can perform correct line scan.
-        bool line_rev_scan = false;
-        line_rev_scan = line_rev_scan || ( ( dir_z >= 0 && dir_z < 4 ) && 
-            ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
-            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ) );
-        line_rev_scan = line_rev_scan || ( ( dir_z >= 4 && dir_z < 8 ) && 
-            ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
-            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP ) );
-        
-        // Line move pieces scan.
-        if( line_rev_scan ){
-
-            // Reverse scan linear index increment amount and count.
-            int rev_incrm = 0;  int rev_inc_cnt = 0;
-            // Reverse scan helper variables definition.
-            switch( dir_z ){
-            case 0:     // North scan -> South reverse scan.
-                rev_incrm = direc_unit_step[1];
-                rev_inc_cnt = rev_scan_dist_arr[1];
-                break;
-            case 1:     // South scan -> North reverse scan.
-                rev_incrm = direc_unit_step[0];
-                rev_inc_cnt = rev_scan_dist_arr[0];
-                break;
-            case 2:     // West scan -> East reverse scan.
-                rev_incrm = direc_unit_step[3];
-                rev_inc_cnt = rev_scan_dist_arr[3];
-                break;
-            case 3:     // East scan -> West reverse scan.
-                rev_incrm = direc_unit_step[2];
-                rev_inc_cnt = rev_scan_dist_arr[2];
-                break;
-            case 4:     // NE -> SW reverse scan.
-                rev_incrm = direc_unit_step[6];
-                rev_inc_cnt = rev_scan_dist_arr[6];
-                break; 
-            case 5:     // NW -> SE reverse scan.
-                rev_incrm = direc_unit_step[7];
-                rev_inc_cnt = rev_scan_dist_arr[7];
-                break;
-            case 6:     // SW -> NE reverse scan.
-                rev_incrm = direc_unit_step[4];
-                rev_inc_cnt = rev_scan_dist_arr[4];
-                break;
-            case 7:     // SE -> NW reverse scan.
-                rev_incrm = direc_unit_step[5];
-                rev_inc_cnt = rev_scan_dist_arr[5];
-                break;
-            default:
-                break;
-            }
-
-            // Scan piece is a white.
-            if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
-
-                // Displaced piece is black, so no longer attacked at starting position.
-                if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
-
-                    // Remove valid attack from white scan piece to starting position.
-                    this->valid_W_atks_map[ ind_z ].erase(
-                        std::remove(this->valid_W_atks_map[ ind_z ].begin(), 
-                        this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
-                        this->valid_W_atks_map[ ind_z ].end() );
-
-                }
-                // Add new free space as valid white scan piece move.
-                this->valid_W_moves_map[ ind_z ].push_back( ind_a );
-
-                // Initialize reverse scan linear index.
-                ind_t = ind_a;
-                // Reverse scan remaining line.
-                for( int t = 1; t <= rev_inc_cnt; t++ ){
-
-                    ind_t += rev_incrm;
-                    pce_t = this->get_piece_at( ind_t );
-
-                    // Regardless of what's on the reverse scan square, it is added to attacks 
-                    // by white list.
-                    this->atk_list_by_W[ind_t].push_back( ind_z );
-
-                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
-                        // Free space means accessible by current reverse scan root.
-                        this->valid_W_moves_map[ ind_z ].push_back( ind_t );
-                    }else{
-                        if( pce_t.color == CHS_PIECE_COLOR::BLACK ){
-                            // Black piece means can be attacked by current reverse scan root.
-                            this->valid_W_atks_map[ ind_z ].push_back( ind_t );
-                        }
-                    }
-
-                }
-
-            // Scan piece is a black.
-            }else{
-
-                // Displaced piece is white, so no longer attacked at starting position.
-                if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
-
-                    // Remove valid attack from black scan piece to starting position.
-                    this->valid_B_atks_map[ ind_z ].erase(
-                        std::remove(this->valid_B_atks_map[ ind_z ].begin(), 
-                        this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
-                        this->valid_B_atks_map[ ind_z ].end() );
-
-                }
-                // Add new free space as valid black scan piece move.
-                this->valid_B_moves_map[ ind_z ].push_back( ind_a );
-
-                // Initialize reverse scan linear index.
-                int ind_t = ind_a;
-                // Reverse scan remaining line.
-                for( int t = 1; t <= rev_inc_cnt; t++ ){
-
-                    ind_t += rev_incrm;
-                    pce_t = this->get_piece_at( ind_t );
-
-                    // Regardless of what's on the reverse scan square, it is added to attacks 
-                    // by black list.
-                    this->atk_list_by_B[ind_t].push_back( ind_z );
-
-                    if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
-                        // Free space means accessible by current reverse scan root.
-                        this->valid_B_moves_map[ ind_z ].push_back( ind_t );
-                    }else{
-                        if( pce_t.color == CHS_PIECE_COLOR::WHITE ){
-                            // White piece means can be attacked by current reverse scan root.
-                            this->valid_B_atks_map[ ind_z ].push_back( ind_t );
-                        }
-                    }
-
-                }
-
-            }
-
-            // Current scan is complete.
-            continue;
-
-        }
-
-
-    }
-
-// ---------------------------------------------------------------------- <<<<<
 
 // ---------------------------------------------------------------------- >>>>>
 //      Point B POV Line Contacts Delimiting
@@ -8585,13 +8598,14 @@ that may need their list of possible plays updated with this newly occupied squa
                 
                 // Scan piece is an unmoved pawn (which can only be black if rules are respected).
                 if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::BLACK )
                 {   
                     // Remove double jump possibility now the square is occupied.
-                    this->valid_W_moves_map[ ind_z ].erase(
-                        std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
-                        this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
-                        this->valid_W_moves_map[ ind_z ].end() );
+                    this->valid_B_moves_map[ ind_z ].erase(
+                        std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
+                        this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
+                        this->valid_B_moves_map[ ind_z ].end() );
                     // Current direction scan complete.
                     continue;
                 }
@@ -8601,13 +8615,14 @@ that may need their list of possible plays updated with this newly occupied squa
 
                 // Scan piece is an unmoved pawn (which can only be white if rules are respected).
                 if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN )
+                    this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::PAWN &&
+                    this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE )
                 {  
                     // Remove double jump possibility now the square is occupied.
-                    this->valid_B_moves_map[ ind_z ].erase(
-                        std::remove(this->valid_B_moves_map[ ind_z ].begin(), 
-                        this->valid_B_moves_map[ ind_z ].end(), ind_b ), 
-                        this->valid_B_moves_map[ ind_z ].end() );
+                    this->valid_W_moves_map[ ind_z ].erase(
+                        std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
+                        this->valid_W_moves_map[ ind_z ].end(), ind_b ), 
+                        this->valid_W_moves_map[ ind_z ].end() );
                     // Current direction scan complete.
                     continue;
                 }
