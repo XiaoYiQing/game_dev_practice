@@ -5854,7 +5854,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
     tmp_pce = b_rook;    tmp_pce.not_moved = false;
     myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 44, emp_pce );
@@ -5939,7 +5939,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
     tmp_pce = w_queen;    tmp_pce.not_moved = false;
     myGame2.set_piece_at_NO_UPD( 4, 3, tmp_pce );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 37, 35, emp_pce );
@@ -5985,7 +5985,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
     tmp_pce = w_queen;    tmp_pce.not_moved = false;
     myGame2.set_piece_at_NO_UPD( 3, 2, tmp_pce );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 35, 26, emp_pce );
@@ -6069,7 +6069,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
     tmp_pce = b_queen;    tmp_pce.not_moved = false;
     myGame2.set_piece_at_NO_UPD( 4, 3, tmp_pce );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 37, 35, emp_pce );

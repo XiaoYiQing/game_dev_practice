@@ -7481,6 +7481,10 @@ that may need their list of possible plays updated with this newly liberated squ
     // TODO: King special case, where the moved piece is the king, in which case
     //  attacked by evaluations are handled differently.
 
+    // Boolean indicating if a reverse scan needs to take into account that a king of
+    // opposite color has moved. Requires modified scanning.
+    bool king_rev_scan_except = false;
+
     /*
     Array containing the distance of first contact along each of the 8 directions
     starting from the newly emptied starting position ( i_a, j_a ).
@@ -7791,6 +7795,9 @@ that may need their list of possible plays updated with this newly liberated squ
             // Scan piece is a white.
             if( this->CHS_board[sub_z.first][sub_z.second].color == CHS_PIECE_COLOR::WHITE ){
 
+                // Add new free space as valid white scan piece move.
+                this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+
                 // Displaced piece is black, so no longer attacked at starting position.
                 if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
 
@@ -7800,9 +7807,11 @@ that may need their list of possible plays updated with this newly liberated squ
                         this->valid_W_atks_map[ ind_z ].end(), ind_a ), 
                         this->valid_W_atks_map[ ind_z ].end() );
 
+                    king_rev_scan_except = tar_pce.type == CHS_PIECE_TYPE::KING;
+                }else{
+                    king_rev_scan_except = false;
                 }
-                // Add new free space as valid white scan piece move.
-                this->valid_W_moves_map[ ind_z ].push_back( ind_a );
+                
 
                 // Initialize reverse scan linear index.
                 ind_t = ind_a;
@@ -7812,9 +7821,10 @@ that may need their list of possible plays updated with this newly liberated squ
                     ind_t += rev_incrm;
                     pce_t = this->get_piece_at( ind_t );
 
-                    // Regardless of what's on the reverse scan square, it is added to attacks 
-                    // by white list.
-                    this->atk_list_by_W[ind_t].push_back( ind_z );
+                    // Add to the attacked by white list unless special king moved condition.
+                    if( !king_rev_scan_except ){
+                        this->atk_list_by_W[ind_t].push_back( ind_z );
+                    }
 
                     if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
                         // Free space means accessible by current reverse scan root.
@@ -7831,6 +7841,9 @@ that may need their list of possible plays updated with this newly liberated squ
             // Scan piece is a black.
             }else{
 
+                // Add new free space as valid black scan piece move.
+                this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+
                 // Displaced piece is white, so no longer attacked at starting position.
                 if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
@@ -7840,9 +7853,11 @@ that may need their list of possible plays updated with this newly liberated squ
                         this->valid_B_atks_map[ ind_z ].end(), ind_a ), 
                         this->valid_B_atks_map[ ind_z ].end() );
 
+                    king_rev_scan_except = tar_pce.type == CHS_PIECE_TYPE::KING;
+                }else{
+                    king_rev_scan_except = false;
                 }
-                // Add new free space as valid black scan piece move.
-                this->valid_B_moves_map[ ind_z ].push_back( ind_a );
+                
 
                 // Initialize reverse scan linear index.
                 int ind_t = ind_a;
@@ -7852,9 +7867,10 @@ that may need their list of possible plays updated with this newly liberated squ
                     ind_t += rev_incrm;
                     pce_t = this->get_piece_at( ind_t );
 
-                    // Regardless of what's on the reverse scan square, it is added to attacks 
-                    // by black list.
-                    this->atk_list_by_B[ind_t].push_back( ind_z );
+                    // Add to the attacked by white list unless special king moved condition.
+                    if( !king_rev_scan_except ){
+                        this->atk_list_by_B[ind_t].push_back( ind_z );
+                    }
 
                     if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
                         // Free space means accessible by current reverse scan root.
