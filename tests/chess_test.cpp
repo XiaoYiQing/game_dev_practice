@@ -6115,7 +6115,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
     tmp_pce = b_queen;    tmp_pce.not_moved = false;
     myGame2.set_piece_at_NO_UPD( 3, 2, tmp_pce );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 35, 26, emp_pce );
@@ -6147,6 +6147,68 @@ void tests::chess_upd_pre_legal_v2_tests(){
         cout << "chess upd_pre_legal_plays queen (diag) move test 1 (verso): passed!" << endl;
     }else{
         cout << "chess upd_pre_legal_plays queen (diag) move test 1 (verso): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      King Move Line Reverse Scan Test (Recto)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 3, 5, w_king );
+    myGame1.set_piece_at( 7, 0, b_king );
+    myGame1.set_piece_at( 6, 0, b_pawn );
+    myGame1.set_piece_at( 6, 1, b_pawn );
+    myGame1.set_piece_at( 7, 1, b_knight );
+
+    myGame1.set_piece_at( 3, 2, b_rook );
+
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 3, 5, emp_pce );
+    tmp_pce = w_king;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 2, 5, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 3, 5, emp_pce );
+    tmp_pce = w_king;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 2, 5, tmp_pce );
+
+    myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 29, 21, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays king move test 1 (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays king move test 1 (verso): failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<

@@ -7495,6 +7495,7 @@ that may need their list of possible plays updated with this newly liberated squ
     */
     int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    int leftover_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
     /*
     Linear index step equivalent along each of the cardinal directions.
@@ -7518,6 +7519,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a + z][j_a].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[0] = z;
             contact_ind_arr[0] = { i_a + z, j_a };
+            leftover_dist_arr[0] = u_dist_a - z;
             break;
         }
     }
@@ -7527,6 +7529,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a - z][j_a].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[1] = z;
             contact_ind_arr[1] = { i_a - z, j_a };
+            leftover_dist_arr[1] = d_dist_a - z;
             break;
         }
     }
@@ -7536,6 +7539,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[2] = z;
             contact_ind_arr[2] = { i_a, j_a - z };
+            leftover_dist_arr[2] = l_dist_a - z;
             break;
         }
     }
@@ -7545,6 +7549,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[3] = z;
             contact_ind_arr[3] = { i_a, j_a + z };
+            leftover_dist_arr[3] = r_dist_a - z;
             break;
         }
     }
@@ -7554,6 +7559,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a + z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[4] = z;
             contact_ind_arr[4] = { i_a + z, j_a + z };
+            leftover_dist_arr[4] = min( u_dist_a, r_dist_a ) - z;
             break;
         }
     }
@@ -7563,6 +7569,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a + z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[5] = z;
             contact_ind_arr[5] = { i_a + z, j_a - z };
+            leftover_dist_arr[5] = min( u_dist_a, l_dist_a ) - z;
             break;
         }
     }
@@ -7572,6 +7579,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a - z][j_a - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[6] = z;
             contact_ind_arr[6] = { i_a - z, j_a - z };
+            leftover_dist_arr[6] = min( d_dist_a, l_dist_a ) - z;
             break;
         }
     }
@@ -7581,6 +7589,7 @@ that may need their list of possible plays updated with this newly liberated squ
         if( CHS_board[i_a - z][j_a + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[7] = z;
             contact_ind_arr[7] = { i_a - z, j_a + z };
+            leftover_dist_arr[7] = min( d_dist_a, r_dist_a ) - z;
             break;
         }
     }
@@ -7753,40 +7762,48 @@ that may need their list of possible plays updated with this newly liberated squ
         if( line_rev_scan ){
 
             // Reverse scan linear index increment amount and count.
-            int rev_incrm = 0;  int rev_inc_cnt = 0;
+            int rev_incrm = 0;  int rev_inc_cnt = 0;    int rem_cnt = 0;
             // Reverse scan helper variables definition.
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
                 rev_incrm = direc_unit_step[1];
                 rev_inc_cnt = rev_scan_dist_arr[1];
+                rem_cnt = leftover_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
                 rev_incrm = direc_unit_step[0];
                 rev_inc_cnt = rev_scan_dist_arr[0];
+                rem_cnt = leftover_dist_arr[0];
                 break;
             case 2:     // West scan -> East reverse scan.
                 rev_incrm = direc_unit_step[3];
                 rev_inc_cnt = rev_scan_dist_arr[3];
+                rem_cnt = leftover_dist_arr[3];
                 break;
             case 3:     // East scan -> West reverse scan.
                 rev_incrm = direc_unit_step[2];
                 rev_inc_cnt = rev_scan_dist_arr[2];
+                rem_cnt = leftover_dist_arr[2];
                 break;
             case 4:     // NE -> SW reverse scan.
                 rev_incrm = direc_unit_step[6];
                 rev_inc_cnt = rev_scan_dist_arr[6];
+                rem_cnt = leftover_dist_arr[6];
                 break; 
             case 5:     // NW -> SE reverse scan.
                 rev_incrm = direc_unit_step[7];
                 rev_inc_cnt = rev_scan_dist_arr[7];
+                rem_cnt = leftover_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
                 rev_incrm = direc_unit_step[4];
                 rev_inc_cnt = rev_scan_dist_arr[4];
+                rem_cnt = leftover_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
                 rev_incrm = direc_unit_step[5];
                 rev_inc_cnt = rev_scan_dist_arr[5];
+                rem_cnt = leftover_dist_arr[5];
                 break;
             default:
                 break;
@@ -7824,6 +7841,8 @@ that may need their list of possible plays updated with this newly liberated squ
                     // Add to the attacked by white list unless special king moved condition.
                     if( !king_rev_scan_except ){
                         this->atk_list_by_W[ind_t].push_back( ind_z );
+                    }else{
+                        int uuuu = 0;
                     }
 
                     if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
@@ -7836,6 +7855,19 @@ that may need their list of possible plays updated with this newly liberated squ
                         }
                     }
 
+                }
+
+                // The first contact is the opposite king.
+                if( pce_t.type == CHS_PIECE_TYPE::KING && pce_t.color == CHS_PIECE_COLOR::BLACK ){
+                    // Continue filling the attack by white lists until contact.
+                    for( int t = 0; t < rem_cnt; t++ ){
+                        ind_t += rev_incrm;
+                        this->atk_list_by_W[ind_t].push_back( ind_z );
+                        pce_t = this->get_piece_at( ind_t );
+                        if( pce_t.type != CHS_PIECE_TYPE::NO_P ){
+                            break;
+                        }
+                    }
                 }
 
             // Scan piece is a black.
@@ -7870,6 +7902,8 @@ that may need their list of possible plays updated with this newly liberated squ
                     // Add to the attacked by white list unless special king moved condition.
                     if( !king_rev_scan_except ){
                         this->atk_list_by_B[ind_t].push_back( ind_z );
+                    }else{
+                        int uuuu = 0;
                     }
 
                     if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
@@ -7882,6 +7916,19 @@ that may need their list of possible plays updated with this newly liberated squ
                         }
                     }
 
+                }
+
+                // The first contact is the opposite king.
+                if( pce_t.type == CHS_PIECE_TYPE::KING && pce_t.color == CHS_PIECE_COLOR::WHITE ){
+                    // Continue filling the attack by black lists until contact.
+                    for( int t = 0; t < rem_cnt; t++ ){
+                        ind_t += rev_incrm;
+                        this->atk_list_by_B[ind_t].push_back( ind_z );
+                        pce_t = this->get_piece_at( ind_t );
+                        if( pce_t.type != CHS_PIECE_TYPE::NO_P ){
+                            break;
+                        }
+                    }
                 }
 
             }
