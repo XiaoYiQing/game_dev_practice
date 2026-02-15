@@ -7841,8 +7841,6 @@ that may need their list of possible plays updated with this newly liberated squ
                     // Add to the attacked by white list unless special king moved condition.
                     if( !king_rev_scan_except ){
                         this->atk_list_by_W[ind_t].push_back( ind_z );
-                    }else{
-                        int uuuu = 0;
                     }
 
                     if( pce_t.type == CHS_PIECE_TYPE::NO_P ){
@@ -7902,8 +7900,6 @@ that may need their list of possible plays updated with this newly liberated squ
                     // Add to the attacked by white list unless special king moved condition.
                     if( !king_rev_scan_except ){
                         this->atk_list_by_B[ind_t].push_back( ind_z );
-                    }else{
-                        int uuuu = 0;
                     }
 
                     if( pce_t.type == CHS_PIECE_TYPE::NO_P ){

@@ -5262,6 +5262,12 @@ void tests::chess_upd_pre_legal_v2_tests(){
     chess::chs_piece w_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
     chess::chs_piece b_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
     
+    auto atk_list_by_W_bef = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_bef = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_bef = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_bef = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_bef = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_bef = myGame1.get_valid_B_atks_map();
     auto atk_list_by_W_1 = myGame1.getAtk_list_by_W();
     auto atk_list_by_B_1 = myGame1.getAtk_list_by_B();
     auto valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
@@ -6158,7 +6164,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
 
     test_bool = true;
     myGame1.clearBoard();
-    myGame1.setTurn_cnt(1);
+    myGame1.setTurn_cnt(0);
 
     myGame1.set_piece_at( 3, 5, w_king );
     myGame1.set_piece_at( 7, 0, b_king );
@@ -6168,6 +6174,13 @@ void tests::chess_upd_pre_legal_v2_tests(){
 
     myGame1.set_piece_at( 3, 2, b_rook );
 
+    // Obtain the standard results.
+    atk_list_by_W_bef = myGame1.getAtk_list_by_W();
+    atk_list_by_B_bef = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_bef = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_bef = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_bef = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_bef = myGame1.get_valid_B_atks_map();
 
     myGame2 = myGame1;
     
@@ -6183,7 +6196,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
     tmp_pce = w_king;    tmp_pce.not_moved = false;
     myGame2.set_piece_at_NO_UPD( 2, 5, tmp_pce );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 21, emp_pce );
@@ -6205,6 +6218,93 @@ void tests::chess_upd_pre_legal_v2_tests(){
     valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
     valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
 
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_bef, atk_list_by_B_1 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays king move test 1 (recto): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays king move test 1 (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      King Move Line Reverse Scan Test (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 3, 5, b_king );
+    myGame1.set_piece_at( 0, 0, w_king );
+    myGame1.set_piece_at( 1, 0, w_pawn );
+    myGame1.set_piece_at( 1, 1, w_pawn );
+    myGame1.set_piece_at( 0, 1, w_knight );
+
+    myGame1.set_piece_at( 3, 2, w_rook );
+
+    // Obtain the standard results.
+    atk_list_by_W_bef = myGame1.getAtk_list_by_W();
+    atk_list_by_B_bef = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_bef = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_bef = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_bef = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_bef = myGame1.get_valid_B_atks_map();
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 3, 5, emp_pce );
+    tmp_pce = b_king;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 2, 5, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 3, 5, emp_pce );
+    tmp_pce = b_king;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 2, 5, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 29, 21, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_bef, atk_list_by_W_1 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+
     if( test_bool ){
         cout << "chess upd_pre_legal_plays king move test 1 (verso): passed!" << endl;
     }else{
@@ -6212,6 +6312,396 @@ void tests::chess_upd_pre_legal_v2_tests(){
     }
 
 // ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Exposed King Reverse Scan Test (Recto)
+// ---------------------------------------------------------------------- >>>>>
+
+    // Horizontal case.
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+    
+    myGame1.set_piece_at( 7, 0, b_king );
+    myGame1.set_piece_at( 6, 0, b_pawn );
+    myGame1.set_piece_at( 6, 1, b_pawn );
+    myGame1.set_piece_at( 7, 1, b_knight );
+
+    myGame1.set_piece_at( 3, 5, w_king );
+    myGame1.set_piece_at( 3, 0, b_rook );
+    myGame1.set_piece_at( 3, 3, b_knight );
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 3, 3, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 5, 4, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 3, 3, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 27, 44, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays horizontal exposed king reverse scan test (recto): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays horizontal exposed king reverse scan test (recto): failed!" << endl;
+    }
+
+    // Vertical case.
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 7, 0, b_king );
+    myGame1.set_piece_at( 6, 0, b_pawn );
+    myGame1.set_piece_at( 6, 1, b_pawn );
+    myGame1.set_piece_at( 7, 1, b_knight );
+
+    myGame1.set_piece_at( 1, 4, w_king );
+    myGame1.set_piece_at( 5, 4, b_rook );
+    myGame1.set_piece_at( 3, 4, b_knight );
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 3, 4, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 2, 2, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 2, 2, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 28, 18, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays vertical exposed king reverse scan test (recto): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays vertical exposed king reverse scan test (recto): failed!" << endl;
+    }
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 7, 0, b_king );
+    myGame1.set_piece_at( 6, 0, b_pawn );
+    myGame1.set_piece_at( 6, 1, b_pawn );
+    myGame1.set_piece_at( 7, 1, b_knight );
+
+    myGame1.set_piece_at( 3, 4, w_king );
+    myGame1.set_piece_at( 2, 3, b_knight );
+    myGame1.set_piece_at( 0, 1, b_bishop );
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 2, 3, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 4, 2, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 2, 3, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 4, 2, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 19, 34, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays diagonal exposed king reverse scan test (recto): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays diagonal exposed king reverse scan test (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Exposed King Reverse Scan Test (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    // Horizontal case.
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+    
+    myGame1.set_piece_at( 7, 0, w_king );
+
+    myGame1.set_piece_at( 3, 5, b_king );
+    myGame1.set_piece_at( 3, 0, w_rook );
+    myGame1.set_piece_at( 3, 3, w_knight );
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 3, 3, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 5, 4, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 3, 3, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 27, 44, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays horizontal exposed king reverse scan test (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays horizontal exposed king reverse scan test (verso): failed!" << endl;
+    }
+
+    // Vertical case.
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 7, 0, w_king );
+
+    myGame1.set_piece_at( 1, 4, b_king );
+    myGame1.set_piece_at( 5, 4, w_rook );
+    myGame1.set_piece_at( 3, 4, w_knight );
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 3, 4, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 2, 2, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 2, 2, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 28, 18, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays vertical exposed king reverse scan test (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays vertical exposed king reverse scan test (verso): failed!" << endl;
+    }
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 7, 0, w_king );
+
+    myGame1.set_piece_at( 3, 4, b_king );
+    myGame1.set_piece_at( 2, 3, w_knight );
+    myGame1.set_piece_at( 0, 1, w_bishop );
+
+    myGame2 = myGame1;
+    
+    // Perform a "manual" play.
+    myGame1.set_piece_at( 2, 3, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 4, 2, tmp_pce );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 2, 3, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 4, 2, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 19, 34, emp_pce );
+
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays diagonal exposed king reverse scan test (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays diagonal exposed king reverse scan test (verso): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 
 
 }
