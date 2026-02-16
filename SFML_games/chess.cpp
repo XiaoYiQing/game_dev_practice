@@ -9125,13 +9125,13 @@ that may need their list of possible plays updated with this newly occupied squa
         }
 
 
-        // New occupant is white bishop/queen.
+        // New occupant is white bishop/rook/queen.
         if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
-            // Parse through each of the diagonal directions.
+            // Parse through each of the line directions.
             for( unsigned int t = t_min; t < t_max; t++ ){
 
-                // Offset for number of free squares till contact.
+                // Offset to the number of free squares till contact.
                 int offset = 0;
 
                 // First contact point parse.
@@ -9160,15 +9160,30 @@ that may need their list of possible plays updated with this newly occupied squa
                     this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
                 }
 
+                
+                // If opponent's king is the line contact.
+                if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].type == CHS_PIECE_TYPE::KING &&
+                    this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == CHS_PIECE_COLOR::BLACK )
+                {
+                    // Continue adding attacked by white points till another contact.
+                    for( int st = 0; st < leftover_dist_arr[t]; st++ ){
+                        tmp_int += direc_unit_step[t];
+                        this->atk_list_by_W[ tmp_int ].push_back( ind_b );
+                        if( this->get_piece_at( tmp_int ).type != CHS_PIECE_TYPE::NO_P ){
+                            break;
+                        }
+                    }
+                }
+
             }
 
-        // New occupant is black bishop/queen.
+        // New occupant is black bishop/rook/queen.
         }else{
 
-            // Parse through each of the diagonal directions.
+            // Parse through each of the line directions.
             for( unsigned int t = t_min; t < t_max; t++ ){
 
-                // Offset for number of free squares till contact.
+                // Offset to the number of free squares till contact.
                 int offset = 0;
 
                 // First contact point parse.
@@ -9194,6 +9209,20 @@ that may need their list of possible plays updated with this newly occupied squa
                     tmp_int += direc_unit_step[t];
                     this->atk_list_by_B[ tmp_int ].push_back( ind_b );
                     this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
+                }
+
+                // If opponent's king is the line contact.
+                if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].type == CHS_PIECE_TYPE::KING &&
+                    this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == CHS_PIECE_COLOR::WHITE )
+                {
+                    // Continue adding attacked by white points till another contact.
+                    for( int st = 0; st < leftover_dist_arr[t]; st++ ){
+                        tmp_int += direc_unit_step[t];
+                        this->atk_list_by_B[ tmp_int ].push_back( ind_b );
+                        if( this->get_piece_at( tmp_int ).type != CHS_PIECE_TYPE::NO_P ){
+                            break;
+                        }
+                    }
                 }
 
             }
