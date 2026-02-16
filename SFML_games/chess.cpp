@@ -8339,6 +8339,7 @@ that may need their list of possible plays updated with this newly occupied squa
         contact_dist_arr[z] = 0;
         rev_scan_dist_arr[z] = 0;
         contact_ind_arr[z] = {-1,-1};
+        leftover_dist_arr[z] = 0;
     }
 
     // North first contact scan.
@@ -8347,6 +8348,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b + z][j_b].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[0] = z;
             contact_ind_arr[0] = { i_b + z, j_b };
+            leftover_dist_arr[0] = u_dist_b - z;
             break;
         }
     }
@@ -8356,6 +8358,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b - z][j_b].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[1] = z;
             contact_ind_arr[1] = { i_b - z, j_b };
+            leftover_dist_arr[1] = d_dist_b - z;
             break;
         }
     }
@@ -8365,6 +8368,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[2] = z;
             contact_ind_arr[2] = { i_b, j_b - z };
+            leftover_dist_arr[2] = l_dist_b - z;
             break;
         }
     }
@@ -8374,6 +8378,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[3] = z;
             contact_ind_arr[3] = { i_b, j_b + z };
+            leftover_dist_arr[3] = r_dist_b - z;
             break;
         }
     }
@@ -8383,6 +8388,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b + z][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[4] = z;
             contact_ind_arr[4] = { i_b + z, j_b + z };
+            leftover_dist_arr[4] = min( u_dist_b, r_dist_b ) - z;
             break;
         }
     }
@@ -8392,6 +8398,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b + z][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[5] = z;
             contact_ind_arr[5] = { i_b + z, j_b - z };
+            leftover_dist_arr[5] = min( u_dist_b, l_dist_b ) - z;
             break;
         }
     }
@@ -8401,6 +8408,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b - z][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[6] = z;
             contact_ind_arr[6] = { i_b - z, j_b - z };
+            leftover_dist_arr[6] = min( d_dist_b, l_dist_b ) - z;
             break;
         }
     }
@@ -8410,6 +8418,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( CHS_board[i_b - z][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[7] = z;
             contact_ind_arr[7] = { i_b - z, j_b + z };
+            leftover_dist_arr[7] = min( d_dist_b, r_dist_b ) - z;
             break;
         }
     }
@@ -8769,6 +8778,10 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
                     // Add black attack option of new white occupant.
                     this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+                    
+                    king_rev_scan_except = tar_pce.type == CHS_PIECE_TYPE::KING;
+                }else{
+                    king_rev_scan_except = false;
                 }
 
             // Target square was empty, scan piece is white.
@@ -8784,6 +8797,10 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
                     // Add white attack option of new black occupant.
                     this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+                
+                    king_rev_scan_except = tar_pce.type == CHS_PIECE_TYPE::KING;
+                }else{
+                    king_rev_scan_except = false;
                 }
 
             }
@@ -8841,11 +8858,15 @@ that may need their list of possible plays updated with this newly occupied squa
                     pce_t = this->get_piece_at( ind_t );
 
                     // Erase attack by current white scan target at the current
-                    // reverse scan square.
-                    this->atk_list_by_W[ ind_t ].erase(
-                        std::remove(this->atk_list_by_W[ ind_t ].begin(), 
-                        this->atk_list_by_W[ ind_t ].end(), ind_z ), 
-                        this->atk_list_by_W[ ind_t ].end() );
+                    // reverse scan square unless king reverse scan exception is in effect.
+                    if( !king_rev_scan_except ){
+
+                        this->atk_list_by_W[ ind_t ].erase(
+                            std::remove(this->atk_list_by_W[ ind_t ].begin(), 
+                            this->atk_list_by_W[ ind_t ].end(), ind_z ), 
+                            this->atk_list_by_W[ ind_t ].end() );
+
+                    }
 
                     // Erase valid move from the current white scan target to the current
                     // reverse scan square.
@@ -8879,11 +8900,13 @@ that may need their list of possible plays updated with this newly occupied squa
                     pce_t = this->get_piece_at( ind_t );
 
                     // Erase attack by current black scan target at the current
-                    // reverse scan square.
-                    this->atk_list_by_B[ ind_t ].erase(
-                        std::remove(this->atk_list_by_B[ ind_t ].begin(), 
-                        this->atk_list_by_B[ ind_t ].end(), ind_z ), 
-                        this->atk_list_by_B[ ind_t ].end() );
+                    // reverse scan square unless king reverse scan exception is in effect.
+                    if( !king_rev_scan_except ){    
+                        this->atk_list_by_B[ ind_t ].erase(
+                            std::remove(this->atk_list_by_B[ ind_t ].begin(), 
+                            this->atk_list_by_B[ ind_t ].end(), ind_z ), 
+                            this->atk_list_by_B[ ind_t ].end() );
+                    }
                     
                     // Erase valid move from the current black scan target to the current
                     // reverse scan square.
