@@ -9243,8 +9243,74 @@ that may need their list of possible plays updated with this newly occupied squa
 //      En-Passant Move Check
 // ---------------------------------------------------------------------- >>>>>
 
+    // Cleanup previous en-passant moves, if any.
+    for( chs_move tmp_move : this->prev_en_pass_moves ){
+        
+        int tmp_ind_a = chess::sub2ind( tmp_move.pt_a );
+        int tmp_ind_b = chess::sub2ind( tmp_move.pt_b );
+        int tmp_ind_c;
+
+        // White pawn performing en-passant.
+        if( tmp_ind_b > tmp_ind_a ){
+            
+            tmp_ind_c = tmp_ind_b - chess::BOARDWIDTH;
+
+            this->atk_list_by_W[ tmp_ind_c ].erase(
+                std::remove(this->atk_list_by_W[ tmp_ind_c ].begin(), 
+                this->atk_list_by_W[ tmp_ind_c ].end(), tmp_ind_a ), 
+                this->atk_list_by_W[ tmp_ind_c ].end() );
+            this->valid_W_atks_map[ tmp_ind_a ].erase(
+                std::remove(this->valid_W_atks_map[ tmp_ind_a ].begin(), 
+                this->valid_W_atks_map[ tmp_ind_a ].end(), tmp_ind_c ), 
+                this->valid_W_atks_map[ tmp_ind_a ].end() );
+
+        // Black pawn performing en-passant.
+        }else{
+
+            tmp_ind_c = tmp_ind_b + chess::BOARDWIDTH;
+
+            this->atk_list_by_B[ tmp_ind_c ].erase(
+                std::remove(this->atk_list_by_B[ tmp_ind_c ].begin(), 
+                this->atk_list_by_B[ tmp_ind_c ].end(), tmp_ind_a ), 
+                this->atk_list_by_B[ tmp_ind_c ].end() );
+            this->valid_B_atks_map[ tmp_ind_a ].erase(
+                std::remove(this->valid_B_atks_map[ tmp_ind_a ].begin(), 
+                this->valid_B_atks_map[ tmp_ind_a ].end(), tmp_ind_c ), 
+                this->valid_B_atks_map[ tmp_ind_a ].end() );
+
+        }
+
+    }
+    // Clear the previous en-passant moves.
+    this->prev_en_pass_moves.clear();
+
     // If the en-passant flag was raised during last turn.
     if( this->en_pass_flag ){
+
+        // Put the current active en-passant possibilities on the pre-legal lists.
+        for( chs_move tmp_move : this->en_pass_moves ){
+        
+            int tmp_ind_a = chess::sub2ind( tmp_move.pt_a );
+            int tmp_ind_b = chess::sub2ind( tmp_move.pt_b );
+            int tmp_ind_c;
+
+            // White pawn performing en-passant.
+            if( tmp_ind_b > tmp_ind_a ){
+
+                tmp_ind_c = tmp_ind_b - chess::BOARDWIDTH;
+                this->atk_list_by_W[ tmp_ind_c ].push_back( tmp_ind_a );
+                this->valid_W_atks_map[ tmp_ind_a ].push_back( tmp_ind_c );
+
+            // Black pawn performing en-passant.
+            }else{
+
+                tmp_ind_c = tmp_ind_b + chess::BOARDWIDTH;
+                this->atk_list_by_B[ tmp_ind_c ].push_back( tmp_ind_a );
+                this->valid_B_atks_map[ tmp_ind_a ].push_back( tmp_ind_c );
+
+            }
+
+        }
 
     }
 

@@ -823,6 +823,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     /**
      * Perform updates on the on the attack lists and the valid moves and attacks all in
      * one go in a precise manner given the target displacement/attack performed.
+     * 
+     * @warning Redundant call to this function will add repeated entries in the pre-legal 
+     *  lists. This function should be called ONCE after a play.
+     * @warning This function consumes the entries of the variable "prev_en_pass_moves" as
+     *  it deletes previous en-passant plays from the pre-legal lists.
      */
     void upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce );
 
