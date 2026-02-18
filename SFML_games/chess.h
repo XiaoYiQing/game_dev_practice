@@ -1118,6 +1118,7 @@ protected:
     bool en_pass_flag;
     // The specific en-passant move.
     vector<chs_move> en_pass_moves;
+    vector<chs_move> prev_en_pass_moves;
 
     // Game lock boolean for when a promotion is necessary for a pawn that reached
     // the last row.

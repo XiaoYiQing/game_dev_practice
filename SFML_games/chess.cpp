@@ -261,6 +261,8 @@ chess::chess(){
         this->legal_moves_map[z].reserve(27);
         this->legal_atks_map[z].reserve(8);
     }
+    this->en_pass_moves.reserve(2);
+    this->prev_en_pass_moves.reserve(2);
 
     AI_proc_flag = false;
     // Set the number of threads to utilize.
@@ -285,7 +287,7 @@ void chess::resetStateVars(){
     this->no_change_turn_cnt = 0;
     this->en_pass_flag = false;
     this->en_pass_moves.clear();
-    this->en_pass_moves.reserve(2);
+    this->prev_en_pass_moves.clear();
     this->promo_lock = false;
 
     this->game_tracking_signal();
@@ -1276,6 +1278,11 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
             // First condition of possiblity of en-passant: pawn moved.
             en_pass_posb = true;
+            // Update previous en-passant moves.
+            this->prev_en_pass_moves.clear();
+            for( chs_move tmp_move : this->en_pass_moves )
+                this->prev_en_pass_moves.push_back( tmp_move );
+            // Clear current en-passant moves.
             this->en_pass_moves.clear();
 
             if( currPiece.color == CHS_PIECE_COLOR::WHITE ){
@@ -1370,7 +1377,6 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
         this->en_pass_flag = true;
     }else{
         this->en_pass_flag = false;
-        this->en_pass_moves.clear();
     }
 
     // Signal for change of board state.
@@ -5090,7 +5096,6 @@ bool chess::play_and_pre_legal_upds( int i_bef, int j_bef, int i_aft, int j_aft 
         this->en_pass_flag = true;
     }else{
         this->en_pass_flag = false;
-        this->en_pass_moves.clear();
     }
 
     // Signal for change of board state.
@@ -7939,7 +7944,6 @@ that may need their list of possible plays updated with this newly liberated squ
 
 // ---------------------------------------------------------------------- <<<<<
 
-
     // Return the destination square to its the new occupant.
     this->CHS_board[i_b][j_b] = tar_pce;
 
@@ -9228,6 +9232,19 @@ that may need their list of possible plays updated with this newly occupied squa
             }
 
         }
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      En-Passant Move Check
+// ---------------------------------------------------------------------- >>>>>
+
+    // If the en-passant flag was raised during last turn.
+    if( this->en_pass_flag ){
 
     }
 
