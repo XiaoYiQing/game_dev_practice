@@ -9261,7 +9261,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 this->atk_list_by_W[ tmp_ind_c ].end() );
             this->valid_W_atks_map[ tmp_ind_a ].erase(
                 std::remove(this->valid_W_atks_map[ tmp_ind_a ].begin(), 
-                this->valid_W_atks_map[ tmp_ind_a ].end(), tmp_ind_c ), 
+                this->valid_W_atks_map[ tmp_ind_a ].end(), tmp_ind_b ), 
                 this->valid_W_atks_map[ tmp_ind_a ].end() );
 
         // Black pawn performing en-passant.
@@ -9275,7 +9275,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 this->atk_list_by_B[ tmp_ind_c ].end() );
             this->valid_B_atks_map[ tmp_ind_a ].erase(
                 std::remove(this->valid_B_atks_map[ tmp_ind_a ].begin(), 
-                this->valid_B_atks_map[ tmp_ind_a ].end(), tmp_ind_c ), 
+                this->valid_B_atks_map[ tmp_ind_a ].end(), tmp_ind_b ), 
                 this->valid_B_atks_map[ tmp_ind_a ].end() );
 
         }
@@ -9299,14 +9299,14 @@ that may need their list of possible plays updated with this newly occupied squa
 
                 tmp_ind_c = tmp_ind_b - chess::BOARDWIDTH;
                 this->atk_list_by_W[ tmp_ind_c ].push_back( tmp_ind_a );
-                this->valid_W_atks_map[ tmp_ind_a ].push_back( tmp_ind_c );
+                this->valid_W_atks_map[ tmp_ind_a ].push_back( tmp_ind_b );
 
             // Black pawn performing en-passant.
             }else{
 
                 tmp_ind_c = tmp_ind_b + chess::BOARDWIDTH;
                 this->atk_list_by_B[ tmp_ind_c ].push_back( tmp_ind_a );
-                this->valid_B_atks_map[ tmp_ind_a ].push_back( tmp_ind_c );
+                this->valid_B_atks_map[ tmp_ind_a ].push_back( tmp_ind_b );
 
             }
 
