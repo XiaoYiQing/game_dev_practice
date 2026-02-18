@@ -1278,7 +1278,7 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
             // First condition of possiblity of en-passant: pawn moved.
             en_pass_posb = true;
-            // Update previous en-passant moves.
+            // Update previous en-passant moves.    
             this->prev_en_pass_moves.clear();
             for( chs_move tmp_move : this->en_pass_moves )
                 this->prev_en_pass_moves.push_back( tmp_move );
@@ -1376,6 +1376,14 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
     if( en_pass_posb ){
         this->en_pass_flag = true;
     }else{
+
+        // If en-passant possibility has just passed, record previous en-passant.
+        if( this->en_pass_flag ){
+            this->prev_en_pass_moves.clear();
+            for( chs_move tmp_move : this->en_pass_moves )
+                this->prev_en_pass_moves.push_back( tmp_move );
+        }
+
         this->en_pass_flag = false;
     }
 
@@ -4709,6 +4717,8 @@ void chess::upd_pre_legal_plays(){
             }
         }
     }
+
+    
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -9284,7 +9294,7 @@ that may need their list of possible plays updated with this newly occupied squa
     // Clear the previous en-passant moves.
     this->prev_en_pass_moves.clear();
 
-    // If the en-passant flag was raised during last turn.
+    // If the en-passant flag was raised during last play.
     if( this->en_pass_flag ){
 
         // Put the current active en-passant possibilities on the pre-legal lists.
