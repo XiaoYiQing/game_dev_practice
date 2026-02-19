@@ -166,9 +166,9 @@ void do_tests( unsigned int test_id ){
     // tests::chess_alg_coord_trans_tests();
     // tests::chess_all_alg_comm_tests();
     // tests::chess_upd_pre_legal_tests();
-    // tests::chess_upd_pre_legal_tests_emp();
+    tests::chess_upd_pre_legal_tests_emp();
     // tests::chess_upd_pre_legal_tests_occ();
-    tests::chess_upd_pre_legal_v2_tests();
+    // tests::chess_upd_pre_legal_v2_tests();
 
     // tests::CHS_SFML_eng_tests();
 
