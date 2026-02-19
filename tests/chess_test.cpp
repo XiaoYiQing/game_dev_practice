@@ -6972,7 +6972,7 @@ void tests::chess_upd_pre_legal_v2_tests(){
     // Re-update game2 to game 1 state.
     myGame2 = myGame1;
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Play the black king to miss the en-passant chance.
     myGame1.ply( 7, 4, 7, 5 );
@@ -7154,12 +7154,58 @@ void tests::chess_upd_pre_legal_v2_tests(){
         cout << "chess upd_pre_legal_plays pawn double en-passant init test (verso): failed!" << endl;
     }
 
+    // Re-update game2 to game 1 state.
+    myGame2 = myGame1;
+
+    // myGame1.printBoard();
+
+    myGame1.ply( 0, 4, 0, 5 );
+
+    // Set the update flag to always.
+    myGame2.setForce_lists_upd(true);
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 0, 4, emp_pce );
+    tmp_pce = w_king;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 0, 5, tmp_pce );
+
+    // Perform manual trigger for the en-passant miss.
+    myGame2.setEn_pass_flag( false );
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 4, 5, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays pawn en-passant delete test (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays pawn en-passant delete test (verso): failed!" << endl;
+    }
+
 // ---------------------------------------------------------------------- <<<<<
 
-
-// ---------------------------------------------------------------------- >>>>>
-//      En-Passant Tests (Recto)
-// ---------------------------------------------------------------------- >>>>>
 
 }
 
