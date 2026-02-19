@@ -7197,7 +7197,6 @@ void tests::chess_upd_pre_legal_v2_tests(){
     test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
     test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
 
-
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn en-passant delete test (verso): passed!" << endl;
     }else{

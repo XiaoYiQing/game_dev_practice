@@ -36,13 +36,25 @@ class chess{
 public:
 
     // The dimensions of the chess board.
-    static const unsigned int BOARDWIDTH = 8;
-    static const unsigned int BOARDHEIGHT = 8;
+    static constexpr unsigned int BOARDWIDTH = 8;
+    static constexpr unsigned int BOARDHEIGHT = 8;
 
     // Define the maximum number of consecutive moves without a pawn being moved
     // or a piece been captured.
-    static const unsigned int DRAWMOVECOUNTMAX = 50;
+    static constexpr unsigned int DRAWMOVECOUNTMAX = 50;
 
+    /*
+    Linear index step equivalent along each of the cardinal directions.
+
+    The directional indices:
+    0 = N,  1 = S,  2 = W,  3 = E,
+    4 = NE, 5 = NW, 6 = SW, 7 = SE
+    */
+    static constexpr int direc_unit_step[8] = {
+        chess::BOARDWIDTH, -1 * (int) chess::BOARDWIDTH, -1, 1,
+        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, -1 * (int) chess::BOARDWIDTH - 1, 
+        -1 * (int) chess::BOARDWIDTH + 1
+    };
 
 // ====================================================================== >>>>>
 //      Class Enum "CHS_PIECE_TYPE" Help Functions

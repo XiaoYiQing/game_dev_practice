@@ -5305,16 +5305,6 @@ void chess::upd_pre_legal_plays_emp( int ind_a, chs_piece tar_pce ){
                     tmp_ind_arr[tmp_arr_lim++] = ind_a + chess::BOARDWIDTH + 1;
                 }
             }
-            // // Possible en-passant attacks on the left.
-            // if( j_a > 0 && this->CHS_board[i_a][j_a-1].type == CHS_PIECE_TYPE::PAWN &&
-            //     this->CHS_board[i_a][j_a-1].color != tar_pce.color ){
-            //     tmp_ind_arr[tmp_arr_lim++] = ind_a - 1;
-            // }
-            // // Possible en-passant attacks on the right.
-            // if( j_a < chess::BOARDWIDTH - 1 && this->CHS_board[i_a][j_a+1].type == CHS_PIECE_TYPE::PAWN &&
-            //     this->CHS_board[i_a][j_a+1].color != tar_pce.color ){
-            //     tmp_ind_arr[tmp_arr_lim++] = ind_a + 1;
-            // }
 
         }
 
@@ -6296,18 +6286,7 @@ that may need their list of possible plays updated with this newly occupied squa
     int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
     int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    /*
-    Linear index step equivalent along each of the cardinal directions.
 
-    The directional indices:
-    0 = N,  1 = S,  2 = W,  3 = E,
-    4 = NE, 5 = NW, 6 = SW, 7 = SE
-    */
-    int direc_unit_step[8] = {
-        chess::BOARDWIDTH, -1 * (int) chess::BOARDWIDTH, -1, 1,
-        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, -1 * (int) chess::BOARDWIDTH - 1, 
-        -1 * (int) chess::BOARDWIDTH + 1
-    };
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
 
@@ -7143,7 +7122,6 @@ that may need their list of possible plays updated with this newly occupied squa
 
     }
 
-
 // ---------------------------------------------------------------------- <<<<<
 
 }
@@ -7511,19 +7489,6 @@ that may need their list of possible plays updated with this newly liberated squ
     int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     int leftover_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    /*
-    Linear index step equivalent along each of the cardinal directions.
-
-    The directional indices:
-    0 = N,  1 = S,  2 = W,  3 = E,
-    4 = NE, 5 = NW, 6 = SW, 7 = SE
-    */
-    int direc_unit_step[8] = {
-        chess::BOARDWIDTH, -1 * (int) chess::BOARDWIDTH, -1, 1,
-        chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, -1 * (int) chess::BOARDWIDTH - 1, 
-        -1 * (int) chess::BOARDWIDTH + 1
-    };
 
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
