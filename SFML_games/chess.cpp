@@ -5912,10 +5912,10 @@ void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
 
     // Compute metric w.r.t. board dimensions.
     int sq_cnt = chess::BOARDHEIGHT * chess::BOARDWIDTH;
-    int u_dist = BOARDHEIGHT - 1 - i_b;
-    int r_dist = BOARDWIDTH - 1 - j_b;
-    int d_dist = i_b;
-    int l_dist = j_b;
+    int u_dist_b = BOARDHEIGHT - 1 - i_b;
+    int r_dist_b = BOARDWIDTH - 1 - j_b;
+    int d_dist_b = i_b;
+    int l_dist_b = j_b;
 
     // Temporary variable to be resued in multiple instances.
     int tmp_int, ind_z, ind_t;
@@ -5974,58 +5974,58 @@ void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
     }else if( prev_pce.type == CHS_PIECE_TYPE::BISHOP ){
 
         // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist, r_dist ) ; NE_z++ )
+        for( int NE_z = 1; NE_z <= min( u_dist_b, r_dist_b ) ; NE_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
         // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist, l_dist ) ; NW_z++ )
+        for( int NW_z = 1; NW_z <= min( u_dist_b, l_dist_b ) ; NW_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
         // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist, l_dist ) ; SW_z++ )
+        for( int SW_z = 1; SW_z <= min( d_dist_b, l_dist_b ) ; SW_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
         // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist, r_dist ) ; SE_z++ )
+        for( int SE_z = 1; SE_z <= min( d_dist_b, r_dist_b ) ; SE_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
         
     }else if( prev_pce.type == CHS_PIECE_TYPE::ROOK ){
 
         // North sweep.
-        for( int N_z = 1; N_z <= u_dist; N_z++ )
+        for( int N_z = 1; N_z <= u_dist_b; N_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
         // West sweep.
-        for( int W_z = 1; W_z <= l_dist; W_z++ )
+        for( int W_z = 1; W_z <= l_dist_b; W_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
         // South sweep.
-        for( int S_z = 1; S_z <= d_dist; S_z++ )
+        for( int S_z = 1; S_z <= d_dist_b; S_z++ )
             tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
         // East sweep.
-        for( int E_z = 1; E_z <= r_dist; E_z++ )
+        for( int E_z = 1; E_z <= r_dist_b; E_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z;            
 
     }else if( prev_pce.type == CHS_PIECE_TYPE::QUEEN ){
         
         // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist, r_dist ) ; NE_z++ )
+        for( int NE_z = 1; NE_z <= min( u_dist_b, r_dist_b ) ; NE_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
         // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist, l_dist ) ; NW_z++ )
+        for( int NW_z = 1; NW_z <= min( u_dist_b, l_dist_b ) ; NW_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
         // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist, l_dist ) ; SW_z++ )
+        for( int SW_z = 1; SW_z <= min( d_dist_b, l_dist_b ) ; SW_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
         // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist, r_dist ) ; SE_z++ )
+        for( int SE_z = 1; SE_z <= min( d_dist_b, r_dist_b ) ; SE_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
         // North sweep.
-        for( int N_z = 1; N_z <= u_dist; N_z++ )
+        for( int N_z = 1; N_z <= u_dist_b; N_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
         // West sweep.
-        for( int W_z = 1; W_z <= l_dist; W_z++ )
+        for( int W_z = 1; W_z <= l_dist_b; W_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
         // South sweep.
-        for( int S_z = 1; S_z <= d_dist; S_z++ )
+        for( int S_z = 1; S_z <= d_dist_b; S_z++ )
             tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
         // East sweep.
-        for( int E_z = 1; E_z <= r_dist; E_z++ )
+        for( int E_z = 1; E_z <= r_dist_b; E_z++ )
             tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z; 
 
     // NOTE: This possibility should not exist since there is no such a thing as
@@ -6082,16 +6082,6 @@ void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
                     tmp_ind_arr[tmp_arr_lim++] = ind_b + chess::BOARDWIDTH + 1;
                 }
             }
-            // Possible en-passant attacks on the left.
-            if( j_b > 0 && this->CHS_board[i_b][j_b-1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_b][j_b-1].color != prev_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_b - 1;
-            }
-            // Possible en-passant attacks on the right.
-            if( j_b < chess::BOARDWIDTH - 1 && this->CHS_board[i_b][j_b+1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_b][j_b+1].color != prev_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_b + 1;
-            }
 
         }
 
@@ -6124,16 +6114,6 @@ void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
                 if( j_b < chess::BOARDWIDTH - 1 ){
                     tmp_ind_arr[tmp_arr_lim++] = ind_b - chess::BOARDWIDTH + 1;
                 }
-            }
-            // Possible en-passant attacks on the left.
-            if( j_b > 0 && this->CHS_board[i_b][j_b-1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_b][j_b-1].color != prev_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_b - 1;
-            }
-            // Possible en-passant attacks on the right.
-            if( j_b < chess::BOARDWIDTH - 1 && this->CHS_board[i_b][j_b+1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_b][j_b+1].color != prev_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_b + 1;
             }
             
         }
@@ -6338,6 +6318,10 @@ that may need their list of possible plays updated with this newly occupied squa
 //      Line Contacts Delimiting
 // ---------------------------------------------------------------------- >>>>>
 
+    // Boolean indicating if a reverse scan needs to take into account that a king of
+    // opposite color has moved. Requires modified scanning.
+    bool king_rev_scan_except = false;
+
     /*
     Array containing the distance of first contact along each of the 8 directions
     starting from the newly occupied position ( i_b, j_b ).
@@ -6347,89 +6331,94 @@ that may need their list of possible plays updated with this newly occupied squa
     4 = NE, 5 = NW, 6 = SW, 7 = SE
     */
     int contact_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-
     int rev_scan_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    int leftover_dist_arr[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
     // Linear index coordinate of first contact along each direction.
     pair<int,int> contact_ind_arr[8];
 
     // North first contact scan.
-    for( int z = 1; z <= u_dist; z++ ){
+    for( int z = 1; z <= u_dist_b; z++ ){
         rev_scan_dist_arr[0]++;
         if( CHS_board[i_b + z][j_b].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[0] = z;
             contact_ind_arr[0] = { i_b + z, j_b };
+            leftover_dist_arr[0] = u_dist_b - z;
             break;
         }
     }
     // South first contact scan.
-    for( int z = 1; z <= d_dist; z++ ){
+    for( int z = 1; z <= d_dist_b; z++ ){
         rev_scan_dist_arr[1]++;
         if( CHS_board[i_b - z][j_b].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[1] = z;
             contact_ind_arr[1] = { i_b - z, j_b };
+            leftover_dist_arr[1] = d_dist_b - z;
             break;
         }
     }
     // West first contact scan.
-    for( int z = 1; z <= l_dist; z++ ){
+    for( int z = 1; z <= l_dist_b; z++ ){
         rev_scan_dist_arr[2]++;
         if( CHS_board[i_b][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[2] = z;
             contact_ind_arr[2] = { i_b, j_b - z };
+            leftover_dist_arr[2] = l_dist_b - z;
             break;
         }
     }
     // East first contact scan.
-    for( int z = 1; z <= r_dist; z++ ){
+    for( int z = 1; z <= r_dist_b; z++ ){
         rev_scan_dist_arr[3]++;
         if( CHS_board[i_b][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[3] = z;
             contact_ind_arr[3] = { i_b, j_b + z };
+            leftover_dist_arr[3] = r_dist_b - z;
             break;
         }
     }
     // North-East first contact scan.
-    for( int z = 1; z <= min( u_dist, r_dist ); z++ ){
+    for( int z = 1; z <= min( u_dist_b, r_dist_b ); z++ ){
         rev_scan_dist_arr[4]++;
         if( CHS_board[i_b + z][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[4] = z;
             contact_ind_arr[4] = { i_b + z, j_b + z };
+            leftover_dist_arr[4] = min( u_dist_b, r_dist_b ) - z;
             break;
         }
     }
     // North-West first contact scan.
-    for( int z = 1; z <= min( u_dist, l_dist ); z++ ){
+    for( int z = 1; z <= min( u_dist_b, l_dist_b ); z++ ){
         rev_scan_dist_arr[5]++;
         if( CHS_board[i_b + z][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[5] = z;
             contact_ind_arr[5] = { i_b + z, j_b - z };
+            leftover_dist_arr[5] = min( u_dist_b, l_dist_b ) - z;
             break;
         }
     }
     // South-West first contact scan.
-    for( int z = 1; z <= min( d_dist, l_dist ); z++ ){
+    for( int z = 1; z <= min( d_dist_b, l_dist_b ); z++ ){
         rev_scan_dist_arr[6]++;
         if( CHS_board[i_b - z][j_b - z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[6] = z;
             contact_ind_arr[6] = { i_b - z, j_b - z };
+            leftover_dist_arr[6] = min( d_dist_b, l_dist_b ) - z;
             break;
         }
     }
     // South-East first contact scan.
-    for( int z = 1; z <= min( d_dist, r_dist ); z++ ){
+    for( int z = 1; z <= min( d_dist_b, r_dist_b ); z++ ){
         rev_scan_dist_arr[7]++;
         if( CHS_board[i_b - z][j_b + z].type != CHS_PIECE_TYPE::NO_P ){
             contact_dist_arr[7] = z;
             contact_ind_arr[7] = { i_b - z, j_b + z };
+            leftover_dist_arr[7] = min( d_dist_b, r_dist_b ) - z;
             break;
         }
     }
 
 // ---------------------------------------------------------------------- <<<<<
-
-
-
 
 
 // ---------------------------------------------------------------------- >>>>>
@@ -6703,11 +6692,17 @@ that may need their list of possible plays updated with this newly occupied squa
 
         }
 
+        // Determine if target contact can perform correct line scan.
+        bool line_rev_scan = false;
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 0 && dir_z < 4 ) && 
+            ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ) );
+        line_rev_scan = line_rev_scan || ( ( dir_z >= 4 && dir_z < 8 ) && 
+            ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
+            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP ) );
+
         // Line move pieces scan.
-        if( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
-            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::ROOK ||
-            this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP )
-        {
+        if( line_rev_scan ){
 
             // If occupied square was NOT empty before.
             if( prev_pce.type != CHS_PIECE_TYPE::NO_P ){
@@ -6775,6 +6770,10 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
                     // Add black attack option of new white occupant.
                     this->valid_B_atks_map[ ind_z ].push_back( ind_b );
+                    
+                    king_rev_scan_except = tar_pce.type == CHS_PIECE_TYPE::KING;
+                }else{
+                    king_rev_scan_except = false;
                 }
 
             // Target square was empty, scan piece is white.
@@ -6790,6 +6789,10 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( tar_pce.color == CHS_PIECE_COLOR::BLACK ){
                     // Add white attack option of new black occupant.
                     this->valid_W_atks_map[ ind_z ].push_back( ind_b );
+                
+                    king_rev_scan_except = tar_pce.type == CHS_PIECE_TYPE::KING;
+                }else{
+                    king_rev_scan_except = false;
                 }
 
             }
@@ -6799,35 +6802,35 @@ that may need their list of possible plays updated with this newly occupied squa
             // Reverse scan helper variables definition.
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
-                rev_incrm = -1 * (int) chess::BOARDWIDTH;
+                rev_incrm = DIR_UNIT_STEP[1];
                 rev_inc_cnt = rev_scan_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
-                rev_incrm = chess::BOARDWIDTH;
+                rev_incrm = DIR_UNIT_STEP[0];
                 rev_inc_cnt = rev_scan_dist_arr[0];
                 break;
             case 2:     // West scan -> East reverse scan.
-                rev_incrm = 1;
+                rev_incrm = DIR_UNIT_STEP[3];
                 rev_inc_cnt = rev_scan_dist_arr[3];
                 break;
             case 3:     // East scan -> West reverse scan.
-                rev_incrm = -1;
+                rev_incrm = DIR_UNIT_STEP[2];
                 rev_inc_cnt = rev_scan_dist_arr[2];
                 break;
             case 4:     // NE -> SW reverse scan.
-                rev_incrm = -1 * (int) chess::BOARDWIDTH - 1;
+                rev_incrm = DIR_UNIT_STEP[6];
                 rev_inc_cnt = rev_scan_dist_arr[6];
                 break; 
             case 5:     // NW -> SE reverse scan.
-                rev_incrm = -1 * (int) chess::BOARDWIDTH + 1;
+                rev_incrm = DIR_UNIT_STEP[7];
                 rev_inc_cnt = rev_scan_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
-                rev_incrm = chess::BOARDWIDTH + 1;
+                rev_incrm = DIR_UNIT_STEP[4];
                 rev_inc_cnt = rev_scan_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
-                rev_incrm = chess::BOARDWIDTH - 1;
+                rev_incrm = DIR_UNIT_STEP[5];
                 rev_inc_cnt = rev_scan_dist_arr[5];
                 break;
             default:
@@ -6847,11 +6850,15 @@ that may need their list of possible plays updated with this newly occupied squa
                     pce_t = this->get_piece_at( ind_t );
 
                     // Erase attack by current white scan target at the current
-                    // reverse scan square.
-                    this->atk_list_by_W[ ind_t ].erase(
-                        std::remove(this->atk_list_by_W[ ind_t ].begin(), 
-                        this->atk_list_by_W[ ind_t ].end(), ind_z ), 
-                        this->atk_list_by_W[ ind_t ].end() );
+                    // reverse scan square unless king reverse scan exception is in effect.
+                    if( !king_rev_scan_except ){
+
+                        this->atk_list_by_W[ ind_t ].erase(
+                            std::remove(this->atk_list_by_W[ ind_t ].begin(), 
+                            this->atk_list_by_W[ ind_t ].end(), ind_z ), 
+                            this->atk_list_by_W[ ind_t ].end() );
+
+                    }
 
                     // Erase valid move from the current white scan target to the current
                     // reverse scan square.
@@ -6885,11 +6892,13 @@ that may need their list of possible plays updated with this newly occupied squa
                     pce_t = this->get_piece_at( ind_t );
 
                     // Erase attack by current black scan target at the current
-                    // reverse scan square.
-                    this->atk_list_by_B[ ind_t ].erase(
-                        std::remove(this->atk_list_by_B[ ind_t ].begin(), 
-                        this->atk_list_by_B[ ind_t ].end(), ind_z ), 
-                        this->atk_list_by_B[ ind_t ].end() );
+                    // reverse scan square unless king reverse scan exception is in effect.
+                    if( !king_rev_scan_except ){    
+                        this->atk_list_by_B[ ind_t ].erase(
+                            std::remove(this->atk_list_by_B[ ind_t ].begin(), 
+                            this->atk_list_by_B[ ind_t ].end(), ind_z ), 
+                            this->atk_list_by_B[ ind_t ].end() );
+                    }
                     
                     // Erase valid move from the current black scan target to the current
                     // reverse scan square.
@@ -6921,7 +6930,7 @@ that may need their list of possible plays updated with this newly occupied squa
 
 // ---------------------------------------------------------------------- <<<<<
 
-// TODO: Please test this
+
 // ---------------------------------------------------------------------- >>>>>
 //      Line Based New Occupant Influence Update
 // ---------------------------------------------------------------------- >>>>>
@@ -6932,7 +6941,7 @@ that may need their list of possible plays updated with this newly occupied squa
         if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
 
             // Valid pawn movement add.
-            if( u_dist > 0 && ( contact_dist_arr[0] > 1 || contact_dist_arr[0] == 0 ) ){
+            if( u_dist_b > 0 && ( contact_dist_arr[0] > 1 || contact_dist_arr[0] == 0 ) ){
                 this->valid_W_moves_map[ind_b].push_back( ind_b + chess::BOARDWIDTH );
                 // Double pawn jump scenario.
                 if( tar_pce.not_moved && ( contact_dist_arr[0] > 2 || contact_dist_arr[0] == 0 ) ){
@@ -6941,10 +6950,10 @@ that may need their list of possible plays updated with this newly occupied squa
             }
 
             // Not on last row.
-            if( u_dist > 0 ){
+            if( u_dist_b > 0 ){
 
                 // Not on last row and not on leftmost column.
-                if( l_dist > 0 ){
+                if( l_dist_b > 0 ){
 
                     // North-West square is influenced by current white pawn.
                     this->atk_list_by_W[ ind_b + chess::BOARDWIDTH - 1 ].push_back( ind_b );
@@ -6959,7 +6968,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 }
 
                 // Not on last row and not on rightmost column.
-                if( r_dist > 0 ){
+                if( r_dist_b > 0 ){
 
                     // North-East square is influenced by current white pawn.
                     this->atk_list_by_W[ ind_b + chess::BOARDWIDTH + 1 ].push_back( ind_b );
@@ -6979,7 +6988,7 @@ that may need their list of possible plays updated with this newly occupied squa
         }else{
 
             // Valid pawn movement add.
-            if( d_dist > 0 && ( contact_dist_arr[1] > 1 || contact_dist_arr[1] == 0 ) ){
+            if( d_dist_b > 0 && ( contact_dist_arr[1] > 1 || contact_dist_arr[1] == 0 ) ){
                 this->valid_B_moves_map[ind_b].push_back( ind_b - chess::BOARDWIDTH );
                 // Double pawn jump scenario.
                 if( tar_pce.not_moved && ( contact_dist_arr[1] > 2 || contact_dist_arr[1] == 0 ) ){
@@ -6989,10 +6998,10 @@ that may need their list of possible plays updated with this newly occupied squa
             }
 
             // Not on first row.
-            if( d_dist > 0 ){
+            if( d_dist_b > 0 ){
 
                 // Not on first row, not on leftmost column.
-                if( l_dist > 0 ){
+                if( l_dist_b > 0 ){
 
                     // South-West square is influenced by current black pawn.
                     this->atk_list_by_B[ ind_b - chess::BOARDWIDTH - 1 ].push_back( ind_b );
@@ -7007,7 +7016,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 }
 
                 // Not on first row and not on rightmost column.
-                if( r_dist > 0 ){
+                if( r_dist_b > 0 ){
 
                     // South-East square is influenced by current black pawn.
                     this->atk_list_by_B[ ind_b - chess::BOARDWIDTH + 1 ].push_back( ind_b );
@@ -7143,6 +7152,20 @@ that may need their list of possible plays updated with this newly occupied squa
                     this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
                 }
 
+                // If opponent's king is the line contact.
+                if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].type == CHS_PIECE_TYPE::KING &&
+                    this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == CHS_PIECE_COLOR::BLACK )
+                {
+                    // Continue adding attacked by white points till another contact.
+                    for( int st = 0; st < leftover_dist_arr[t]; st++ ){
+                        tmp_int += DIR_UNIT_STEP[t];
+                        this->atk_list_by_W[ tmp_int ].push_back( ind_b );
+                        if( this->get_piece_at( tmp_int ).type != CHS_PIECE_TYPE::NO_P ){
+                            break;
+                        }
+                    }
+                }
+
             }
 
         // New occupant is black bishop/queen.
@@ -7177,6 +7200,20 @@ that may need their list of possible plays updated with this newly occupied squa
                     tmp_int += DIR_UNIT_STEP[t];
                     this->atk_list_by_B[ tmp_int ].push_back( ind_b );
                     this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
+                }
+
+                // If opponent's king is the line contact.
+                if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].type == CHS_PIECE_TYPE::KING &&
+                    this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == CHS_PIECE_COLOR::WHITE )
+                {
+                    // Continue adding attacked by white points till another contact.
+                    for( int st = 0; st < leftover_dist_arr[t]; st++ ){
+                        tmp_int += DIR_UNIT_STEP[t];
+                        this->atk_list_by_B[ tmp_int ].push_back( ind_b );
+                        if( this->get_piece_at( tmp_int ).type != CHS_PIECE_TYPE::NO_P ){
+                            break;
+                        }
+                    }
                 }
 
             }
