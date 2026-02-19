@@ -6976,7 +6976,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( rev_scan_dist_arr[t] > 0 ){
 
                     // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_W[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+                    this->atk_list_by_W[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
 
                     // Immediate contact along current direction.
                     if( contact_dist_arr[t] == 1 ){
@@ -6985,12 +6985,12 @@ that may need their list of possible plays updated with this newly occupied squa
                         if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
                             CHS_PIECE_COLOR::BLACK )
                         {
-                            this->valid_W_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                            this->valid_W_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
                         }
 
                     // No-immediate contact along current direction.
                     }else{
-                        this->valid_W_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                        this->valid_W_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
                     }
 
                 }
@@ -7007,7 +7007,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( rev_scan_dist_arr[t] > 0 ){
 
                     // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_B[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+                    this->atk_list_by_B[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
 
                     // Immediate contact along current direction.
                     if( contact_dist_arr[t] == 1 ){
@@ -7016,12 +7016,12 @@ that may need their list of possible plays updated with this newly occupied squa
                         if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
                             CHS_PIECE_COLOR::WHITE )
                         {
-                            this->valid_B_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                            this->valid_B_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
                         }
 
                     // No-immediate contact along current direction.
                     }else{
-                        this->valid_B_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                        this->valid_B_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
                     }
 
                 }
@@ -7075,7 +7075,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 tmp_int = ind_b;
                 // Parse through remaining free squares till first contact of board end.
                 for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
-                    tmp_int += direc_unit_step[t];
+                    tmp_int += DIR_UNIT_STEP[t];
                     this->atk_list_by_W[ tmp_int ].push_back( ind_b );
                     this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
                 }
@@ -7111,7 +7111,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 tmp_int = ind_b;
                 // Parse through remaining free squares till first contact of board end.
                 for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
-                    tmp_int += direc_unit_step[t];
+                    tmp_int += DIR_UNIT_STEP[t];
                     this->atk_list_by_B[ tmp_int ].push_back( ind_b );
                     this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
                 }
@@ -7746,42 +7746,42 @@ that may need their list of possible plays updated with this newly liberated squ
             // Reverse scan helper variables definition.
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
-                rev_incrm = direc_unit_step[1];
+                rev_incrm = DIR_UNIT_STEP[1];
                 rev_inc_cnt = rev_scan_dist_arr[1];
                 rem_cnt = leftover_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
-                rev_incrm = direc_unit_step[0];
+                rev_incrm = DIR_UNIT_STEP[0];
                 rev_inc_cnt = rev_scan_dist_arr[0];
                 rem_cnt = leftover_dist_arr[0];
                 break;
             case 2:     // West scan -> East reverse scan.
-                rev_incrm = direc_unit_step[3];
+                rev_incrm = DIR_UNIT_STEP[3];
                 rev_inc_cnt = rev_scan_dist_arr[3];
                 rem_cnt = leftover_dist_arr[3];
                 break;
             case 3:     // East scan -> West reverse scan.
-                rev_incrm = direc_unit_step[2];
+                rev_incrm = DIR_UNIT_STEP[2];
                 rev_inc_cnt = rev_scan_dist_arr[2];
                 rem_cnt = leftover_dist_arr[2];
                 break;
             case 4:     // NE -> SW reverse scan.
-                rev_incrm = direc_unit_step[6];
+                rev_incrm = DIR_UNIT_STEP[6];
                 rev_inc_cnt = rev_scan_dist_arr[6];
                 rem_cnt = leftover_dist_arr[6];
                 break; 
             case 5:     // NW -> SE reverse scan.
-                rev_incrm = direc_unit_step[7];
+                rev_incrm = DIR_UNIT_STEP[7];
                 rev_inc_cnt = rev_scan_dist_arr[7];
                 rem_cnt = leftover_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
-                rev_incrm = direc_unit_step[4];
+                rev_incrm = DIR_UNIT_STEP[4];
                 rev_inc_cnt = rev_scan_dist_arr[4];
                 rem_cnt = leftover_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
-                rev_incrm = direc_unit_step[5];
+                rev_incrm = DIR_UNIT_STEP[5];
                 rev_inc_cnt = rev_scan_dist_arr[5];
                 rem_cnt = leftover_dist_arr[5];
                 break;
@@ -8789,35 +8789,35 @@ that may need their list of possible plays updated with this newly occupied squa
             // Reverse scan helper variables definition.
             switch( dir_z ){
             case 0:     // North scan -> South reverse scan.
-                rev_incrm = direc_unit_step[1];
+                rev_incrm = DIR_UNIT_STEP[1];
                 rev_inc_cnt = rev_scan_dist_arr[1];
                 break;
             case 1:     // South scan -> North reverse scan.
-                rev_incrm = direc_unit_step[0];
+                rev_incrm = DIR_UNIT_STEP[0];
                 rev_inc_cnt = rev_scan_dist_arr[0];
                 break;
             case 2:     // West scan -> East reverse scan.
-                rev_incrm = direc_unit_step[3];
+                rev_incrm = DIR_UNIT_STEP[3];
                 rev_inc_cnt = rev_scan_dist_arr[3];
                 break;
             case 3:     // East scan -> West reverse scan.
-                rev_incrm = direc_unit_step[2];
+                rev_incrm = DIR_UNIT_STEP[2];
                 rev_inc_cnt = rev_scan_dist_arr[2];
                 break;
             case 4:     // NE -> SW reverse scan.
-                rev_incrm = direc_unit_step[6];
+                rev_incrm = DIR_UNIT_STEP[6];
                 rev_inc_cnt = rev_scan_dist_arr[6];
                 break; 
             case 5:     // NW -> SE reverse scan.
-                rev_incrm = direc_unit_step[7];
+                rev_incrm = DIR_UNIT_STEP[7];
                 rev_inc_cnt = rev_scan_dist_arr[7];
                 break;
             case 6:     // SW -> NE reverse scan.
-                rev_incrm = direc_unit_step[4];
+                rev_incrm = DIR_UNIT_STEP[4];
                 rev_inc_cnt = rev_scan_dist_arr[4];
                 break;
             case 7:     // SE -> NW reverse scan.
-                rev_incrm = direc_unit_step[5];
+                rev_incrm = DIR_UNIT_STEP[5];
                 rev_inc_cnt = rev_scan_dist_arr[5];
                 break;
             default:
@@ -9035,7 +9035,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( rev_scan_dist_arr[t] > 0 ){
 
                     // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_W[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+                    this->atk_list_by_W[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
 
                     // Immediate contact along current direction.
                     if( contact_dist_arr[t] == 1 ){
@@ -9044,12 +9044,12 @@ that may need their list of possible plays updated with this newly occupied squa
                         if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
                             CHS_PIECE_COLOR::BLACK )
                         {
-                            this->valid_W_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                            this->valid_W_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
                         }
 
                     // No-immediate contact along current direction.
                     }else{
-                        this->valid_W_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                        this->valid_W_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
                     }
 
                 }
@@ -9066,7 +9066,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( rev_scan_dist_arr[t] > 0 ){
 
                     // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_B[ ind_b + direc_unit_step[t] ].push_back( ind_b );
+                    this->atk_list_by_B[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
 
                     // Immediate contact along current direction.
                     if( contact_dist_arr[t] == 1 ){
@@ -9075,12 +9075,12 @@ that may need their list of possible plays updated with this newly occupied squa
                         if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
                             CHS_PIECE_COLOR::WHITE )
                         {
-                            this->valid_B_atks_map[ind_b].push_back( ind_b + direc_unit_step[t]  );
+                            this->valid_B_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
                         }
 
                     // No-immediate contact along current direction.
                     }else{
-                        this->valid_B_moves_map[ind_b].push_back( ind_b + direc_unit_step[t] );
+                        this->valid_B_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
                     }
 
                 }
@@ -9134,7 +9134,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 tmp_int = ind_b;
                 // Parse through remaining free squares till first contact of board end.
                 for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
-                    tmp_int += direc_unit_step[t];
+                    tmp_int += DIR_UNIT_STEP[t];
                     this->atk_list_by_W[ tmp_int ].push_back( ind_b );
                     this->valid_W_moves_map[ ind_b ].push_back( tmp_int );
                 }
@@ -9146,7 +9146,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 {
                     // Continue adding attacked by white points till another contact.
                     for( int st = 0; st < leftover_dist_arr[t]; st++ ){
-                        tmp_int += direc_unit_step[t];
+                        tmp_int += DIR_UNIT_STEP[t];
                         this->atk_list_by_W[ tmp_int ].push_back( ind_b );
                         if( this->get_piece_at( tmp_int ).type != CHS_PIECE_TYPE::NO_P ){
                             break;
@@ -9185,7 +9185,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 tmp_int = ind_b;
                 // Parse through remaining free squares till first contact of board end.
                 for( int st = 1; st <= rev_scan_dist_arr[t] - offset; st++ ){
-                    tmp_int += direc_unit_step[t];
+                    tmp_int += DIR_UNIT_STEP[t];
                     this->atk_list_by_B[ tmp_int ].push_back( ind_b );
                     this->valid_B_moves_map[ ind_b ].push_back( tmp_int );
                 }
@@ -9196,7 +9196,7 @@ that may need their list of possible plays updated with this newly occupied squa
                 {
                     // Continue adding attacked by white points till another contact.
                     for( int st = 0; st < leftover_dist_arr[t]; st++ ){
-                        tmp_int += direc_unit_step[t];
+                        tmp_int += DIR_UNIT_STEP[t];
                         this->atk_list_by_B[ tmp_int ].push_back( ind_b );
                         if( this->get_piece_at( tmp_int ).type != CHS_PIECE_TYPE::NO_P ){
                             break;

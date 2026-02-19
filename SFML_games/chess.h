@@ -50,7 +50,7 @@ public:
     0 = N,  1 = S,  2 = W,  3 = E,
     4 = NE, 5 = NW, 6 = SW, 7 = SE
     */
-    static constexpr int direc_unit_step[8] = {
+    static constexpr int DIR_UNIT_STEP[8] = {
         chess::BOARDWIDTH, -1 * (int) chess::BOARDWIDTH, -1, 1,
         chess::BOARDWIDTH + 1, chess::BOARDWIDTH - 1, -1 * (int) chess::BOARDWIDTH - 1, 
         -1 * (int) chess::BOARDWIDTH + 1
