@@ -6465,7 +6465,8 @@ that may need their list of possible plays updated with this newly occupied squa
 
                             // Double square pawn jump possibility.
                             if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                                this->CHS_board[sub_z.first - 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
+                                ( d_dist_b > 0 ) &&
+                                this->CHS_board[sub_z.first - 2 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
                             {
                                 // Remove black pawn double jump possibility.
                                 this->valid_B_moves_map[ ind_z ].erase(
@@ -6494,12 +6495,13 @@ that may need their list of possible plays updated with this newly occupied squa
                                 this->valid_W_moves_map[ ind_z ].end() );
                             // Double square pawn jump possibility.
                             if( this->CHS_board[sub_z.first][sub_z.second].not_moved &&
-                                this->CHS_board[sub_z.first + 1 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
+                                ( u_dist_b > 0 ) &&
+                                this->CHS_board[sub_z.first + 2 ][sub_z.second].type == CHS_PIECE_TYPE::NO_P )
                             {
                                 // Remove white pawn double jump possibility.
                                 this->valid_W_moves_map[ ind_z ].erase(
                                     std::remove(this->valid_W_moves_map[ ind_z ].begin(), 
-                                    this->valid_W_moves_map[ ind_z ].end(), ind_b - chess::BOARDWIDTH ), 
+                                    this->valid_W_moves_map[ ind_z ].end(), ind_b + chess::BOARDWIDTH ), 
                                     this->valid_W_moves_map[ ind_z ].end() );
                             }
 
@@ -6700,6 +6702,7 @@ that may need their list of possible plays updated with this newly occupied squa
         line_rev_scan = line_rev_scan || ( ( dir_z >= 4 && dir_z < 8 ) && 
             ( this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::QUEEN ||
             this->CHS_board[sub_z.first][sub_z.second].type == CHS_PIECE_TYPE::BISHOP ) );
+
 
         // Line move pieces scan.
         if( line_rev_scan ){
