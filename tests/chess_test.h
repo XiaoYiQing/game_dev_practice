@@ -56,7 +56,9 @@ namespace tests{
 
     void chess_upd_pre_legal_tests_emp_and_occ();
 
-    void chess_upd_pre_legal_v2_tests();
+    void chess_upd_pre_legal_v2_move_tests();
+    
+    void chess_upd_pre_legal_v2_atk_tests();
     
 
 
