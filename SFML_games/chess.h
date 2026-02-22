@@ -1135,6 +1135,13 @@ protected:
     bool en_pass_flag;
     // The specific en-passant move.
     vector<chs_move> en_pass_moves;
+    /**
+     * The previous en-passant move that is now no longer valid.
+     * 
+     * This variable serves as a token for the removal of en-passant possibility
+     * once the possibility has expired. Once used, it is expected to be emptied
+     * to signal that the en-passant expiration has been updated.
+     */
     vector<chs_move> prev_en_pass_moves;
 
     // Game lock boolean for when a promotion is necessary for a pawn that reached

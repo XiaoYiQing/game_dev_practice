@@ -9394,6 +9394,137 @@ that may need their list of possible plays updated with this newly occupied squa
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Move Check
+// ---------------------------------------------------------------------- >>>>>
+/*
+This scenario deals with change in possibility of caslting, NOT the actual castling
+play itself.
+If the play was a castling move itself, the flow of the function should have been lead 
+elsewhere rather than to this point.
+*/
+
+    // Starting position was on white castling row and white king has not moved.
+    if( i_a == 0 && this->CHS_board[0][4].type == CHS_PIECE_TYPE::KING &&
+        this->CHS_board[0][4].not_moved )
+    {
+        
+        // Starting position on right-side of the king and right-side white rook has not moved.
+        if( j_a > 4 && this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK &&
+        this->CHS_board[0][7].not_moved ){
+            
+            // Right-side path for castling is clear.
+            if( this->CHS_board[0][5].type == CHS_PIECE_TYPE::NO_P &&
+                this->CHS_board[0][6].type == CHS_PIECE_TYPE::NO_P )
+            {
+                this->valid_W_moves_map[4].push_back(6);
+            }
+
+        // Starting position on left-side of the king and left-side white rook has not moved.
+        }else if( j_a < 4 && this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK &&
+        this->CHS_board[0][0].not_moved ){
+
+            // Left-side path for castling is clear.
+            if( this->CHS_board[0][3].type == CHS_PIECE_TYPE::NO_P &&
+                this->CHS_board[0][2].type == CHS_PIECE_TYPE::NO_P &&
+                this->CHS_board[0][1].type == CHS_PIECE_TYPE::NO_P )
+            {
+                this->valid_W_moves_map[4].push_back(2);
+            }
+
+        }
+
+    // Starting position was on black castling row.
+    }else if( i_a == chess::BOARDHEIGHT && this->CHS_board[7][4].type == CHS_PIECE_TYPE::KING &&
+        this->CHS_board[7][4].not_moved )
+    {
+
+        // Starting position on right-side of the king and right-side white rook has not moved.
+        if( j_a > 4 && this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK &&
+        this->CHS_board[7][7].not_moved )
+        {
+            
+            // Right-side path for castling is clear.
+            if( this->CHS_board[7][5].type == CHS_PIECE_TYPE::NO_P &&
+                this->CHS_board[7][6].type == CHS_PIECE_TYPE::NO_P )
+            {
+                this->valid_W_moves_map[60].push_back(62);
+            }
+
+        // Starting position on left-side of the king and left-side white rook has not moved.
+        }else if( j_a < 4 && this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK &&
+            this->CHS_board[7][0].not_moved )
+        {
+
+            // Left-side path for castling is clear.
+            if( this->CHS_board[7][3].type == CHS_PIECE_TYPE::NO_P &&
+                this->CHS_board[7][2].type == CHS_PIECE_TYPE::NO_P &&
+                this->CHS_board[7][1].type == CHS_PIECE_TYPE::NO_P )
+            {
+                this->valid_W_moves_map[60].push_back(58);
+            }
+
+        }
+
+    }
+
+    // Ending position was on white castling row.
+    if( i_b == 0 && this->CHS_board[0][4].type == CHS_PIECE_TYPE::KING &&
+        this->CHS_board[0][4].not_moved )
+    {
+
+        // Ending position on right-side of the king and right-side white rook has not moved.
+        if( j_b > 4 && this->CHS_board[0][7].type == CHS_PIECE_TYPE::ROOK &&
+            this->CHS_board[0][7].not_moved )
+        {
+            // Remove right-side castling possibility.
+            this->valid_W_moves_map[4].erase(
+                std::remove(this->valid_W_moves_map[4].begin(), 
+                this->valid_W_moves_map[4].end(), 6 ), 
+                this->valid_W_moves_map[4].end() );
+
+        // Ending position on left-side of the king and left-side white rook has not moved.
+        }else if( j_b < 4 && this->CHS_board[0][0].type == CHS_PIECE_TYPE::ROOK &&
+            this->CHS_board[0][0].not_moved )
+        {
+            // Remove left-side castling possibility.
+            this->valid_W_moves_map[4].erase(
+                std::remove(this->valid_W_moves_map[4].begin(), 
+                this->valid_W_moves_map[4].end(), 2 ), 
+                this->valid_W_moves_map[4].end() );
+        }
+            
+    // Ending position was on black castling row.
+    }else if( i_b == chess::BOARDHEIGHT && this->CHS_board[7][4].type == CHS_PIECE_TYPE::KING &&
+        this->CHS_board[7][4].not_moved )
+    {
+
+        // Ending position on right-side of the king and right-side black rook has not moved.
+        if( j_b > 4 && this->CHS_board[7][7].type == CHS_PIECE_TYPE::ROOK &&
+            this->CHS_board[7][7].not_moved )
+        {
+            // Remove right-side castling possibility.
+            this->valid_W_moves_map[60].erase(
+                std::remove(this->valid_W_moves_map[60].begin(), 
+                this->valid_W_moves_map[60].end(), 62 ), 
+                this->valid_W_moves_map[60].end() );
+
+        // Ending position on left-side of the king and left-side black rook has not moved.
+        }else if( j_b < 4 && this->CHS_board[7][0].type == CHS_PIECE_TYPE::ROOK &&
+            this->CHS_board[7][0].not_moved )
+        {
+            // Remove left-side castling possibility.
+            this->valid_W_moves_map[60].erase(
+                std::remove(this->valid_W_moves_map[60].begin(), 
+                this->valid_W_moves_map[60].end(), 58 ), 
+                this->valid_W_moves_map[60].end() );
+        }
+
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 
