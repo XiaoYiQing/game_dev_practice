@@ -9528,6 +9528,13 @@ elsewhere rather than to this point.
 }
 
 
+void chess::upd_pre_legal_castl( int ind_b ){
+
+    
+
+}
+
+
 void chess::printBoard() const{
 
     for( unsigned int i = 0; i < BOARDHEIGHT; i++ ){
