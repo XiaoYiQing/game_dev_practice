@@ -7533,6 +7533,497 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 // ---------------------------------------------------------------------- <<<<<
 
 
+// ---------------------------------------------------------------------- >>>>>
+//      Castling Possibility Change Tests (Both)
+// ---------------------------------------------------------------------- >>>>>
+
+    /*
+    Right-side castling opening.
+    */
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(0);
+    
+    myGame1.set_piece_at( 0, 4, w_king );
+    myGame1.set_piece_at( 7, 4, b_king );
+
+    myGame1.set_piece_at( 0, 6, w_knight );
+    myGame1.set_piece_at( 0, 7, w_rook );
+    myGame1.set_piece_at( 0, 0, w_rook );
+    myGame1.set_piece_at( 7, 6, b_knight );
+    myGame1.set_piece_at( 7, 7, b_rook );
+    myGame1.set_piece_at( 7, 0, b_rook );
+
+    myGame2 = myGame1;
+
+    // Play the knights to unblock the right-side castlings.
+    myGame1.ply( 0, 6, 1, 4 );
+    myGame1.ply( 7, 6, 6, 4 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 0, 6, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 6, 12, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 7, 6, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 62, 52, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays right castling unblock test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays right castling unblock test (both): failed!" << endl;
+    }
+
+    /*
+    Continuation with blockage of left-side castling.
+    */
+
+    test_bool = true;
+    myGame2 = myGame1;
+
+    // Move the knights to block left-side castling.
+    myGame1.ply( 1, 4, 0, 2 );
+    myGame1.ply( 6, 4, 7, 2 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 0, 2, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 12, 2, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 7, 2, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 52, 58, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays left castling block test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays left castling block test (both): failed!" << endl;
+    }
+
+    /*
+    Continuation with unblocking of left-side castling.
+    */
+
+    test_bool = true;
+    myGame2 = myGame1;
+
+    // Move the knights to unblock left-side castling.
+    myGame1.ply( 0, 2, 1, 4 );
+    myGame1.ply( 7, 2, 6, 4 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 0, 2, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 2, 12, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 7, 2, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 58, 52, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays left castling unblock test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays left castling unblock test (both): failed!" << endl;
+    }
+
+    /*
+    Continuation with blocking of right-side castling.
+    */
+   
+    test_bool = true;
+    myGame2 = myGame1;
+
+    // Move the knights to block right-side castling.
+    myGame1.ply( 1, 4, 0, 6 );
+    myGame1.ply( 6, 4, 7, 6 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 0, 6, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 12, 6, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 7, 6, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 52, 62, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays right castling block test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays right castling block test (both): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Fake Castling Possibility Change Tests (Both)
+// ---------------------------------------------------------------------- >>>>>
+
+/*
+    Right-side castling opening.
+    */
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(0);
+    
+    myGame1.set_piece_at( 0, 4, w_king );
+    myGame1.set_piece_at( 7, 4, b_king );
+
+    myGame1.set_piece_at( 0, 6, w_knight );
+    myGame1.set_piece_at( 0, 5, w_bishop );
+    myGame1.set_piece_at( 0, 3, w_bishop );
+    myGame1.set_piece_at( 0, 7, w_rook );
+    myGame1.set_piece_at( 0, 0, w_rook );
+    myGame1.set_piece_at( 7, 6, b_knight );
+    myGame1.set_piece_at( 7, 5, b_bishop );
+    myGame1.set_piece_at( 7, 3, b_bishop );
+    myGame1.set_piece_at( 7, 7, b_rook );
+    myGame1.set_piece_at( 7, 0, b_rook );
+
+    myGame2 = myGame1;
+
+    // Play the knights to unblock the right-side castlings.
+    myGame1.ply( 0, 6, 1, 4 );
+    myGame1.ply( 7, 6, 6, 4 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 0, 6, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 6, 12, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 7, 6, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 62, 52, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays fake right castling unblock test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays fake right castling unblock test (both): failed!" << endl;
+    }
+
+    /*
+    Continuation with blockage of left-side castling.
+    */
+
+    test_bool = true;
+    myGame2 = myGame1;
+
+    // Move the knights to block left-side castling.
+    myGame1.ply( 1, 4, 0, 2 );
+    myGame1.ply( 6, 4, 7, 2 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 0, 2, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 12, 2, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 7, 2, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 52, 58, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays fake left castling block test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays fake left castling block test (both): failed!" << endl;
+    }
+
+    /*
+    Continuation with unblocking of left-side castling.
+    */
+
+    test_bool = true;
+    myGame2 = myGame1;
+
+    // Move the knights to unblock left-side castling.
+    myGame1.ply( 0, 2, 1, 4 );
+    myGame1.ply( 7, 2, 6, 4 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 0, 2, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 2, 12, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 7, 2, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 58, 52, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays fake left castling unblock test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays fake left castling unblock test (both): failed!" << endl;
+    }
+
+    /*
+    Continuation with blocking of right-side castling.
+    */
+   
+    test_bool = true;
+    myGame2 = myGame1;
+
+    // Move the knights to block right-side castling.
+    myGame1.ply( 1, 4, 0, 6 );
+    myGame1.ply( 6, 4, 7, 6 );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 0, 6, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 12, 6, emp_pce );
+
+    // Perform a "manual" play without updating.
+    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
+    tmp_pce = b_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 7, 6, tmp_pce );
+    // Perform specialized update.
+    myGame2.upd_pre_legal_plays( 52, 62, emp_pce );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays fake right castling block test (both): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays fake right castling block test (both): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 
