@@ -9528,9 +9528,50 @@ elsewhere rather than to this point.
 }
 
 
-void chess::upd_pre_legal_castl( int ind_b ){
 
+void chess::upd_pre_legal_castl( bool is_w, bool is_r ){
+
+    chess::chs_piece emp_pce;
+    emp_pce.set_as_empty();
+
+    // Castling row index.
+    unsigned int r_idx = ( is_w ) ?  0 : chess::BOARDHEIGHT - 1;
+    // The castling row's starting linear index.
+    unsigned int r_lin_idx_0 = r_idx * chess::BOARDWIDTH;
+
+    // Castling column indices (rook after, king after, and rook before castling).
+    unsigned int c_idx[3] = { 0, 0, 0 };
+
+    // Right-side castling.
+    if( is_r ){
+        c_idx[0] = 5;   c_idx[1] = 6;   c_idx[2] = 7;
+    // Left-side castling.
+    }else{
+        c_idx[0] = 3;   c_idx[1] = 2;   c_idx[2] = 0;
+    }
+
+    // Obtain the king and rook pieces.
+    chess::chs_piece king_pce = this->CHS_board[r_idx][ c_idx[1] ];
+    chess::chs_piece rook_pce = this->CHS_board[r_idx][ c_idx[0] ];
+
+    // Return the board into pre-castling form (without rook) and perform 
+    // empty square update.
+    this->CHS_board[r_idx][ c_idx[1] ].set_as_empty();
+    this->CHS_board[r_idx][ c_idx[0] ].set_as_empty();
+    this->CHS_board[r_idx][4] = king_pce;
+    upd_pre_legal_plays_emp( r_lin_idx_0 + c_idx[2], rook_pce );
+
+    // Set board to no king and rook state and perform empty square update.
+    this->CHS_board[r_idx][4].set_as_empty();
+    upd_pre_legal_plays_emp( r_lin_idx_0 + 4, king_pce );
     
+    // Set the king on the board and perform occupy square update.
+    this->CHS_board[r_idx][ c_idx[1] ] == king_pce;
+    upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[1], king_pce );
+
+    // Set the rook on the board and perform occupy square update.
+    this->CHS_board[r_idx][ c_idx[0] ] == rook_pce;
+    upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[0], rook_pce );
 
 }
 

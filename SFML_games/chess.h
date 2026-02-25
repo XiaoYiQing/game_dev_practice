@@ -846,8 +846,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     /**
      * Perform updates on the on the attack lists and the valid moves and attacks all in
      * one go in a precise manner given the target castling.
+     * 
+     * @param is_w Boolean indicating is it white king performing the castling (if false, black).
+     * @param is_r Boolean indicating is the right-side castling (if false, left).
      */
-    void upd_pre_legal_castl( int ind_b );
+    void upd_pre_legal_castl( bool is_w, bool is_r );
 
     /**
      * \brief Print the state of the board onto the console terminal.
