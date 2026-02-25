@@ -8941,9 +8941,9 @@ void tests::chess_upd_pre_legal_castl_tests(){
 	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
 
 	if( test_bool ){
-		cout << "chess upd_pre_legal_castl right side white castling: passed!" << endl;
+		cout << "chess upd_pre_legal_castl right side white castling simple test: passed!" << endl;
 	}else{
-		cout << "chess upd_pre_legal_castl right side white castling: failed!" << endl;
+		cout << "chess upd_pre_legal_castl right side white castling simple test: failed!" << endl;
 	}
 
     test_bool = true;
@@ -8996,9 +8996,9 @@ void tests::chess_upd_pre_legal_castl_tests(){
 	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
 
 	if( test_bool ){
-		cout << "chess upd_pre_legal_castl right side black castling: passed!" << endl;
+		cout << "chess upd_pre_legal_castl right side black castling simple test: passed!" << endl;
 	}else{
-		cout << "chess upd_pre_legal_castl right side black castling: failed!" << endl;
+		cout << "chess upd_pre_legal_castl right side black castling simple test: failed!" << endl;
 	}
 
 // ---------------------------------------------------------------------- <<<<<
@@ -9065,9 +9065,9 @@ void tests::chess_upd_pre_legal_castl_tests(){
 	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
 
 	if( test_bool ){
-		cout << "chess upd_pre_legal_castl left side white castling: passed!" << endl;
+		cout << "chess upd_pre_legal_castl left side white castling simple test: passed!" << endl;
 	}else{
-		cout << "chess upd_pre_legal_castl left side white castling: failed!" << endl;
+		cout << "chess upd_pre_legal_castl left side white castling simple test: failed!" << endl;
 	}
 
     test_bool = true;
@@ -9120,9 +9120,284 @@ void tests::chess_upd_pre_legal_castl_tests(){
 	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
 
 	if( test_bool ){
-		cout << "chess upd_pre_legal_castl left side black castling: passed!" << endl;
+		cout << "chess upd_pre_legal_castl left side black castling simple test: passed!" << endl;
 	}else{
-		cout << "chess upd_pre_legal_castl left side black castling: failed!" << endl;
+		cout << "chess upd_pre_legal_castl left side black castling simple test: failed!" << endl;
+	}
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Right-Side Castling Complex Case Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(0);
+
+    
+    myGame1.set_piece_at( 0, 4, w_king );
+    myGame1.set_piece_at( 0, 7, w_rook );
+
+    myGame1.set_piece_at( 7, 4, b_king );
+    myGame1.set_piece_at( 7, 7, w_rook );
+
+    myGame1.set_piece_at( 3, 4, w_queen );
+    myGame1.set_piece_at( 3, 5, w_rook );
+    myGame1.set_piece_at( 2, 6, w_knight );
+    myGame1.set_piece_at( 2, 7, w_bishop );
+    myGame1.set_piece_at( 0, 0, w_rook );
+
+    myGame1.set_piece_at( 4, 4, b_queen );
+    myGame1.set_piece_at( 4, 5, b_rook );
+    myGame1.set_piece_at( 5, 6, b_knight );
+    myGame1.set_piece_at( 5, 7, b_bishop );
+    myGame1.set_piece_at( 7, 0, b_rook );
+
+
+    myGame2 = myGame1;
+
+    // Perform a "manual" castling with standard updates.
+	myGame1.set_piece_at( 0, 4, emp_pce );
+    myGame1.set_piece_at( 0, 7, emp_pce );
+	tmp_pce = w_king;    tmp_pce.not_moved = false;
+	myGame1.set_piece_at( 0, 6, tmp_pce );
+    tmp_pce = w_rook;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 0, 5, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" castling with specialized updates.
+    myGame2.set_piece_at_NO_UPD( 0, 4, emp_pce );
+    myGame2.set_piece_at_NO_UPD( 0, 7, emp_pce );
+	tmp_pce = w_king;    tmp_pce.not_moved = false;
+	myGame2.set_piece_at_NO_UPD( 0, 6, tmp_pce );
+    tmp_pce = w_rook;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 0, 5, tmp_pce );
+
+    // Right-side white castling update.
+    myGame2.upd_pre_legal_castl( true, true );
+
+    // Obtain the standard results.
+	atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+	atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+	valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+	valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+	valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+	valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+	// Obtain the special results.
+	atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+	atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+	valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+	valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+	valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+	valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+	if( test_bool ){
+		cout << "chess upd_pre_legal_castl right side white castling complex test: passed!" << endl;
+	}else{
+		cout << "chess upd_pre_legal_castl right side white castling complex test: failed!" << endl;
+	}
+
+    test_bool = true;
+    myGame1.setTurn_cnt(1);
+
+    myGame2 = myGame1;
+
+    // Perform a "manual" castling with standard updates.
+	myGame1.set_piece_at( 7, 4, emp_pce );
+    myGame1.set_piece_at( 7, 7, emp_pce );
+	tmp_pce = b_king;    tmp_pce.not_moved = false;
+	myGame1.set_piece_at( 7, 6, tmp_pce );
+    tmp_pce = b_rook;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 7, 5, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" castling with specialized updates.
+    myGame2.set_piece_at_NO_UPD( 7, 4, emp_pce );
+    myGame2.set_piece_at_NO_UPD( 7, 7, emp_pce );
+	tmp_pce = b_king;    tmp_pce.not_moved = false;
+	myGame2.set_piece_at_NO_UPD( 7, 6, tmp_pce );
+    tmp_pce = b_rook;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 7, 5, tmp_pce );
+
+    // Right-side white castling update.
+    myGame2.upd_pre_legal_castl( false, true );
+
+    // Obtain the standard results.
+	atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+	atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+	valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+	valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+	valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+	valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+	// Obtain the special results.
+	atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+	atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+	valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+	valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+	valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+	valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+	if( test_bool ){
+		cout << "chess upd_pre_legal_castl right side black castling complex test: passed!" << endl;
+	}else{
+		cout << "chess upd_pre_legal_castl right side black castling complex test: failed!" << endl;
+	}
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Left-Side Castling Complex Case Test
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(0);
+
+    
+    myGame1.set_piece_at( 0, 4, w_king );
+    myGame1.set_piece_at( 0, 7, w_rook );
+
+    myGame1.set_piece_at( 7, 4, b_king );
+    myGame1.set_piece_at( 7, 7, w_rook );
+
+    myGame1.set_piece_at( 3, 3, w_queen );
+    myGame1.set_piece_at( 3, 2, w_rook );
+    myGame1.set_piece_at( 2, 1, w_knight );
+    myGame1.set_piece_at( 2, 0, w_bishop );
+    myGame1.set_piece_at( 0, 0, w_rook );
+
+    myGame1.set_piece_at( 4, 3, b_queen );
+    myGame1.set_piece_at( 4, 2, b_rook );
+    myGame1.set_piece_at( 5, 1, b_knight );
+    myGame1.set_piece_at( 5, 0, b_bishop );
+    myGame1.set_piece_at( 7, 0, b_rook );
+
+    myGame2 = myGame1;
+
+    // Perform a "manual" castling with standard updates.
+	myGame1.set_piece_at( 0, 4, emp_pce );
+    myGame1.set_piece_at( 0, 0, emp_pce );
+	tmp_pce = w_king;    tmp_pce.not_moved = false;
+	myGame1.set_piece_at( 0, 2, tmp_pce );
+    tmp_pce = w_rook;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 0, 3, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" castling with specialized updates.
+    myGame2.set_piece_at_NO_UPD( 0, 4, emp_pce );
+    myGame2.set_piece_at_NO_UPD( 0, 0, emp_pce );
+	tmp_pce = w_king;    tmp_pce.not_moved = false;
+	myGame2.set_piece_at_NO_UPD( 0, 2, tmp_pce );
+    tmp_pce = w_rook;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 0, 3, tmp_pce );
+
+    // Right-side white castling update.
+    myGame2.upd_pre_legal_castl( true, false );
+
+    // Obtain the standard results.
+	atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+	atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+	valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+	valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+	valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+	valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+	// Obtain the special results.
+	atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+	atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+	valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+	valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+	valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+	valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+	if( test_bool ){
+		cout << "chess upd_pre_legal_castl left side white castling complex test: passed!" << endl;
+	}else{
+		cout << "chess upd_pre_legal_castl left side white castling complex test: failed!" << endl;
+	}
+
+    test_bool = true;
+    myGame1.setTurn_cnt(1);
+
+    myGame2 = myGame1;
+
+    // Perform a "manual" castling with standard updates.
+	myGame1.set_piece_at( 7, 4, emp_pce );
+    myGame1.set_piece_at( 7, 0, emp_pce );
+	tmp_pce = b_king;    tmp_pce.not_moved = false;
+	myGame1.set_piece_at( 7, 2, tmp_pce );
+    tmp_pce = b_rook;    tmp_pce.not_moved = false;
+    myGame1.set_piece_at( 7, 3, tmp_pce );
+
+    // myGame1.printBoard();
+
+    // Perform a "manual" castling with specialized updates.
+    myGame2.set_piece_at_NO_UPD( 7, 4, emp_pce );
+    myGame2.set_piece_at_NO_UPD( 7, 0, emp_pce );
+	tmp_pce = b_king;    tmp_pce.not_moved = false;
+	myGame2.set_piece_at_NO_UPD( 7, 2, tmp_pce );
+    tmp_pce = b_rook;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 7, 3, tmp_pce );
+
+    // Right-side white castling update.
+    myGame2.upd_pre_legal_castl( false, false );
+
+    // Obtain the standard results.
+	atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+	atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+	valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+	valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+	valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+	valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+	// Obtain the special results.
+	atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+	atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+	valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+	valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+	valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+	valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+	test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+	if( test_bool ){
+		cout << "chess upd_pre_legal_castl left side black castling complex test: passed!" << endl;
+	}else{
+		cout << "chess upd_pre_legal_castl left side black castling complex test: failed!" << endl;
 	}
 
 // ---------------------------------------------------------------------- <<<<<
