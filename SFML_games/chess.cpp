@@ -9564,14 +9564,14 @@ void chess::upd_pre_legal_castl( bool is_w, bool is_r ){
     // Set board to no king and rook state and perform empty square update.
     this->CHS_board[r_idx][4].set_as_empty();
     upd_pre_legal_plays_emp( r_lin_idx_0 + 4, king_pce );
-    
-    // Set the king on the board and perform occupy square update.
-    this->CHS_board[r_idx][ c_idx[1] ] == king_pce;
-    upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[1], king_pce );
 
-    // Set the rook on the board and perform occupy square update.
-    this->CHS_board[r_idx][ c_idx[0] ] == rook_pce;
-    upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[0], rook_pce );
+    // Set the post-castling king on the board and perform occupy square update.
+    this->CHS_board[r_idx][ c_idx[1] ] = king_pce;
+    upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[1], emp_pce );
+
+    // Set the post-castling rook on the board and perform occupy square update.
+    this->CHS_board[r_idx][ c_idx[0] ] = rook_pce;
+    upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[0], emp_pce );
 
 }
 

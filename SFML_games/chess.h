@@ -844,11 +844,13 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce );
 
     /**
-     * Perform updates on the on the attack lists and the valid moves and attacks all in
+     * Perform updates on the attack lists and the valid moves and attacks all in
      * one go in a precise manner given the target castling.
      * 
-     * @param is_w Boolean indicating is it white king performing the castling (if false, black).
-     * @param is_r Boolean indicating is the right-side castling (if false, left).
+     * @warning This function does not check if a valid castling has been performed.
+     * 
+     * @param is_w Boolean indicating whether it is the white king performing the castling (if false, black).
+     * @param is_r Boolean indicating whether it is right-side castling (if false, left).
      */
     void upd_pre_legal_castl( bool is_w, bool is_r );
 
