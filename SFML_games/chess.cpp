@@ -9583,7 +9583,7 @@ void chess::upd_pre_legal_promo( const bool is_w, const unsigned int c_idx ){
     }
 
     unsigned int r_idx = 0;
-    if( !is_w ){
+    if( is_w ){
         r_idx = chess::BOARDHEIGHT - 1;
     }
 
@@ -9595,6 +9595,9 @@ void chess::upd_pre_legal_promo( const bool is_w, const unsigned int c_idx ){
     }
 
     chs_piece emp_pce;  emp_pce.set_as_empty();
+    emp_pce.type = CHS_PIECE_TYPE::PAWN;
+    emp_pce.color = CHS_PIECE_COLOR::BLACK;
+
     // Perform update at the promotion square assuming it was empty before (since pawn
     // on the last row has effectively no zone of influence).
     this->upd_pre_legal_plays_occ( chess::sub2ind( r_idx, c_idx ), emp_pce );

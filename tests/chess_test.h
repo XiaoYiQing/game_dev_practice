@@ -61,6 +61,8 @@ namespace tests{
     void chess_upd_pre_legal_v2_atk_tests();
 
     void chess_upd_pre_legal_castl_tests();
+
+    void chess_upd_pre_legal_promo_tests();
     
 
 

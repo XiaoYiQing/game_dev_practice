@@ -9405,6 +9405,123 @@ void tests::chess_upd_pre_legal_castl_tests(){
 }
 
 
+void tests::chess_upd_pre_legal_promo_tests(){
+
+    bool test_bool = true;
+    chess myGame1;
+    chess myGame2;
+    
+    chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C );
+    chess::chs_piece tmp_pce;
+
+    chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
+    
+    auto atk_list_by_W_bef = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_bef = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_bef = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_bef = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_bef = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_bef = myGame1.get_valid_B_atks_map();
+    auto atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+    auto atk_list_by_W_2 = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_2 = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_2 = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_2 = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_2 = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_2 = myGame1.get_valid_B_atks_map();
+
+// ---------------------------------------------------------------------- >>>>>
+//      Promotion Test (Recto)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+
+    myGame1.set_piece_at( 3, 0, w_king );
+    myGame1.set_piece_at( 5, 0, b_king );
+    
+    myGame1.set_piece_at( 6, 5, w_pawn );
+
+    myGame1.set_piece_at( 7, 7, b_rook );
+    myGame1.set_piece_at( 7, 3, w_queen );
+    myGame1.set_piece_at( 6, 3, b_knight );
+    myGame1.set_piece_at( 5, 3, w_bishop );
+    myGame1.set_piece_at( 5, 4, w_knight );
+    myGame1.set_piece_at( 5, 7, b_bishop );
+
+    myGame1.printBoard();
+
+    // Push the pawn into promotion zone.
+    bool tmp_bool = myGame1.ply( 6, 5, 7, 5 );    
+
+    myGame1.printBoard();
+
+    // Update alternatve game object to current main game object state.
+    myGame2 = myGame1;
+
+    // Perform normal promotion path.
+    myGame1.promote( 5, chess::CHS_PIECE_TYPE::KNIGHT );
+
+    myGame1.printBoard();
+
+    // Perform manual promotion on alternative game.
+    myGame2.set_piece_at_NO_UPD( 7, 5, emp_pce );
+    tmp_pce = w_knight;    tmp_pce.not_moved = false;
+    myGame2.set_piece_at_NO_UPD( 7, 5, tmp_pce );
+    // Perform special update.
+    myGame2.upd_pre_legal_promo( true, 5 );
+
+    // Obtain the standard results.
+    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_promo pawn promo test 1 (recto): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_promo pawn promo test 1 (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+}
+
+
 void tests::CHS_SFML_eng_tests(){
 
 // ---------------------------------------------------------------------- >>>>>
