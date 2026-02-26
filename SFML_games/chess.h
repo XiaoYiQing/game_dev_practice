@@ -855,6 +855,15 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     void upd_pre_legal_castl( const bool is_w, const bool is_r );
 
     /**
+     * Perform updates on the attack lists and the valid moves and attacks all in
+     * one go in a precise manner given the target promotion.
+     * 
+     * Note that this function assumes that the promotion has been enacted already, and
+     * the specified square where it has occured is now occupied by the promoted piece.
+     */
+    void upd_pre_legal_promo( const bool is_w, const unsigned int c_idx );
+
+    /**
      * \brief Print the state of the board onto the console terminal.
      * 
      * \note This is a debug tool and has no impact on actual game functionalities.
