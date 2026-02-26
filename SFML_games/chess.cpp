@@ -4881,7 +4881,7 @@ void chess::upd_pre_legal_plays(){
 }
 
 
-bool chess::play_and_pre_legal_upds( int i_bef, int j_bef, int i_aft, int j_aft ){
+bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int i_aft, const int j_aft ){
 
     // Prevent play if the game is already in a win state.
     if( this->state == CHS_STATE::BWIN || this->state == CHS_STATE::WWIN || 
@@ -5125,7 +5125,7 @@ bool chess::play_and_pre_legal_upds( int i_bef, int j_bef, int i_aft, int j_aft 
 }
 
 
-void chess::upd_pre_legal_plays_emp( int ind_a, chs_piece tar_pce ){
+void chess::upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce ){
 
     pair<int,int> ij_a = chess::ind2sub( ind_a );
     int i_a = ij_a.first;
@@ -5896,7 +5896,7 @@ that may need their list of possible plays updated with this newly liberated squ
 }
 
 
-void chess::upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce ){
+void chess::upd_pre_legal_plays_occ( const int ind_b, const chs_piece prev_pce ){
 
     pair<int,int> ij_b = chess::ind2sub( ind_b );
     int i_b = ij_b.first;
@@ -7230,7 +7230,7 @@ that may need their list of possible plays updated with this newly occupied squa
 }
 
 
-void chess::upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce ){
+void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_piece prev_pce ){
 
     pair<int,int> ij_a = chess::ind2sub( ind_a );
     int i_a = ij_a.first;
@@ -9529,7 +9529,7 @@ elsewhere rather than to this point.
 
 
 
-void chess::upd_pre_legal_castl( bool is_w, bool is_r ){
+void chess::upd_pre_legal_castl( const bool is_w, const bool is_r ){
 
     chess::chs_piece emp_pce;
     emp_pce.set_as_empty();

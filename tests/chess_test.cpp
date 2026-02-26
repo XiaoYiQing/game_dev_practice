@@ -8886,7 +8886,6 @@ void tests::chess_upd_pre_legal_castl_tests(){
     test_bool = true;
     myGame1.clearBoard();
     myGame1.setTurn_cnt(0);
-
     
     myGame1.set_piece_at( 0, 4, w_king );
     myGame1.set_piece_at( 0, 7, w_rook );

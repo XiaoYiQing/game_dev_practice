@@ -805,7 +805,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * 
      * \note The given play is not validated.
      */
-    bool play_and_pre_legal_upds( int i_bef, int j_bef, int i_aft, int j_aft );
+    bool play_and_pre_legal_upds( const int i_bef, const int j_bef, const int i_aft, const int j_aft );
 
     /**
      * Perform updates on the attack lists and the valid moves and attacks all in
@@ -819,7 +819,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  scenarios since those task requires both knowledge of starting and ending positions 
      *  of a piece.
      */
-    void upd_pre_legal_plays_emp( int ind_a, chs_piece tar_pce );
+    void upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce );
 
     /**
      * Perform updates on the on the attack lists and the valid moves and attacks all in
@@ -830,7 +830,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      *  scenarios since those task requires both knowledge of starting and ending positions 
      *  of a piece.
      */
-    void upd_pre_legal_plays_occ( int ind_b, chs_piece prev_pce );
+    void upd_pre_legal_plays_occ( const int ind_b, const chs_piece prev_pce );
 
     /**
      * Perform updates on the on the attack lists and the valid moves and attacks all in
@@ -841,7 +841,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * @warning This function consumes the entries of the variable "prev_en_pass_moves" as
      *  it deletes previous en-passant plays from the pre-legal lists.
      */
-    void upd_pre_legal_plays( int ind_a, int ind_b, chs_piece prev_pce );
+    void upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_piece prev_pce );
 
     /**
      * Perform updates on the attack lists and the valid moves and attacks all in
@@ -852,7 +852,7 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      * @param is_w Boolean indicating whether it is the white king performing the castling (if false, black).
      * @param is_r Boolean indicating whether it is right-side castling (if false, left).
      */
-    void upd_pre_legal_castl( bool is_w, bool is_r );
+    void upd_pre_legal_castl( const bool is_w, const bool is_r );
 
     /**
      * \brief Print the state of the board onto the console terminal.
