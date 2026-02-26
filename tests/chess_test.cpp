@@ -9466,12 +9466,9 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 5, 4, w_knight );
     myGame1.set_piece_at( 5, 7, b_bishop );
 
-    myGame1.printBoard();
-
     // Push the pawn into promotion zone.
     bool tmp_bool = myGame1.ply( 6, 5, 7, 5 );    
 
-    myGame1.printBoard();
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
@@ -9479,7 +9476,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::KNIGHT );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
     // Perform manual promotion on alternative game.
     myGame2.set_piece_at_NO_UPD( 7, 5, emp_pce );

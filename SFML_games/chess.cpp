@@ -9594,13 +9594,30 @@ void chess::upd_pre_legal_promo( const bool is_w, const unsigned int c_idx ){
         throw std::runtime_error( "Invalid piece type at post-promotion location." );
     }
 
-    chs_piece emp_pce;  emp_pce.set_as_empty();
-    emp_pce.type = CHS_PIECE_TYPE::PAWN;
-    emp_pce.color = CHS_PIECE_COLOR::BLACK;
 
-    // Perform update at the promotion square assuming it was empty before (since pawn
-    // on the last row has effectively no zone of influence).
-    this->upd_pre_legal_plays_occ( chess::sub2ind( r_idx, c_idx ), emp_pce );
+    // TODO: Here, we are performing an extra "upd_pre_legal_plays_emp(...)" because
+    // promotion is technically a two parts action of removing the pawn and then inserting
+    // the promotion piece. Perhaps you can write a specialized "upd_pre_legal_plays_occ(...)"
+    // right here to reduce redundant computations?
+
+    // Obtain the promotion piece.
+    chs_piece promo_pce = this->CHS_board[r_idx][c_idx];
+    // Identify the pawn piece that has promoted.
+    chs_piece tmp_pce;  
+    tmp_pce.type = CHS_PIECE_TYPE::PAWN;
+    tmp_pce.color =  is_w ? CHS_PIECE_COLOR::WHITE : CHS_PIECE_COLOR::BLACK;
+
+    // Set promotion square as empty for update purposes.
+    this->CHS_board[r_idx][c_idx].set_as_empty();
+    // Perform influence update of the promoting pawn dissapearing.
+    this->upd_pre_legal_plays_emp( chess::sub2ind( r_idx, c_idx ), tmp_pce );
+
+    // Restore the promotion piece on the square.
+    this->CHS_board[r_idx][c_idx] = promo_pce;
+    // Set temporary piece as empty.
+    tmp_pce.set_as_empty();
+    // Perform update at the promotion square with new occupying promoted piece.
+    this->upd_pre_legal_plays_occ( chess::sub2ind( r_idx, c_idx ), tmp_pce );
 
 }
 
