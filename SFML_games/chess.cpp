@@ -7015,7 +7015,7 @@ that may need their list of possible plays updated with this newly occupied squa
                     this->atk_list_by_B[ ind_b - chess::BOARDWIDTH - 1 ].push_back( ind_b );
 
                     // Immediate contact on South-West diagonal is white.
-                    if( contact_dist_arr[5] == 1 &&
+                    if( contact_dist_arr[6] == 1 &&
                         this->CHS_board[i_b-1][j_b-1].color == CHS_PIECE_COLOR::WHITE )
                     {
                         this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH - 1 );
@@ -7030,7 +7030,7 @@ that may need their list of possible plays updated with this newly occupied squa
                     this->atk_list_by_B[ ind_b - chess::BOARDWIDTH + 1 ].push_back( ind_b );
 
                     // Immediate contact on South-East diagonal is white.
-                    if( contact_dist_arr[5] == 1 &&
+                    if( contact_dist_arr[7] == 1 &&
                         this->CHS_board[i_b-1][j_b+1].color == CHS_PIECE_COLOR::WHITE )
                     {
                         this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH + 1 );
@@ -9102,7 +9102,7 @@ that may need their list of possible plays updated with this newly occupied squa
                     this->atk_list_by_B[ ind_b - chess::BOARDWIDTH - 1 ].push_back( ind_b );
 
                     // Immediate contact on South-West diagonal is white.
-                    if( contact_dist_arr[5] == 1 &&
+                    if( contact_dist_arr[6] == 1 &&
                         this->CHS_board[i_b-1][j_b-1].color == CHS_PIECE_COLOR::WHITE )
                     {
                         this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH - 1 );
@@ -9117,7 +9117,7 @@ that may need their list of possible plays updated with this newly occupied squa
                     this->atk_list_by_B[ ind_b - chess::BOARDWIDTH + 1 ].push_back( ind_b );
 
                     // Immediate contact on South-East diagonal is white.
-                    if( contact_dist_arr[5] == 1 &&
+                    if( contact_dist_arr[7] == 1 &&
                         this->CHS_board[i_b-1][j_b+1].color == CHS_PIECE_COLOR::WHITE )
                     {
                         this->valid_B_atks_map[ ind_b ].push_back( ind_b - chess::BOARDWIDTH + 1 );
@@ -9577,6 +9577,8 @@ void chess::upd_pre_legal_castl( const bool is_w, const bool is_r ){
     // Set the post-castling rook on the board and perform occupy square update.
     this->CHS_board[r_idx][ c_idx[0] ] = rook_pce;
     upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[0], emp_pce );
+
+    this->atk_list_by_W;
 
 }
 
