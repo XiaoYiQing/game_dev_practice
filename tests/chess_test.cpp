@@ -10027,6 +10027,12 @@ void tests::chess_upd_pre_legal_promo_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+}
+
+
+void tests::chess_play_and_pre_legal_upds_tests(){
+
+    
 
 }
 

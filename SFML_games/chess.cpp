@@ -4896,6 +4896,8 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
         return false;
     }
 
+
+
 // ---------------------------------------------------------------------- >>>>>
 //      En-Passant Reset
 // ---------------------------------------------------------------------- >>>>>
@@ -4953,6 +4955,8 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
 
     // Obtain the target piece.
     chs_piece currPiece = get_piece_at( i_bef, j_bef );
+    // Obtain the piece at the destination.
+    chs_piece prevPiece = get_piece_at( i_aft, j_aft );
     // Initialize temporary chess piece variable.
     chs_piece tmp_pce;
 
@@ -4971,21 +4975,18 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
         is_atk = j_bef != j_aft;
     }
 
+    // Boolean indicating whether the pre-legal updates have already been performed.
+    bool pre_legal_upd = false;
+
 // ---------------------------------------------------------------------- <<<<<
 
+    // Is a move.
     if( !is_atk ){
 
         // Perform the displacement.
-        tmp_pce = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_aft][j_aft].not_moved = false;
         this->CHS_board[i_bef][j_bef].set_as_empty(); 
-
-        this->upd_pre_legal_plays_emp( ij_bef, tmp_pce );
-
-        tmp_pce.not_moved = false;
-        this->CHS_board[i_aft][j_aft] = tmp_pce;
-
-        this->upd_pre_legal_plays_occ( ij_aft, emp_pce );
-        
 
         // Only the castling move involves moving more than 1 piece at a time, and must
         // be treated as a special stand-alone case.
@@ -4993,18 +4994,29 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
 
             int j_displ = (int) j_aft - (int) j_bef;
             
-            // Right-side castling.
+            // Right-side castling rook update.
             if( j_displ == 2 ){
+
                 this->CHS_board[i_aft][j_aft-1] = this->CHS_board[i_aft][BOARDWIDTH-1];
                 this->CHS_board[i_aft][j_aft-1].not_moved = false;
                 this->CHS_board[i_aft][BOARDWIDTH-1].set_as_empty();
 
-            // Left-side castling.
+                this->upd_pre_legal_castl( currPiece.color == CHS_PIECE_COLOR::WHITE, true );
+                pre_legal_upd = true;
+
+            // Left-side castling rook update.
             }else if( j_displ == -2 ){
+
                 this->CHS_board[i_aft][j_aft+1] = this->CHS_board[i_aft][0];
                 this->CHS_board[i_aft][j_aft+1].not_moved = false;
                 this->CHS_board[i_aft][0].set_as_empty();
+
+                this->upd_pre_legal_castl( currPiece.color == CHS_PIECE_COLOR::WHITE, false );
+                pre_legal_upd = true;
+
             }
+
+            
 
         }
 
@@ -5071,6 +5083,7 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
 
         }
 
+    // Is an attack.
     }else{
 
         // The en-passant attack is a unique attack where the end square is empty.
@@ -5083,13 +5096,16 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
 
         // En-passant unique attack scenario additional step.
         if( is_en_pass ){
+
             if( currPiece.color == CHS_PIECE_COLOR::WHITE ){
-                this->CHS_board[ i_aft - 1 ][j_aft].set_as_empty(); 
+                this->CHS_board[ i_aft - 1 ][j_aft].set_as_empty();
             }else if( currPiece.color == CHS_PIECE_COLOR::BLACK ){
                 this->CHS_board[ i_aft + 1 ][j_aft].set_as_empty(); 
+
             }else{
                 throw runtime_error( "Unrecognized chess color." );
             }
+
         }
 
     }
@@ -5113,12 +5129,11 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
         
     // Increment the turn count.
     this->turn_cnt++;
-    // Update all states of the game.
-    if( this->upd_post_play() ){
 
-    }else{
-        throw runtime_error( "Chess: A play is made all the way to post play update and the update failed." );
-    }   
+    // Perform the pre-legal updates.
+    if( !pre_legal_upd ){
+        this->upd_pre_legal_plays( ij_bef, ij_aft, prevPiece );
+    }
 
     return true;
 
