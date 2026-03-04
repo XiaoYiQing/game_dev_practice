@@ -9487,28 +9487,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( true, 5 );
 
-    // Obtain the standard results.
-    atk_list_by_W_1 = myGame1.getAtk_list_by_W();
-    atk_list_by_B_1 = myGame1.getAtk_list_by_B();
-    valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
-    valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
-    valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
-    valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
-
-    // Obtain the special results.
-    atk_list_by_W_2 = myGame2.getAtk_list_by_W();
-    atk_list_by_B_2 = myGame2.getAtk_list_by_B();
-    valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
-    valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
-    valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
-    valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
-
-    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
-    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
-    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
-    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
-    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
-    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into knight test (recto): passed!" << endl;

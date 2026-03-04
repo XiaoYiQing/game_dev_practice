@@ -103,6 +103,10 @@ namespace tests_tools{
     bool are_int_vector_arr_eq( std::array<vector<int>, 64>& arr1, 
         std::array<vector<int>, 64>& arr2 );
 
+    /**
+     * Function determines whether the pre-pegal lists of the chess game objects
+     * are the same.
+     */
     bool are_chess_pre_legal_lists_eq( const gameEngine::chess &myGame1, const gameEngine::chess &myGame2 );
 
 }
