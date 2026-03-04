@@ -1094,11 +1094,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     /**
      * Obtain the list of all white pieces attacking each and every square on the board.
      */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W();
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_W() const;
     /**
      * Obtain the list of all black pieces attacking each and every square on the board.
      */
-    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B();
+    std::array<vector<int>,BOARDHEIGHT*BOARDWIDTH> getAtk_list_by_B() const;
 
     bool getIs_psbl_alg_comm_upd() const;
     vector<string> get_all_psbl_alg_comm();
@@ -1108,16 +1108,16 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_legal_moves_map();
 
     bool getIs_valid_moves_upd() const;
-    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_moves_map();
-    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_B_moves_map();
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_moves_map() const;
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_B_moves_map() const;
 
     bool getIs_all_legal_atks_upd() const;
     vector<chs_move> get_all_legal_atks();
     array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_legal_atks_map();
     
     bool getIs_valid_atks_upd() const;
-    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_atks_map();
-    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_B_atks_map();
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_W_atks_map() const;
+    array< vector<int>, BOARDHEIGHT*BOARDWIDTH > get_valid_B_atks_map() const;
 
 // ====================================================================== <<<<<
 

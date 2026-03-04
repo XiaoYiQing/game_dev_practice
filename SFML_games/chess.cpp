@@ -4975,8 +4975,8 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
         is_atk = j_bef != j_aft;
     }
 
-    // Boolean indicating whether the pre-legal updates have already been performed.
-    bool pre_legal_upd = false;
+    // Boolean indicating whether we need special pre-legal updates for a castling move.
+    bool is_castl = false;
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -5001,8 +5001,7 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
                 this->CHS_board[i_aft][j_aft-1].not_moved = false;
                 this->CHS_board[i_aft][BOARDWIDTH-1].set_as_empty();
 
-                this->upd_pre_legal_castl( currPiece.color == CHS_PIECE_COLOR::WHITE, true );
-                pre_legal_upd = true;
+                is_castl = true;
 
             // Left-side castling rook update.
             }else if( j_displ == -2 ){
@@ -5011,8 +5010,7 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
                 this->CHS_board[i_aft][j_aft+1].not_moved = false;
                 this->CHS_board[i_aft][0].set_as_empty();
 
-                this->upd_pre_legal_castl( currPiece.color == CHS_PIECE_COLOR::WHITE, false );
-                pre_legal_upd = true;
+                is_castl = true;
 
             }
 
@@ -5131,8 +5129,10 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
     this->turn_cnt++;
 
     // Perform the pre-legal updates.
-    if( !pre_legal_upd ){
+    if( !is_castl ){
         this->upd_pre_legal_plays( ij_bef, ij_aft, prevPiece );
+    }else{
+        this->upd_pre_legal_castl( currPiece.color == CHS_PIECE_COLOR::WHITE, j_aft > j_bef );
     }
 
     return true;
@@ -10215,18 +10215,12 @@ void chess::setThread_to_use( unsigned int thr_cnt )
     { this->thread_to_use = thr_cnt; }
 
 
-array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W()
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_W() const
 {
-    if( !this->is_atk_lists_upd ){
-        this->upd_atk_lists();
-    }
     return this->atk_list_by_W;
 }
-array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B()
+array<vector<int>,chess::BOARDHEIGHT*chess::BOARDWIDTH> chess::getAtk_list_by_B() const
 {
-    if( !this->is_atk_lists_upd ){
-        this->upd_atk_lists();
-    }
     return this->atk_list_by_B;
 }
 
@@ -10285,16 +10279,10 @@ bool chess::getIs_atk_lists_upd() const{
 bool chess::getIs_valid_moves_upd() const{
     return this->is_valid_moves_upd;
 }
-array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_moves_map(){
-    if( !this->is_valid_moves_upd ){
-        this->upd_all_valid_moves();
-    }
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_moves_map() const{
     return this->valid_W_moves_map; 
 }
-array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_moves_map(){
-    if( !this->is_valid_moves_upd ){
-        this->upd_all_valid_moves();
-    }
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_moves_map() const{
     return this->valid_B_moves_map; 
 }
 
@@ -10331,16 +10319,10 @@ array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_legal_atks
 
 bool chess::getIs_valid_atks_upd() const
     { return this->is_valid_atks_upd; }
-array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_atks_map(){
-    if( !this->is_valid_atks_upd ){
-        this->upd_all_valid_atks();
-    }
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_W_atks_map() const{
     return this->valid_W_atks_map; 
 }
-array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_atks_map(){
-    if( !this->is_valid_atks_upd ){
-        this->upd_all_valid_atks();
-    }
+array< vector<int>, chess::BOARDHEIGHT*chess::BOARDWIDTH > chess::get_valid_B_atks_map() const{
     return this->valid_B_atks_map; 
 }
 

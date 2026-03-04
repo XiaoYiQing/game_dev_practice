@@ -10032,7 +10032,49 @@ void tests::chess_upd_pre_legal_promo_tests(){
 
 void tests::chess_play_and_pre_legal_upds_tests(){
 
+    bool test_bool = true;
+    chess myGame1;
+    chess myGame2;
+
+    vector< chess::chs_move > en_pass_moves;
     
+    chess::chs_piece emp_pce = chess::chs_piece( chess::CHS_PIECE_TYPE::NO_P, 
+        chess::CHS_PIECE_COLOR::NO_C );
+    chess::chs_piece tmp_pce;
+
+    chess::chs_piece w_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_pawn = chess::chs_piece( chess::CHS_PIECE_TYPE::PAWN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_knight = chess::chs_piece( chess::CHS_PIECE_TYPE::KNIGHT, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_bishop = chess::chs_piece( chess::CHS_PIECE_TYPE::BISHOP, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_rook = chess::chs_piece( chess::CHS_PIECE_TYPE::ROOK, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_queen = chess::chs_piece( chess::CHS_PIECE_TYPE::QUEEN, chess::CHS_PIECE_COLOR::BLACK );
+    chess::chs_piece w_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::WHITE );
+    chess::chs_piece b_king = chess::chs_piece( chess::CHS_PIECE_TYPE::KING, chess::CHS_PIECE_COLOR::BLACK );
+    
+    auto atk_list_by_W_bef = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_bef = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_bef = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_bef = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_bef = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_bef = myGame1.get_valid_B_atks_map();
+    auto atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+    auto atk_list_by_W_2 = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_2 = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_2 = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_2 = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_2 = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_2 = myGame1.get_valid_B_atks_map();
+
+
 
 }
 
@@ -11405,3 +11447,37 @@ bool tests_tools::are_int_vector_arr_eq( std::array<vector<int>, 64>& arr1,
 
 }
 
+
+
+bool tests_tools::are_chess_pre_legal_lists_eq( const gameEngine::chess &myGame1, 
+    const gameEngine::chess &myGame2 )
+{
+
+    bool test_bool = true;
+
+    // Obtain the standard results.
+    auto atk_list_by_W_1 = myGame1.getAtk_list_by_W();
+    auto atk_list_by_B_1 = myGame1.getAtk_list_by_B();
+    auto valid_W_moves_map_1 = myGame1.get_valid_W_moves_map();
+    auto valid_B_moves_map_1 = myGame1.get_valid_B_moves_map();
+    auto valid_W_atks_map_1 = myGame1.get_valid_W_atks_map();
+    auto valid_B_atks_map_1 = myGame1.get_valid_B_atks_map();
+
+    // Obtain the special results.
+    auto atk_list_by_W_2 = myGame2.getAtk_list_by_W();
+    auto atk_list_by_B_2 = myGame2.getAtk_list_by_B();
+    auto valid_W_moves_map_2 = myGame2.get_valid_W_moves_map();
+    auto valid_B_moves_map_2 = myGame2.get_valid_B_moves_map();
+    auto valid_W_atks_map_2 = myGame2.get_valid_W_atks_map();
+    auto valid_B_atks_map_2 = myGame2.get_valid_B_atks_map();
+
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_W_1, atk_list_by_W_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( atk_list_by_B_1, atk_list_by_B_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_moves_map_1, valid_W_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_moves_map_1, valid_B_moves_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
+    test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
+    
+    return test_bool;
+
+}
