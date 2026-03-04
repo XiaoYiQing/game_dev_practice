@@ -5291,7 +5291,7 @@ void chess::upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce ){
         this->valid_W_atks_map[ ind_a ].clear();
 
         // Pawn case.
-        if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+        if( tar_pce.type == CHS_PIECE_TYPE::PAWN && i_a < chess::BOARDHEIGHT - 1 ){
 
             tmp_arr_lim = 0;
 
@@ -5324,7 +5324,7 @@ void chess::upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce ){
         this->valid_B_atks_map[ ind_a ].clear();
 
         // Pawn case.
-        if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+        if( tar_pce.type == CHS_PIECE_TYPE::PAWN && i_a > 0 ){
 
             tmp_arr_lim = 0;
 
@@ -5336,16 +5336,6 @@ void chess::upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce ){
                 if( j_a < chess::BOARDWIDTH - 1 ){
                     tmp_ind_arr[tmp_arr_lim++] = ind_a - chess::BOARDWIDTH + 1;
                 }
-            }
-            // Possible en-passant attacks on the left.
-            if( j_a > 0 && this->CHS_board[i_a][j_a-1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_a][j_a-1].color != tar_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_a - 1;
-            }
-            // Possible en-passant attacks on the right.
-            if( j_a < chess::BOARDWIDTH - 1 && this->CHS_board[i_a][j_a+1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_a][j_a+1].color != tar_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_a + 1;
             }
             
         }
@@ -6069,7 +6059,7 @@ void chess::upd_pre_legal_plays_occ( const int ind_b, const chs_piece prev_pce )
         this->valid_W_atks_map[ ind_b ].clear();
 
         // Pawn case.
-        if( prev_pce.type == CHS_PIECE_TYPE::PAWN ){
+        if( prev_pce.type == CHS_PIECE_TYPE::PAWN && i_b < chess::BOARDHEIGHT - 1 ){
 
             tmp_arr_lim = 0;
 
@@ -6102,7 +6092,7 @@ void chess::upd_pre_legal_plays_occ( const int ind_b, const chs_piece prev_pce )
         this->valid_B_atks_map[ ind_b ].clear();
 
         // Pawn case.
-        if( prev_pce.type == CHS_PIECE_TYPE::PAWN ){
+        if( prev_pce.type == CHS_PIECE_TYPE::PAWN && i_b > 0 ){
 
             tmp_arr_lim = 0;
 
@@ -7410,7 +7400,7 @@ void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_pie
         this->valid_W_atks_map[ ind_a ].clear();
 
         // Pawn case.
-        if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+        if( tar_pce.type == CHS_PIECE_TYPE::PAWN && i_a < chess::BOARDHEIGHT - 1 ){
 
             tmp_arr_lim = 0;
 
@@ -7443,7 +7433,7 @@ void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_pie
         this->valid_B_atks_map[ ind_a ].clear();
 
         // Pawn case.
-        if( tar_pce.type == CHS_PIECE_TYPE::PAWN ){
+        if( tar_pce.type == CHS_PIECE_TYPE::PAWN && i_a > 0 ){
 
             tmp_arr_lim = 0;
 
