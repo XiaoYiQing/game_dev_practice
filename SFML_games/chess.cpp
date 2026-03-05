@@ -7422,6 +7422,10 @@ that may need their list of possible plays updated with this newly occupied squa
 
 void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_piece prev_pce ){
 
+    this->is_atk_lists_upd = false;
+    this->is_valid_moves_upd = false;
+    this->is_valid_atks_upd = false;
+
     pair<int,int> ij_a = chess::ind2sub( ind_a );
     int i_a = ij_a.first;
     int j_a = ij_a.second;
@@ -9704,6 +9708,10 @@ elsewhere rather than to this point.
     }
 
 // ---------------------------------------------------------------------- <<<<<
+
+    this->is_atk_lists_upd = true;
+    this->is_valid_moves_upd = true;
+    this->is_valid_atks_upd = true;
 
 }
 

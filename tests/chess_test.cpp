@@ -6783,18 +6783,11 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Play the black king to miss the en-passant chance.
     myGame1.ply( 7, 4, 7, 5 );
 
-    myGame1.printBoard();
+    // myGame1.printBoard();
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 7, 4, emp_pce );
-    tmp_pce = b_king;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 7, 5, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 7, 4, 7, 5 );
     
-    // Perform manual trigger for the en-passant miss.
-    myGame2.setEn_pass_flag( false );
-
     // Perform special update.
     myGame2.upd_pre_legal_plays( 60, 61, emp_pce );
 
@@ -6830,18 +6823,8 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
-    tmp_pce = b_pawn;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 4, 4, tmp_pce );
-
-    // Perform manual trigger for the en-passant inducing move.
-    myGame2.setEn_pass_flag( true );
-    en_pass_moves.clear();
-    en_pass_moves.push_back( chess::chs_move( pair<int,int>( 4, 5 ), pair<int,int>( 5, 4 ) ) );
-    myGame2.setEn_pass_moves( en_pass_moves );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 6, 4, 4, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 52, 36, emp_pce );
@@ -6873,19 +6856,8 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
-    tmp_pce = b_pawn;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 4, 4, tmp_pce );
-
-    // Perform manual trigger for the en-passant inducing move.
-    myGame2.setEn_pass_flag( true );
-    en_pass_moves.clear();
-    en_pass_moves.push_back( chess::chs_move( pair<int,int>( 4, 5 ), pair<int,int>( 5, 4 ) ) );
-    en_pass_moves.push_back( chess::chs_move( pair<int,int>( 4, 3 ), pair<int,int>( 5, 4 ) ) );
-    myGame2.setEn_pass_moves( en_pass_moves );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 6, 4, 4, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 52, 36, emp_pce );
@@ -6905,15 +6877,8 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     myGame1.ply( 0, 4, 0, 5 );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 0, 4, emp_pce );
-    tmp_pce = w_king;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 0, 5, tmp_pce );
-
-    // Perform manual trigger for the en-passant miss.
-    myGame2.setEn_pass_flag( false );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 0, 4, 0, 5 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 4, 5, emp_pce );
@@ -6959,17 +6924,13 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 0, 6, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 0, 6, 1, 4 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 6, 12, emp_pce );
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 7, 6, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 7, 6, 6, 4 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 62, 52, emp_pce );
 
