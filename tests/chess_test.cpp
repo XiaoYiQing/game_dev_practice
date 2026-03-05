@@ -5647,8 +5647,8 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     
     // myGame1.printBoard();
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
-
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn move test 1 (recto): passed!" << endl;
     }else{
@@ -5699,7 +5699,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     
     
     
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn move test 1 (verso): passed!" << endl;
@@ -5754,7 +5754,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 44, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays knight move test 1 (recto): passed!" << endl;
@@ -5810,7 +5810,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 44, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays knight move test 1 (verso): passed!" << endl;
@@ -5869,7 +5869,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 21, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays bishop move test 1 (recto): passed!" << endl;
@@ -5929,7 +5929,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 21, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays bishop move test 1 (verso): passed!" << endl;
@@ -5988,7 +5988,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 44, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays rook move test 1 (recto): passed!" << endl;
@@ -6048,7 +6048,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 44, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays rook move test 1 (verso): passed!" << endl;
@@ -6112,7 +6112,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 37, 35, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays queen (horiz) move test 1 (recto): passed!" << endl;
@@ -6137,7 +6137,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 35, 26, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays queen (diag) move test 1 (recto): passed!" << endl;
@@ -6200,7 +6200,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 37, 35, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays queen (horiz) move test 1 (verso): passed!" << endl;
@@ -6225,7 +6225,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 35, 26, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays queen (diag) move test 1 (verso): passed!" << endl;
@@ -6279,7 +6279,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 21, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays king move test 1 (recto): passed!" << endl;
@@ -6333,7 +6333,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 21, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays king move test 1 (verso): passed!" << endl;
@@ -6382,7 +6382,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 27, 44, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
     
     if( test_bool ){
         cout << "chess upd_pre_legal_plays horizontal exposed king reverse scan test (recto): passed!" << endl;
@@ -6424,7 +6424,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 18, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays vertical exposed king reverse scan test (recto): passed!" << endl;
@@ -6464,7 +6464,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 34, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays diagonal exposed king reverse scan test (recto): passed!" << endl;
@@ -6510,7 +6510,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 27, 44, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays horizontal exposed king reverse scan test (verso): passed!" << endl;
@@ -6549,7 +6549,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 18, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays vertical exposed king reverse scan test (verso): passed!" << endl;
@@ -6586,7 +6586,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 34, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
     
     if( test_bool ){
         cout << "chess upd_pre_legal_plays diagonal exposed king reverse scan test (verso): passed!" << endl;
@@ -6632,7 +6632,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 27, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays king into threat line test (recto): passed!" << endl;
@@ -6678,7 +6678,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 27, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays king into threat line test (verso): passed!" << endl;
@@ -6726,7 +6726,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 12, 28, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn en-passant init test (recto): passed!" << endl;
@@ -6769,7 +6769,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 12, 28, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn double en-passant init test (recto): passed!" << endl;
@@ -6791,7 +6791,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 60, 61, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn en-passant delete test (recto): passed!" << endl;
@@ -6829,7 +6829,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 52, 36, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn en-passant init test (verso): passed!" << endl;
@@ -6862,7 +6862,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 52, 36, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn double en-passant init test (verso): passed!" << endl;
@@ -6883,7 +6883,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 4, 5, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn en-passant delete test (verso): passed!" << endl;
@@ -6934,7 +6934,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 62, 52, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays right castling unblock test (both): passed!" << endl;
@@ -6955,21 +6955,17 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 0, 2, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 1, 4, 0, 2 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 12, 2, emp_pce );
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 7, 2, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 6, 4, 7, 2 );    
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 52, 58, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays left castling block test (both): passed!" << endl;
@@ -6990,21 +6986,17 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 0, 2, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 0, 2, 1, 4 ); 
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 2, 12, emp_pce );
-
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 7, 2, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 7, 2, 6, 4 ); 
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 58, 52, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays left castling unblock test (both): passed!" << endl;
@@ -7025,21 +7017,17 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 0, 6, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 1, 4, 0, 6 ); 
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 12, 6, emp_pce );
-
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 7, 6, tmp_pce );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 6, 4, 7, 6 ); 
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 52, 62, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays right castling block test (both): passed!" << endl;
@@ -7084,21 +7072,17 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 0, 6, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 0, 6, 1, 4 ); 
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 6, 12, emp_pce );
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 7, 6, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 7, 6, 6, 4 ); 
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 62, 52, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays fake right castling unblock test (both): passed!" << endl;
@@ -7119,21 +7103,17 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 0, 2, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 1, 4, 0, 2 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 12, 2, emp_pce );
-
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 7, 2, tmp_pce );
+     
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 6, 4, 7, 2 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 52, 58, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays fake left castling block test (both): passed!" << endl;
@@ -7154,21 +7134,17 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 0, 2, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 1, 4, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 0, 2, 1, 4 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 2, 12, emp_pce );
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 7, 2, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 6, 4, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 7, 2, 6, 4 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 58, 52, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays fake left castling unblock test (both): passed!" << endl;
@@ -7189,21 +7165,17 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 0, 6, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 1, 4, 0, 6 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 12, 6, emp_pce );
 
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 6, 4, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 7, 6, tmp_pce );
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 6, 4, 7, 6 );
     // Perform specialized update.
     myGame2.upd_pre_legal_plays( 52, 62, emp_pce );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays fake right castling block test (both): passed!" << endl;
@@ -7298,7 +7270,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 11, 18, b_pawn );
     
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn atk test 1 (recto): passed!" << endl;
@@ -7350,7 +7322,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 51, 42, w_pawn );
     
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays pawn atk test 1 (verso): passed!" << endl;
@@ -7406,7 +7378,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 44, b_knight );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays knight atk test 1 (recto): passed!" << endl;
@@ -7463,7 +7435,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 44, w_knight );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays knight atk test 1 (verso): passed!" << endl;
@@ -7523,7 +7495,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 21, b_bishop );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays bishop atk test 1 (recto): passed!" << endl;
@@ -7584,7 +7556,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 21, w_bishop );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays bishop atk test 1 (verso): passed!" << endl;
@@ -7644,7 +7616,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 44, b_rook );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays rook atk test 1 (recto): passed!" << endl;
@@ -7705,7 +7677,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 44, w_rook );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays rook atk test 1 (verso): passed!" << endl;
@@ -7773,7 +7745,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 37, 35, b_queen );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays queen (horiz) atk test 1 (recto): passed!" << endl;
@@ -7798,7 +7770,7 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_plays( 35, 26, b_pawn );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_plays queen (diag) atk test 1 (recto): passed!" << endl;
@@ -7892,7 +7864,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( true, true );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl right side white castling simple test: passed!" << endl;
@@ -7926,7 +7898,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( false, true );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl right side black castling simple test: passed!" << endl;
@@ -7974,7 +7946,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( true, false );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl left side white castling simple test: passed!" << endl;
@@ -8008,7 +7980,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( false, false );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl left side black castling simple test: passed!" << endl;
@@ -8070,7 +8042,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( true, true );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
     
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl right side white castling complex test: passed!" << endl;
@@ -8104,7 +8076,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( false, true );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl right side black castling complex test: passed!" << endl;
@@ -8165,7 +8137,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( true, false );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl left side white castling complex test: passed!" << endl;
@@ -8199,7 +8171,7 @@ void tests::chess_upd_pre_legal_castl_tests(){
     // Right-side white castling update.
     myGame2.upd_pre_legal_castl( false, false );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
 	if( test_bool ){
 		cout << "chess upd_pre_legal_castl left side black castling complex test: passed!" << endl;
@@ -8294,7 +8266,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( true, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into knight test (recto): passed!" << endl;
@@ -8343,7 +8315,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( false, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into knight test (verso): passed!" << endl;
@@ -8395,7 +8367,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( true, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into rook test (recto): passed!" << endl;
@@ -8447,7 +8419,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( false, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into rook test (verso): passed!" << endl;
@@ -8500,7 +8472,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( true, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into bishop test (recto): passed!" << endl;
@@ -8552,7 +8524,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( false, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
     
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into bishop test (verso): passed!" << endl;
@@ -8604,7 +8576,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( true, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
     
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into queen test (recto): passed!" << endl;
@@ -8656,7 +8628,7 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform special update.
     myGame2.upd_pre_legal_promo( false, 5 );
 
-    test_bool = tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
     if( test_bool ){
         cout << "chess upd_pre_legal_promo pawn promo into queen test (verso): passed!" << endl;
