@@ -493,6 +493,25 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
      */
     bool play( unsigned int i_bef, unsigned int j_bef, 
         unsigned int i_aft, unsigned int j_aft );
+
+    /**
+     * \brief Play a chess piece with the specified beginning and ending square coordinates.
+     * 
+     * @note Special version of the "play" function where the standard updates after play
+     *  are not performed. Some innate attribute such as en-passant triggers and pawn 
+     *  promotion triggers are still in effect.
+     * 
+     * @warning This function is for testing purposes, and not part of the official chess 
+     *  game functionalities.
+     * 
+     * \param i_bef Row index of the starting position.
+     * \param j_bef Column index of the starting position.
+     * \param i_aft Row index of the landing position.
+     * \param j_aft Column index of the landing position.
+     * \return Boolean indicating whether this play is successful.
+     */
+    bool play_NO_UPD( unsigned int i_bef, unsigned int j_bef, 
+        unsigned int i_aft, unsigned int j_aft );
     
     /**
      * Play a chess piece with the specified beginning and ending square coordinates.

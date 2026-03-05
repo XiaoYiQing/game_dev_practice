@@ -6780,10 +6780,10 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     // Re-update game2 to game 1 state.
     myGame2 = myGame1;
 
-    // myGame1.printBoard();
-
     // Play the black king to miss the en-passant chance.
     myGame1.ply( 7, 4, 7, 5 );
+
+    myGame1.printBoard();
 
     // Set the update flag to always.
     myGame2.setForce_lists_upd(true);
@@ -6791,7 +6791,7 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2.set_piece_at_NO_UPD( 7, 4, emp_pce );
     tmp_pce = b_king;    tmp_pce.not_moved = false;
     myGame2.set_piece_at_NO_UPD( 7, 5, tmp_pce );
-
+    
     // Perform manual trigger for the en-passant miss.
     myGame2.setEn_pass_flag( false );
 
@@ -10156,6 +10156,7 @@ bool tests_tools::are_chess_pre_legal_lists_eq( const gameEngine::chess &myGame1
     test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_W_atks_map_1, valid_W_atks_map_2 );
     test_bool = test_bool && tests_tools::are_int_vector_arr_eq( valid_B_atks_map_1, valid_B_atks_map_2 );
     
+
     return test_bool;
 
 }

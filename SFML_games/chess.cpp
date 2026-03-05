@@ -1403,6 +1403,191 @@ bool chess::play( unsigned int i_bef, unsigned int j_bef,
 
 }
 
+
+bool chess::play_NO_UPD( unsigned int i_bef, unsigned int j_bef, 
+    unsigned int i_aft, unsigned int j_aft )
+{
+    
+
+    // Prevent play if the game is already in a win state.
+    if( this->state == CHS_STATE::BWIN || this->state == CHS_STATE::WWIN || 
+        this->state == CHS_STATE::DRAW ){
+        return false;
+    }
+
+    // Promotion lock check.
+    if( promo_lock ){
+        if( verbose )
+            cout << "Play prevented by promotion lock." << endl;
+        return false;
+    }
+
+    // Special boolean checking whether en-passant possibility has been triggered by a move.
+    bool en_pass_posb = false;
+
+    // Obtain the target piece.
+    chs_piece currPiece = get_piece_at( i_bef, j_bef );
+
+    // Attack condition.
+    bool is_atk = !this->is_sq_empty( i_aft, j_aft );
+    // Special en-passant attack condition.
+    if( currPiece.type == CHS_PIECE_TYPE::PAWN ){
+        is_atk = j_bef != j_aft;
+    }
+
+
+    if( !is_atk ){
+
+        // Perform the displacement.
+        this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_aft][j_aft].not_moved = false;
+        this->CHS_board[i_bef][j_bef].set_as_empty(); 
+
+        // Only the castling move involves moving more than 1 piece at a time, and must
+        // be treated as a special stand-alone case.
+        if( currPiece.type == CHS_PIECE_TYPE::KING ){
+
+            int j_displ = (int) j_aft - (int) j_bef;
+            
+            // Right-side castling.
+            if( j_displ == 2 ){
+                this->CHS_board[i_aft][j_aft-1] = this->CHS_board[i_aft][BOARDWIDTH-1];
+                this->CHS_board[i_aft][j_aft-1].not_moved = false;
+                this->CHS_board[i_aft][BOARDWIDTH-1].set_as_empty();
+
+            // Left-side castling.
+            }else if( j_displ == -2 ){
+                this->CHS_board[i_aft][j_aft+1] = this->CHS_board[i_aft][0];
+                this->CHS_board[i_aft][j_aft+1].not_moved = false;
+                this->CHS_board[i_aft][0].set_as_empty();
+            }
+
+        }
+
+        // The en-passant special trigger case.
+        if( currPiece.type == CHS_PIECE_TYPE::PAWN ){            
+
+            // First condition of possiblity of en-passant: pawn moved.
+            en_pass_posb = true;
+            // Update previous en-passant moves.    
+            this->prev_en_pass_moves.clear();
+            for( chs_move tmp_move : this->en_pass_moves )
+                this->prev_en_pass_moves.push_back( tmp_move );
+            // Clear current en-passant moves.
+            this->en_pass_moves.clear();
+
+            if( currPiece.color == CHS_PIECE_COLOR::WHITE ){
+
+                // The white pawn jumped two squares from its starting position.
+                en_pass_posb = en_pass_posb && i_bef == 1 && i_aft == 3;
+                // If the white pawn is not on the first column.
+                if( j_bef > 0 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef - 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                        get_piece_at( i_aft, j_bef - 1 ).color == CHS_PIECE_COLOR::BLACK ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef - 1, i_aft - 1, j_bef )
+                        );
+                    }
+                }
+                // If the white pawn is not on the last column.
+                if( j_bef < BOARDWIDTH - 1 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef + 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                        get_piece_at( i_aft, j_bef + 1 ).color == CHS_PIECE_COLOR::BLACK ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef + 1, i_aft - 1, j_bef )
+                        );
+                    }
+                }
+                // There is at least one valid en-passant move.
+                en_pass_posb = en_pass_posb && this->en_pass_moves.size() > 0;
+
+            }else if( currPiece.color == CHS_PIECE_COLOR::BLACK ){
+
+                // The black pawn jumped two squares from its starting position.
+                en_pass_posb = en_pass_posb && i_bef == BOARDHEIGHT - 2 && 
+                    i_aft == BOARDHEIGHT - 4;
+                // If the black pawn is not on the first column.
+                if( j_bef > 0 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef - 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                        get_piece_at( i_aft, j_bef - 1 ).color == CHS_PIECE_COLOR::WHITE ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef - 1, i_aft + 1, j_bef )
+                        );
+                    }
+                }
+                // If the black pawn is not on the last column.
+                if( j_bef < BOARDWIDTH - 1 && en_pass_posb ){
+                    if( get_piece_at( i_aft, j_bef + 1 ).type == CHS_PIECE_TYPE::PAWN &&
+                    get_piece_at( i_aft, j_bef + 1 ).color == CHS_PIECE_COLOR::WHITE ){
+                        this->en_pass_moves.push_back(
+                            chs_move( i_aft, j_bef + 1, i_aft + 1, j_bef )
+                        );
+                    }
+                }
+                // There is at least one valid en-passant move.
+                en_pass_posb = en_pass_posb && this->en_pass_moves.size() > 0;
+
+            }else{
+                throw runtime_error( "Unrecognized chess color." );
+            }  
+
+        }
+
+    }else{
+
+        // The en-passant attack is a unique attack where the end square is empty.
+        bool is_en_pass = this->is_sq_empty( i_aft, j_aft );
+
+        // Perform the attack.
+        this->CHS_board[i_aft][j_aft] = this->CHS_board[i_bef][j_bef];
+        this->CHS_board[i_aft][j_aft].not_moved = false;
+        this->CHS_board[i_bef][j_bef].set_as_empty(); 
+
+        // En-passant unique attack scenario additional step.
+        if( is_en_pass ){
+            if( currPiece.color == CHS_PIECE_COLOR::WHITE ){
+                this->CHS_board[ i_aft - 1 ][j_aft].set_as_empty(); 
+            }else if( currPiece.color == CHS_PIECE_COLOR::BLACK ){
+                this->CHS_board[ i_aft + 1 ][j_aft].set_as_empty(); 
+            }else{
+                throw runtime_error( "Unrecognized chess color." );
+            }
+        }
+
+    }
+
+    // If the piece played is a pawn and it has reached the end of its column.
+    if( currPiece.type == CHS_PIECE_TYPE::PAWN && ( i_aft == 0 || i_aft == BOARDHEIGHT - 1 ) ){
+        promo_lock = true;
+        promo_point.first = i_aft;
+        promo_point.second = j_aft;
+    }
+
+    // Turn the en-passant flag to false when conditions are not met.
+    if( en_pass_posb ){
+        this->en_pass_flag = true;
+    }else{
+
+        // If en-passant possibility has just passed, record previous en-passant.
+        if( this->en_pass_flag ){
+            this->prev_en_pass_moves.clear();
+            for( chs_move tmp_move : this->en_pass_moves )
+                this->prev_en_pass_moves.push_back( tmp_move );
+        }
+
+        this->en_pass_flag = false;
+    }
+
+    // Signal for change of board state.
+    this->game_tracking_signal();
+        
+    // Increment the turn count.
+    this->turn_cnt++;  
+
+    return true;
+
+}
+
 bool chess::ply_ag_comm( string alg_comm ){
 
 // ---------------------------------------------------------------------- >>>>>
@@ -7460,16 +7645,6 @@ void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_pie
                 if( j_a < chess::BOARDWIDTH - 1 ){
                     tmp_ind_arr[tmp_arr_lim++] = ind_a - chess::BOARDWIDTH + 1;
                 }
-            }
-            // Possible en-passant attacks on the left.
-            if( j_a > 0 && this->CHS_board[i_a][j_a-1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_a][j_a-1].color != tar_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_a - 1;
-            }
-            // Possible en-passant attacks on the right.
-            if( j_a < chess::BOARDWIDTH - 1 && this->CHS_board[i_a][j_a+1].type == CHS_PIECE_TYPE::PAWN &&
-                this->CHS_board[i_a][j_a+1].color != tar_pce.color ){
-                tmp_ind_arr[tmp_arr_lim++] = ind_a + 1;
             }
             
         }
