@@ -8266,7 +8266,9 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 2, 7, w_bishop );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 1, 5, 0, 5 );
+    myGame1.play_NO_UPD( 1, 5, 0, 5 );
+    myGame1.upd_all();
+    
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
@@ -8317,8 +8319,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 4, 5, b_knight );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 6, 5, 7, 5 );    
-
+    myGame1.play_NO_UPD( 6, 5, 7, 5 );
+    myGame1.upd_all();
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
@@ -8370,7 +8372,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 3, 5, w_knight );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 1, 5, 0, 5 );
+    myGame1.play_NO_UPD( 1, 5, 0, 5 );
+    myGame1.upd_all();
 
     // Update alternative game object to current main game object state.
     myGame2 = myGame1;
@@ -8422,8 +8425,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 4, 2, b_pawn );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 6, 5, 7, 5 );    
-
+    myGame1.play_NO_UPD( 6, 5, 7, 5 );
+    myGame1.upd_all();
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
@@ -8475,7 +8478,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 3, 2, w_pawn );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 1, 5, 0, 5 );    
+    myGame1.play_NO_UPD( 1, 5, 0, 5 );
+    myGame1.upd_all();
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
@@ -8527,7 +8531,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 4, 2, b_pawn );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 6, 5, 7, 5 );  
+    myGame1.play_NO_UPD( 6, 5, 7, 5 );
+    myGame1.upd_all();
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
@@ -8579,7 +8584,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 3, 2, w_pawn );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 1, 5, 0, 5 );  
+    myGame1.play_NO_UPD( 1, 5, 0, 5 );
+    myGame1.upd_all();
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
