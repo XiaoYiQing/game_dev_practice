@@ -5636,12 +5636,10 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_pawn;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 2, 3, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play by displacing the pawn without updating.
-    myGame2.set_piece_at_NO_UPD( 1, 3, emp_pce );
-    tmp_pce = w_pawn;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 2, 3, tmp_pce );
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 1, 3, 2, 3 );
     // Perform special update.
     myGame2.upd_pre_legal_plays( 11, 19, emp_pce );
     
@@ -5688,16 +5686,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play by displacing the pawn without updating.
-    myGame2.set_piece_at_NO_UPD( 6, 3, emp_pce );
-    tmp_pce = b_pawn;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 5, 3, tmp_pce );
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 6, 3, 5, 3 );
     // Perform special update.
     myGame2.upd_pre_legal_plays( 51, 43, emp_pce );
-    
-    
     
     test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
@@ -5742,14 +5736,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 5, 4, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 5, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
-
     // myGame1.printBoard();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 5, 5, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 44, emp_pce );
@@ -5797,15 +5789,13 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame1.set_piece_at( 3, 5, emp_pce );
     tmp_pce = b_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 5, 4, tmp_pce );
-
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 5, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
-
+    
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 5, 5, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 44, emp_pce );
@@ -5857,14 +5847,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_bishop;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 2, 5, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
-    tmp_pce = w_bishop;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 2, 5, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 4, 2, 5 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 21, emp_pce );
@@ -5917,14 +5905,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_bishop;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 2, 5, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
-    tmp_pce = b_bishop;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 2, 5, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 4, 2, 5 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 21, emp_pce );
@@ -5976,14 +5962,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_rook;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 5, 4, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
-    tmp_pce = w_rook;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 4, 5, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 44, emp_pce );
@@ -6036,14 +6020,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_rook;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 5, 4, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
-    tmp_pce = b_rook;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 4, 5, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 44, emp_pce );
@@ -6100,14 +6082,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_queen;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 4, 3, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 4, 5, emp_pce );
-    tmp_pce = w_queen;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 4, 3, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 4, 5, 4, 3 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 37, 35, emp_pce );
@@ -6125,14 +6105,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_queen;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 3, 2, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 4, 3, emp_pce );
-    tmp_pce = w_queen;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 3, 2, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 4, 3, 3, 2 );    
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 35, 26, emp_pce );
@@ -6188,14 +6166,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_queen;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 4, 3, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 4, 5, emp_pce );
-    tmp_pce = b_queen;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 4, 3, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 4, 5, 4, 3 ); 
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 37, 35, emp_pce );
@@ -6213,15 +6189,13 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_queen;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 3, 2, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 4, 3, emp_pce );
-    tmp_pce = b_queen;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 3, 2, tmp_pce );
-
     // myGame1.printBoard();
-
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 4, 3, 3, 2 ); 
+    
     // Perform special update.
     myGame2.upd_pre_legal_plays( 35, 26, emp_pce );
 
@@ -6252,14 +6226,6 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     myGame1.set_piece_at( 3, 2, b_rook );
 
-    // Obtain the standard results.
-    atk_list_by_W_bef = myGame1.getAtk_list_by_W();
-    atk_list_by_B_bef = myGame1.getAtk_list_by_B();
-    valid_W_moves_map_bef = myGame1.get_valid_W_moves_map();
-    valid_B_moves_map_bef = myGame1.get_valid_B_moves_map();
-    valid_W_atks_map_bef = myGame1.get_valid_W_atks_map();
-    valid_B_atks_map_bef = myGame1.get_valid_B_atks_map();
-
     myGame2 = myGame1;
     
     // Perform a "manual" play.
@@ -6267,14 +6233,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_king;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 2, 5, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 5, emp_pce );
-    tmp_pce = w_king;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 2, 5, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 5, 2, 5 ); 
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 21, emp_pce );
@@ -6306,14 +6270,6 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     myGame1.set_piece_at( 3, 2, w_rook );
 
-    // Obtain the standard results.
-    atk_list_by_W_bef = myGame1.getAtk_list_by_W();
-    atk_list_by_B_bef = myGame1.getAtk_list_by_B();
-    valid_W_moves_map_bef = myGame1.get_valid_W_moves_map();
-    valid_B_moves_map_bef = myGame1.get_valid_B_moves_map();
-    valid_W_atks_map_bef = myGame1.get_valid_W_atks_map();
-    valid_B_atks_map_bef = myGame1.get_valid_B_atks_map();
-
     myGame2 = myGame1;
     
     // Perform a "manual" play.
@@ -6321,14 +6277,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_king;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 2, 5, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 5, emp_pce );
-    tmp_pce = b_king;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 2, 5, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 5, 2, 5 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 29, 21, emp_pce );
@@ -6370,14 +6324,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 5, 4, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 3, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 3, 5, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 27, 44, emp_pce );
@@ -6412,14 +6364,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 2, 2, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 2, 2, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 4, 2, 2 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 18, emp_pce );
@@ -6452,14 +6402,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 4, 2, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 2, 3, emp_pce );
-    tmp_pce = b_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 4, 2, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 2, 3, 4, 2 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 34, emp_pce );
@@ -6498,14 +6446,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 5, 4, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 3, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 5, 4, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 3, 5, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 27, 44, emp_pce );
@@ -6537,14 +6483,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 2, 2, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 3, 4, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 2, 2, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 4, 2, 2 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 28, 18, emp_pce );
@@ -6574,14 +6518,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_knight;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 4, 2, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 2, 3, emp_pce );
-    tmp_pce = w_knight;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 4, 2, tmp_pce );
-
     // myGame1.printBoard();
+    
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 2, 3, 4, 2 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 34, emp_pce );
@@ -6620,14 +6562,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = w_king;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 3, 3, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 2, 3, emp_pce );
-    tmp_pce = w_king;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 3, 3, tmp_pce );
-
     // myGame1.printBoard();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 2, 3, 3, 3 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 27, emp_pce );
@@ -6666,14 +6606,12 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     tmp_pce = b_king;    tmp_pce.not_moved = false;
     myGame1.set_piece_at( 3, 3, tmp_pce );
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 2, 3, emp_pce );
-    tmp_pce = b_king;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 3, 3, tmp_pce );
-
     // myGame1.printBoard();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 2, 3, 3, 3 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 19, 27, emp_pce );
@@ -6706,22 +6644,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Play the white pawn to achieve the en-passant state.
-    myGame1.ply( 1, 4, 3, 4 );
+    myGame1.play_NO_UPD( 1, 4, 3, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
-    tmp_pce = w_pawn;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 3, 4, tmp_pce );
-
-    // Perform manual trigger for the en-passant inducing move.
-    myGame2.setEn_pass_flag( true );
-    en_pass_moves.clear();
-    en_pass_moves.push_back( chess::chs_move( pair<int,int>( 3, 5 ), pair<int,int>( 2, 4 ) ) );
-    myGame2.setEn_pass_moves( en_pass_moves );
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 1, 4, 3, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 12, 28, emp_pce );
@@ -6748,23 +6679,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Play the white pawn to achieve the en-passant state.
-    myGame1.ply( 1, 4, 3, 4 );
+    myGame1.play_NO_UPD( 1, 4, 3, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
-    // Set the update flag to always.
-    myGame2.setForce_lists_upd(true);
-    // Perform a "manual" play without updating.
-    myGame2.set_piece_at_NO_UPD( 1, 4, emp_pce );
-    tmp_pce = w_pawn;    tmp_pce.not_moved = false;
-    myGame2.set_piece_at_NO_UPD( 3, 4, tmp_pce );
-
-    // Perform manual trigger for the en-passant inducing move.
-    myGame2.setEn_pass_flag( true );
-    en_pass_moves.clear();
-    en_pass_moves.push_back( chess::chs_move( pair<int,int>( 3, 5 ), pair<int,int>( 2, 4 ) ) );
-    en_pass_moves.push_back( chess::chs_move( pair<int,int>( 3, 3 ), pair<int,int>( 2, 4 ) ) );
-    myGame2.setEn_pass_moves( en_pass_moves );
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 1, 4, 3, 4 );
 
     // Perform special update.
     myGame2.upd_pre_legal_plays( 12, 28, emp_pce );
@@ -6781,10 +6704,13 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Play the black king to miss the en-passant chance.
-    myGame1.ply( 7, 4, 7, 5 );
+    myGame1.play_NO_UPD( 7, 4, 7, 5 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 7, 4, 7, 5 );
     
@@ -6819,10 +6745,13 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Play the white pawn to achieve the en-passant state.
-    myGame1.ply( 6, 4, 4, 4 );
+    myGame1.play_NO_UPD( 6, 4, 4, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 6, 4, 4, 4 );
 
@@ -6852,10 +6781,13 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Play the white pawn to achieve the en-passant state.
-    myGame1.ply( 6, 4, 4, 4 );
+    myGame1.play_NO_UPD( 6, 4, 4, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 6, 4, 4, 4 );
 
@@ -6875,8 +6807,11 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
 
     // myGame1.printBoard();
 
-    myGame1.ply( 0, 4, 0, 5 );
+    myGame1.play_NO_UPD( 0, 4, 0, 5 );
+    myGame1.upd_all();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 0, 4, 0, 5 );
 
@@ -6919,11 +6854,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Play the knights to unblock the right-side castlings.
-    myGame1.ply( 0, 6, 1, 4 );
-    myGame1.ply( 7, 6, 6, 4 );
+    myGame1.play_NO_UPD( 0, 6, 1, 4 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 7, 6, 6, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 0, 6, 1, 4 );
     // Perform specialized update.
@@ -6950,11 +6889,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Move the knights to block left-side castling.
-    myGame1.ply( 1, 4, 0, 2 );
-    myGame1.ply( 6, 4, 7, 2 );
+    myGame1.play_NO_UPD( 1, 4, 0, 2 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 6, 4, 7, 2 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 1, 4, 0, 2 );
     // Perform specialized update.
@@ -6981,11 +6924,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Move the knights to unblock left-side castling.
-    myGame1.ply( 0, 2, 1, 4 );
-    myGame1.ply( 7, 2, 6, 4 );
+    myGame1.play_NO_UPD( 0, 2, 1, 4 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 7, 2, 6, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 0, 2, 1, 4 ); 
     // Perform specialized update.
@@ -7012,11 +6959,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Move the knights to block right-side castling.
-    myGame1.ply( 1, 4, 0, 6 );
-    myGame1.ply( 6, 4, 7, 6 );
+    myGame1.play_NO_UPD( 1, 4, 0, 6 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 6, 4, 7, 6 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 1, 4, 0, 6 ); 
     // Perform specialized update.
@@ -7067,11 +7018,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Play the knights to unblock the right-side castlings.
-    myGame1.ply( 0, 6, 1, 4 );
-    myGame1.ply( 7, 6, 6, 4 );
+    myGame1.play_NO_UPD( 0, 6, 1, 4 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 7, 6, 6, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 0, 6, 1, 4 ); 
     // Perform specialized update.
@@ -7098,11 +7053,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Move the knights to block left-side castling.
-    myGame1.ply( 1, 4, 0, 2 );
-    myGame1.ply( 6, 4, 7, 2 );
+    myGame1.play_NO_UPD( 1, 4, 0, 2 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 6, 4, 7, 2 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 1, 4, 0, 2 );
     // Perform specialized update.
@@ -7129,11 +7088,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Move the knights to unblock left-side castling.
-    myGame1.ply( 0, 2, 1, 4 );
-    myGame1.ply( 7, 2, 6, 4 );
+    myGame1.play_NO_UPD( 0, 2, 1, 4 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 7, 2, 6, 4 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 0, 2, 1, 4 );
     // Perform specialized update.
@@ -7160,11 +7123,15 @@ void tests::chess_upd_pre_legal_v2_move_tests(){
     myGame2 = myGame1;
 
     // Move the knights to block right-side castling.
-    myGame1.ply( 1, 4, 0, 6 );
-    myGame1.ply( 6, 4, 7, 6 );
+    myGame1.play_NO_UPD( 1, 4, 0, 6 );
+    myGame1.upd_all();
+    myGame1.play_NO_UPD( 6, 4, 7, 6 );
+    myGame1.upd_all();
 
     // myGame1.printBoard();
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // Perform the same play in game 2, but without performing the list updates.
     myGame2.play_NO_UPD( 1, 4, 0, 6 );
     // Perform specialized update.
@@ -8249,7 +8216,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     myGame1.set_piece_at( 5, 7, b_bishop );
 
     // Push the pawn into promotion zone.
-    tmp_bool = myGame1.ply( 6, 5, 7, 5 );
+    myGame1.play_NO_UPD( 6, 5, 7, 5 );
+    myGame1.upd_all();
 
     // Update alternatve game object to current main game object state.
     myGame2 = myGame1;
