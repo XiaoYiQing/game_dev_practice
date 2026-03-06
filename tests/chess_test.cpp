@@ -7718,6 +7718,44 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Attack Into Check Test (Recto)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.resetBoard();
+    myGame1.setTurn_cnt(0);
+
+    // Delete all pawns.
+    for( unsigned int z = 0; z < 8; z++ ){
+        myGame1.set_piece_at_NO_UPD( 1, z, emp_pce );
+        myGame1.set_piece_at_NO_UPD( 6, z, emp_pce );
+    }
+    myGame1.upd_all();
+
+    myGame2 = myGame1;
+
+    myGame1.play_NO_UPD( 0, 3, 7, 3 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+        
+    myGame2.play_NO_UPD( 0, 3, 7, 3 );
+    myGame2.upd_pre_legal_plays( 3, 7*chess::BOARDWIDTH + 3, b_queen );
+
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays queen atk into check test (recto): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays queen atk into check test (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 
@@ -8688,57 +8726,57 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 //      Initial Game All Possible First Move Test (Recto)
 // ---------------------------------------------------------------------- >>>>>
 
-    // test_bool = true;
-    // myGame1.resetBoard();
-    // myGame1.setTurn_cnt(0);
+    test_bool = true;
+    myGame1.resetBoard();
+    myGame1.setTurn_cnt(0);
 
-    // myGame2 = myGame1;
+    myGame2 = myGame1;
     
-    // plays_vec.clear();
+    plays_vec.clear();
 
-    // // Add all first pawn moves.
-    // for( unsigned int z = 0; z < 8; z++ ){
-    //     plays_vec.push_back( chess::chs_move( 1, z, 2, z ) );
-    //     plays_vec.push_back( chess::chs_move( 1, z, 3, z ) );
-    // }
-    // // Add all first knight moves.
-    // plays_vec.push_back( chess::chs_move( 0, 1, 2, 0 ) );
-    // plays_vec.push_back( chess::chs_move( 0, 1, 2, 2 ) );
-    // plays_vec.push_back( chess::chs_move( 0, 6, 2, 5 ) );
-    // plays_vec.push_back( chess::chs_move( 0, 6, 2, 7 ) );
+    // Add all first pawn moves.
+    for( unsigned int z = 0; z < 8; z++ ){
+        plays_vec.push_back( chess::chs_move( 1, z, 2, z ) );
+        plays_vec.push_back( chess::chs_move( 1, z, 3, z ) );
+    }
+    // Add all first knight moves.
+    plays_vec.push_back( chess::chs_move( 0, 1, 2, 0 ) );
+    plays_vec.push_back( chess::chs_move( 0, 1, 2, 2 ) );
+    plays_vec.push_back( chess::chs_move( 0, 6, 2, 5 ) );
+    plays_vec.push_back( chess::chs_move( 0, 6, 2, 7 ) );
     
-    // // Play all test cases.
-    // for( chess::chs_move play_z : plays_vec ){
+    // Play all test cases.
+    for( chess::chs_move play_z : plays_vec ){
 
-    //     myGame1.resetBoard();
-    //     myGame1.setTurn_cnt(0);
-    //     myGame2 = myGame1;
+        myGame1.resetBoard();
+        myGame1.setTurn_cnt(0);
+        myGame2 = myGame1;
 
-    //     myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
-    //         play_z.pt_b.first, play_z.pt_b.second );
-    //     myGame1.upd_atk_lists();
-    //     myGame1.upd_all_valid_moves();
-    //     myGame1.upd_all_valid_atks();
+        myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
+            play_z.pt_b.first, play_z.pt_b.second );
+        myGame1.upd_atk_lists();
+        myGame1.upd_all_valid_moves();
+        myGame1.upd_all_valid_atks();
 
-    //     test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+        test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
-    //     myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
-    //         play_z.pt_b.first, play_z.pt_b.second );
+        myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
+            play_z.pt_b.first, play_z.pt_b.second );
 
-    //     test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+        test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
-    //     // If test failed already, skip further test cases.
-    //     if( !test_bool ){
-    //         break;
-    //     }
+        // If test failed already, skip further test cases.
+        if( !test_bool ){
+            break;
+        }
 
-    // }
+    }
 
-    // if( test_bool ){
-    //     cout << "chess play_and_pre_legal_upds all first move test (recto): passed!" << endl;
-    // }else{
-    //     cout << "chess play_and_pre_legal_upds all first move test (recto): failed!" << endl;
-    // }
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds all first move test (recto): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds all first move test (recto): failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -8747,57 +8785,57 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 //      Initial Game All Possible First Move Test (Verso)
 // ---------------------------------------------------------------------- >>>>>
 
-    // test_bool = true;
-    // myGame1.resetBoard();
-    // myGame1.setTurn_cnt(1);
+    test_bool = true;
+    myGame1.resetBoard();
+    myGame1.setTurn_cnt(1);
 
-    // myGame2 = myGame1;
+    myGame2 = myGame1;
     
-    // plays_vec.clear();
+    plays_vec.clear();
 
-    // // Add all first pawn moves.
-    // for( unsigned int z = 0; z < 8; z++ ){
-    //     plays_vec.push_back( chess::chs_move( 6, z, 5, z ) );
-    //     plays_vec.push_back( chess::chs_move( 6, z, 4, z ) );
-    // }
-    // // Add all first knight moves.
-    // plays_vec.push_back( chess::chs_move( 7, 1, 5, 0 ) );
-    // plays_vec.push_back( chess::chs_move( 7, 1, 5, 2 ) );
-    // plays_vec.push_back( chess::chs_move( 7, 6, 5, 5 ) );
-    // plays_vec.push_back( chess::chs_move( 7, 6, 5, 7 ) );
+    // Add all first pawn moves.
+    for( unsigned int z = 0; z < 8; z++ ){
+        plays_vec.push_back( chess::chs_move( 6, z, 5, z ) );
+        plays_vec.push_back( chess::chs_move( 6, z, 4, z ) );
+    }
+    // Add all first knight moves.
+    plays_vec.push_back( chess::chs_move( 7, 1, 5, 0 ) );
+    plays_vec.push_back( chess::chs_move( 7, 1, 5, 2 ) );
+    plays_vec.push_back( chess::chs_move( 7, 6, 5, 5 ) );
+    plays_vec.push_back( chess::chs_move( 7, 6, 5, 7 ) );
 
-    // // Play all test cases.
-    // for( chess::chs_move play_z : plays_vec ){
+    // Play all test cases.
+    for( chess::chs_move play_z : plays_vec ){
 
-    //     myGame1.resetBoard();
-    //     myGame1.setTurn_cnt(1);
-    //     myGame2 = myGame1;
+        myGame1.resetBoard();
+        myGame1.setTurn_cnt(1);
+        myGame2 = myGame1;
 
-    //     myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
-    //         play_z.pt_b.first, play_z.pt_b.second );
-    //     myGame1.upd_atk_lists();
-    //     myGame1.upd_all_valid_moves();
-    //     myGame1.upd_all_valid_atks();
+        myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
+            play_z.pt_b.first, play_z.pt_b.second );
+        myGame1.upd_atk_lists();
+        myGame1.upd_all_valid_moves();
+        myGame1.upd_all_valid_atks();
 
-    //     test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+        test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
-    //     myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
-    //         play_z.pt_b.first, play_z.pt_b.second );
+        myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
+            play_z.pt_b.first, play_z.pt_b.second );
 
-    //     test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+        test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
-    //     // If test failed already, skip further test cases.
-    //     if( !test_bool ){
-    //         break;
-    //     }
+        // If test failed already, skip further test cases.
+        if( !test_bool ){
+            break;
+        }
 
-    // }
+    }
 
-    // if( test_bool ){
-    //     cout << "chess play_and_pre_legal_upds all first move test (verso): passed!" << endl;
-    // }else{
-    //     cout << "chess play_and_pre_legal_upds all first move test (verso): failed!" << endl;
-    // }
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds all first move test (verso): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds all first move test (verso): failed!" << endl;
+    }
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -8822,19 +8860,18 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     plays_vec.clear();
 
     // Obtain all possible white plays from an initial board with no pawns.
-    // for( unsigned int z = 0; z < 8; z++ ){
+    for( unsigned int z = 0; z < 8; z++ ){
 
-    //     coord_vec = myGame1.get_all_valid_move_sq( 0, z );
-    //     for( pair<int,int> coord_z : coord_vec ){
-    //         plays_vec.push_back( chess::chs_move( 0, z, coord_z.first, coord_z.second ) );
-    //     }
-    //     coord_vec = myGame1.get_all_valid_atk_sq( 0, z );
-    //     for( pair<int,int> coord_z : coord_vec ){
-    //         plays_vec.push_back( chess::chs_move( 0, z, coord_z.first, coord_z.second ) );
-    //     }
+        coord_vec = myGame1.get_all_valid_move_sq( 0, z );
+        for( pair<int,int> coord_z : coord_vec ){
+            plays_vec.push_back( chess::chs_move( 0, z, coord_z.first, coord_z.second ) );
+        }
+        coord_vec = myGame1.get_all_valid_atk_sq( 0, z );
+        for( pair<int,int> coord_z : coord_vec ){
+            plays_vec.push_back( chess::chs_move( 0, z, coord_z.first, coord_z.second ) );
+        }
 
-    // }
-    plays_vec.push_back( chess::chs_move( 0, 3, 7, 3 ) );
+    }
     
     // Play all test cases.
     for( chess::chs_move play_z : plays_vec ){
@@ -8857,8 +8894,6 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 
         test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
         
-        myGame1.printBoard();
-
         myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
 

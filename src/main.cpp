@@ -170,10 +170,10 @@ void do_tests( unsigned int test_id ){
     // tests::chess_upd_pre_legal_tests_occ();
     // tests::chess_upd_pre_legal_tests_emp_and_occ();
     // tests::chess_upd_pre_legal_v2_move_tests();
-    // tests::chess_upd_pre_legal_v2_atk_tests();
+    tests::chess_upd_pre_legal_v2_atk_tests();
     // tests::chess_upd_pre_legal_castl_tests();
     // tests::chess_upd_pre_legal_promo_tests();
-    tests::chess_play_and_pre_legal_upds_tests();
+    // tests::chess_play_and_pre_legal_upds_tests();
 
     // tests::CHS_SFML_eng_tests();
 
