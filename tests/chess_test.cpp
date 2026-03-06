@@ -7782,12 +7782,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 0, 4, emp_pce );
-    myGame1.set_piece_at( 0, 7, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 7, emp_pce );
 	tmp_pce = w_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 0, 6, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 6, tmp_pce );
     tmp_pce = w_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 0, 5, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 5, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -7816,12 +7820,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 7, 4, emp_pce );
-    myGame1.set_piece_at( 7, 7, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 7, emp_pce );
 	tmp_pce = b_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 7, 6, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 6, tmp_pce );
     tmp_pce = b_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 7, 5, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 5, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -7864,12 +7872,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 0, 4, emp_pce );
-    myGame1.set_piece_at( 0, 0, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 0, emp_pce );
 	tmp_pce = w_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 0, 2, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 2, tmp_pce );
     tmp_pce = w_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 0, 3, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 3, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -7898,12 +7910,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 7, 4, emp_pce );
-    myGame1.set_piece_at( 7, 0, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 0, emp_pce );
 	tmp_pce = b_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 7, 2, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 2, tmp_pce );
     tmp_pce = b_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 7, 3, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 3, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -7960,12 +7976,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 0, 4, emp_pce );
-    myGame1.set_piece_at( 0, 7, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 7, emp_pce );
 	tmp_pce = w_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 0, 6, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 6, tmp_pce );
     tmp_pce = w_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 0, 5, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 5, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -7994,12 +8014,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 7, 4, emp_pce );
-    myGame1.set_piece_at( 7, 7, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 7, emp_pce );
 	tmp_pce = b_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 7, 6, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 6, tmp_pce );
     tmp_pce = b_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 7, 5, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 5, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -8055,12 +8079,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 0, 4, emp_pce );
-    myGame1.set_piece_at( 0, 0, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 0, emp_pce );
 	tmp_pce = w_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 0, 2, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 0, 2, tmp_pce );
     tmp_pce = w_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 0, 3, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 0, 3, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -8089,12 +8117,16 @@ void tests::chess_upd_pre_legal_castl_tests(){
     myGame2 = myGame1;
 
     // Perform a "manual" castling with standard updates.
-	myGame1.set_piece_at( 7, 4, emp_pce );
-    myGame1.set_piece_at( 7, 0, emp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 4, emp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 0, emp_pce );
 	tmp_pce = b_king;    tmp_pce.not_moved = false;
-	myGame1.set_piece_at( 7, 2, tmp_pce );
+	myGame1.set_piece_at_NO_UPD( 7, 2, tmp_pce );
     tmp_pce = b_rook;    tmp_pce.not_moved = false;
-    myGame1.set_piece_at( 7, 3, tmp_pce );
+    myGame1.set_piece_at_NO_UPD( 7, 3, tmp_pce );
+    myGame1.game_tracking_signal();
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
