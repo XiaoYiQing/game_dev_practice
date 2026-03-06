@@ -7422,9 +7422,7 @@ that may need their list of possible plays updated with this newly occupied squa
 
 void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_piece prev_pce ){
 
-    this->is_atk_lists_upd = false;
-    this->is_valid_moves_upd = false;
-    this->is_valid_atks_upd = false;
+
 
     pair<int,int> ij_a = chess::ind2sub( ind_a );
     int i_a = ij_a.first;
@@ -9709,6 +9707,7 @@ elsewhere rather than to this point.
 
 // ---------------------------------------------------------------------- <<<<<
 
+    // Update the tracking booleans for the pre-legal lists.
     this->is_atk_lists_upd = true;
     this->is_valid_moves_upd = true;
     this->is_valid_atks_upd = true;
@@ -9761,7 +9760,11 @@ void chess::upd_pre_legal_castl( const bool is_w, const bool is_r ){
     this->CHS_board[r_idx][ c_idx[0] ] = rook_pce;
     upd_pre_legal_plays_occ( r_lin_idx_0 + c_idx[0], emp_pce );
 
-    this->atk_list_by_W;
+
+    // Update the tracking booleans for the pre-legal lists.
+    this->is_atk_lists_upd = true;
+    this->is_valid_moves_upd = true;
+    this->is_valid_atks_upd = true;
 
 }
 
@@ -9808,6 +9811,12 @@ void chess::upd_pre_legal_promo( const bool is_w, const unsigned int c_idx ){
     tmp_pce.set_as_empty();
     // Perform update at the promotion square with new occupying promoted piece.
     this->upd_pre_legal_plays_occ( chess::sub2ind( r_idx, c_idx ), tmp_pce );
+
+
+    // Update the tracking booleans for the pre-legal lists.
+    this->is_atk_lists_upd = true;
+    this->is_valid_moves_upd = true;
+    this->is_valid_atks_upd = true;
 
 }
 
