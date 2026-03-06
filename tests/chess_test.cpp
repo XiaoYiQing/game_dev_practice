@@ -5154,7 +5154,7 @@ void tests::chess_upd_pre_legal_tests_occ(){
 
     myGame.upd_pre_legal_plays_occ( chess::sub2ind( 2, 4 ), emp_pce );
     
-    myGame.printBoard();
+    // myGame.printBoard();
 
     // Obtain the pre-legal play lists after update.
     atk_list_by_W_aft = myGame.getAtk_list_by_W();
@@ -7720,6 +7720,92 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
 
 
 // ---------------------------------------------------------------------- >>>>>
+//      Queen Attack Test (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 0, 0, w_king );
+    myGame1.set_piece_at( 1, 0, w_pawn );
+    myGame1.set_piece_at( 1, 1, w_pawn );
+    myGame1.set_piece_at( 0, 1, w_knight );
+    myGame1.set_piece_at( 7, 0, b_king );
+    myGame1.set_piece_at( 6, 0, b_pawn );
+    myGame1.set_piece_at( 6, 1, b_pawn );
+    myGame1.set_piece_at( 7, 1, b_knight );
+
+    myGame1.set_piece_at( 3, 5, b_queen );
+
+    myGame1.set_piece_at( 0, 5, w_rook );
+    myGame1.set_piece_at( 7, 5, b_bishop );
+    myGame1.set_piece_at( 1, 7, w_bishop );
+    myGame1.set_piece_at( 3, 0, w_queen );
+    myGame1.set_piece_at( 5, 7, b_bishop );
+    myGame1.set_piece_at( 1, 4, w_knight );
+    myGame1.set_piece_at( 2, 2, w_pawn );
+    myGame1.set_piece_at( 5, 3, w_pawn );
+    myGame1.set_piece_at( 6, 3, b_pawn );
+    myGame1.set_piece_at( 1, 3, b_rook );
+    myGame1.set_piece_at( 5, 4, b_knight );
+    myGame1.set_piece_at( 5, 1, b_bishop );
+    myGame1.set_piece_at( 0, 6, w_bishop );
+
+    myGame1.set_piece_at( 3, 3, w_queen );
+    myGame1.set_piece_at( 4, 2, w_pawn );
+
+
+    myGame2 = myGame1;
+
+    // Perform a "manual" play.
+    myGame1.play_NO_UPD( 3, 5, 3, 3 );
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // myGame1.printBoard();
+
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 5, 3, 3 );
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 29, 27, w_queen );
+
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+    
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays queen (horiz) atk test 1 (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays queen (horiz) atk test 1 (verso): failed!" << endl;
+    }
+
+    // Perform a "manual" play.
+    myGame1.play_NO_UPD( 3, 3, 4, 2 );
+    myGame1.upd_all();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // myGame1.printBoard();
+
+    // Perform the same play in game 2, but without performing the list updates.
+    myGame2.play_NO_UPD( 3, 3, 4, 2 );
+
+    // Perform special update.
+    myGame2.upd_pre_legal_plays( 27, 34, w_pawn );
+
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays queen (diag) atk test 1 (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays queen (diag) atk test 1 (verso): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
 //      Attack Into Check Test (Recto)
 // ---------------------------------------------------------------------- >>>>>
 
@@ -7752,6 +7838,44 @@ void tests::chess_upd_pre_legal_v2_atk_tests(){
         cout << "chess upd_pre_legal_plays queen atk into check test (recto): passed!" << endl;
     }else{
         cout << "chess upd_pre_legal_plays queen atk into check test (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Attack Into Check Test (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.resetBoard();
+    myGame1.setTurn_cnt(1);
+
+    // Delete all pawns.
+    for( unsigned int z = 0; z < 8; z++ ){
+        myGame1.set_piece_at_NO_UPD( 1, z, emp_pce );
+        myGame1.set_piece_at_NO_UPD( 6, z, emp_pce );
+    }
+    myGame1.upd_all();
+
+    myGame2 = myGame1;
+
+    myGame1.play_NO_UPD( 7, 3, 0, 3 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+        
+    myGame2.play_NO_UPD( 7, 3, 0, 3 );
+    myGame2.upd_pre_legal_plays( 7*chess::BOARDWIDTH + 3, 3, w_queen );
+
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess upd_pre_legal_plays queen atk into check test (verso): passed!" << endl;
+    }else{
+        cout << "chess upd_pre_legal_plays queen atk into check test (verso): failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
