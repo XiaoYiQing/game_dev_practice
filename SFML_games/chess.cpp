@@ -5081,8 +5081,6 @@ bool chess::play_and_pre_legal_upds( const int i_bef, const int j_bef, const int
         return false;
     }
 
-
-
 // ---------------------------------------------------------------------- >>>>>
 //      En-Passant Reset
 // ---------------------------------------------------------------------- >>>>>
@@ -9428,7 +9426,9 @@ that may need their list of possible plays updated with this newly occupied squa
                 // If opponent's king is the line contact.
                 if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].type == CHS_PIECE_TYPE::KING &&
                     this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == CHS_PIECE_COLOR::BLACK )
-                {
+                {   
+                    // Step over the contact.
+                    tmp_int = tmp_int += DIR_UNIT_STEP[t];
                     // Continue adding attacked by white points till another contact.
                     for( int st = 0; st < leftover_dist_arr[t]; st++ ){
                         tmp_int += DIR_UNIT_STEP[t];
@@ -9479,6 +9479,8 @@ that may need their list of possible plays updated with this newly occupied squa
                 if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].type == CHS_PIECE_TYPE::KING &&
                     this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == CHS_PIECE_COLOR::WHITE )
                 {
+                    // Step over the contact.
+                    tmp_int = tmp_int += DIR_UNIT_STEP[t];
                     // Continue adding attacked by white points till another contact.
                     for( int st = 0; st < leftover_dist_arr[t]; st++ ){
                         tmp_int += DIR_UNIT_STEP[t];

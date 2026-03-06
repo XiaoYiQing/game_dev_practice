@@ -101,13 +101,14 @@ namespace tests_tools{
      * The arrays are expected to be size 64 for chess purpose.
      */
     bool are_int_vector_arr_eq( std::array<vector<int>, 64>& arr1, 
-        std::array<vector<int>, 64>& arr2 );
+        std::array<vector<int>, 64>& arr2, bool verbose = false );
 
     /**
      * Function determines whether the pre-pegal lists of the chess game objects
      * are the same.
      */
-    bool are_chess_pre_legal_lists_eq( const gameEngine::chess &myGame1, const gameEngine::chess &myGame2 );
+    bool are_chess_pre_legal_lists_eq( const gameEngine::chess &myGame1, 
+        const gameEngine::chess &myGame2, const bool verbose = false );
 
 }
 
