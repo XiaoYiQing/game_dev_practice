@@ -8228,6 +8228,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::KNIGHT );
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
     // myGame1.printBoard();
 
     // Perform manual promotion on alternative game.
@@ -8278,6 +8280,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
 
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::KNIGHT );
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -8330,6 +8334,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
 
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::ROOK );
+
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
     // myGame1.printBoard();
 
@@ -8384,6 +8390,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::ROOK );
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // myGame1.printBoard();
 
     // Perform manual promotion on alternative game.
@@ -8437,6 +8445,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::BISHOP );
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // myGame1.printBoard();
 
     // Perform manual promotion on alternative game.
@@ -8490,6 +8500,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::BISHOP );
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // myGame1.printBoard();
 
     // Perform manual promotion on alternative game.
@@ -8543,6 +8555,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::QUEEN );
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // myGame1.printBoard();
 
     // Perform manual promotion on alternative game.
@@ -8596,6 +8610,8 @@ void tests::chess_upd_pre_legal_promo_tests(){
     // Perform normal promotion path.
     myGame1.promote( 5, chess::CHS_PIECE_TYPE::QUEEN );
 
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+    
     // myGame1.printBoard();
 
     // Perform manual promotion on alternative game.
