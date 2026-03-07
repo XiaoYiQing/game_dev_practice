@@ -4078,8 +4078,6 @@ void tests::chess_upd_pre_legal_tests(){
         cout << "chess upd_pre_legal en-passant test: failed!" << endl;
     }
 
-    int lol = 0;
-
 // ---------------------------------------------------------------------- <<<<<
 
 
@@ -8846,6 +8844,9 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     vector< pair<int,int> > coord_vec;
     coord_vec.reserve(32);
 
+    vector<chess::chs_move> en_pass_move;
+    en_pass_move.reserve(2);
+
 // ---------------------------------------------------------------------- >>>>>
 //      Initial Game All Possible First Move Test (Recto)
 // ---------------------------------------------------------------------- >>>>>
@@ -9034,6 +9035,314 @@ void tests::chess_play_and_pre_legal_upds_tests(){
         cout << "chess play_and_pre_legal_upds no pawn all first move test (recto): passed!" << endl;
     }else{
         cout << "chess play_and_pre_legal_upds no pawn all first move test (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      Initial Game Without Pawns All Possible First Move Test (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.resetBoard();
+    myGame1.setTurn_cnt(1);
+
+    // Delete all pawns.
+    for( unsigned int z = 0; z < 8; z++ ){
+        myGame1.set_piece_at_NO_UPD( 1, z, emp_pce );
+        myGame1.set_piece_at_NO_UPD( 6, z, emp_pce );
+    }
+    myGame1.upd_all();
+
+    myGame2 = myGame1;
+    
+    plays_vec.clear();
+
+    // Obtain all possible black plays from an initial board with no pawns.
+    for( unsigned int z = 0; z < 8; z++ ){
+
+        coord_vec = myGame1.get_all_valid_move_sq( chess::BOARDHEIGHT - 1, z );
+        for( pair<int,int> coord_z : coord_vec ){
+            plays_vec.push_back( chess::chs_move( chess::BOARDHEIGHT - 1, z, 
+                coord_z.first, coord_z.second ) );
+        }
+        coord_vec = myGame1.get_all_valid_atk_sq( chess::BOARDHEIGHT - 1, z );
+        for( pair<int,int> coord_z : coord_vec ){
+            plays_vec.push_back( chess::chs_move( chess::BOARDHEIGHT - 1, z, 
+                coord_z.first, coord_z.second ) );
+        }
+
+    }
+
+    // Play all test cases.
+    for( chess::chs_move play_z : plays_vec ){
+
+        myGame1.resetBoard();
+        myGame1.setTurn_cnt(1);
+        // Delete all pawns.
+        for( unsigned int z = 0; z < 8; z++ ){
+            myGame1.set_piece_at_NO_UPD( 1, z, emp_pce );
+            myGame1.set_piece_at_NO_UPD( 6, z, emp_pce );
+        }
+        myGame1.upd_all();
+        myGame2 = myGame1;
+
+        myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
+            play_z.pt_b.first, play_z.pt_b.second );
+        myGame1.upd_atk_lists();
+        myGame1.upd_all_valid_moves();
+        myGame1.upd_all_valid_atks();
+        
+        test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+        
+        myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
+            play_z.pt_b.first, play_z.pt_b.second );
+
+        test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+        // If test failed already, skip further test cases.
+        if( !test_bool ){
+            break;
+        }
+
+    }
+
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds no pawn all first move test (verso): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds no pawn all first move test (verso): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      En-Passant Test (Recto)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(0);
+
+    myGame1.set_piece_at( 0, 0, w_king );
+    myGame1.set_piece_at( 7, 7, b_king );
+
+    myGame1.set_piece_at( 1, 4, w_pawn );
+    myGame1.set_piece_at( 3, 5, b_pawn );
+
+    myGame2 = myGame1;
+
+    // Perform the play that triggers the en-passant flag and perform standard 
+    // pre-legal lists updates.
+    myGame1.play_NO_UPD( 1, 4, 3, 4 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    // Make sure there is a difference between the two games in pre-legal lists
+    // before game2 gets a chance to update.
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the play that triggers the en-passant flag and perform special 
+    // pre-legal lists updates.
+    myGame2.play_and_pre_legal_upds( 1, 4, 3, 4 );
+
+    // Check if game2 has proper en-passant triggers.
+    test_bool = test_bool && myGame2.getEn_pass_flag();
+    en_pass_move = myGame2.getEn_pass_moves();
+    if( en_pass_move.size() > 0 ){
+        test_bool = test_bool && en_pass_move[0].pt_a == pair<int,int>(3,5);
+        test_bool = test_bool && en_pass_move[0].pt_b == pair<int,int>(2,4);
+    }else{
+        test_bool = false;
+    }
+
+    // Make sure both games have identical pre-legal lists.
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds en-passant test 1 (recto): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds en-passant test 1 (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      En-Passant Test (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 0, 0, w_king );
+    myGame1.set_piece_at( 7, 7, b_king );
+
+    myGame1.set_piece_at( 6, 4, b_pawn );
+    myGame1.set_piece_at( 4, 5, w_pawn );
+
+    myGame2 = myGame1;
+
+    
+    // Perform the play that triggers the en-passant flag and perform standard 
+    // pre-legal lists updates.
+    myGame1.play_NO_UPD( 6, 4, 4, 4 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    // Make sure there is a difference between the two games in pre-legal lists
+    // before game2 gets a chance to update.
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the play that triggers the en-passant flag and perform special 
+    // pre-legal lists updates.
+    myGame2.play_and_pre_legal_upds( 6, 4, 4, 4 );
+
+    // Check if game2 has proper en-passant triggers.
+    test_bool = test_bool && myGame2.getEn_pass_flag();
+    en_pass_move = myGame2.getEn_pass_moves();
+    if( en_pass_move.size() > 0 ){
+        test_bool = test_bool && en_pass_move[0].pt_a == pair<int,int>(4,5);
+        test_bool = test_bool && en_pass_move[0].pt_b == pair<int,int>(5,4);
+    }else{
+        test_bool = false;
+    }
+    
+
+    // Make sure both games have identical pre-legal lists.
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds en-passant test 1 (verso): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds en-passant test 1 (verso): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      En-Passant Test 2 (Recto)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(0);
+
+    myGame1.set_piece_at( 0, 0, w_king );
+    myGame1.set_piece_at( 7, 7, b_king );
+
+    myGame1.set_piece_at( 1, 4, w_pawn );
+    myGame1.set_piece_at( 3, 5, b_pawn );
+    myGame1.set_piece_at( 3, 3, b_pawn );
+
+    myGame2 = myGame1;
+
+    // Perform the play that triggers the en-passant flag and perform standard 
+    // pre-legal lists updates.
+    myGame1.play_NO_UPD( 1, 4, 3, 4 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    // Make sure there is a difference between the two games in pre-legal lists
+    // before game2 gets a chance to update.
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the play that triggers the en-passant flag and perform special 
+    // pre-legal lists updates.
+    myGame2.play_and_pre_legal_upds( 1, 4, 3, 4 );
+
+    // Check if game2 has proper en-passant triggers.
+    test_bool = test_bool && myGame2.getEn_pass_flag();
+    en_pass_move = myGame2.getEn_pass_moves();
+    if( en_pass_move.size() > 1 ){
+        test_bool = test_bool && (
+            ( en_pass_move[0].pt_a == pair<int,int>(3,5) && 
+            en_pass_move[1].pt_a == pair<int,int>(3,3) ) || 
+            ( en_pass_move[1].pt_a == pair<int,int>(3,5) && 
+            en_pass_move[0].pt_a == pair<int,int>(3,3) ) 
+        );
+        test_bool = test_bool && en_pass_move[0].pt_b == pair<int,int>(2,4);
+        test_bool = test_bool && en_pass_move[1].pt_b == pair<int,int>(2,4);
+    }else{
+        test_bool = false;
+    }
+
+    // Make sure both games have identical pre-legal lists.
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds en-passant test 2 (recto): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds en-passant test 2 (recto): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
+
+// ---------------------------------------------------------------------- >>>>>
+//      En-Passant Test 2 (Verso)
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(1);
+
+    myGame1.set_piece_at( 0, 0, w_king );
+    myGame1.set_piece_at( 7, 7, b_king );
+
+    myGame1.set_piece_at( 6, 4, b_pawn );
+    myGame1.set_piece_at( 4, 5, w_pawn );
+    myGame1.set_piece_at( 4, 3, w_pawn );
+
+    myGame2 = myGame1;
+
+    
+    // Perform the play that triggers the en-passant flag and perform standard 
+    // pre-legal lists updates.
+    myGame1.play_NO_UPD( 6, 4, 4, 4 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    // Make sure there is a difference between the two games in pre-legal lists
+    // before game2 gets a chance to update.
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the play that triggers the en-passant flag and perform special 
+    // pre-legal lists updates.
+    myGame2.play_and_pre_legal_upds( 6, 4, 4, 4 );
+
+    // Check if game2 has proper en-passant triggers.
+    test_bool = test_bool && myGame2.getEn_pass_flag();
+    en_pass_move = myGame2.getEn_pass_moves();
+    if( en_pass_move.size() > 1 ){
+        test_bool = test_bool && (
+            ( en_pass_move[0].pt_a == pair<int,int>(4,5) && 
+            en_pass_move[1].pt_a == pair<int,int>(4,3) ) || 
+            ( en_pass_move[1].pt_a == pair<int,int>(4,5) && 
+            en_pass_move[0].pt_a == pair<int,int>(4,3) ) 
+        );
+        test_bool = test_bool && en_pass_move[0].pt_b == pair<int,int>(5,4);
+        test_bool = test_bool && en_pass_move[1].pt_b == pair<int,int>(5,4);
+    }else{
+        test_bool = false;
+    }
+    
+
+    // Make sure both games have identical pre-legal lists.
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds en-passant test 2 (verso): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds en-passant test 2 (verso): failed!" << endl;
     }
 
 // ---------------------------------------------------------------------- <<<<<
