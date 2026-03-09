@@ -9347,6 +9347,75 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 
 // ---------------------------------------------------------------------- <<<<<
 
+
+// ---------------------------------------------------------------------- >>>>>
+//      Castling
+// ---------------------------------------------------------------------- >>>>>
+
+    test_bool = true;
+    myGame1.clearBoard();
+    myGame1.setTurn_cnt(0);
+
+    myGame1.set_piece_at( 0, 4, w_king );
+    myGame1.set_piece_at( 7, 4, b_king );
+
+    myGame1.set_piece_at( 0, 0, w_rook );
+    myGame1.set_piece_at( 0, 7, w_rook );
+    
+    myGame1.set_piece_at( 7, 0, b_rook );
+    myGame1.set_piece_at( 7, 7, b_rook );
+
+
+    myGame2 = myGame1;
+
+    // Perform the castling with standard updates.
+    myGame1.play_NO_UPD( 0, 4, 0, 6 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    // Make sure there is a difference between the two games in pre-legal lists
+    // before game2 gets a chance to update.
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the castling with special updates.
+    myGame2.play_and_pre_legal_upds( 0, 4, 0, 6 );
+
+    // Make sure both games have identical pre-legal lists.
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds castling test 1 (recto): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds castling test 1 (recto): failed!" << endl;
+    }
+
+    myGame2 = myGame1;
+
+    // Perform the castling with standard updates.
+    myGame1.play_NO_UPD( 7, 4, 7, 6 );
+    myGame1.upd_atk_lists();
+    myGame1.upd_all_valid_moves();
+    myGame1.upd_all_valid_atks();
+
+    // Make sure there is a difference between the two games in pre-legal lists
+    // before game2 gets a chance to update.
+    test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
+
+    // Perform the castling with special updates.
+    myGame2.play_and_pre_legal_upds( 7, 4, 7, 6 );
+
+    // Make sure both games have identical pre-legal lists.
+    test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
+
+    if( test_bool ){
+        cout << "chess play_and_pre_legal_upds castling test 1 (verso): passed!" << endl;
+    }else{
+        cout << "chess play_and_pre_legal_upds castling test 1 (verso): failed!" << endl;
+    }
+
+// ---------------------------------------------------------------------- <<<<<
+
 }
 
 
