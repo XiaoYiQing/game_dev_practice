@@ -8847,6 +8847,15 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     vector<chess::chs_move> en_pass_move;
     en_pass_move.reserve(2);
 
+    auto start = std::chrono::steady_clock::now();  // TODO: DELETE THIS
+    auto end = std::chrono::steady_clock::now();    // TODO: DELETE THIS
+    auto time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+
+    vector<long long> time_A_vec, time_B_vec;
+    time_A_vec.reserve( plays_vec.size() );
+    time_B_vec.reserve( plays_vec.size() );
+    long long avg_time_A, avg_time_B;
+
 // ---------------------------------------------------------------------- >>>>>
 //      Initial Game All Possible First Move Test (Recto)
 // ---------------------------------------------------------------------- >>>>>
@@ -8858,6 +8867,8 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     myGame2 = myGame1;
     
     plays_vec.clear();
+    time_A_vec.clear();
+    time_B_vec.clear();
 
     // Add all first pawn moves.
     for( unsigned int z = 0; z < 8; z++ ){
@@ -8877,16 +8888,22 @@ void tests::chess_play_and_pre_legal_upds_tests(){
         myGame1.setTurn_cnt(0);
         myGame2 = myGame1;
 
+        start = std::chrono::steady_clock::now();
         myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
-        myGame1.upd_atk_lists();
-        myGame1.upd_all_valid_moves();
-        myGame1.upd_all_valid_atks();
+        myGame1.upd_pre_legal_plays();
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_A_vec.push_back( time_z );
 
         test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
+        start = std::chrono::steady_clock::now();
         myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_B_vec.push_back( time_z );
 
         test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
@@ -8903,6 +8920,16 @@ void tests::chess_play_and_pre_legal_upds_tests(){
         cout << "chess play_and_pre_legal_upds all first move test (recto): failed!" << endl;
     }
 
+    avg_time_A = 0;     avg_time_B = 0;
+    for( unsigned int z = 0; z < time_A_vec.size(); z++ ){
+        avg_time_A = avg_time_A + time_A_vec[z];
+        avg_time_B = avg_time_B + time_B_vec[z];
+    }
+    avg_time_A = avg_time_A/time_A_vec.size();
+    avg_time_B = avg_time_B/time_B_vec.size();
+    cout << "Standard update average time (us): " << avg_time_A << endl;
+    cout << "Special update average time (us): " << avg_time_B << endl;
+
 // ---------------------------------------------------------------------- <<<<<
 
 
@@ -8917,6 +8944,8 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     myGame2 = myGame1;
     
     plays_vec.clear();
+    time_A_vec.clear();
+    time_B_vec.clear();
 
     // Add all first pawn moves.
     for( unsigned int z = 0; z < 8; z++ ){
@@ -8933,19 +8962,25 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     for( chess::chs_move play_z : plays_vec ){
 
         myGame1.resetBoard();
-        myGame1.setTurn_cnt(1);
+        myGame1.setTurn_cnt(0);
         myGame2 = myGame1;
 
+        start = std::chrono::steady_clock::now();
         myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
-        myGame1.upd_atk_lists();
-        myGame1.upd_all_valid_moves();
-        myGame1.upd_all_valid_atks();
+        myGame1.upd_pre_legal_plays();
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_A_vec.push_back( time_z );
 
         test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
 
+        start = std::chrono::steady_clock::now();
         myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_B_vec.push_back( time_z );
 
         test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 );
 
@@ -8961,6 +8996,16 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     }else{
         cout << "chess play_and_pre_legal_upds all first move test (verso): failed!" << endl;
     }
+
+    avg_time_A = 0;     avg_time_B = 0;
+    for( unsigned int z = 0; z < time_A_vec.size(); z++ ){
+        avg_time_A = avg_time_A + time_A_vec[z];
+        avg_time_B = avg_time_B + time_B_vec[z];
+    }
+    avg_time_A = avg_time_A/time_A_vec.size();
+    avg_time_B = avg_time_B/time_B_vec.size();
+    cout << "Standard update average time (us): " << avg_time_A << endl;
+    cout << "Special update average time (us): " << avg_time_B << endl;
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -8983,6 +9028,8 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     myGame2 = myGame1;
     
     plays_vec.clear();
+    time_A_vec.clear();
+    time_B_vec.clear();
 
     // Obtain all possible white plays from an initial board with no pawns.
     for( unsigned int z = 0; z < 8; z++ ){
@@ -9011,16 +9058,22 @@ void tests::chess_play_and_pre_legal_upds_tests(){
         myGame1.upd_all();
         myGame2 = myGame1;
 
+        start = std::chrono::steady_clock::now();
         myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
-        myGame1.upd_atk_lists();
-        myGame1.upd_all_valid_moves();
-        myGame1.upd_all_valid_atks();
+        myGame1.upd_pre_legal_plays();
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_A_vec.push_back( time_z );
 
         test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
         
+        start = std::chrono::steady_clock::now();
         myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_B_vec.push_back( time_z );
 
         test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
 
@@ -9036,6 +9089,16 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     }else{
         cout << "chess play_and_pre_legal_upds no pawn all first move test (recto): failed!" << endl;
     }
+
+    avg_time_A = 0;     avg_time_B = 0;
+    for( unsigned int z = 0; z < time_A_vec.size(); z++ ){
+        avg_time_A = avg_time_A + time_A_vec[z];
+        avg_time_B = avg_time_B + time_B_vec[z];
+    }
+    avg_time_A = avg_time_A/time_A_vec.size();
+    avg_time_B = avg_time_B/time_B_vec.size();
+    cout << "Standard update average time (us): " << avg_time_A << endl;
+    cout << "Special update average time (us): " << avg_time_B << endl;
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -9058,6 +9121,8 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     myGame2 = myGame1;
     
     plays_vec.clear();
+    time_A_vec.clear();
+    time_B_vec.clear();
 
     // Obtain all possible black plays from an initial board with no pawns.
     for( unsigned int z = 0; z < 8; z++ ){
@@ -9088,16 +9153,22 @@ void tests::chess_play_and_pre_legal_upds_tests(){
         myGame1.upd_all();
         myGame2 = myGame1;
 
+        start = std::chrono::steady_clock::now();
         myGame1.play_NO_UPD( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
-        myGame1.upd_atk_lists();
-        myGame1.upd_all_valid_moves();
-        myGame1.upd_all_valid_atks();
+        myGame1.upd_pre_legal_plays();
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_A_vec.push_back( time_z );
         
         test_bool = test_bool && !( tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2 ) );
         
+        start = std::chrono::steady_clock::now();
         myGame2.play_and_pre_legal_upds( play_z.pt_a.first, play_z.pt_a.second,
             play_z.pt_b.first, play_z.pt_b.second );
+        end = std::chrono::steady_clock::now();
+        time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+        time_B_vec.push_back( time_z );
 
         test_bool = test_bool && tests_tools::are_chess_pre_legal_lists_eq( myGame1, myGame2, true );
 
@@ -9113,6 +9184,16 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     }else{
         cout << "chess play_and_pre_legal_upds no pawn all first move test (verso): failed!" << endl;
     }
+
+    avg_time_A = 0;     avg_time_B = 0;
+    for( unsigned int z = 0; z < time_A_vec.size(); z++ ){
+        avg_time_A = avg_time_A + time_A_vec[z];
+        avg_time_B = avg_time_B + time_B_vec[z];
+    }
+    avg_time_A = avg_time_A/time_A_vec.size();
+    avg_time_B = avg_time_B/time_B_vec.size();
+    cout << "Standard update average time (us): " << avg_time_A << endl;
+    cout << "Special update average time (us): " << avg_time_B << endl;
 
 // ---------------------------------------------------------------------- <<<<<
 
@@ -9133,12 +9214,20 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 
     myGame2 = myGame1;
 
+    time_A_vec.clear();
+    time_B_vec.clear();
+
     // Perform the play that triggers the en-passant flag and perform standard 
     // pre-legal lists updates.
+    start = std::chrono::steady_clock::now();
     myGame1.play_NO_UPD( 1, 4, 3, 4 );
-    myGame1.upd_atk_lists();
-    myGame1.upd_all_valid_moves();
-    myGame1.upd_all_valid_atks();
+    // myGame1.upd_atk_lists();
+    // myGame1.upd_all_valid_moves();
+    // myGame1.upd_all_valid_atks();
+    myGame1.upd_pre_legal_plays();
+    end = std::chrono::steady_clock::now();
+    time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    time_A_vec.push_back( time_z );
 
     // Make sure there is a difference between the two games in pre-legal lists
     // before game2 gets a chance to update.
@@ -9146,7 +9235,11 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 
     // Perform the play that triggers the en-passant flag and perform special 
     // pre-legal lists updates.
+    start = std::chrono::steady_clock::now();
     myGame2.play_and_pre_legal_upds( 1, 4, 3, 4 );
+    end = std::chrono::steady_clock::now();
+    time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    time_B_vec.push_back( time_z );
 
     // Check if game2 has proper en-passant triggers.
     test_bool = test_bool && myGame2.getEn_pass_flag();
@@ -9167,6 +9260,16 @@ void tests::chess_play_and_pre_legal_upds_tests(){
         cout << "chess play_and_pre_legal_upds en-passant test 1 (recto): failed!" << endl;
     }
 
+    avg_time_A = 0;     avg_time_B = 0;
+    for( unsigned int z = 0; z < time_A_vec.size(); z++ ){
+        avg_time_A = avg_time_A + time_A_vec[z];
+        avg_time_B = avg_time_B + time_B_vec[z];
+    }
+    avg_time_A = avg_time_A/time_A_vec.size();
+    avg_time_B = avg_time_B/time_B_vec.size();
+    cout << "Standard update average time (us): " << avg_time_A << endl;
+    cout << "Special update average time (us): " << avg_time_B << endl;
+
 // ---------------------------------------------------------------------- <<<<<
 
 
@@ -9186,13 +9289,20 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 
     myGame2 = myGame1;
 
+    time_A_vec.clear();
+    time_B_vec.clear();
     
     // Perform the play that triggers the en-passant flag and perform standard 
     // pre-legal lists updates.
+    start = std::chrono::steady_clock::now();
     myGame1.play_NO_UPD( 6, 4, 4, 4 );
-    myGame1.upd_atk_lists();
-    myGame1.upd_all_valid_moves();
-    myGame1.upd_all_valid_atks();
+    // myGame1.upd_atk_lists();
+    // myGame1.upd_all_valid_moves();
+    // myGame1.upd_all_valid_atks();
+    myGame1.upd_pre_legal_plays();
+    end = std::chrono::steady_clock::now();
+    time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    time_A_vec.push_back( time_z );
 
     // Make sure there is a difference between the two games in pre-legal lists
     // before game2 gets a chance to update.
@@ -9200,7 +9310,11 @@ void tests::chess_play_and_pre_legal_upds_tests(){
 
     // Perform the play that triggers the en-passant flag and perform special 
     // pre-legal lists updates.
+    start = std::chrono::steady_clock::now();
     myGame2.play_and_pre_legal_upds( 6, 4, 4, 4 );
+    end = std::chrono::steady_clock::now();
+    time_z = std::chrono::duration_cast<std::chrono::microseconds>( end - start).count();  // TODO: DELETE THIS
+    time_B_vec.push_back( time_z );
 
     // Check if game2 has proper en-passant triggers.
     test_bool = test_bool && myGame2.getEn_pass_flag();
@@ -9221,6 +9335,16 @@ void tests::chess_play_and_pre_legal_upds_tests(){
     }else{
         cout << "chess play_and_pre_legal_upds en-passant test 1 (verso): failed!" << endl;
     }
+
+    avg_time_A = 0;     avg_time_B = 0;
+    for( unsigned int z = 0; z < time_A_vec.size(); z++ ){
+        avg_time_A = avg_time_A + time_A_vec[z];
+        avg_time_B = avg_time_B + time_B_vec[z];
+    }
+    avg_time_A = avg_time_A/time_A_vec.size();
+    avg_time_B = avg_time_B/time_B_vec.size();
+    cout << "Standard update average time (us): " << avg_time_A << endl;
+    cout << "Special update average time (us): " << avg_time_B << endl;
 
 // ---------------------------------------------------------------------- <<<<<
 
