@@ -3083,6 +3083,7 @@ const array<vector<int>,64> chess::init_knightAtks(){
             ind_z = ind_a - chess::BOARDWIDTH + 2;
             if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
                 res_arr[ind_a].push_back( ind_z );
+
             // West-North
             ind_z = ind_a + chess::BOARDWIDTH - 2;
             if( ind_z < sq_cnt && ( j_a > 1 ) )
@@ -3103,6 +3104,8 @@ const array<vector<int>,64> chess::init_knightAtks(){
             // Increment the linear index.
             ind_a++;
             sub_a = chess::ind2sub( ind_a );
+            i_a = sub_a.first;
+            j_a = sub_a.second;
 
         }
     }
