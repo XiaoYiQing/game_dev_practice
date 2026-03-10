@@ -658,9 +658,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     static const array<vector<int>,64> init_kingAtks();
     // King movement tables.
     static const array<vector<int>,64> kingAtks;
-    
-    // Pawn movement tables.
-    uint64_t pawnAtks[64];
+
+    // Bishop movement tables initializer.
+    static const array<array<vector<int>,4>,64> init_bishopAtks();
+    // Bishop movement tables.
+    static const array<array<vector<int>,4>,64> bishopAtks;
 
 // ====================================================================== <<<<<
 

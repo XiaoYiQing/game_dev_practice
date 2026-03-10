@@ -3213,6 +3213,61 @@ const array<vector<int>,64> chess::init_kingAtks(){
 
 }
 
+const array<array<vector<int>,4>,64> chess::bishopAtks = chess::init_bishopAtks();
+
+const array<array<vector<int>,4>,64> chess::init_bishopAtks(){
+
+    array<array<vector<int>,4>,64> res_arr{};
+
+    int sq_cnt = 64;
+
+    int ind_a = 0;
+    int ind_z = 0;
+
+    int r_z = 0;
+    int c_z = 0;
+
+    // Full scan.
+    for( unsigned int r_id = 0; r_id < 8; r_id++ ){
+    for( unsigned int c_id = 0; c_id < 8; c_id++ ){
+
+        ind_a = r_id + c_id * chess::BOARDWIDTH;
+
+        // North-East diagonal scan.
+        r_z = r_id + 1;     c_z = c_id + 1;
+        while( r_z < 8 && c_z < 8 ){
+            res_arr[ind_a][0].push_back( r_z + c_z * chess::BOARDWIDTH );
+            r_z++;  c_z++;
+        }
+
+        // North-West diagonal scan.
+        r_z = r_id + 1;     c_z = c_id - 1;
+        while( r_z < 8 && c_z >= 0 ){
+            res_arr[ind_a][1].push_back( r_z + c_z * chess::BOARDWIDTH );
+            r_z++;  c_z--;
+        }
+
+        // South-West diagonal scan.
+        r_z = r_id - 1;     c_z = c_id - 1;
+        while( r_z >= 0 && c_z >= 0 ){
+            res_arr[ind_a][2].push_back( r_z + c_z * chess::BOARDWIDTH );
+            r_z--;  c_z--;
+        }
+
+        // South-East diagonal scan.
+        r_z = r_id - 1;     c_z = c_id + 1;
+        while( r_z >= 0 && c_z < 8 ){
+            res_arr[ind_a][3].push_back( r_z + c_z * chess::BOARDWIDTH );
+            r_z--;  c_z++;
+        }
+
+    }
+    }
+
+    return res_arr;
+
+}
+
 // ====================================================================== <<<<<
 
 
