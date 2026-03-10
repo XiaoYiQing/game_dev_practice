@@ -3114,6 +3114,34 @@ const array<vector<int>,64> chess::init_knightAtks(){
 
 }
 
+const array<vector<int>,64> chess::kingAtks = chess::init_kingAtks();
+
+const array<vector<int>,64> chess::init_kingAtks(){
+
+    std::array<vector<int>,64> res_arr{};
+
+    int sq_cnt = 64;
+
+    int ind_a = 0;
+    int ind_z = 0;
+
+    pair<int,int> sub_a = chess::ind2sub( ind_a );
+    int i_a = sub_a.first;
+    int j_a = sub_a.second;
+
+    for( unsigned int r_id = 0; r_id < 8; r_id++ ){
+
+        for( unsigned int c_id = 0; c_id < 8; c_id++ ){
+
+
+        }
+
+    }
+
+    return res_arr;
+
+}
+
 // ====================================================================== <<<<<
 
 
@@ -5441,30 +5469,9 @@ void chess::upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce ){
 
         // Collect all potential moves/attacks of the knight at its start 
         // position.
-        ind_z = ind_a - 2 * chess::BOARDWIDTH - 1; 
-        if( ( ind_z >= 0 ) && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - 2 * chess::BOARDWIDTH + 1;
-        if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH - 2;
-        if( ( ind_z >= 0 ) && ( j_a > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH + 2;
-        if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH - 2;
-        if( ind_z < sq_cnt && ( j_a > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH + 2;
-        if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + 2 * chess::BOARDWIDTH - 1;
-        if( ind_z < sq_cnt && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + 2 * chess::BOARDWIDTH + 1;
-        if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        for( int ind_zz : chess::knightAtks[ind_a] ){
+            tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+        }
 
     }else if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
 
@@ -5634,31 +5641,9 @@ that may need their list of possible plays updated with this newly liberated squ
 
     // Reset number of plays counter.
     tmp_arr_lim = 0;
-    // Collect all potential positions from which a knight may move to the starting location.
-    ind_z = ind_a - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
-    if( ( ind_z >= 0 ) && ( j_a > 0 ) )     
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
-    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - chess::BOARDWIDTH - 2;                  // West-South jump.
-    if( ( ind_z >= 0 ) && ( j_a > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - chess::BOARDWIDTH + 2;                  // East-South jump.
-    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + chess::BOARDWIDTH - 2;                  // West-North jump.
-    if( ind_z < sq_cnt && ( j_a > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + chess::BOARDWIDTH + 2;                  // East-North jump.
-    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
-    if( ind_z < sq_cnt && ( j_a > 0 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
-    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    for( int ind_zz : chess::knightAtks[ind_a] ){
+        tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+    }
 
     // Parse through all posible knights positions around the starting position.
     for( int z = 0; z < tmp_arr_lim; z++ ){
@@ -7554,32 +7539,9 @@ void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_pie
 
     if( tar_pce.type == CHS_PIECE_TYPE::KNIGHT ){
 
-        // Collect all potential moves/attacks of the knight at its start 
-        // position.
-        ind_z = ind_a - 2 * chess::BOARDWIDTH - 1; 
-        if( ( ind_z >= 0 ) && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - 2 * chess::BOARDWIDTH + 1;
-        if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH - 2;
-        if( ( ind_z >= 0 ) && ( j_a > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH + 2;
-        if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH - 2;
-        if( ind_z < sq_cnt && ( j_a > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH + 2;
-        if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + 2 * chess::BOARDWIDTH - 1;
-        if( ind_z < sq_cnt && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + 2 * chess::BOARDWIDTH + 1;
-        if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        for( int ind_zz : chess::knightAtks[ind_a] ){
+            tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+        }
 
     }else if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
 
@@ -7750,31 +7712,9 @@ that may need their list of possible plays updated with this newly liberated squ
 
     // Reset number of plays counter.
     tmp_arr_lim = 0;
-    // Collect all potential positions from which a knight may move to the starting location.
-    ind_z = ind_a - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
-    if( ( ind_z >= 0 ) && ( j_a > 0 ) )     
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
-    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - chess::BOARDWIDTH - 2;                  // West-South jump.
-    if( ( ind_z >= 0 ) && ( j_a > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a - chess::BOARDWIDTH + 2;                  // East-South jump.
-    if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + chess::BOARDWIDTH - 2;                  // West-North jump.
-    if( ind_z < sq_cnt && ( j_a > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + chess::BOARDWIDTH + 2;                  // East-North jump.
-    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
-    if( ind_z < sq_cnt && ( j_a > 0 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_a + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
-    if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
+    for( int ind_zz : chess::knightAtks[ind_a] ){
+        tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+    }
 
     // Parse through all possible knights positions around the starting position.
     for( int z = 0; z < tmp_arr_lim; z++ ){
