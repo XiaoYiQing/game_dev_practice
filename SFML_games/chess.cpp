@@ -5605,30 +5605,9 @@ void chess::upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce ){
 
         // Identifying all 8 squares around the white king and whether they are 
         // on the board.
-        ind_z = ind_a + chess::BOARDWIDTH + 1;
-        if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH;
-        if( ind_z < sq_cnt )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH - 1;
-        if( ind_z < sq_cnt && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - 1;
-        if( j_a > 0 )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH - 1;
-        if( ( ind_z >= 0 ) && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH;
-        if( ind_z >= 0 )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH + 1;
-        if( ( ind_z >= 0 ) && ( j_a < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + 1;
-        if( j_a < chess::BOARDWIDTH - 1 )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        for( int ind_zz : chess::kingAtks[ind_a] ){
+            tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+        }
 
     }
 
@@ -7361,30 +7340,21 @@ that may need their list of possible plays updated with this newly occupied squa
         // New occupant is white king.
         if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
             
-            // Parse through each of the eight directions.
-            for( unsigned int t = 0; t < 8; t++ ){
+            for( int zz : chess::kingAtks[ind_b] ){
 
-                // Not at end of current direction.
-                if( rev_scan_dist_arr[t] > 0 ){
+                // Immediate neighbor square along current direction is under king influence.
+                this->atk_list_by_W[ zz ].push_back( ind_b );
 
-                    // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_W[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
+                if( this->get_piece_at(zz).type != CHS_PIECE_TYPE::NO_P ){
 
-                    // Immediate contact along current direction.
-                    if( contact_dist_arr[t] == 1 ){
-                        
-                        // Immediate contact is black.
-                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                            CHS_PIECE_COLOR::BLACK )
-                        {
-                            this->valid_W_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
-                        }
-
-                    // No-immediate contact along current direction.
-                    }else{
-                        this->valid_W_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
+                    // Immediate contact is black.
+                    if( this->get_piece_at(zz).color == CHS_PIECE_COLOR::BLACK )
+                    {
+                        this->valid_W_atks_map[ind_b].push_back( zz );
                     }
 
+                }else{
+                    this->valid_W_moves_map[ind_b].push_back( zz );
                 }
 
             }
@@ -7392,30 +7362,21 @@ that may need their list of possible plays updated with this newly occupied squa
         // New occupant is black king.
         }else{
 
-            // Parse through each of the eight directions.
-            for( unsigned int t = 0; t < 8; t++ ){
+            for( int zz : chess::kingAtks[ind_b] ){
 
-                // Not at end of current direction.
-                if( rev_scan_dist_arr[t] > 0 ){
+                // Immediate neighbor square along current direction is under king influence.
+                this->atk_list_by_B[ zz ].push_back( ind_b );
 
-                    // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_B[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
+                if( this->get_piece_at(zz).type != CHS_PIECE_TYPE::NO_P ){
 
-                    // Immediate contact along current direction.
-                    if( contact_dist_arr[t] == 1 ){
-
-                        // Immediate contact is white.
-                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                            CHS_PIECE_COLOR::WHITE )
-                        {
-                            this->valid_B_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
-                        }
-
-                    // No-immediate contact along current direction.
-                    }else{
-                        this->valid_B_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
+                    // Immediate contact is white.
+                    if( this->get_piece_at(zz).color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ind_b].push_back( zz );
                     }
 
+                }else{
+                    this->valid_B_moves_map[ind_b].push_back( zz );
                 }
 
             }
@@ -7675,30 +7636,9 @@ void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_pie
 
         // Identifying all 8 squares around the white king and whether they are 
         // on the board.
-        ind_z = ind_a + chess::BOARDWIDTH + 1;
-        if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH;
-        if( ind_z < sq_cnt )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + chess::BOARDWIDTH - 1;
-        if( ind_z < sq_cnt && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - 1;
-        if( j_a > 0 )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH - 1;
-        if( ( ind_z >= 0 ) && ( j_a > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH;
-        if( ind_z >= 0 )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a - chess::BOARDWIDTH + 1;
-        if( ( ind_z >= 0 ) && ( j_a < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_a + 1;
-        if( j_a < chess::BOARDWIDTH - 1 )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        for( int ind_zz : chess::kingAtks[ind_a] ){
+            tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+        }
 
     }
 
@@ -9399,30 +9339,21 @@ that may need their list of possible plays updated with this newly occupied squa
         // New occupant is white king.
         if( tar_pce.color == CHS_PIECE_COLOR::WHITE ){
             
-            // Parse through each of the eight directions.
-            for( unsigned int t = 0; t < 8; t++ ){
+            for( int zz : chess::kingAtks[ind_b] ){
 
-                // Not at end of current direction.
-                if( rev_scan_dist_arr[t] > 0 ){
+                // Immediate neighbor square along current direction is under king influence.
+                this->atk_list_by_W[ zz ].push_back( ind_b );
 
-                    // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_W[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
+                if( this->get_piece_at(zz).type != CHS_PIECE_TYPE::NO_P ){
 
-                    // Immediate contact along current direction.
-                    if( contact_dist_arr[t] == 1 ){
-                        
-                        // Immediate contact is black.
-                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                            CHS_PIECE_COLOR::BLACK )
-                        {
-                            this->valid_W_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
-                        }
-
-                    // No-immediate contact along current direction.
-                    }else{
-                        this->valid_W_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
+                    // Immediate contact is black.
+                    if( this->get_piece_at(zz).color == CHS_PIECE_COLOR::BLACK )
+                    {
+                        this->valid_W_atks_map[ind_b].push_back( zz );
                     }
 
+                }else{
+                    this->valid_W_moves_map[ind_b].push_back( zz );
                 }
 
             }
@@ -9430,30 +9361,21 @@ that may need their list of possible plays updated with this newly occupied squa
         // New occupant is black king.
         }else{
 
-            // Parse through each of the eight directions.
-            for( unsigned int t = 0; t < 8; t++ ){
+            for( int zz : chess::kingAtks[ind_b] ){
 
-                // Not at end of current direction.
-                if( rev_scan_dist_arr[t] > 0 ){
+                // Immediate neighbor square along current direction is under king influence.
+                this->atk_list_by_B[ zz ].push_back( ind_b );
 
-                    // Immediate neighbor square along current direction is under king influence.
-                    this->atk_list_by_B[ ind_b + DIR_UNIT_STEP[t] ].push_back( ind_b );
+                if( this->get_piece_at(zz).type != CHS_PIECE_TYPE::NO_P ){
 
-                    // Immediate contact along current direction.
-                    if( contact_dist_arr[t] == 1 ){
-
-                        // Immediate contact is white.
-                        if( this->CHS_board[contact_ind_arr[t].first][contact_ind_arr[t].second].color == 
-                            CHS_PIECE_COLOR::WHITE )
-                        {
-                            this->valid_B_atks_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t]  );
-                        }
-
-                    // No-immediate contact along current direction.
-                    }else{
-                        this->valid_B_moves_map[ind_b].push_back( ind_b + DIR_UNIT_STEP[t] );
+                    // Immediate contact is white.
+                    if( this->get_piece_at(zz).color == CHS_PIECE_COLOR::WHITE )
+                    {
+                        this->valid_B_atks_map[ind_b].push_back( zz );
                     }
 
+                }else{
+                    this->valid_B_moves_map[ind_b].push_back( zz );
                 }
 
             }
