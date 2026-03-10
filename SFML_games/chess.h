@@ -646,6 +646,23 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
 
 
 // ====================================================================== >>>>>
+//      Play Tables
+// ====================================================================== >>>>>
+
+    static const array<vector<int>,64> init_knightAtks();
+
+    // Knight movement tables.
+    static const array<vector<int>,64> knightAtks;
+
+    // King movement tables.
+    uint64_t kingAtks[64];
+    // Pawn movement tables.
+    uint64_t pawnAtks[64];
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Game State Functions
 // ====================================================================== >>>>>
     /**

@@ -3045,6 +3045,76 @@ bool chess::is_atk_valid( int ind_a, int ind_b ) const{
 
 
 // ====================================================================== >>>>>
+//      Play Tables
+// ====================================================================== >>>>>
+
+const array<vector<int>,64> chess::knightAtks = chess::init_knightAtks();
+
+const array<vector<int>,64> chess::init_knightAtks(){
+
+    std::array<vector<int>,64> res_arr{};
+
+    int sq_cnt = 64;
+
+    int ind_a = 0;
+    int ind_z = 0;
+
+    pair<int,int> sub_a = chess::ind2sub( ind_a );
+    int i_a = sub_a.first;
+    int j_a = sub_a.second;
+
+    for( unsigned int r_id = 0; r_id < 8; r_id++ ){
+
+        for( unsigned int c_id = 0; c_id < 8; c_id++ ){
+            
+            // South-West.
+            ind_z = ind_a - 2 * chess::BOARDWIDTH - 1; 
+            if( ( ind_z >= 0 ) && ( j_a > 0 ) )
+                res_arr[ind_a].push_back( ind_z );
+            // South-East.
+            ind_z = ind_a - 2 * chess::BOARDWIDTH + 1;
+            if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 1 ) )
+                res_arr[ind_a].push_back( ind_z );
+            // West-South
+            ind_z = ind_a - chess::BOARDWIDTH - 2;
+            if( ( ind_z >= 0 ) && ( j_a > 1 ) )
+                res_arr[ind_a].push_back( ind_z );
+            // East-South
+            ind_z = ind_a - chess::BOARDWIDTH + 2;
+            if( ( ind_z >= 0 ) && ( j_a < BOARDWIDTH - 2 ) )
+                res_arr[ind_a].push_back( ind_z );
+            // West-North
+            ind_z = ind_a + chess::BOARDWIDTH - 2;
+            if( ind_z < sq_cnt && ( j_a > 1 ) )
+                res_arr[ind_a].push_back( ind_z );
+            // East-North
+            ind_z = ind_a + chess::BOARDWIDTH + 2;
+            if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 2 ) )
+                res_arr[ind_a].push_back( ind_z );
+            // North-West
+            ind_z = ind_a + 2 * chess::BOARDWIDTH - 1;
+            if( ind_z < sq_cnt && ( j_a > 0 ) )
+                res_arr[ind_a].push_back( ind_z );
+            // North-East
+            ind_z = ind_a + 2 * chess::BOARDWIDTH + 1;
+            if( ind_z < sq_cnt && ( j_a < chess::BOARDWIDTH - 1 ) )
+                res_arr[ind_a].push_back( ind_z );
+
+            // Increment the linear index.
+            ind_a++;
+            sub_a = chess::ind2sub( ind_a );
+
+        }
+    }
+
+    return res_arr;
+
+}
+
+// ====================================================================== <<<<<
+
+
+// ====================================================================== >>>>>
 //      Game State Functions
 // ====================================================================== >>>>>
 
