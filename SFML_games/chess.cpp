@@ -3129,14 +3129,85 @@ const array<vector<int>,64> chess::init_kingAtks(){
     int i_a = sub_a.first;
     int j_a = sub_a.second;
 
-    for( unsigned int r_id = 0; r_id < 8; r_id++ ){
+    // Inner board play insert.
+    for( unsigned int r_id = 1; r_id < 7; r_id++ ){
+        for( unsigned int c_id = 1; c_id < 7; c_id++ ){
 
-        for( unsigned int c_id = 0; c_id < 8; c_id++ ){
-
+            ind_a = r_id + c_id * chess::BOARDWIDTH;
+            res_arr[ind_a].push_back( ind_a - chess::BOARDWIDTH - 1 );  // South-West.
+            res_arr[ind_a].push_back( ind_a - chess::BOARDWIDTH );      // South.
+            res_arr[ind_a].push_back( ind_a - chess::BOARDWIDTH + 1 );  // South-East
+            res_arr[ind_a].push_back( ind_a - 1 );                      // West
+            res_arr[ind_a].push_back( ind_a + 1 );                      // East
+            res_arr[ind_a].push_back( ind_a + chess::BOARDWIDTH - 1 );  // North-West
+            res_arr[ind_a].push_back( ind_a + chess::BOARDWIDTH );      // North
+            res_arr[ind_a].push_back( ind_a + chess::BOARDWIDTH + 1 );  // North-East
 
         }
+    }
+
+
+    int b_id = 0;
+    int t_id = 56;
+    int l_id = 0;
+    int r_id = 7;
+    // Board limit rows and columns (except corners).
+    for( unsigned int pos_id = 1; pos_id < 7; pos_id++ ){
+
+        b_id++;
+        // Bottom row.
+        res_arr[b_id].push_back( b_id - 1 );
+        res_arr[b_id].push_back( b_id + 1 );
+        res_arr[b_id].push_back( b_id + chess::BOARDWIDTH - 1 );
+        res_arr[b_id].push_back( b_id + chess::BOARDWIDTH );
+        res_arr[b_id].push_back( b_id + chess::BOARDWIDTH + 1 );
+
+        t_id++;
+        // Top row.
+        res_arr[t_id].push_back( t_id - chess::BOARDWIDTH - 1 );
+        res_arr[t_id].push_back( t_id - chess::BOARDWIDTH );
+        res_arr[t_id].push_back( t_id - chess::BOARDWIDTH + 1 );
+        res_arr[t_id].push_back( t_id - 1 );
+        res_arr[t_id].push_back( t_id + 1 );
+
+        l_id += chess::BOARDWIDTH;
+        // Left column.
+        res_arr[l_id].push_back( l_id - chess::BOARDWIDTH );
+        res_arr[l_id].push_back( l_id - chess::BOARDWIDTH + 1 );
+        res_arr[l_id].push_back( l_id + 1 );
+        res_arr[l_id].push_back( l_id + chess::BOARDWIDTH );
+        res_arr[l_id].push_back( l_id + chess::BOARDWIDTH + 1 );
+
+        r_id += chess::BOARDWIDTH;
+        // Right column.
+        res_arr[r_id].push_back( r_id - chess::BOARDWIDTH - 1 );
+        res_arr[r_id].push_back( r_id - chess::BOARDWIDTH );
+        res_arr[r_id].push_back( r_id - 1 );
+        res_arr[r_id].push_back( r_id + chess::BOARDWIDTH - 1 );
+        res_arr[r_id].push_back( r_id + chess::BOARDWIDTH );
 
     }
+
+    // South-West corner.
+    ind_a = 0;
+    res_arr[ind_a].push_back( ind_a + 1 );                      // East
+    res_arr[ind_a].push_back( ind_a + chess::BOARDWIDTH );      // North
+    res_arr[ind_a].push_back( ind_a + chess::BOARDWIDTH + 1 );  // North-East
+    // South-East corner.
+    ind_a = 7;
+    res_arr[ind_a].push_back( ind_a - 1 );                      // West
+    res_arr[ind_a].push_back( ind_a + chess::BOARDWIDTH - 1 );  // North-West
+    res_arr[ind_a].push_back( ind_a + chess::BOARDWIDTH );      // North
+    // North-West corner.
+    ind_a = 56;
+    res_arr[ind_a].push_back( ind_a - chess::BOARDWIDTH );      // South.
+    res_arr[ind_a].push_back( ind_a - chess::BOARDWIDTH + 1 );  // South-East
+    res_arr[ind_a].push_back( ind_a + 1 );                      // East
+    // North-East corner.
+    ind_a = 63;
+    res_arr[ind_a].push_back( ind_a - chess::BOARDWIDTH - 1 );  // South-West.
+    res_arr[ind_a].push_back( ind_a - chess::BOARDWIDTH );      // South.
+    res_arr[ind_a].push_back( ind_a - 1 );                      // West
 
     return res_arr;
 
