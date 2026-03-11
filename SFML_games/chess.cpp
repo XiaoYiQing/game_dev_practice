@@ -4425,13 +4425,6 @@ void chess::upd_pce_cnt_list(){
 }
 
 
-/*
-TODO: This function must be THE most efficient function in the class.
-The information it updates is fundamental too all other info, and is
-thus one of the most called function.
-It is also the most resource intensive function, as it has no choice but to
-check all pieces on the board.
-*/
 void chess::upd_atk_lists(){
 
     if( this->is_atk_lists_upd && !this->force_lists_upd ){
@@ -5771,15 +5764,10 @@ Given the starting position is empty now, update all potential knights
 that may need their list of possible plays updated with this newly liberated square.
 */
 
-    // Reset number of plays counter.
-    tmp_arr_lim = 0;
-    for( int ind_zz : chess::knightAtks[ind_a] ){
-        tmp_ind_arr[tmp_arr_lim++] = ind_zz;
-    }
 
     // Parse through all posible knights positions around the starting position.
-    for( int z = 0; z < tmp_arr_lim; z++ ){
-        ind_z = tmp_ind_arr[z];
+    for( int ind_z : chess::knightAtks[ind_a] ){
+
         ij_tmp = chess::ind2sub( ind_z );
 
         // Check if current potential position has a knight.
@@ -5826,9 +5814,6 @@ that may need their list of possible plays updated with this newly liberated squ
 // ---------------------------------------------------------------------- >>>>>
 //      Starting Position POV Update (Line Directions)
 // ---------------------------------------------------------------------- >>>>>
-
-    // TODO: King special case, where the moved piece is the king, in which case
-    //  attacked by evaluations are handled differently.
 
     // Boolean indicating if a reverse scan needs to take into account that a king of
     // opposite color has moved. Requires modified scanning.
@@ -6466,40 +6451,11 @@ Given the ending position is occupied now, update all potential knights
 that may need their list of possible plays updated with this newly occupied square.
 */
 
-    // Reset number of plays counter.
-    tmp_arr_lim = 0;
-    // Collect all potential positions from which a knight may move to the starting location.
-    ind_z = ind_b - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
-    if( ( ind_z >= 0 ) && ( j_b > 0 ) )     
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
-    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - chess::BOARDWIDTH - 2;                  // West-South jump.
-    if( ( ind_z >= 0 ) && ( j_b > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - chess::BOARDWIDTH + 2;                  // East-South jump.
-    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + chess::BOARDWIDTH - 2;                  // West-North jump.
-    if( ind_z < sq_cnt && ( j_b > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + chess::BOARDWIDTH + 2;                  // East-North jump.
-    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
-    if( ind_z < sq_cnt && ( j_b > 0 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
-    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-
     // Boolean indicating whether the target occupant matches the current POV update type.
     bool tar_POV_valid = tar_pce.type == CHS_PIECE_TYPE::KNIGHT;
     // Parse through all posible knights positions around the occupied position.
-    for( int z = 0; z < tmp_arr_lim; z++ ){
+    for( int ind_z : chess::knightAtks[ind_b] ){
 
-        ind_z = tmp_ind_arr[z];
         ij_tmp = chess::ind2sub( ind_z );
 
         // Scanning square is empty.
@@ -7544,7 +7500,6 @@ that may need their list of possible plays updated with this newly occupied squa
 void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_piece prev_pce ){
 
 
-
     pair<int,int> ij_a = chess::ind2sub( ind_a );
     int i_a = ij_a.first;
     int j_a = ij_a.second;
@@ -7720,15 +7675,8 @@ Given the starting position is empty now, update all potential knights
 that may need their list of possible plays updated with this newly liberated square.
 */
 
-    // Reset number of plays counter.
-    tmp_arr_lim = 0;
-    for( int ind_zz : chess::knightAtks[ind_a] ){
-        tmp_ind_arr[tmp_arr_lim++] = ind_zz;
-    }
-
     // Parse through all possible knights positions around the starting position.
-    for( int z = 0; z < tmp_arr_lim; z++ ){
-        ind_z = tmp_ind_arr[z];
+    for( int ind_z : chess::knightAtks[ind_a] ){
 
         // Don't perform POV update of the very piece that performed the play.
         if( ind_b == ind_z ){
@@ -7780,9 +7728,6 @@ that may need their list of possible plays updated with this newly liberated squ
 // ---------------------------------------------------------------------- >>>>>
 //      Point A POV Update (Line Directions)
 // ---------------------------------------------------------------------- >>>>>
-
-    // TODO: King special case, where the moved piece is the king, in which case
-    //  attacked by evaluations are handled differently.
 
     // Boolean indicating if a reverse scan needs to take into account that a king of
     // opposite color has moved. Requires modified scanning.
@@ -8386,40 +8331,11 @@ Given the ending position is occupied now, update all potential knights
 that may need their list of possible plays updated with this newly occupied square.
 */
 
-    // Reset number of plays counter.
-    tmp_arr_lim = 0;
-    // Collect all potential positions from which a knight may move to the starting location.
-    ind_z = ind_b - 2 * chess::BOARDWIDTH - 1;              // South-West jump.
-    if( ( ind_z >= 0 ) && ( j_b > 0 ) )     
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - 2 * chess::BOARDWIDTH + 1;              // South-East jump.
-    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - chess::BOARDWIDTH - 2;                  // West-South jump.
-    if( ( ind_z >= 0 ) && ( j_b > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b - chess::BOARDWIDTH + 2;                  // East-South jump.
-    if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + chess::BOARDWIDTH - 2;                  // West-North jump.
-    if( ind_z < sq_cnt && ( j_b > 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + chess::BOARDWIDTH + 2;                  // East-North jump.
-    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 2 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + 2 * chess::BOARDWIDTH - 1;              // North-West jump.
-    if( ind_z < sq_cnt && ( j_b > 0 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-    ind_z = ind_b + 2 * chess::BOARDWIDTH + 1;              // North-East jump.
-    if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
-        tmp_ind_arr[tmp_arr_lim++] = ind_z;
-
     // Boolean indicating whether the target occupant matches the current POV update type.
     bool tar_POV_valid = tar_pce.type == CHS_PIECE_TYPE::KNIGHT;
     // Parse through all posible knights positions around the occupied position.
-    for( int z = 0; z < tmp_arr_lim; z++ ){
+    for( int ind_z : chess::knightAtks[ind_b] ){
 
-        ind_z = tmp_ind_arr[z];
         ij_tmp = chess::ind2sub( ind_z );
 
         // Scanning square is empty.
