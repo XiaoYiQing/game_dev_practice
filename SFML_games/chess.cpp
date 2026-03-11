@@ -6322,89 +6322,36 @@ void chess::upd_pre_legal_plays_occ( const int ind_b, const chs_piece prev_pce )
         // Do nothing.
     }else if( prev_pce.type == CHS_PIECE_TYPE::KNIGHT ){
 
-        // Collect all potential moves/attacks of the knight at its start 
-        // position.
-        ind_z = ind_b - 2 * chess::BOARDWIDTH - 1; 
-        if( ( ind_z >= 0 ) && ( j_b > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b - 2 * chess::BOARDWIDTH + 1;
-        if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b - chess::BOARDWIDTH - 2;
-        if( ( ind_z >= 0 ) && ( j_b > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b - chess::BOARDWIDTH + 2;
-        if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + chess::BOARDWIDTH - 2;
-        if( ind_z < sq_cnt && ( j_b > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + chess::BOARDWIDTH + 2;
-        if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + 2 * chess::BOARDWIDTH - 1;
-        if( ind_z < sq_cnt && ( j_b > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + 2 * chess::BOARDWIDTH + 1;
-        if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        for( int ind_zz : chess::knightAtks[ind_b] ){
+            tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+        }
 
     }else if( prev_pce.type == CHS_PIECE_TYPE::BISHOP ){
 
-        // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist_b, r_dist_b ) ; NE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
-        // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist_b, l_dist_b ) ; NW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
-        // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist_b, l_dist_b ) ; SW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
-        // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist_b, r_dist_b ) ; SE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::bishopAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        }
         
     }else if( prev_pce.type == CHS_PIECE_TYPE::ROOK ){
 
-        // North sweep.
-        for( int N_z = 1; N_z <= u_dist_b; N_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
-        // West sweep.
-        for( int W_z = 1; W_z <= l_dist_b; W_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
-        // South sweep.
-        for( int S_z = 1; S_z <= d_dist_b; S_z++ )
-            tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
-        // East sweep.
-        for( int E_z = 1; E_z <= r_dist_b; E_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z;            
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::rookAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        }              
 
     }else if( prev_pce.type == CHS_PIECE_TYPE::QUEEN ){
         
-        // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist_b, r_dist_b ) ; NE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
-        // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist_b, l_dist_b ) ; NW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
-        // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist_b, l_dist_b ) ; SW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
-        // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist_b, r_dist_b ) ; SE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
-        // North sweep.
-        for( int N_z = 1; N_z <= u_dist_b; N_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
-        // West sweep.
-        for( int W_z = 1; W_z <= l_dist_b; W_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
-        // South sweep.
-        for( int S_z = 1; S_z <= d_dist_b; S_z++ )
-            tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
-        // East sweep.
-        for( int E_z = 1; E_z <= r_dist_b; E_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z; 
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::bishopAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+            for( int ind_zz : chess::rookAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        } 
 
     // NOTE: This possibility should not exist since there is no such a thing as
     // capturing a king in chess, but I leave it here for completeness sake.
@@ -8296,89 +8243,36 @@ that may need their list of possible plays updated with this newly liberated squ
         // Do nothing.
     }else if( prev_pce.type == CHS_PIECE_TYPE::KNIGHT ){
 
-        // Collect all potential moves/attacks of the knight at its start 
-        // position.
-        ind_z = ind_b - 2 * chess::BOARDWIDTH - 1; 
-        if( ( ind_z >= 0 ) && ( j_b > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b - 2 * chess::BOARDWIDTH + 1;
-        if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b - chess::BOARDWIDTH - 2;
-        if( ( ind_z >= 0 ) && ( j_b > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b - chess::BOARDWIDTH + 2;
-        if( ( ind_z >= 0 ) && ( j_b < BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + chess::BOARDWIDTH - 2;
-        if( ind_z < sq_cnt && ( j_b > 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + chess::BOARDWIDTH + 2;
-        if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 2 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + 2 * chess::BOARDWIDTH - 1;
-        if( ind_z < sq_cnt && ( j_b > 0 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
-        ind_z = ind_b + 2 * chess::BOARDWIDTH + 1;
-        if( ind_z < sq_cnt && ( j_b < chess::BOARDWIDTH - 1 ) )
-            tmp_ind_arr[tmp_arr_lim++] = ind_z;
+        for( int ind_zz : chess::knightAtks[ind_b] ){
+            tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+        }
 
     }else if( prev_pce.type == CHS_PIECE_TYPE::BISHOP ){
 
-        // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist_b, r_dist_b ) ; NE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
-        // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist_b, l_dist_b ) ; NW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
-        // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist_b, l_dist_b ) ; SW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
-        // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist_b, r_dist_b ) ; SE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::bishopAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        }
         
     }else if( prev_pce.type == CHS_PIECE_TYPE::ROOK ){
 
-        // North sweep.
-        for( int N_z = 1; N_z <= u_dist_b; N_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
-        // West sweep.
-        for( int W_z = 1; W_z <= l_dist_b; W_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
-        // South sweep.
-        for( int S_z = 1; S_z <= d_dist_b; S_z++ )
-            tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
-        // East sweep.
-        for( int E_z = 1; E_z <= r_dist_b; E_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z;            
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::rookAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        }            
 
     }else if( prev_pce.type == CHS_PIECE_TYPE::QUEEN ){
         
-        // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist_b, r_dist_b ) ; NE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NE_z * chess::BOARDWIDTH + NE_z;
-        // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist_b, l_dist_b ) ; NW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + NW_z * chess::BOARDWIDTH - NW_z;
-        // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist_b, l_dist_b ) ; SW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SW_z * chess::BOARDWIDTH - SW_z;
-        // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist_b, r_dist_b ) ; SE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - SE_z * chess::BOARDWIDTH + SE_z;
-        // North sweep.
-        for( int N_z = 1; N_z <= u_dist_b; N_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + N_z * chess::BOARDWIDTH;
-        // West sweep.
-        for( int W_z = 1; W_z <= l_dist_b; W_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b - W_z;
-        // South sweep.
-        for( int S_z = 1; S_z <= d_dist_b; S_z++ )
-            tmp_ind_arr[tmp_arr_lim++] =  ind_b - S_z * chess::BOARDWIDTH;
-        // East sweep.
-        for( int E_z = 1; E_z <= r_dist_b; E_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_b + E_z; 
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::bishopAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+            for( int ind_zz : chess::rookAtks[ind_b][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        } 
 
     // NOTE: This possibility should not exist since there is no such a thing as
     // capturing a king in chess, but I leave it here for completeness sake.
