@@ -5601,18 +5601,11 @@ void chess::upd_pre_legal_plays_emp( const int ind_a, const chs_piece tar_pce ){
 
     }else if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
 
-        // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist_a, r_dist_a ) ; NE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a + NE_z * chess::BOARDWIDTH + NE_z;
-        // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist_a, l_dist_a ) ; NW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a + NW_z * chess::BOARDWIDTH - NW_z;
-        // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist_a, l_dist_a ) ; SW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a - SW_z * chess::BOARDWIDTH - SW_z;
-        // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist_a, r_dist_a ) ; SE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a - SE_z * chess::BOARDWIDTH + SE_z;
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::bishopAtks[ind_a][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        }
         
     }else if( tar_pce.type == CHS_PIECE_TYPE::ROOK ){
 
@@ -7632,18 +7625,11 @@ void chess::upd_pre_legal_plays( const int ind_a, const int ind_b, const chs_pie
 
     }else if( tar_pce.type == CHS_PIECE_TYPE::BISHOP ){
 
-        // North-East diagonal squares.
-        for( int NE_z = 1; NE_z <= min( u_dist_a, r_dist_a ) ; NE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a + NE_z * chess::BOARDWIDTH + NE_z;
-        // North-West diagonal squares.
-        for( int NW_z = 1; NW_z <= min( u_dist_a, l_dist_a ) ; NW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a + NW_z * chess::BOARDWIDTH - NW_z;
-        // South-West diagonal squares.
-        for( int SW_z = 1; SW_z <= min( d_dist_a, l_dist_a ) ; SW_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a - SW_z * chess::BOARDWIDTH - SW_z;
-        // South-East diagonal squares.
-        for( int SE_z = 1; SE_z <= min( d_dist_a, r_dist_a ) ; SE_z++ )
-            tmp_ind_arr[tmp_arr_lim++] = ind_a - SE_z * chess::BOARDWIDTH + SE_z;
+        for( unsigned int z = 0; z < 4; z++ ){
+            for( int ind_zz : chess::bishopAtks[ind_a][z] ){
+                tmp_ind_arr[tmp_arr_lim++] = ind_zz;
+            }
+        }
         
     }else if( tar_pce.type == CHS_PIECE_TYPE::ROOK ){
 

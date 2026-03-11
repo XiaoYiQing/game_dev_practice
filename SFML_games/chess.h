@@ -664,6 +664,11 @@ static CHS_STATE get_CHS_STATE_AtIdx( int idx );
     // Bishop movement tables.
     static const array<array<vector<int>,4>,64> bishopAtks;
 
+    // Rook movement tables initializer.
+    static const array<array<vector<int>,4>,64> init_rookAtks();
+    // Rook movement tables.
+    static const array<array<vector<int>,4>,64> rookAtks;
+
 // ====================================================================== <<<<<
 
 
